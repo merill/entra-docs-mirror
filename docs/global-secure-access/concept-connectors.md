@@ -32,9 +32,11 @@ source_path: docs/global-secure-access/concept-connectors.md
 cmProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/d5321f31-a36c-484d-a808-69f9088f4f84
+- https://authoring-docs-microsoft.poolparty.biz/devrel/bcbcbad5-4208-4783-8035-8481272c98b8
 spProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/6032d191-3b2e-4df1-9108-c955546973aa
+- https://authoring-docs-microsoft.poolparty.biz/devrel/43b2e5aa-8a6d-4de2-a252-692232e5edc8
 platformId: 0c91cc4d-efcc-118b-3c5a-be049f7db6ff
 ---
 
@@ -160,25 +162,75 @@ Another factor that affects performance is the quality of the networking between
 
 For guidance on where to install connectors and how to optimize your network, see [Optimize traffic flow with Microsoft Entra application proxy](../identity/app-proxy/application-proxy-network-topology).
 
-## Expanding ephemeral port range
+## Configure dynamic and AutoReuse TCP port ranges
 
-Private network connectors initiate TCP and UDP connections to designated destination endpoints. These connections require available source ports on the connector host machine. Expanding the ephemeral port range can improve the availability of source ports, particularly when you're managing a high volume of concurrent connections.
+Private network connectors initiate outbound TCP and UDP connections to configured destinations. Each connection requires an available source port on the connector host.
 
-To view the current dynamic port range on a system, use the following `netsh` commands:
+For high-volume TCP workloads, configure separate, non-overlapping dynamic and AutoReuse port ranges:
 
-- `netsh int ipv4 show dynamicport tcp`
-- `netsh int ipv4 show dynamicport udp`
-- `netsh int ipv6 show dynamicport tcp`
-- `netsh int ipv6 show dynamicport udp`
+- **Dynamic TCP range**: 49152–65535 (16,384 ports)
+- **AutoReuse TCP range**: 10000–49151 (39,152 ports)
 
-Here are sample `netsh` commands to increase the ports:
+The AutoReuse range improves TCP connection scalability by allowing eligible outbound connections to reuse a local source port when the complete connection tuple—source IP, source port, destination IP, and destination port—remains unique.
 
-- `netsh int ipv4 set dynamicport tcp start=1025 num=64511`
-- `netsh int ipv4 set dynamicport udp start=1025 num=64511`
-- `netsh int ipv6 set dynamicport tcp start=1025 num=64511`
-- `netsh int ipv6 set dynamicport udp start=1025 num=64511`
+Important
 
-These commands set the dynamic port range from 1025 to the maximum of 65535. The minimum start port is 1025.
+The dynamic and AutoReuse TCP ranges must not overlap.
+
+Before you begin:
+
+- Use Windows Server 2016 or later.
+- Run the commands from an elevated PowerShell session.
+- Confirm that ports 10000–49151 aren't required by applications installed on the connector server.
+- Review the excluded TCP port ranges:
+
+```
+netsh int ipv4 show excludedportrange tcp
+netsh int ipv6 show excludedportrange tcp
+```
+
+### Configure the port ranges
+
+**Configure the dynamic TCP range**
+
+```
+netsh int ipv4 set dynamicport tcp start=49152 num=16384
+netsh int ipv6 set dynamicport tcp start=49152 num=16384
+```
+
+**Configure the AutoReuse TCP range**
+
+```
+Set-NetTCPSetting `
+  -SettingName Internet,Datacenter,Compat `
+  -AutoReusePortRangeStartPort 10000 `
+  -AutoReusePortRangeNumberOfPorts 39152
+```
+
+### Verify the configuration
+
+```
+netsh int ipv4 show dynamicport tcp
+netsh int ipv6 show dynamicport tcp
+ 
+Get-NetTCPSetting -SettingName Internet,Datacenter,Compat |
+  Select-Object SettingName,
+    DynamicPortRangeStartPort,
+    DynamicPortRangeNumberOfPorts,
+    AutoReusePortRangeStartPort,
+    AutoReusePortRangeNumberOfPorts
+```
+
+Expected values:
+
+| Setting | Start port | Number of ports | End port |
+| --- | --- | --- | --- |
+| Dynamic TCP range | 49152 | 16384 | 65535 |
+| AutoReuse TCP range | 10000 | 39152 | 49151 |
+
+Note
+
+AutoReuse allows the same source port to be used for simultaneous connections to different destinations. Connections from the same connector IP to the same resolved destination IP and port still require different source ports. Sustained high connection volume to a single destination can therefore still exhaust the available source ports. A destination can be configured as an IP address or a fully qualified domain name (FQDN). For an FQDN, Windows establishes the connection to the IP address returned by DNS resolution. AutoReuse applies only to TCP. UDP continues to use its configured dynamic port range.
 
 ## Specifications and sizing requirements
 
