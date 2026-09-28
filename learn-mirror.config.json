@@ -1,0 +1,8 @@
+{
+  "sitemapIndex": "https://learn.microsoft.com/_sitemaps/sitemapindex.xml",
+  "sitemaps": "/_sitemaps/entra_en-us_\\d+\\.xml$",
+  "include": "^https://learn\\.microsoft\\.com/en-us/entra/",
+  "trackedPaths": "^docs/",
+  "sourceRepos": ["MicrosoftDocs/entra-docs-pr"],
+  "concurrency": 6
+}
