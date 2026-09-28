@@ -1,0 +1,240 @@
+---
+layout: Conceptual
+title: View reports & logs in entitlement management - Microsoft Entra ID Governance | Microsoft Learn
+canonicalUrl: https://learn.microsoft.com/en-us/entra/id-governance/entitlement-management-reports
+uhfHeaderId: MSDocsHeader-Entra
+breadcrumb_path: /entra/breadcrumb/toc.json
+feedback_system: Standard
+feedback_product_url: https://feedback.azure.com/d365community/forum/79b1327d-d925-ec11-b6e6-000d3a4f06a4
+author: OWinfreyATL
+ms.author: owinfrey
+ms.service: entra-id-governance
+manager: dougeby
+description: Learn how to view the identity assignments report and audit logs in entitlement management.
+editor: jocastel-MSFT
+ms.subservice: entitlement-management
+ms.topic: how-to
+ms.date: 2026-09-03T00:00:00.0000000Z
+ms.reviewer: jocastel
+ai-usage: ai-assisted
+ms.custom: sfi-ga-nochange, sfi-image-nochange, msecd-doc-authoring-1026
+locale: en-us
+document_id: 536aa90b-45e8-c1eb-82e3-b0e6c19eb6a8
+document_version_independent_id: 2d13b6b9-5e14-9684-e733-7a09b3a18b54
+original_content_git_url: https://github.com/MicrosoftDocs/entra-docs-pr/blob/live/docs/id-governance/entitlement-management-reports.md
+site_name: Docs
+depot_name: MSDN.entra-docs
+page_type: conceptual
+toc_rel: toc.json
+feedback_help_link_type: ''
+feedback_help_link_url: ''
+asset_id: id-governance/entitlement-management-reports
+moniker_range_name: 
+monikers: []
+item_type: Content
+source_path: docs/id-governance/entitlement-management-reports.md
+cmProducts:
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/68e4b2d8-b70c-4019-b49a-d1f8881e2aea
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
+spProducts:
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/67b2ba1a-6f74-4044-a48a-f0f8ad076b8f
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
+platformId: dfdeea3e-4f2b-3e93-55c3-b447235c5fc0
+---
+
+# View reports & logs in entitlement management - Microsoft Entra ID Governance | Microsoft Learn
+
+The entitlement management reports and Microsoft Entra audit log provide more details about what resources identities have access to. As an administrator, you can view the access packages and resource assignments for an identity and view request logs for auditing purposes or determining the status of an identities request. This article describes how to use the entitlement management reports and Microsoft Entra audit logs.
+
+This article outlines how to view reports on current objects in entitlement management. To retain and report on historical Microsoft Entra objects, such as identities or application role assignments, see [Customized reports in Azure Data Explorer (ADX) using data from Microsoft Entra ID](custom-entitlement-report-with-adx-and-entra-id).
+
+Watch the following video to learn how to view what resources identities have access to in entitlement management:
+
+## View identities assigned to an access package
+
+This report enables you to list all of the identities who are assigned to an access package.
+
+1. Sign in to the [Microsoft Entra admin center](https://entra.microsoft.com) as at least an [Identity Governance Administrator](../identity/role-based-access-control/permissions-reference#identity-governance-administrator).
+2. Browse to **ID Governance** &gt; **Entitlement management** &gt; **Access packages**.
+3. On the Access packages page, select the access package of interest.
+4. In the left menu, select **Assignments**, then select **Download**.
+5. Confirm the file name and then select **Download**.
+
+## View access packages for a user
+
+This report enables you to list all of the access packages a user can request and the access packages that are currently assigned to the user.
+
+1. Sign in to the [Microsoft Entra admin center](https://entra.microsoft.com) as at least an [Identity Governance Administrator](../identity/role-based-access-control/permissions-reference#identity-governance-administrator).
+2. Browse to **ID Governance** &gt; **Entitlement management** &gt; **Reports**.
+3. Select **Access packages for a user**.
+4. Select **Select users** to open the Select users pane.
+5. Find the user in the list and then select **Select**.
+
+    The **Can request** tab displays a list of the access packages the user can request. This list is determined by the [request policies](entitlement-management-access-package-request-policy#for-users-service-principals-and-agent-identities-in-your-directory) defined for the access packages.
+
+    ![Access packages for a user](media/entitlement-management-reports/access-packages-report.png)
+6. If there are more than one resource roles or policies for an access package, select the resource roles or policies entry to see selection details.
+7. Select the **Assigned** tab to see a list of the access packages currently assigned to the user. When an access package is assigned to a user, it means that the user has access to all of the resource roles in the access package.
+
+## View resource assignments for a user
+
+This report enables you to list the resources currently assigned to a user in entitlement management. This report is for resources managed with entitlement management. The user might have access to other resources in your directory outside of entitlement management.
+
+1. Sign in to the [Microsoft Entra admin center](https://entra.microsoft.com) as at least an [Identity Governance Administrator](../identity/role-based-access-control/permissions-reference#identity-governance-administrator).
+2. Browse to **ID Governance** &gt; **Entitlement management** &gt; **Reports**.
+3. Select **Resource assignments for a user**.
+4. Select **Select users** to open the Select users pane.
+5. Find the user in the list and then select **Select**.
+
+    A list of the resources currently assigned to the user is displayed. The list also shows the access package and policy they got the resource role from, along with start and end date for access.
+
+    If a user got access to the same resource in two or more packages, you can select an arrow to see each package and policy.
+
+    ![Resource assignments for a user](media/entitlement-management-reports/resource-assignments-report.png)
+
+## Determine the status of a user's request
+
+To get extra details on how a user requested and received access to an access package, you can use the Microsoft Entra audit log. In particular, you can use the log records in the `EntitlementManagement` and `UserManagement` categories to get more details on the processing steps for each request.
+
+1. Sign in to the [Microsoft Entra admin center](https://entra.microsoft.com) as at least an [Identity Governance Administrator](../identity/role-based-access-control/permissions-reference#identity-governance-administrator).
+2. Browse to **ID Governance** &gt; **Entitlement management** &gt; **Audit logs**.
+3. At the top, change the **Category** to either `EntitlementManagement` or `UserManagement`, depending on the audit record you're looking for.
+4. Select **Apply**.
+5. To download the logs, select **Download**.
+
+When Microsoft Entra ID receives a new request, it writes an audit record, in which the **Category** is `EntitlementManagement` and the **Activity** is typically `User requests access package assignment`. If a direct assignment created in the Microsoft Entra admin center, the **Activity** field of the audit record is `Administrator directly assigns user to access package`, and the user performing the assignment is identified by the **ActorUserPrincipalName**.
+
+Microsoft Entra ID writes extra audit records while the request is in progress, including:
+
+| Category | Activity | Request status |
+| --- | --- | --- |
+| `EntitlementManagement` | `Auto approve access package assignment request` | Request doesn't require approval |
+| `UserManagement` | `Create request approval` | Request requires approval |
+| `UserManagement` | `Add approver to request approval` | Request requires approval |
+| `EntitlementManagement` | `Approve access package assignment request` | Request approved |
+| `EntitlementManagement` | `Ready to fulfill access package assignment request` | Request approved, or doesn't require approval |
+
+When a user is assigned access, Microsoft Entra ID writes an audit record for the `EntitlementManagement` category with **Activity**`Fulfill access package assignment`. The user who received the access is identified by **ActorUserPrincipalName** field.
+
+If access wasn't assigned, then Microsoft Entra ID writes an audit record for the `EntitlementManagement` category with **Activity** either `Deny access package assignment request`, if the request was denied by an approver, or `Access package assignment request timed out (no approver action taken)`, if the request timed out before an approver could approve.
+
+When the user's access package assignment expires, is canceled by the user, or removed by an administrator, then Microsoft Entra ID writes an audit record for the `EntitlementManagement` category with **Activity** of `Remove access package assignment`.
+
+## Download the list of connected organizations
+
+1. Sign in to the [Microsoft Entra admin center](https://entra.microsoft.com) as at least an [Identity Governance Administrator](../identity/role-based-access-control/permissions-reference#identity-governance-administrator).
+2. Browse to **ID Governance** &gt; **Entitlement management** &gt; **Connected organizations**.
+3. On the Connected organizations page, select **Download**.
+
+## Identify users who have or will have incompatible access with separation of duties
+
+With the separation of duties settings on an access package, you can configure that a user who is a member of a security group or who already has an assignment to one access package can't request another access package, by marking those as incompatible. You can then [view access packages that are configured as incompatible](entitlement-management-access-package-incompatible#view-other-access-packages-that-are-configured-as-incompatible-with-this-one), and [list users who will have incompatible access to another access package](entitlement-management-access-package-incompatible#identifying-users-who-will-have-incompatible-access-to-another-access-package). You can also [list users who already have incompatible access to another access package](entitlement-management-access-package-incompatible#identifying-users-who-already-have-incompatible-access-to-another-access-package) in the Microsoft Entra Admin Center, [using Microsoft Graph](entitlement-management-access-package-incompatible#identifying-users-who-already-have-incompatible-access-programmatically), or [using PowerShell](entitlement-management-access-package-incompatible#identifying-users-who-already-have-incompatible-access-using-powershell).
+
+## View events for an access package
+
+If you have configured to send audit log events to [Azure Monitor](entitlement-management-logs-and-reporting), then you can use the built-in workbooks and custom workbooks to view the audit logs retained in Azure Monitor.
+
+To view events for an access package, you must have access to the underlying Azure Monitor workspace (see [Manage access to log data and workspaces in Azure Monitor](/en-us/azure/azure-monitor/logs/manage-access#azure-rbac) for information) and in one of the following roles:
+
+- Global Administrator
+- Security Administrator
+- Security Reader
+- Reports Reader
+- Application Administrator
+
+1. Sign in to the [Microsoft Entra admin center](https://entra.microsoft.com) as at least a [Reports Reader](../identity/role-based-access-control/permissions-reference#reports-reader). Make sure you have access to the resource group containing the Azure Monitor workspace.
+2. Browse to **Entra ID** &gt; **Monitoring & health** &gt; **Workbooks**.
+3. If you have multiple subscriptions, select the subscription that contains the workspace.
+4. Once you have selected the subscription, or if you only have one subscription, select the workbook named *Access Package Activity*.
+5. In that workbook, select a time range (change to **All** if not sure), and select an access package ID from the drop-down list of all access packages that had activity during that time range. The events related to the access package that occurred during the selected time range will be displayed.
+
+    [![View access package events](media/entitlement-management-logs-and-reporting/view-events-access-package-sml.png)](media/entitlement-management-logs-and-reporting/view-events-access-package-lrg.png#lightbox)
+
+    Each row includes the time, access package ID, the name of the operation, the object ID, UPN, and the display name of the user who started the operation. More details are included in JSON.
+
+## View historical application role assignments not made by Entitlement Management
+
+If you have configured to send audit log events to [Azure Monitor](entitlement-management-logs-and-reporting), then you can use the built-in workbooks and custom workbooks to view the audit logs retained in Azure Monitor.
+
+The workbook *Application role assignment activity* shows if there have been changes to application role assignments for an application that weren't due to access package assignments, such as by a Global Administrator directly assigning a user to an application role.
+
+1. Sign in to the [Microsoft Entra admin center](https://entra.microsoft.com) as at least a [Reports Reader](../identity/role-based-access-control/permissions-reference#reports-reader). Make sure you have access to the resource group containing the Azure Monitor workspace.
+2. Browse to **Entra ID** &gt; **Monitoring & health** &gt; **Workbooks**.
+3. If you have multiple subscriptions, select the subscription that contains the workspace.
+4. Once you have selected the subscription, or if you only have one subscription, select the workbook named *Access Package Activity*.
+
+    [![View app role assignments](media/entitlement-management-access-package-incompatible/workbook-ara-sml.png)](media/entitlement-management-access-package-incompatible/workbook-ara-lrg.png#lightbox)
+5. If you select to omit entitlement activity, then only changes to application roles that weren't made by entitlement management are shown. For example, you would see a row if a Global Administrator had directly assigned a user to an application role.
+
+## View access package drift
+
+Access package drift reports show where access to governed groups and enterprise applications no longer matches entitlement management policies. You can use this report to find users who have direct resource access without an access package assignment, and users who have an active access package assignment without the expected group membership or application assignment.
+
+Access package drift reports are in preview.
+
+Before you view access package drift reports, make sure your tenant has a Microsoft Entra ID Governance or Microsoft Entra Suite add-on license.
+
+To view access package drift reports in the Microsoft Entra admin center, use one of the following roles:
+
+- Global Administrator.
+- Identity Governance Administrator.
+- Directory Reader.
+- Reports Reader.
+- Catalog Owner.
+- Catalog Reader.
+
+To download access package drift reports, use one of the following roles:
+
+- Global Administrator.
+- Identity Governance Administrator.
+- Directory Reader.
+- Reports Reader.
+
+Access package drift reports include:
+
+- Microsoft Entra groups that have members without corresponding access package assignments.
+- Enterprise applications that have application role assignments without corresponding access package assignments.
+- Active access package assignments where the expected group membership or application assignment is missing.
+
+To review access package drift:
+
+1. Sign in to the [Microsoft Entra admin center](https://entra.microsoft.com).
+2. Browse to **ID Governance** &gt; **Access Guardian** &gt; **Reports** &gt; **Access Drift**.
+
+    The Access Drift page shows an **Access drift data as of** timestamp and lists only resources where drift is detected. If the same resource is included in more than one catalog, the resource appears once for each catalog.
+3. Review the **Detected drift** summary and the resource table.
+
+    The summary shows the number of resources with detected drift. The resource table is separated into **Groups** and **Applications** tabs. You can search by resource or catalog name, filter by catalog, and review the **Resource**, **Total drift**, **Unauthorized access**, **Missing access**, and **Catalog** columns.
+
+    To view the underlying resource, select **View group** or **View application**.
+4. Search for a specific resource, or select the resource name from the table to open the drift details.
+5. On the drift details page, review the users with drift for the selected resource.
+
+    Drift details are grouped by category:
+
+    - **Unauthorized access**: Access granted outside of governance policies.
+    - **Missing assignments**: Access granted through an access package, but missing from the resource.
+    - **Total drift**: All access discrepancies for the selected resource.
+
+    The details table shows the user, access package, expected access package role, current Microsoft Entra role, and drift category. You can search by display name or role.
+6. Remediate the drift.
+
+    To remediate unauthorized access, [assign users to an access package](entitlement-management-access-package-assignments#directly-assign-an-identity). The access package picker is scoped to the catalog for the selected resource and shows whether an access package includes the resource. To remediate missing access, [reprocess access package assignments](entitlement-management-reprocess-access-package-assignments) for selected users.
+
+    After you submit a remediation action, the change is applied to the resource directly and might take a few minutes. Because drift reports are refreshed on a schedule, remediated rows will not change until the next report update.
+7. To export access drift details, select **Download**.
+
+The downloadable report includes drift across all catalogs in the tenant. The download in the Microsoft Entra admin center can't be scoped to a single catalog.
+
+The report currently refreshes about once a day, so data can be up to 24 hours old. Because access package drift reports are in preview, this refresh schedule might change before general availability. Refer to the Access drift data as of timestamp on the page to confirm how current the results are.
+
+Access package drift reports have the following limitations:
+
+- Drift between entitlement management and third-party applications, Azure roles, or SharePoint sites isn't included.
+- Nested group drift isn't included. The report only shows drift between access package assignments and users directly assigned to the group.
+
+## View orphan or local accounts in your applications
+
+Administrators of your connected applications (Salesforce, SAP Cloud Identity Services, etc.) can manually create accounts in your applications, circumventing the governance controls in place. Using the account discovery functionality, you can generate a report of all the users in your application, identify which users have matching Microsoft Entra accounts, and which users are local to your application with one click. The report classifies accounts as local accounts, unassigned users, or assigned users, which helps you identify unmanaged access and access drift. It enables you to simplify onboarding to Microsoft Entra, while also periodically monitoring for unauthorized access. For detailed steps, see [Discover identities in target applications with Account Discovery](../identity/app-provisioning/how-to-account-discovery).

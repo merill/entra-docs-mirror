@@ -1,0 +1,458 @@
+---
+layout: Conceptual
+title: Sign in to a Windows virtual machine in Azure by using Microsoft Entra ID - Microsoft Entra ID | Microsoft Learn
+canonicalUrl: https://learn.microsoft.com/en-us/entra/identity/devices/howto-vm-sign-in-azure-ad-windows
+uhfHeaderId: MSDocsHeader-Entra
+breadcrumb_path: /entra/breadcrumb/toc.json
+feedback_system: Standard
+feedback_product_url: https://feedback.azure.com/d365community/forum/22920db1-ad25-ec11-b6e6-000d3a4f0789
+author: OWinfreyATL
+ms.author: owinfrey
+ms.service: entra-id
+ms.subservice: devices
+manager: dougeby
+description: Learn how to sign in to an Azure VM that's running Windows by using Microsoft Entra authentication.
+ms.topic: how-to
+ms.date: 2025-06-27T00:00:00.0000000Z
+ms.reviewer: sandeo
+ms.custom: references_regions, devx-track-azurecli, subject-rbac-steps, has-azure-ad-ps-ref, sfi-image-nochange
+locale: en-us
+document_id: c946fe0f-e18d-2529-2fbf-bce04759fbca
+document_version_independent_id: 885a61d1-6096-5aa0-fe8d-f1ec8d55e542
+original_content_git_url: https://github.com/MicrosoftDocs/entra-docs-pr/blob/live/docs/identity/devices/howto-vm-sign-in-azure-ad-windows.md
+site_name: Docs
+depot_name: MSDN.entra-docs
+page_type: conceptual
+toc_rel: toc.json
+feedback_help_link_type: ''
+feedback_help_link_url: ''
+asset_id: identity/devices/howto-vm-sign-in-azure-ad-windows
+moniker_range_name: 
+monikers: []
+item_type: Content
+source_path: docs/identity/devices/howto-vm-sign-in-azure-ad-windows.md
+cmProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/2ed91286-6cf7-4b83-810d-75d0ee3b09dd
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
+- https://authoring-docs-microsoft.poolparty.biz/devrel/68ec7f3a-2bc6-459f-b959-19beb729907d
+spProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/6735bd7e-4f7b-457d-b58c-29e6f0198677
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
+- https://authoring-docs-microsoft.poolparty.biz/devrel/90370425-aca4-4a39-9533-d52e5e002a5d
+platformId: 3512e42e-8944-5079-2d47-fb14afa85c6b
+---
+
+# Sign in to a Windows virtual machine in Azure by using Microsoft Entra ID - Microsoft Entra ID | Microsoft Learn
+
+Organizations can improve the security of Windows Server virtual machines in Azure by integrating with Microsoft Entra authentication. You can now use Microsoft Entra ID as a core authentication platform to Remote Desktop Protocol (RDP) into supported versions of Windows Server. You can then centrally control and enforce Azure role-based access control (RBAC) and Conditional Access policies that allow or deny access to the virtual machines.
+
+This article shows you how to create and configure a Windows Server virtual machine and sign in by using Microsoft Entra ID-based authentication.
+
+There are many security benefits of using Microsoft Entra ID-based authentication to sign in to Windows Server virtual machines in Azure. They include:
+
+- Use Microsoft Entra authentication including passwordless to sign in to Windows Server virtual machines. Reduce reliance on local administrator accounts.
+- Use Password complexity and password lifetime policies that you configure for Microsoft Entra ID also help secure Windows Server virtual machines.
+- Use Azure role-based access control:
+    - Specify who can sign in as a regular user or with administrator privileges.
+    - When users join or leave your team, you can update Azure role-based access control policy to grant access as appropriate.
+    - When employees leave your organization and their user accounts are disabled or removed from Microsoft Entra ID, they no longer have access to your resources.
+- Use Conditional Access policy "phishing resistant MFA" and other signals such as user sign-in risk.
+- Use Azure Policy to deploy and audit policies to require Microsoft Entra sign in for Windows Server virtual machines and to flag the use of unapproved local accounts on the virtual machines.
+- Use Intune to automate and scale Microsoft Entra join with mobile device management (MDM) autoenrollment of Azure Windows VMs that are part of your virtual desktop infrastructure (VDI) deployments. MDM autoenrollment requires Microsoft Entra ID P1 licenses.
+
+MDM autoenrollment requires Microsoft Entra ID P1 licenses. Windows Server VMs don't support MDM enrollment.
+
+Important
+
+After you enable this capability, your Azure virtual machine will be Microsoft Entra joined. You can't join them to another domain, like on-premises Active Directory or Microsoft Entra Domain Services. If you need to do so, disconnect the device from Microsoft Entra by uninstalling the extension. In addition, if you deploy a supported golden image, you can enable Microsoft Entra ID authentication by installing the extension. Conditional Access isn't supported with Windows Server with Microsoft Entra join extension in Azure Windows virtual machines.
+
+## Requirements
+
+### Supported Azure regions and Windows distributions
+
+This feature currently supports the following Windows Server distributions:
+
+- Windows 11 24H2 or later installed.
+- Windows Server 2022, 2025 or later installed with Desktop Experience.
+
+This feature is now available in the following Azure clouds:
+
+- Azure Global
+- Azure Government
+- Microsoft Azure operated by 21Vianet
+
+Note
+
+CIS hardened images support Microsoft Entra ID authentication for Microsoft Windows Enterprise and Microsoft Windows Server offerings. For more information, see: [CIS Hardened Images on Microsoft Windows Enterprise](https://azuremarketplace.microsoft.com/marketplace/apps/center-for-internet-security-inc.cis-windows-server).
+
+### Network requirements
+
+To enable Microsoft Entra authentication to virtual machines in Azure, you need to ensure that your network configuration permits outbound access to the following endpoints over TCP port 443.
+
+Azure Global:
+
+- `https://enterpriseregistration.windows.net`: Device registration.
+- `http://169.254.169.254`: Azure Instance Metadata Service endpoint.
+- `https://login.microsoftonline.com`: Authentication flows.
+- `https://pas.windows.net`: Azure role-based access control flows.
+
+Azure Government:
+
+- `https://enterpriseregistration.microsoftonline.us`: Device registration.
+- `http://169.254.169.254`: Azure Instance Metadata Service endpoint.
+- `https://login.microsoftonline.us`: Authentication flows.
+- `https://pasff.usgovcloudapi.net`: Azure role-based access control flows.
+
+Microsoft Azure operated by 21Vianet:
+
+- `https://enterpriseregistration.partner.microsoftonline.cn`: Device registration.
+- `http://169.254.169.254`: Azure Instance Metadata Service endpoint.
+- `https://login.chinacloudapi.cn`: Authentication flows.
+- `https://pas.chinacloudapi.cn`: Azure role-based access control flows.
+
+### Authentication requirements
+
+- **User account type**: Only standard Microsoft Entra user accounts from the same tenant as the azure windows virtual machine are supported. [Guest accounts (B2B users)](../../external-id/what-is-b2b) cannot be used for authentication.
+- **Managed identities**: You must enable system-assigned managed identity on your Azure virtual machine before installing the Microsoft Entra sign in virtual machine extension. Managed Identities are stored in a single Microsoft Entra tenant and currently don't support cross directory scenarios.
+- **Role assignments**: Users must be assigned either the **Virtual Machine Administrator Login** or **Virtual Machine User Login** role to sign in to the VM. Having the Owner or Contributor role alone doesn't grant sign-in privileges.
+- **Virtual Machine Administrator Login:** Users who have this role assigned can sign in to an Azure virtual machine with administrator privileges.
+- **Virtual Machine User Login:** Users who have this role assigned can sign in to an Azure virtual machine with regular user privileges.
+- **Authentication methods**:
+
+    - [Passwordless authentication](../authentication/concept-authentication-passkeys-fido2) is recommended and supported via Microsoft Entra credentials
+    - [Password-based authentication](../../architecture/auth-password-based-sso) is supported with proper role assignments
+    - [Windows Hello for Business](/en-us/windows/security/identity-protection/hello-for-business/) is supported using the certificate trust model only (not key trust model)
+    - Local administrator accounts created manually by adding users to local groups aren't supported
+
+## Enable Microsoft Entra sign in for a Windows virtual machine in Azure
+
+To use Microsoft Entra sign in for a Windows virtual machine, you must:
+
+1. Enable the Microsoft Entra sign in extension for the device.
+2. Configure Azure role assignments for users.
+
+### Enable Microsoft Entra sign in extension
+
+- [Azure virtual machine running Windows](/en-us/azure/virtual-machines/extensions/features-windows#run-vm-extensions)
+
+You must enable system-assigned managed identity on your Azure virtual machine before you install the Microsoft Entra sign in virtual machine extension. Managed Identities are stored in a single Microsoft Entra tenant and currently don't support cross directory scenarios.
+
+The following sample demonstrates Azure templates for Azure Virtual Machine extensions.
+
+```json
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "vmName": {
+      "type": "string"
+    },
+    "location": {
+      "type": "string"
+    }
+  },
+  "resources": [
+    {
+      "name": "[concat(parameters('vmName'),'/AADLogin')]",
+      "type": "Microsoft.Compute/virtualMachines/extensions",
+      "location": "[parameters('location')]",
+      "apiVersion": "2015-06-15",
+      "properties": {
+        "publisher": "Microsoft.Azure.ActiveDirectory",
+        "type": "AADLoginForWindows",
+        "typeHandlerVersion": "1.0",
+        "autoUpgradeMinorVersion": true
+      }
+    }
+  ]
+}
+```
+
+## Configure role assignments
+
+To assign user roles, you must have the [Virtual Machine Data Access Administrator](/en-us/azure/role-based-access-control/built-in-roles#virtual-machine-data-access-administrator-preview) role, or any role that includes the `Microsoft.Authorization/roleAssignments/write` action such as the [Role Based Access Control Administrator](/en-us/azure/role-based-access-control/built-in-roles#role-based-access-control-administrator-preview) role. However, if you use a different role than Virtual Machine Data Access Administrator, we recommend you [add a condition to reduce the permission to create role assignments](/en-us/azure/role-based-access-control/delegate-role-assignments-overview).
+
+- **Virtual Machine Administrator Login:** Users who have this role assigned can sign in to an Azure virtual machine with administrator privileges.
+- **Virtual Machine User Login:** Users who have this role assigned can sign in to an Azure virtual machine with regular user privileges.
+
+Note
+
+Manually elevating a user to become a local administrator on the device by adding the user to a member of the local administrators' group or by running `net localgroup administrators /add "AzureAD\UserUpn"` command isn't supported. You need to use roles in Azure to authorize sign in.
+
+Note
+
+An Azure user who has the Owner or Contributor role assigned doesn't automatically have privileges to sign in to devices. The reason is to provide audited separation between the set of people who control virtual machines and the set of people who can access virtual machines.
+
+The following documentation provides step-by-step details to add user accounts to role assignments in Azure:
+
+- [Assign Azure roles by using the Azure portal](/en-us/azure/role-based-access-control/role-assignments-portal)
+- [Assign Azure roles by using the Azure CLI](/en-us/azure/role-based-access-control/role-assignments-cli)
+- [Assign Azure roles by using Azure PowerShell](/en-us/azure/role-based-access-control/role-assignments-powershell)
+
+## Sign in by using Microsoft Entra credentials to a Windows VM
+
+You can sign in over RDP using one of two methods:
+
+- Passwordless using any of the supported Microsoft Entra credentials (recommended)
+- Password/passwordless using Windows Hello for Business deployed using certificate trust model
+
+### Sign in using passwordless authentication with Microsoft Entra ID
+
+To use passwordless authentication for your Windows Server VMs in Azure, the session host (VM) must be running:
+
+- Windows 11 with [2022-10 Cumulative Updates for Windows 11 (KB5018418)](https://support.microsoft.com/kb/KB5018418) or later installed.
+- Windows 10, version 20H2 or later with [2022-10 Cumulative Updates for Windows 10 (KB5018410)](https://support.microsoft.com/kb/KB5018410) or later installed.
+- Windows Server 2022 with [2022-10 Cumulative Update for Microsoft server operating system (KB5018421)](https://support.microsoft.com/kb/KB5018421) or later installed.
+- Windows Server 2025 or later installed.
+
+Note
+
+When using the **web account to sign in to the remote computer** option, there's no requirement for the local device to be joined to a domain or Microsoft Entra ID.
+
+To connect to the remote computer:
+
+- Launch **Remote Desktop Connection** from Windows Search, or by running `mstsc.exe`.
+- Select **Use a web account to sign in to the remote computer** option in the **Advanced** tab. This option is equivalent to the `enablerdsaadauth` RDP property. For more information, see [Supported RDP properties with Remote Desktop Services](/en-us/windows-server/remote/remote-desktop-services/clients/rdp-files).
+- Specify the name of the remote computer and select **Connect**.
+
+Important
+
+IP address can't be used with **Use a web account to sign in to the remote computer** option. The name must match the hostname of the remote device in Microsoft Entra ID and be network addressable, resolving to the IP address of the remote device.
+
+- When prompted for credentials, specify your user name in `user@domain.com` format.
+- You're then prompted to allow the remote desktop connection when connecting to a new PC. Microsoft Entra remembers up to 15 hosts for 30 days before prompting again. If you see this dialogue, select **Yes** to connect.
+
+Important
+
+If your organization is using [Microsoft Entra Conditional Access](../conditional-access/overview), your device must satisfy the Conditional Access requirements to allow connection to the remote computer. Conditional Access policies might be applied to the application **Microsoft Remote Desktop (a4a365df-50f1-4397-bc59-1a1564b8bb9c)** for controlled access.
+
+Note
+
+The Windows lock screen in the remote session doesn't support Microsoft Entra authentication tokens or passwordless authentication methods like FIDO keys. The lack of support for these authentication methods means that users can't unlock their screens in a remote session. When you try to lock a remote session, either through user action or system policy, the session is instead disconnected and the service sends a message to the user. Disconnecting the session also ensures that when the connection is relaunched after a period of inactivity, Microsoft Entra ID reevaluates the applicable Conditional Access policies.
+
+### Sign in using password/passwordless authentication with Microsoft Entra ID
+
+Both [Password-based authentication](../../architecture/auth-password-based-sso), and [Passwordless authentication](../authentication/concept-authentication-passkeys-fido2) are supported to sign in to Windows virtual machines.
+
+Important
+
+Remote connection to VMs that are joined to Microsoft Entra ID is allowed only from Windows 10 or later PCs that are either Microsoft Entra registered(minimum required build is 20H1) or Microsoft Entra joined or Microsoft Entra hybrid joined to the *same* directory as the VM. Additionally, to RDP by using Microsoft Entra credentials, users must belong to one of the two Azure roles, Virtual Machine Administrator Login or Virtual Machine User Login.
+
+If you're using a Microsoft Entra registered windows 10 or later PC, you must enter credentials in the `AzureAD\UPN` format (for example, `AzureAD\john@contoso.com`). At this time, you can use Azure Bastion to sign in with Microsoft Entra authentication [via the Azure CLI and the native RDP client mstsc](/en-us/azure/bastion/native-client).
+
+To sign in to your Windows Server 2019 virtual machine by using Microsoft Entra ID:
+
+1. Go to the overview page of the virtual machine enabled with Microsoft Entra sign in.
+2. Select **Connect** to open the **Connect to virtual machine** pane.
+3. Select **Download RDP File**.
+4. Select **Open** to open the Remote Desktop Connection client.
+5. Select **Connect** to open the Windows sign in dialog.
+6. Sign in by using your Microsoft Entra credentials.
+
+You're now signed in to the Windows Server 2019 Azure virtual machine with the role permissions as assigned, such as VM User or VM Administrator.
+
+Note
+
+You can save the `.RDP` file locally on your computer to start future remote desktop connections to your virtual machine, instead of going to the virtual machine overview page in the Azure portal and using the connect option.
+
+## Enforce Conditional Access policies
+
+You can enforce Conditional Access policies, such as "[phishing resistant MFA](../conditional-access/policy-admin-phish-resistant-mfa)" or [user sign-in risk check](../conditional-access/policy-all-users-mfa-strength), before users can access Windows Server virtual machines in Azure. To apply a Conditional Access policy, you must select the **Microsoft Azure Windows Virtual Machine Sign-in** app from the cloud apps or actions assignment option.
+
+Conditional Access policies that restrict sign in using device configuration rules aren't supported when connecting from a Windows Server device. For a guide on setting conditional access policies, see: [Tutorial: Secure user sign-in events with Microsoft Entra multifactor authentication](../authentication/tutorial-enable-azure-mfa).
+
+Note
+
+If you require MFA as a control, then you must supply an MFA claim as part of the client that initiates the RDP session to the target Windows Server virtual machine. The Remote Desktop application supports Conditional Access policies, however if you're using web sign in, you must use a Windows Hello for Business PIN or biometric authentication. Support for biometric authentication was added to the RDP client in Windows 10 version 1809. Remote desktop using Windows Hello for Business authentication is available only for deployments that use a certificate trust model and isn't available for a key trust model.
+
+## Use Azure Policy to meet standards and assess compliance
+
+Use Azure Policy to:
+
+- Ensure that Microsoft Entra sign in is enabled for your new and existing Windows Server virtual machines.
+- Assess compliance of your environment at scale on a compliance dashboard.
+
+With this capability, you can use many levels of enforcement. You can flag new and existing Windows Server virtual machines within your environment that don't have Microsoft Entra sign in enabled. You can also use Azure Policy to deploy the Microsoft Entra extension to Windows virtual machines in Azure.
+
+In addition to these capabilities, you can use Azure Policy to detect and flag Windows machines that have unapproved local accounts created on their devices. To learn more, review [Azure Policy](/en-us/azure/governance/policy/overview).
+
+## Troubleshoot deployment problems
+
+The AADLoginForWindows extension must be installed successfully for the device to complete the Microsoft Entra join process. If the extension fails to be installed correctly, perform the following steps:
+
+1. Connect to the device and examine the *CommandExecution.log* file under *C:\WindowsAzure\Logs\Plugins\Microsoft.Azure.ActiveDirectory.AADLoginForWindows\1.0.0.1*.
+
+    If the extension restarts after the initial failure, the log with the deployment error will be saved as *CommandExecution\_YYYYMMDDHHMMSSSSS.log*.
+2. Open a PowerShell window on the device. Verify that the following queries against the Azure Instance Metadata Service endpoint running on the host return the expected output:
+
+    For Azure virtual machines:
+
+    | Command to run | Expected output |
+    | --- | --- |
+    | `curl.exe -H Metadata:true "http://169.254.169.254/metadata/instance?api-version=2017-08-01"` | Correct information about the Azure virtual machine |
+    | `curl.exe -H Metadata:true "http://169.254.169.254/metadata/identity/info?api-version=2018-02-01"` | Valid tenant ID associated with the Azure subscription |
+    | `curl.exe -H Metadata:true "http://169.254.169.254/metadata/identity/oauth2/token?resource=urn:ms-drs:enterpriseregistration.windows.net&api-version=2018-02-01"` | Valid access token issued by Microsoft Entra ID for the managed identity that is assigned to this virtual machine |
+3. Ensure that the required endpoints are accessible from the device via PowerShell:
+
+    - `curl.exe https://login.microsoftonline.com/ -D -`
+    - `curl.exe https://login.microsoftonline.com/<TenantID>/ -D -`
+    - `curl.exe https://enterpriseregistration.windows.net/ -D -`
+    - `curl.exe https://device.login.microsoftonline.com/ -D -`
+    - `curl.exe https://pas.windows.net/ -D -`
+
+    Replace `<TenantID>` with the Microsoft Entra tenant ID associated with the Azure subscription. `login.microsoftonline.com/<TenantID>`, `enterpriseregistration.windows.net`, and `pas.windows.net` should return 404 Not Found, which is expected behavior.
+4. View the device state by running `dsregcmd /status`. The goal is for the device state to show as `AzureAdJoined : YES`.
+
+    Microsoft Entra join activity is captured in Event Viewer under the *User Device Registration\Admin* log at *Event Viewer (local)\Applications* and *Services Logs\Microsoft\Windows\User Device Registration\Admin*.
+
+If the AADLoginForWindows extension fails with an error code, you can perform the following steps.
+
+### Device name already exists
+
+If a device object with the same displayName as the hostname of the Azure virtual machine exists, the device fails to join Microsoft Entra with a hostname duplication error. Avoid duplication by [modifying the hostname](/en-us/azure/virtual-network/virtual-networks-viewing-and-modifying-hostnames#modify-a-hostname).
+
+### Terminal error code 1007 and exit code -2145648574
+
+Terminal error code 1007 and exit code -2145648574 translate to `DSREG_E_MSI_TENANTID_UNAVAILABLE`. The extension can't query the Microsoft Entra tenant information.
+
+Connect to the device as a local administrator and verify that the endpoint returns a valid tenant ID from Azure Instance Metadata Service. Run the following command from an elevated PowerShell window on the device:
+
+`curl -H Metadata:true http://169.254.169.254/metadata/identity/info?api-version=2018-02-01`
+
+This problem can also happen when the admin attempts to install the AADLoginForWindows extension, but the device doesn't have a system-assigned managed identity. In that case, go to the **Identity** pane of the device. On the **System assigned** tab, verify that the **Status** toggle is set to **On**.
+
+### Exit code -2145648607
+
+Exit code -2145648607 translates to `DSREG_AUTOJOIN_DISC_FAILED`. The extension can't reach the `https://enterpriseregistration.windows.net` endpoint.
+
+1. Verify that the required endpoints are accessible from the device via PowerShell:
+
+    - `curl https://login.microsoftonline.com/ -D -`
+    - `curl https://login.microsoftonline.com/<TenantID>/ -D -`
+    - `curl https://enterpriseregistration.windows.net/ -D -`
+    - `curl https://device.login.microsoftonline.com/ -D -`
+    - `curl https://pas.windows.net/ -D -`
+
+    Replace `<TenantID>` with the Microsoft Entra tenant ID of the Azure subscription. If you need to find the tenant ID, you can hover over your account name or select **Entra ID** &gt; **Overview** &gt; **Properties** &gt; **Tenant ID**.
+
+    Attempts to connect to `enterpriseregistration.windows.net` might return 404 Not Found, which is expected behavior. Attempts to connect to `pas.windows.net` might prompt for PIN credentials or might return 404 Not Found. (You don't need to enter the PIN.) Either one is sufficient to verify that the URL is reachable.
+2. If any of the commands fails with "Couldn't resolve host `<URL>`," try running this command to determine which DNS server Windows is using:
+
+    `nslookup <URL>`
+
+    Replace `<URL>` with the fully qualified domain names that the endpoints use, such as `login.microsoftonline.com`.
+3. See whether specifying a public DNS server allows the command to succeed:
+
+    `nslookup <URL> 208.67.222.222`
+4. If necessary, change the DNS server assigned to the network security group that the device belongs to.
+
+### Exit code 51
+
+Exit code 51 translates to "This extension isn't supported on this operating system."
+
+The AADLoginForWindows extension is intended to be installed only on Azure virtual machines with Windows Server 2022 or Windows 10 1809 or later. Ensure that your version of Windows Server is supported. If it isn't supported, uninstall the extension.
+
+## Troubleshoot sign-in problems
+
+Use the following information to correct sign-in problems.
+
+You can view the device and single sign-on (SSO) state by running `dsregcmd /status`. The goal is for the device state to show as `AzureAdJoined : YES` and for the SSO state to show `AzureAdPrt : YES`.
+
+RDP sign-in via Microsoft Entra accounts is captured in Event Viewer under the *Applications and Services Logs\Microsoft\Windows\AAD\Operational* event logs.
+
+### Azure role not assigned
+
+You might get the following error message when you initiate a remote desktop connection to your device: "Your account is configured to prevent you from using this device. For more info, contact your system administrator."
+
+![Screenshot of the message that says your account is configured to prevent you from using this device.](media/howto-vm-sign-in-azure-ad-windows/rbac-role-not-assigned.png)
+
+Verify the Azure role-based access control policies that grant the user the Virtual Machine Administrator Login or Virtual Machine User Login role.
+
+If you're having problems with Azure role assignments, see [Troubleshoot Azure role-based access control](/en-us/azure/role-based-access-control/troubleshooting).
+
+### Unauthorized client or password change required
+
+You might get the following error message when you initiate a remote desktop connection to your device: "Your credentials didn't work."
+
+![Screenshot of the message that says your credentials did not work.](media/howto-vm-sign-in-azure-ad-windows/your-credentials-did-not-work.png)
+
+Try these solutions:
+
+- The Windows 10 or later PC that you're using to initiate the remote desktop connection must be Microsoft Entra joined, or Microsoft Entra hybrid joined to the same Microsoft Entra directory. For more information about device identity, see the article [What is a device identity?](overview).
+
+    Windows 10 Build 20H1 added support for a Microsoft Entra registered PC to initiate an RDP connection to your virtual machine. When you're using a client device that's Microsoft Entra registered (not Microsoft Entra joined or Microsoft Entra hybrid joined) as the RDP client to initiate connections to your virtual machine, you must enter credentials in the format `AzureAD\UPN` (for example, `AzureAD\john@contoso.com`).
+
+    Verify that the AADLoginForWindows extension wasn't uninstalled after the Microsoft Entra join finished.
+
+    Also, make sure that the security policy **Network security: Allow PKU2U authentication requests to this computer to use online identities** is enabled on both the server *and* the client.
+- Verify that the user doesn't have a temporary password. Temporary passwords can't be used to sign in to a remote desktop connection.
+
+    Sign in with the user account in a web browser. For instance, sign in to the [Azure portal](https://portal.azure.com) in a private browsing window. If you're prompted to change the password, set a new password. Then try connecting again.
+
+### AADSTS293004: The target-device identifier in the request xxx wasn't found in the tenant xxx
+
+Cause:
+
+The computer name entered in mstsc doesn't match with any one of the "hostnames" attributes for target AADJ device. For example, AADJ device host name is the short name like device\_1, but the computer name entered in mstsc is the FQDN like device\_1.contoso.com.
+
+Try these solutions:
+
+There are multiple ways to resolve the issue:
+
+1. Modify the HOSTS entry on client machine, add an A DNS record that points the correct device name (confirm from AAD Device record) to the IP of target machine. Use that device name in mstsc.
+2. Check if the target machine is managed and if the hostname is set through Group Policy or MDM via the DNS Client PrimaryDnsSuffix value [ADMX_DnsClient Policy CSP | Microsoft Learn](/en-us/windows/client-management/mdm/policy-csp-admx-dnsclient#dns_primarydnssuffix). If this is set and is incorrect, it needs to be removed or set correctly.
+3. When customer requires to use FQDN to connect but AAD Device name is a short name, login to the target machine via local admin, add a “**Primary DNS Suffix**” for their domain suffix. Detailed instructions:
+
+- Navigate to **Advanced System Settings/System Properties** -&gt;\*\* Computer Name\*\* tab -&gt; select the "**Change**" button to rename the computer -&gt; select "**More**..." under the existing computer name -&gt; Type in your domain name and select **OK** -&gt; Save and reboot.
+- Once it’s done, we can RDP with FQDN directly and no need to modify the HOSTS entry.
+
+Note
+
+In such case, when Primary DNS Suffix is added, the Device-Sync scheduled task is triggered when adding the FQDN into AAD device "hostnames" attributes. This is why it resolves the issue.
+
+### MFA sign-in method required
+
+You might see the following error message when you initiate a remote desktop connection to your device: "The sign-in method you're trying to use isn't allowed. Try a different sign-in method or contact your system administrator."
+
+![Screenshot of the message that says the sign-in method you're trying to use isn't allowed.](media/howto-vm-sign-in-azure-ad-windows/mfa-sign-in-method-required.png)
+
+If you configure a Conditional Access policy that requires MFA, you need to ensure that the device initiating the connection uses strong authentication such as Windows Hello.
+
+Another MFA-related error message is the one described previously: "Your credentials didn't work."
+
+![Screenshot of the message that says your credentials didn't work.](media/howto-vm-sign-in-azure-ad-windows/your-credentials-did-not-work.png)
+
+If you configure a legacy per-user **Enabled/Enforced Microsoft Entra multifactor authentication** setting and you see the error, you can resolve the problem by removing the per-user MFA setting. For more information, see the article [Enable per-user Microsoft Entra multifactor authentication to secure sign-in events](../authentication/howto-mfa-userstates).
+
+If Windows Hello for Business isn't an option, configure a Conditional Access policy that excludes the Microsoft Azure Windows Virtual Machine Sign-in app. To learn more about Windows Hello for Business, see [Windows Hello for Business overview](/en-us/windows/security/identity-protection/hello-for-business/hello-identity-verification).
+
+Support for biometric authentication with RDP was added in Windows 10 version 1809. Using Windows Hello for Business authentication during RDP is available for deployments that use a certificate trust model or key trust model.
+
+Share your feedback about this feature or report problems with using it on the [Microsoft Entra feedback forum](https://feedback.azure.com/d365community/forum/22920db1-ad25-ec11-b6e6-000d3a4f0789).
+
+### Missing application
+
+If the Microsoft Azure Windows Virtual Machine Sign-in application is missing from Conditional Access, make sure that the application is in the tenant:
+
+1. Sign in to the [Microsoft Entra admin center](https://entra.microsoft.com) as at least a [Cloud Application Administrator](../role-based-access-control/permissions-reference#cloud-application-administrator).
+2. Browse to **Entra ID** &gt; **Enterprise apps**.
+3. Remove the filters to see all applications, and search for **VM**. If you don't see **Microsoft Azure Windows Virtual Machine Sign-in** as a result, the service principal is missing from the tenant.
+
+Another way to verify it is via Graph PowerShell:
+
+1. [Install the Graph PowerShell SDK](/en-us/powershell/microsoftgraph/installation).
+2. Run `Connect-MgGraph -Scopes "ServicePrincipalEndpoint.ReadWrite.All"`, followed by `"Application.ReadWrite.All"`.
+3. Sign in with a Global Administrator account.
+4. Consent to the permission prompt.
+5. Run `Get-MgServicePrincipal -ConsistencyLevel eventual -Search '"DisplayName:Azure Windows VM Sign-In"'`.
+    - If this command results in no output and returns you to the PowerShell prompt, you can create the service principal with the following Graph PowerShell command:
+
+        `New-MgServicePrincipal -AppId 372140e0-b3b7-4226-8ef9-d57986796201`
+    - Successful output shows that the Microsoft Azure Windows Virtual Machine Sign-in app and its ID were created.
+6. Sign out of Graph PowerShell by using the `Disconnect-MgGraph` command.
+
+Some tenants might see the application named Azure Windows VM Sign-in instead of Microsoft Azure Windows Virtual Machine Sign-in. The application has the same Application ID of 372140e0-b3b7-4226-8ef9-d57986796201.
+
+### Unable to use this capability when require compliant device Conditional Access policy is enforced on Azure Windows VM Sign-in resource and you're connecting from a Windows Server device
+
+Windows Server device compliance configuration in Conditional Access policy isn't supported.

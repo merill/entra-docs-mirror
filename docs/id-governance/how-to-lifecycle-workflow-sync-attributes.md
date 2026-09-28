@@ -1,0 +1,227 @@
+---
+layout: Conceptual
+title: How to synchronize attributes for Lifecycle workflows - Microsoft Entra ID Governance | Microsoft Learn
+canonicalUrl: https://learn.microsoft.com/en-us/entra/id-governance/how-to-lifecycle-workflow-sync-attributes
+uhfHeaderId: MSDocsHeader-Entra
+breadcrumb_path: /entra/breadcrumb/toc.json
+feedback_system: Standard
+feedback_product_url: https://feedback.azure.com/d365community/forum/79b1327d-d925-ec11-b6e6-000d3a4f06a4
+author: OWinfreyATL
+ms.author: owinfrey
+ms.service: entra-id-governance
+manager: dougeby
+description: Describes overview of Lifecycle workflow attributes.
+ms.subservice: lifecycle-workflows
+ms.topic: troubleshooting
+ms.date: 2026-03-12T00:00:00.0000000Z
+ms.custom: sfi-image-nochange
+locale: en-us
+document_id: 53987154-8f6c-1ddd-ec02-2b811ae74818
+document_version_independent_id: eaf44627-eddc-5aeb-7189-661d5dcb90fe
+original_content_git_url: https://github.com/MicrosoftDocs/entra-docs-pr/blob/live/docs/id-governance/how-to-lifecycle-workflow-sync-attributes.md
+site_name: Docs
+depot_name: MSDN.entra-docs
+page_type: conceptual
+toc_rel: toc.json
+feedback_help_link_type: ''
+feedback_help_link_url: ''
+asset_id: id-governance/how-to-lifecycle-workflow-sync-attributes
+moniker_range_name: 
+monikers: []
+item_type: Content
+source_path: docs/id-governance/how-to-lifecycle-workflow-sync-attributes.md
+cmProducts:
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
+- https://authoring-docs-microsoft.poolparty.biz/devrel/b1cfdec6-b0c3-4209-818c-736879856e0e
+- https://authoring-docs-microsoft.poolparty.biz/devrel/8b896464-3b7d-4e1f-84b0-9bb45aeb5f64
+spProducts:
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
+- https://authoring-docs-microsoft.poolparty.biz/devrel/2d0723c1-cf38-4c30-ab3d-5df787b33270
+- https://authoring-docs-microsoft.poolparty.biz/devrel/b1d2d671-9549-46e8-918c-24349120dbf5
+platformId: 7a06a4c6-638f-ad78-a0fc-72b2dbfeda19
+---
+
+# How to synchronize attributes for Lifecycle workflows - Microsoft Entra ID Governance | Microsoft Learn
+
+Workflows contain specific tasks, which can run automatically against users based on the specified execution conditions. Automatic workflow scheduling is supported based on the employeeHireDate and employeeLeaveDateTime user attributes in Microsoft Entra ID.
+
+To take full advantage of Lifecycle Workflows, user provisioning should be automated, and the relevant scheduling attributes should be synchronized.
+
+## Scheduling relevant attributes
+
+The following table shows the relevant scheduling (trigger) attributes and the methods of synchronization that are supported.
+
+| Attribute | Type | Supported in HR Inbound Provisioning | Supported in Microsoft Entra Connect cloud sync | Supported in Microsoft Entra Connect Sync |
+| --- | --- | --- | --- | --- |
+| employeeHireDate | DateTimeOffset | Yes | Yes | Yes |
+| employeeLeaveDateTime | DateTimeOffset | Yes | Yes | Yes |
+
+Note
+
+Manually setting the employeeLeaveDateTime for cloud-only users requires special permissions. For more information, see: [Configure the employeeLeaveDateTime property for a user](/en-us/graph/tutorial-lifecycle-workflows-set-employeeleavedatetime)
+
+This document explains how to set up synchronization from on-premises Microsoft Entra Connect cloud sync or Microsoft Entra Connect for the required attributes.
+
+Note
+
+There's no corresponding EmployeeHireDate or EmployeeLeaveDateTime attribute in Active Directory. If you're synchronizing from on-premises AD, you'll need to identify an attribute in AD that can be used. This attribute must be a string.
+
+## Understanding EmployeeHireDate and EmployeeLeaveDateTime formatting
+
+The EmployeeHireDate and EmployeeLeaveDateTime contain dates and times that must be formatted in a specific way. This means that you might need to use an expression to convert the value of your source attribute to a format the EmployeeHireDate or EmployeeLeaveDateTime accepts. The following table outlines the format that is expected and provides an example expression on how to convert the values.
+
+| Scenario | Expression/Format | Target | More Information |
+| --- | --- | --- | --- |
+| Workday to Active Directory User Provisioning | FormatDateTime([StatusHireDate], ,"yyyy-MM-ddzzz", "yyyyMMddHHmmss.fZ") | On-premises AD string attribute | [Attribute mappings for Workday](../identity/saas-apps/workday-inbound-tutorial#below-are-some-example-attribute-mappings-between-workday-and-active-directory-with-some-common-expressions) |
+| SuccessFactors to Active Directory User Provisioning | FormatDateTime([endDate], ,"M/d/yyyy hh:mm:ss tt","yyyyMMddHHmmss.fZ") | On-premises AD string attribute | [Attribute mappings for SAP Success Factors](../identity/saas-apps/sap-successfactors-inbound-provisioning-tutorial) |
+| Custom import to Active Directory | Must be in the format "yyyyMMddHHmmss.fZ" | On-premises AD string attribute | [Attribute mappings for any other system of record](../identity/app-provisioning/inbound-provisioning-api-configure-app) |
+| Microsoft Graph User API | Must be in the format "YYYY-MM-DDThh:mm:ssZ" | EmployeeHireDate and EmployeeLeaveDateTime |  |
+| Workday to Microsoft Entra user provisioning | Can use a direct mapping. No expression is needed but can be used to adjust the time portion of EmployeeHireDate and EmployeeLeaveDateTime | EmployeeHireDate and EmployeeLeaveDateTime |  |
+| SuccessFactors to Microsoft Entra user provisioning | Can use a direct mapping. No expression is needed but can be used to adjust the time portion of EmployeeHireDate and EmployeeLeaveDateTime | EmployeeHireDate and EmployeeLeaveDateTime |  |
+
+For more information on expressions, see [Reference for writing expressions for attribute mappings in Microsoft Entra ID](../identity/app-provisioning/functions-for-customizing-application-data).
+
+The expression examples in the table use endDate for SAP and StatusHireDate for Workday. However, you can opt to use different attributes.
+
+For example, you might use StatusContinuousFirstDayOfWork instead of StatusHireDate for Workday. In this instance your expression would be:
+
+`FormatDateTime([StatusContinuousFirstDayOfWork], , "yyyy-MM-ddzzz", "yyyyMMddHHmmss.fZ")`
+
+The following table has a list of suggested attributes and their scenario recommendations.
+
+| HR Attribute | HR System | Scenario | Microsoft Entra attribute |
+| --- | --- | --- | --- |
+| StatusHireDate | Workday | Joiner | EmployeeHireDate |
+| StatusContinuousFirstDayOfWork | Workday | Joiner | EmployeeHireDate |
+| StatusDateEnteredWorkforce | Workday | Joiner | EmployeeHireDate |
+| StatusOriginalHireDate | Workday | Joiner | EmployeeHireDate |
+| StatusEndEmploymentDate | Workday | Leaver | EmployeeLeaveDateTime |
+| StatusResignationDate | Workday | Leaver | EmployeeLeaveDateTime |
+| StatusRetirementDate | Workday | Leaver | EmployeeLeaveDateTime |
+| StatusTerminationDate | Workday | Leaver | EmployeeLeaveDateTime |
+| startDate | SAP SF | Joiner | EmployeeHireDate |
+| firstDateWorked | SAP SF | Joiner | EmployeeHireDate |
+| lastDateWorked | SAP SF | Leaver | EmployeeLeaveDateTime |
+| endDate | SAP SF | Leaver | EmployeeLeaveDateTime |
+
+For more attributes, see the [Workday attribute reference](../identity/app-provisioning/workday-attribute-reference) and [SAP SuccessFactors attribute reference](../identity/app-provisioning/sap-successfactors-attribute-reference).
+
+## Importance of time
+
+To ensure timing accuracy of scheduled workflows, it’s crucial to consider:
+
+- The time portion of the attribute must be set accordingly. For example, the `employeeHireDate` should have a time at the beginning of the day like 1 AM or 5 AM, and the `employeeLeaveDateTime` should have a time at the end of the day like 9 PM or 11 PM.
+- The workflows don't run earlier than the time specified in the attribute; however, the [tenant schedule (default 3h)](customize-workflow-schedule) can delay the workflow run. For instance, if you set the `employeeHireDate` to 8 AM but the tenant schedule doesn't run until 9 AM, the workflow isn't processed until then. If a new hire is starting at 8 AM, you would want to set the time to something like (start time - tenant schedule) to ensure it runs before the employee arrives.
+- If you're using Temporary Access Pass (TAP), it's recommended that you set the maximum lifetime to 24 hours. Doing this helps ensure that the TAP hasn't expired after being sent to an employee who might be in a different timezone. For more information, see [Configure Temporary Access Pass in Microsoft Entra ID to register Passwordless authentication methods](../identity/authentication/howto-authentication-temporary-access-pass#enable-the-temporary-access-pass-policy).
+- When importing the data, you should understand if and how the source provides time zone information for your users to potentially make adjustments to ensure timing accuracy.
+
+## Create a custom sync rule in Microsoft Entra Connect cloud sync for EmployeeHireDate
+
+The following steps guide you through creating a synchronization rule by using cloud sync.
+
+1. In the Microsoft Entra admin center, browse to **Hybrid management** &gt; **Microsoft Entra Connect**.
+2. Select **Manage Microsoft Entra Connect cloud sync**.
+3. Under **Configuration**, select your configuration.
+4. Select **Click to edit mappings**. This link opens the **Attribute mappings** screen.
+5. Select **Add attribute**.
+6. Fill in the following information:
+    - Mapping Type: Direct
+    - Source attribute: msDS-cloudExtensionAttribute1
+    - Default value: Leave blank
+    - Target attribute: employeeHireDate
+    - Apply this mapping: Always ![Screenshot of the cloud attribute mapping.](media/how-to-lifecycle-workflow-sync-attributes/edit-cloud-attribute-mapping.png)
+7. Select **Apply**.
+8. Back on the **Attribute mappings** screen, you should see your new attribute mapping.
+9. Select **Save schema**.
+
+For more information on attributes, see [Attribute mapping in Microsoft Entra Connect cloud sync](../identity/hybrid/cloud-sync/how-to-attribute-mapping).
+
+## How to create a custom sync rule in Microsoft Entra Connect for EmployeeHireDate
+
+The following example walks you through setting up a custom synchronization rule that synchronizes the Active Directory attribute to the employeeHireDate attribute in Microsoft Entra ID.
+
+1. Open a PowerShell window as administrator and run `Set-ADSyncScheduler -SyncCycleEnabled $false` to disable the scheduler.
+2. Go to Start\Microsoft Entra Connect\ and open the Synchronization Rules Editor
+3. Ensure the direction at the top is set to **Inbound**.
+4. Select **Add Rule.**
+5. On the **Create Inbound synchronization rule** screen, enter the following information and select **Next**.
+    - Name: In from AD - EmployeeHireDate
+    - Connected System: contoso.com
+    - Connected System Object Type: user
+    - Metaverse Object Type: person
+    - Precedence: 20 ![Screenshot of creating an inbound synchronization rule basics.](media/how-to-lifecycle-workflow-sync-attributes/create-inbound-rule.png)
+6. On the **Scoping filter** screen, select **Next.**
+7. On the **Join rules** screen, select **Next**.
+8. On the **Transformations** screen, Under **Add transformations,**enter the following information.
+    - FlowType: Direct
+    - Target Attribute: employeeHireDate
+    - Source: msDS-cloudExtensionAttribute1 ![Screenshot of creating inbound synchronization rule transformations.](media/how-to-lifecycle-workflow-sync-attributes/create-inbound-rule-transformations.png)
+9. Select **Add**.
+10. In the Synchronization Rules Editor, ensure the direction at the top is set to **Outbound**.
+11. Select **Add Rule.**
+12. On the **Create Outbound synchronization rule** screen, enter the following information and select **Next**.
+    - Name: Out to Microsoft Entra ID - EmployeeHireDate
+    - Connected System: &lt;your tenant&gt;
+    - Connected System Object Type: user
+    - Metaverse Object Type: person
+    - Precedence: 21
+13. On the **Scoping filter** screen, select **Next.**
+14. On the **Join rules** screen, select **Next**.
+15. On the **Transformations** screen, Under **Add transformations,**enter the following information.
+    - FlowType: Direct
+    - Target Attribute: employeeHireDate
+    - Source: employeeHireDate ![Screenshot of create outbound synchronization rule transformations.](media/how-to-lifecycle-workflow-sync-attributes/create-outbound-rule-transformations.png)
+16. Select **Add**.
+17. Close the Synchronization Rules Editor.
+18. Enable the scheduler again by running `Set-ADSyncScheduler -SyncCycleEnabled $true`.
+
+Note
+
+- **msDS-cloudExtensionAttribute1** is an example source.
+- **Starting with [Microsoft Entra Connect 2.0.3.0](../identity/hybrid/connect/reference-connect-version-history#functional-changes-10), `employeeHireDate` is added to the default 'Out to Microsoft Entra ID' rule, so steps 10-16 are not required.**
+- **Starting with [Microsoft Entra Connect 2.1.19.0](../identity/hybrid/connect/reference-connect-version-history#functional-changes-1), `employeeLeaveDateTime` is added to the default 'Out to Microsoft Entra ID' rule, so steps 10-16 aren't required.**
+
+For more information, see [How to customize a synchronization rule](../identity/hybrid/connect/how-to-connect-create-custom-sync-rule) and [Make a change to the default configuration](../identity/hybrid/connect/how-to-connect-sync-change-the-configuration).
+
+## Edit attribute mapping in the provisioning application
+
+After you set up your provisioning application, you can edit its attribute mapping. When the app is created, you get a list of default mappings between your HRM and Active Directory. From there, you can either edit the existing mapping or add a new mapping.
+
+To update this mapping, follow these steps:
+
+1. Sign in to the [Microsoft Entra admin center](https://entra.microsoft.com) as at least an [Application Administrator](../identity/role-based-access-control/permissions-reference#application-administrator).
+2. Browse to **Entra ID** &gt; **Enterprise apps**.
+3. Open your provisioned application.
+4. Select **Provisioning**, and then select **Edit attribute Mapping**.
+5. Select **Show advanced options**, and then select **Edit Attribute list for On-Premises Active Directory**. ![Screenshot of editing on-premises attribute.](media/how-to-lifecycle-workflow-sync-attributes/edit-on-prem-attribute.png)
+6. Add your source attribute or attributes created as Type String, and select the checkbox for required. ![Screenshot of source API list.](media/how-to-lifecycle-workflow-sync-attributes/edit-attribute-list.png)
+
+    Note
+
+    The number and name of source attributes added depend on which attributes you're syncing from Active Directory.
+7. Select Save.
+8. From there, you must map the HRM attributes to the added Active Directory attributes. To do this, Add New Mapping using an Expression.
+9. Your expression must match the formatting found in the [Understanding EmployeeHireDate and EmployeeLeaveDateTime formatting](how-to-lifecycle-workflow-sync-attributes#understanding-employeehiredate-and-employeeleavedatetime-formatting) section. ![Screenshot of setting attribute format.](media/how-to-lifecycle-workflow-sync-attributes/attribute-formatting-expression.png)
+10. Select **OK**.
+
+## How to verify these attribute values in Microsoft Entra ID
+
+To review the values set on these properties on user objects in Microsoft Entra ID, you can use the [Microsoft Graph PowerShell SDK](/en-us/powershell/microsoftgraph/installation?view=graph-powershell-1.0&amp;preserve-view=true). For example:
+
+```PowerShell
+# Import Module
+Import-Module Microsoft.Graph.Users
+
+# Define the necessary scopes
+$Scopes =@("User.Read.All", "User-LifeCycleInfo.Read.All")
+
+# Connect using the scopes defined and select the Beta API Version
+Connect-MgGraph -Scopes $Scopes
+
+# Query a user, using its user ID, and return the desired properties
+$user = Get-MgUser -UserID "00aa00aa-bb11-cc22-dd33-44ee44ee44ee" -Property EmployeeLeaveDateTime
+$User.EmployeeLeaveDateTime
+
+```
+
+![Screenshot of the result.](media/how-to-lifecycle-workflow-sync-attributes/user-lifecycle-properties-return.png)

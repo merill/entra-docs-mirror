@@ -1,0 +1,689 @@
+---
+layout: Conceptual
+title: Understanding the app manifest (Azure AD Graph format) - Microsoft identity platform | Microsoft Learn
+canonicalUrl: https://learn.microsoft.com/en-us/entra/identity-platform/reference-app-manifest
+uhfHeaderId: MSDocsHeader-Entra
+breadcrumb_path: /entra/breadcrumb/toc.json
+feedback_system: Standard
+feedback_product_url: /entra/identity-platform/developer-support-help-options
+author: cilwerner
+ms.author: cwerner
+ms.service: identity-platform
+description: Describes the Microsoft Entra app manifest, which represents an application's identity configuration in a Microsoft Entra tenant.
+manager: pmwongera
+ms.custom: 
+ms.date: 2025-04-15T00:00:00.0000000Z
+ms.reviewer: sureshja
+ms.topic: reference
+locale: en-us
+document_id: 3f7ced07-0b71-715f-749b-180567591c72
+document_version_independent_id: 8c533d7b-a058-3f1a-c296-9c0305f85f13
+original_content_git_url: https://github.com/MicrosoftDocs/entra-docs-pr/blob/live/docs/identity-platform/reference-app-manifest.md
+site_name: Docs
+depot_name: MSDN.entra-docs
+page_type: conceptual
+toc_rel: toc.json
+feedback_help_link_type: ''
+feedback_help_link_url: ''
+asset_id: identity-platform/reference-app-manifest
+moniker_range_name: 
+monikers: []
+item_type: Content
+source_path: docs/identity-platform/reference-app-manifest.md
+cmProducts:
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
+spProducts:
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
+platformId: b1b7402c-2b16-b95d-b37f-ffdb2220c0c9
+---
+
+# Understanding the app manifest (Azure AD Graph format) - Microsoft identity platform | Microsoft Learn
+
+The application manifest contains a definition of all the attributes of an application object in the Microsoft identity platform. It also serves as a mechanism for updating the application object. For more info on the Application entity and its schema, see the [Graph API Application entity documentation](/en-us/graph/api/resources/application).
+
+You can configure an app's attributes through the Microsoft Entra admin center or programmatically using [Microsoft Graph API](/en-us/graph/api/resources/application) or [Microsoft Graph PowerShell SDK](/en-us/powershell/module/microsoft.graph.applications/?view=graph-powershell-1.0&amp;preserve-view=true). However, there are some scenarios where you need to edit the app manifest to configure an app's attribute. These scenarios include:
+
+- If you registered the app as Microsoft Entra multitenant and personal Microsoft accounts, you can't change the supported Microsoft accounts in the UI. Instead, you must use the application manifest editor to change the supported account type.
+- To define permissions and roles that your app supports, you must modify the application manifest.
+
+## Configure the app manifest
+
+To configure the application manifest:
+
+1. Sign in to the [Microsoft Entra admin center](https://entra.microsoft.com) as at least an [Application Developer](../identity/role-based-access-control/permissions-reference#application-developer).
+2. Browse to **Entra ID** &gt; **App registrations**.
+3. Select the app you want to configure.
+4. From the app's **Manage** section, select **Manifest**. A web-based manifest editor opens, allowing you to edit the manifest. Optionally, you can select **Download** to edit the manifest locally, and then use **Upload** to reapply it to your application.
+
+## Manifest reference
+
+This section describes the attributes found in the application manifest.
+
+### id attribute
+
+| Key | Value type |
+| --- | --- |
+| id | String |
+
+The unique identifier for the app in the directory. This ID is not the identifier used to identify the app in any protocol transaction. Use it for the referencing the object in directory queries.
+
+Example:
+
+```json
+"id": "00aa00aa-bb11-cc22-dd33-44ee44ee44ee"
+```
+
+### acceptMappedClaims attribute
+
+| Key | Value type |
+| --- | --- |
+| acceptMappedClaims | Nullable Boolean |
+
+As documented on the [`apiApplication` resource type](/en-us/graph/api/resources/apiapplication#properties), this allows an application to use [claims mapping](saml-claims-customization) without specifying a custom signing key. Applications that receive tokens rely on the fact that the claim values are authoritatively issued by Microsoft Entra ID and cannot be tampered with. However, when you modify the token contents through claims-mapping policies, these assumptions may no longer be correct. Applications must explicitly acknowledge that tokens have been modified by the creator of the claims-mapping policy to protect themselves from claims-mapping policies created by malicious actors.
+
+Warning
+
+Do not set `acceptMappedClaims` property to `true` for multi-tenant apps, which can allow malicious actors to create claims-mapping policies for your app.
+
+Example:
+
+```json
+"acceptMappedClaims": true
+```
+
+### requestedAccessTokenVersion attribute
+
+| Key | Value type |
+| --- | --- |
+| requestedAccessTokenVersion | Nullable Int32 |
+
+Specifies the access token version expected by the resource. This parameter changes the version and format of the JWT produced independent of the endpoint or client used to request the access token.
+
+The endpoint used, v1.0 or v2.0, is chosen by the client and only impacts the version of id\_tokens. Resources need to explicitly configure `requestedAccessTokenVersion` to indicate the supported access token format.
+
+Possible values for `requestedAccessTokenVersion` are 1, 2, or null. If the value is null, this parameter defaults to 1, which corresponds to the v1.0 endpoint.
+
+If `signInAudience` is `AzureADandPersonalMicrosoftAccount`, the value must be `2`.
+
+Example:
+
+```json
+
+"requestedAccessTokenVersion": 2
+
+```
+
+### addIns attribute
+
+| Key | Value type |
+| --- | --- |
+| addIns | Collection |
+
+Defines custom behavior that a consuming service can use to call an app in specific contexts. For example, applications that can render file streams may set the `addIns` property for its "FileHandler" functionality. This parameter lets services like Microsoft 365 call the application in the context of a document the user is working on.
+
+Example:
+
+```json
+"addIns": [
+    {
+        "id": "aaaaaaaa-0000-1111-2222-bbbbbbbbbbbb",
+        "type": " FileHandler",
+        "properties": [
+            {
+                "key": "version",
+                "value": "2"
+            }
+        ]
+    }
+]
+```
+
+### allowPublicClient attribute
+
+| Key | Value type |
+| --- | --- |
+| allowPublicClient | Boolean |
+
+Specifies the fallback application type. Microsoft Entra ID infers the application type from the replyUrlsWithType by default. There are certain scenarios where Microsoft Entra ID can't determine the client app type. For example, one such scenario is the [ROPC](https://tools.ietf.org/html/rfc6749#section-4.3) flow where HTTP request happens without a URL redirection). In those cases, Microsoft Entra ID interprets the application type based on the value of this property. If this value is set to true the fallback application type is set as public client, such as an installed app running on a mobile device. The default value is false, which means the fallback application type is confidential client such as web app.
+
+Example:
+
+```json
+"allowPublicClient": false
+```
+
+### appId attribute
+
+| Key | Value type |
+| --- | --- |
+| appId | String |
+
+Specifies the unique identifier for the app that is assigned to an app by Microsoft Entra ID.
+
+Example:
+
+```json
+"appId": "00001111-aaaa-2222-bbbb-3333cccc4444"
+```
+
+### appRoles attribute
+
+| Key | Value type |
+| --- | --- |
+| appRoles | Collection |
+
+Specifies the collection of roles that an app may declare. These roles can be assigned to users, groups, or service principals. For more examples and info, see [Add app roles in your application and receive them in the token](howto-add-app-roles-in-apps).
+
+App roles and exposed delegated permission scopes share a default limit of 700 permission definitions per application or service principal. Disabled definitions also count. See [App role limits](howto-add-app-roles-in-apps#app-role-limits) for counting rules and behavior for existing objects above the limit.
+
+Example:
+
+```json
+"appRoles": [
+    {
+        "allowedMemberTypes": [
+            "User"
+        ],
+        "description": "Read-only access to device information",
+        "displayName": "Read Only",
+        "id": "aaaaaaaa-0000-1111-2222-bbbbbbbbbbbb",
+        "isEnabled": true,
+        "value": "ReadOnly"
+    }
+]
+```
+
+### errorUrl attribute
+
+| Key | Value type |
+| --- | --- |
+| errorUrl | String |
+
+Unsupported.
+
+### groupMembershipClaims attribute
+
+| Key | Value type |
+| --- | --- |
+| groupMembershipClaims | String |
+
+Configures the `groups` claim issued in a user or OAuth 2.0 access token that the app expects. To set this attribute, use one of the following valid string values:
+
+- `"None"`
+- `"SecurityGroup"` (for security groups and Microsoft Entra roles)
+- `"ApplicationGroup"` (this option includes only groups that are assigned to the application)
+- `"DirectoryRole"` (gets the Microsoft Entra directory roles the user is a member of)
+- `"All"` (this gets all of the security groups, distribution groups, and Microsoft Entra directory roles that the signed-in user is a member of).
+
+Example:
+
+```json
+"groupMembershipClaims": "SecurityGroup"
+```
+
+### optionalClaims attribute
+
+| Key | Value type |
+| --- | --- |
+| optionalClaims | String |
+
+The optional claims returned in the token by the security token service for this specific app.
+
+Apps that support both personal accounts and Microsoft Entra ID can't use optional claims. However, apps registered for just Microsoft Entra ID using the v2.0 endpoint can get the optional claims they requested in the manifest. For more info, see [Optional claims](optional-claims).
+
+Example:
+
+```json
+"optionalClaims": null
+```
+
+### identifierUris attribute
+
+| Key | Value type |
+| --- | --- |
+| identifierUris | String Array |
+
+User-defined URIs that uniquely identify a web app within its Microsoft Entra tenant or verified customer owned domain. When an application is used as a resource app, the identifierUri value is used to uniquely identify and access the resource. For a public client application it cannot have value for identifierUris.
+
+The following API and HTTP scheme-based application ID URI formats are supported. Replace the placeholder values as described in the list following the table.
+
+| Supported application IDURI formats | Example app ID URIs |
+| --- | --- |
+| *api://&lt;appId&gt;* | *api://aaaabbbb-0000-cccc-1111-dddd2222eeee* |
+| *api://&lt;tenantId&gt;/&lt;appId&gt;* | *api://aaaabbbb-0000-cccc-1111-dddd2222eeee/00001111-aaaa-2222-bbbb-3333cccc4444* |
+| *api://&lt;tenantId&gt;/&lt;string&gt;* | *api://aaaabbbb-0000-cccc-1111-dddd2222eeee/api* |
+| *api://&lt;string&gt;/&lt;appId&gt;* | *api://productapi/00001111-aaaa-2222-bbbb-3333cccc4444* |
+| *https://&lt;tenantInitialDomain&gt;.onmicrosoft.com/&lt;string&gt;* | *`https://contoso.onmicrosoft.com/productsapi`* |
+| *https://&lt;verifiedCustomDomain&gt;/&lt;string&gt;* | *`https://contoso.com/productsapi`* |
+| *https://&lt;string&gt;.&lt;verifiedCustomDomain&gt;* | *`https://product.contoso.com`* |
+| *https://&lt;string&gt;.&lt;verifiedCustomDomain&gt;/&lt;string&gt;* | *`https://product.contoso.com/productsapi`* |
+| *api://&lt;string&gt;.&lt;verifiedCustomDomainOrInitialDomain&gt;/&lt;string&gt;* | *`api://contoso.com/productsapi`* |
+
+- *&lt;appId&gt;* - The application identifier (appId) property of the application object.
+- *&lt;string&gt;* - The string value for the host or the api path segment.
+- *&lt;tenantId&gt;* - A GUID generated by Azure to represent the tenant within Azure.
+- *&lt;tenantInitialDomain&gt;* - *&lt;tenantInitialDomain&gt;.onmicrosoft.com*, where *&lt;tenantInitialDomain&gt;* is the initial domain name the tenant creator specified at tenant creation.
+- *&lt;verifiedCustomDomain&gt;* - A [verified custom domain](../fundamentals/add-custom-domain) configured for your Microsoft Entra tenant.
+
+Note
+
+If you use the *api://* scheme, you add a string value directly after the "api://". For example, *api://&lt;string&gt;*. That string value can be a GUID or an arbitrary string. If you add a GUID value, it must match either the app ID or the tenant ID. If you use a string value, it must use either a verified custom domain or initial domain of your tenant. The recommendation is to use *api://&lt;appId&gt;*.
+
+Important
+
+The application ID URI value must not end with a slash "/" character.
+
+Important
+
+The application ID URI value must be unique within your tenant.
+
+Example:
+
+```json
+"identifierUris": "https://contoso.onmicrosoft.com/00001111-aaaa-2222-bbbb-3333cccc4444"
+```
+
+### informationalUrls attribute
+
+| Key | Value type |
+| --- | --- |
+| informationalUrls | String |
+
+Specifies the links to the app's terms of service and privacy statement. The terms of service and privacy statement are surfaced to users through the user consent experience. For more info, see [How to: Add Terms of service and privacy statement for registered Microsoft Entra apps](howto-add-terms-of-service-privacy-statement).
+
+Example:
+
+```json
+"informationalUrls": {
+    "termsOfService": "https://MyRegisteredApp/termsofservice",
+    "support": "https://MyRegisteredApp/support",
+    "privacy": "https://MyRegisteredApp/privacystatement",
+    "marketing": "https://MyRegisteredApp/marketing"
+}
+```
+
+### keyCredentials attribute
+
+| Key | Value type |
+| --- | --- |
+| keyCredentials | Collection |
+
+Holds references to app-assigned credentials, string-based shared secrets and X.509 certificates. These credentials are used when requesting access tokens (when the app is acting as a client rather that as a resource).
+
+Example:
+
+```json
+"keyCredentials": [
+    {
+        "customKeyIdentifier": null,
+        "endDateTime": "2018-09-13T00:00:00Z",
+        "keyId": "<guid>",
+        "startDateTime": "2017-09-12T00:00:00Z",
+        "type": "AsymmetricX509Cert",
+        "usage": "Verify",
+        "value": null
+    }
+]
+```
+
+### knownClientApplications attribute
+
+| Key | Value type |
+| --- | --- |
+| knownClientApplications | String Array |
+
+Used for bundling consent if you have a solution that contains two parts: a client app and a custom web API app. If you enter the appID of the client app into this value, the user will only have to consent once to the client app. Microsoft Entra ID will know that consenting to the client means implicitly consenting to the web API. It automatically provisions service principals for both the client and web API at the same time. Both the client and the web API app must be registered in the same tenant.
+
+Example:
+
+```json
+"knownClientApplications": ["00001111-aaaa-2222-bbbb-3333cccc4444"]
+```
+
+### logoUrl attribute
+
+| Key | Value type |
+| --- | --- |
+| logoUrl | String |
+
+Read only value that points to the CDN URL to logo that was uploaded.
+
+Example:
+
+```json
+"logoUrl": "https://MyRegisteredAppLogo"
+```
+
+### logoutUrl attribute
+
+| Key | Value type |
+| --- | --- |
+| logoutUrl | String |
+
+The URL to sign out of the app.
+
+Example:
+
+```json
+"logoutUrl": "https://MyRegisteredAppLogout"
+```
+
+### name attribute
+
+| Key | Value type |
+| --- | --- |
+| name | String |
+
+The display name for the app.
+
+Example:
+
+```json
+"name": "MyRegisteredApp"
+```
+
+### oauth2AllowImplicitFlow attribute
+
+| Key | Value type |
+| --- | --- |
+| oauth2AllowImplicitFlow | Boolean |
+
+Specifies whether this web app can request OAuth2.0 implicit flow access tokens. The default is false. This flag is used for browser-based apps, like JavaScript single-page apps. To learn more, enter `OAuth 2.0 implicit grant flow` in the table of contents and see the topics about implicit flow. We, however, discourage the use of implicit grant even in SPAs and recommend using the [authorization code flow](v2-oauth2-auth-code-flow) with PKCE.
+
+Example:
+
+```json
+"oauth2AllowImplicitFlow": false
+```
+
+### oauth2AllowIdTokenImplicitFlow attribute
+
+| Key | Value type |
+| --- | --- |
+| oauth2AllowIdTokenImplicitFlow | Boolean |
+
+Specifies whether this web app can request OAuth2.0 implicit flow ID tokens. The default is false. This flag is used for browser-based apps, like JavaScript single-page apps. We, however, discourage the use of implicit grant even in SPAs and recommend using the [authorization code flow](v2-oauth2-auth-code-flow) with PKCE.
+
+In the Microsoft Graph app manifest, this attribute is replaced by the `enableIdTokenIssuance` property of the `implicitGrantSettings` property in the `web` attribute.
+
+Example:
+
+```json
+"oauth2AllowIdTokenImplicitFlow": false
+```
+
+### oauth2Permissions attribute
+
+| Key | Value type |
+| --- | --- |
+| oauth2Permissions | Collection |
+
+Specifies the collection of OAuth 2.0 permission scopes that the web API (resource) app exposes to client apps. These permission scopes may be granted to client apps during consent.
+
+Example:
+
+```json
+"oauth2Permissions": [
+    {
+        "adminConsentDescription": "Allow the app to access resources on behalf of the signed-in user.",
+        "adminConsentDisplayName": "Access resource1",
+        "id": "<guid>",
+        "isEnabled": true,
+        "type": "User",
+        "userConsentDescription": "Allow the app to access resource1 on your behalf.",
+        "userConsentDisplayName": "Access resources",
+        "value": "user_impersonation"
+    }
+]
+```
+
+### oauth2RequiredPostResponse attribute
+
+| Key | Value type |
+| --- | --- |
+| oauth2RequiredPostResponse | Boolean |
+
+Specifies whether, as part of OAuth 2.0 token requests, Microsoft Entra ID will allow POST requests, as opposed to GET requests. The default is false, which specifies that only GET requests are allowed.
+
+Example:
+
+```json
+"oauth2RequirePostResponse": false
+```
+
+### parentalControlSettings attribute
+
+| Key | Value type |
+| --- | --- |
+| parentalControlSettings | String |
+
+- `countriesBlockedForMinors` specifies the countries/regions in which the app is blocked for minors.
+- `legalAgeGroupRule` specifies the legal age group rule that applies to users of the app. Can be set to `Allow`, `RequireConsentForPrivacyServices`, `RequireConsentForMinors`, `RequireConsentForKids`, or `BlockMinors`.
+
+Example:
+
+```json
+"parentalControlSettings": {
+    "countriesBlockedForMinors": [],
+    "legalAgeGroupRule": "Allow"
+}
+```
+
+### passwordCredentials attribute
+
+| Key | Value type |
+| --- | --- |
+| passwordCredentials | Collection |
+
+See the description for the `keyCredentials` property.
+
+Example:
+
+```json
+"passwordCredentials": [
+    {
+        "customKeyIdentifier": null,
+        "displayName": "Generated by App Service",
+        "endDateTime": "2022-10-19T17:59:59.6521653Z",
+        "hint": "Nsn",
+        "keyId": "<guid>",
+        "secretText": null,
+        "startDateTime": "2022-10-19T17:59:59.6521653Z"
+    }
+]
+```
+
+### preAuthorizedApplications attribute
+
+| Key | Value type |
+| --- | --- |
+| preAuthorizedApplications | Collection |
+
+Lists applications and requested permissions for implicit consent. Requires an admin to provide consent to the application. preAuthorizedApplications do not require the user to consent to the requested permissions. Permissions listed in preAuthorizedApplications do not require user consent. However, any additional requested permissions not listed in preAuthorizedApplications require user consent.
+
+Example:
+
+```json
+"preAuthorizedApplications": [
+    {
+        "appId": "00001111-aaaa-2222-bbbb-3333cccc4444",
+        "permissionIds": [
+            "aaaaaaaa-0000-1111-2222-bbbbbbbbbbbb"
+        ]
+    }
+]
+```
+
+### publisherDomain attribute
+
+| Key | Value type |
+| --- | --- |
+| publisherDomain | String |
+
+The verified publisher domain for the application. Read-only.
+
+Example:
+
+```json
+"publisherDomain": "{tenant}.onmicrosoft.com"
+```
+
+### replyUrlsWithType attribute
+
+| Key | Value type |
+| --- | --- |
+| replyUrlsWithType | Collection |
+
+This multi-value property holds the list of registered redirect\_uri values that Microsoft Entra ID accepts as destinations when returning tokens. Each URI value should contain an associated app type value. Supported type values are:
+
+- `Web`
+- `InstalledClient`
+- `Spa`
+
+To learn more, see [replyUrl restrictions and limitations](reply-url).
+
+Example:
+
+```json
+"replyUrlsWithType": [
+    {
+        "url": "https://localhost:4400/services/office365/redirectTarget.html",
+        "type": "InstalledClient"
+    }
+]
+```
+
+### requiredResourceAccess attribute
+
+| Key | Value type |
+| --- | --- |
+| requiredResourceAccess | Collection |
+
+With dynamic consent, `requiredResourceAccess` drives the admin consent experience and the user consent experience for users who are using static consent. However, this parameter doesn't drive the user consent experience for the general case.
+
+- `resourceAppId` is the unique identifier for the resource that the app requires access to. This value should be equal to the appId declared on the target resource app.
+- `resourceAccess` is an array that lists the OAuth2.0 permission scopes and app roles that the app requires from the specified resource. Contains the `id` and `type` values of the specified resources.
+
+Example:
+
+```json
+"requiredResourceAccess": [
+    {
+        "resourceAppId": "00000002-0000-0000-c000-000000000000",
+        "resourceAccess": [
+            {
+                "id": "311a71cc-e848-46a1-bdf8-97ff7156d8e6",
+                "type": "Scope"
+            }
+        ]
+    }
+]
+```
+
+### samlMetadataUrl attribute
+
+| Key | Value type |
+| --- | --- |
+| samlMetadataUrl | String |
+
+The URL to the SAML metadata for the app.
+
+Example:
+
+```json
+"samlMetadataUrl": "https://MyRegisteredAppSAMLMetadata"
+```
+
+### signInUrl attribute
+
+| Key | Value type |
+| --- | --- |
+| signInUrl | String |
+
+Specifies the URL to the app's home page.
+
+Example:
+
+```json
+"signInUrl": "https://MyRegisteredApp"
+```
+
+### signInAudience attribute
+
+| Key | Value type |
+| --- | --- |
+| signInAudience | String |
+
+Specifies what Microsoft accounts are supported for the current application. Supported values are:
+
+- `AzureADMyOrg` - Users with a Microsoft work or school account in my organization's Microsoft Entra tenant (for example, single tenant)
+- `AzureADMultipleOrgs` - Users with a Microsoft work or school account in any organization's Microsoft Entra tenant (for example, multitenant)
+- `AzureADandPersonalMicrosoftAccount` - Users with a personal Microsoft account, or a work or school account in any organization's Microsoft Entra tenant
+- `PersonalMicrosoftAccount` - Personal accounts that are used to sign in to services like Xbox and Skype.
+
+Example:
+
+```json
+"signInAudience": "AzureADandPersonalMicrosoftAccount"
+```
+
+### tags attribute
+
+| Key | Value type |
+| --- | --- |
+| tags | String Array |
+
+Custom strings that can be used to categorize and identify the application.
+
+Individual tags must be between 1 and 256 characters (inclusive). No whitespaces or duplicate tags are allowed. There is no specific limit on the number of tags that can be added, subject to general manifest size limits.
+
+Example:
+
+```json
+"tags": [
+    "ProductionApp"
+]
+```
+
+## Common issues
+
+### Manifest limits
+
+Individual collections also have limits. App roles and exposed delegated permission scopes share a default limit of 700 permission definitions, separate from the aggregate manifest limit. See [App role limits](howto-add-app-roles-in-apps#app-role-limits).
+
+An application manifest has multiple attributes that are referred to as collections; for example, appRoles, keyCredentials, knownClientApplications, identifierUris, redirectUris, requiredResourceAccess, and oauth2Permissions. Within the complete application manifest for any application, the total number of entries in all the collections combined has been capped at 1200. If you previously specify 100 redirect URIs in the application manifest, then you're only left with 1,100 remaining entries to use across all other collections combined that make up the manifest.
+
+Note
+
+In case you try to add more than 1200 entries in the application manifest, you may see an error **"Failed to update application xxxxxx. Error details: The size of the manifest has exceeded its limit. Please reduce the number of values and retry your request."**
+
+### Unsupported attributes
+
+The application manifest represents the schema of the underlying application model in Microsoft Entra ID. As the underlying schema evolves, the manifest editor is updated to reflect the new schema from time to time. As a result, you may notice new attributes showing up in the application manifest. In rare occasions, you may notice a syntactic or semantic change in the existing attributes or you may find an attribute that existed previously aren't supported anymore. For example, you'll see new attributes in the [App registrations](https://go.microsoft.com/fwlink/?linkid=2083908), which are known with a different name in the App registrations (Legacy) experience.
+
+| App registrations (Legacy) | App registrations |
+| --- | --- |
+| `availableToOtherTenants` | `signInAudience` |
+| `displayName` | `name` |
+| `errorUrl` | - |
+| `homepage` | `signInUrl` |
+| `objectId` | `Id` |
+| `publicClient` | `allowPublicClient` |
+| `replyUrls` | `replyUrlsWithType` |
+
+For descriptions for these attributes, see the manifest reference section.
+
+When you try to upload a previously downloaded manifest, you may see one of the following errors. This error is likely because the manifest editor now supports a newer version of the schema, which doesn't match with the one you're trying to upload.
+
+- "Failed to update xxxxxx application. Error detail: Invalid object identifier 'undefined'. []."
+- "Failed to update xxxxxx application. Error detail: One or more property values specified are invalid. []."
+- "Failed to update xxxxxx application. Error detail: Not allowed to set availableToOtherTenants in this api version for update. []."
+- "Failed to update xxxxxx application. Error detail: Updates to 'replyUrls' property isn't allowed for this application. Use 'replyUrlsWithType' property instead. []."
+- "Failed to update xxxxxx application. Error detail: A value without a type name was found and no expected type is available. When the model is specified, each value in the payload must have a type that can be either specified in the payload, explicitly by the caller or implicitly inferred from the parent value. []"
+
+When you see one of these errors, we recommend the following actions:
+
+1. Edit the attributes individually in the manifest editor instead of uploading a previously downloaded manifest. Use the manifest reference table to understand the syntax and semantics of old and new attributes so that you can successfully edit the attributes you're interested in.
+2. If your workflow requires you to save the manifests in your source repository for use later, we suggest rebasing the saved manifests in your repository with the one you see in the **App registrations** experience.

@@ -1,0 +1,247 @@
+---
+layout: Conceptual
+title: Network planning and connections for Microsoft Entra Domain Services - Microsoft Entra ID | Microsoft Learn
+canonicalUrl: https://learn.microsoft.com/en-us/entra/identity/domain-services/network-considerations
+uhfHeaderId: MSDocsHeader-Entra
+breadcrumb_path: /entra/breadcrumb/toc.json
+feedback_system: Standard
+feedback_product_url: https://feedback.azure.com/d365community/forum/22920db1-ad25-ec11-b6e6-000d3a4f0789
+author: Justinha
+ms.author: justinha
+ms.service: entra-id
+ms.subservice: domain-services
+manager: dougeby
+description: Learn about some of the virtual network design considerations and resources used for connectivity when you run Microsoft Entra Domain Services.
+ms.topic: concept-article
+ms.date: 2025-02-05T00:00:00.0000000Z
+ms.reviewer: xyuan
+ms.custom: sfi-image-nochange
+locale: en-us
+document_id: 7013d117-4c2e-1b3e-0b67-d3eec67dc490
+document_version_independent_id: c948be62-abef-57bb-232c-970ccfec504c
+original_content_git_url: https://github.com/MicrosoftDocs/entra-docs-pr/blob/live/docs/identity/domain-services/network-considerations.md
+site_name: Docs
+depot_name: MSDN.entra-docs
+page_type: conceptual
+toc_rel: toc.json
+feedback_help_link_type: ''
+feedback_help_link_url: ''
+asset_id: identity/domain-services/network-considerations
+moniker_range_name: 
+monikers: []
+item_type: Content
+source_path: docs/identity/domain-services/network-considerations.md
+cmProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/20ed8455-bc18-4537-87a4-83784e7b2a39
+spProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/9a7f703b-30bb-4d62-9eb4-97213f571849
+platformId: 4345ec3b-be72-458a-5b31-4b042f7a3825
+---
+
+# Network planning and connections for Microsoft Entra Domain Services - Microsoft Entra ID | Microsoft Learn
+
+Microsoft Entra Domain Services provides authentication and management services to other applications and workloads. Network connectivity is a key component. Without correctly configured virtual network resources, applications and workloads can't communicate with and use the features provided by Domain Services. Plan your virtual network requirements to make sure that Domain Services can serve your applications and workloads as needed.
+
+This article outlines design considerations and requirements for an Azure virtual network to support Domain Services.
+
+## Azure virtual network design
+
+To provide network connectivity and allow applications and services to authenticate against a Domain Services managed domain, you use an Azure virtual network and subnet. Ideally, the managed domain should be deployed into its own virtual network.
+
+You can include a separate application subnet in the same virtual network to host your management VM or light application workloads. A separate virtual network for larger or complex application workloads, peered to the Domain Services virtual network, is usually the most appropriate design.
+
+Other designs choices are valid, provided you meet the requirements outlined in the following sections for the virtual network and subnet.
+
+As you design the virtual network for Domain Services, the following considerations apply:
+
+- Domain Services must be deployed into the same Azure region as your virtual network.
+    - At this time, you can only deploy one managed domain per Microsoft Entra tenant. The managed domain is deployed to single region. Make sure that you create or select a virtual network in a [region that supports Domain Services](https://azure.microsoft.com/global-infrastructure/services/?products=active-directory-ds&amp;regions=all).
+- Consider the proximity of other Azure regions and the virtual networks that host your application workloads.
+    - To minimize latency, keep your core applications close to, or in the same region as, the virtual network subnet for your managed domain. You can use virtual network peering or virtual private network (VPN) connections between Azure virtual networks. These connection options are discussed in a following section.
+- The virtual network can't rely on DNS services other than those services provided by the managed domain.
+    - Domain Services provides its own DNS service. The virtual network must be configured to use these DNS service addresses. Name resolution for additional namespaces can be accomplished using conditional forwarders.
+    - You can't use custom DNS server settings to direct queries from other DNS servers, including on VMs. Resources in the virtual network must use the DNS service provided by the managed domain.
+
+Important
+
+You can't move Domain Services to a different virtual network after you've enabled the service.
+
+A managed domain connects to a subnet in an Azure virtual network. Design this subnet for Domain Services with the following considerations:
+
+- A managed domain must be deployed in its own subnet. Using an existing subnet, gateway subnet, or remote gateways settings in the virtual network peering is unsupported.
+- A network security group is created during the deployment of a managed domain. This network security group contains the required rules for correct service communication.
+
+    - Don't create or use an existing network security group with your own custom rules.
+- A managed domain requires 3-5 IP addresses. Make sure that your subnet IP address range can provide this number of addresses.
+
+    - Restricting the available IP addresses can prevent the managed domain from maintaining two domain controllers.
+
+    Note
+
+    You shouldn't use public IP addresses for virtual networks and their subnets due to the following issues:
+
+    - **Scarcity of the IP address**: IPv4 public IP addresses are limited, and their demand often exceeds the available supply. Also, there are potentially overlapping IPs with public endpoints.
+    - **Security risks**: Using public IPs for virtual networks exposes your devices directly to the internet, increasing the risk of unauthorized access and potential attacks. Without proper security measures, your devices may become vulnerable to various threats.
+    - **Complexity**: Managing a virtual network with public IPs can be more complex than using private IPs, as it requires dealing with external IP ranges and ensuring proper network segmentation and security.
+
+    It is strongly recommended to use private IP addresses. If you use a public IP, ensure you are the owner/dedicated user of the chosen IPs in the public range you chose.
+
+The following example diagram outlines a valid design where the managed domain has its own subnet, there's a gateway subnet for external connectivity, and application workloads are in a connected subnet within the virtual network:
+
+![Recommended subnet design](media/entra-domain-services-design-guide/vnet-subnet-design.png)
+
+## Connections to the Domain Services virtual network
+
+As noted in the previous section, you can only create a managed domain in a single virtual network in Azure, and only one managed domain can be created per Microsoft Entra tenant. Based on this architecture, you may need to connect one or more virtual networks that host your application workloads to your managed domain's virtual network.
+
+You can connect application workloads hosted in other Azure virtual networks using one of the following methods:
+
+- Virtual network peering
+- Virtual private networking (VPN)
+
+### Virtual network peering
+
+Virtual network peering is a mechanism that connects two virtual networks through the Azure backbone network, allowing resources such as virtual machines (VMs) to communicate with each other directly using private IP addresses. Virtual network peering supports both regional peering, which connects VNets within the same Azure region, and global virtual network peering, which connects VNets across different Azure regions. This flexibility allows you to deploy a managed domain with your application workloads across multiple virtual networks, regardless of their regional locations.
+
+![Virtual network connectivity using peering](media/entra-domain-services-design-guide/vnet-peering.png)
+
+For more information, see [Azure virtual network peering overview](/en-us/azure/virtual-network/virtual-network-peering-overview).
+
+### Virtual Private Networking (VPN)
+
+You can connect a virtual network to another virtual network (VNet-to-VNet) in the same way that you can configure a virtual network to an on-premises site location. Both connections use a VPN gateway to create a secure tunnel using IPsec/IKE. This connection model lets you deploy the managed domain into an Azure virtual network and then connect on-premises locations or other clouds.
+
+![Virtual network connectivity using a VPN Gateway](media/entra-domain-services-design-guide/vnet-connection-vpn-gateway.jpg)
+
+For more information on using virtual private networking, read [Configure a VNet-to-VNet VPN gateway connection by using the Microsoft Entra admin center](/en-us/azure/vpn-gateway/vpn-gateway-howto-vnet-vnet-resource-manager-portal).
+
+## Name resolution when connecting virtual networks
+
+Virtual networks connected to the managed domain's virtual network typically have their own DNS settings. When you connect virtual networks, it doesn't automatically configure name resolution for the connecting virtual network to resolve services provided by the managed domain. Name resolution on the connecting virtual networks must be configured to enable application workloads to locate the managed domain.
+
+You can enable name resolution using conditional DNS forwarders on the DNS server supporting the connecting virtual networks, or by using the same DNS IP addresses from the managed domain's virtual network.
+
+## Network resources used by Domain Services
+
+A managed domain creates some networking resources during deployment. These resources are needed for successful operation and management of the managed domain, and shouldn't be manually configured.
+
+Don't lock the networking resources used by Domain Services. If networking resources get locked, they can't be deleted. When domain controllers need to be rebuilt in that case, new networking resources with different IP addresses need to be created.
+
+| Azure resource | Description |
+| --- | --- |
+| Network interface card | Domain Services hosts the managed domain on two domain controllers (DCs) that run on Windows Server as Azure VMs. Each VM has a virtual network interface that connects to your virtual network subnet. |
+| Dynamic standard public IP address | Domain Services communicates with the synchronization and management service using a Standard SKU public IP address. For more information about public IP addresses, see [IP address types and allocation methods in Azure](/en-us/azure/virtual-network/ip-services/public-ip-addresses). |
+| Azure standard load balancer | Domain Services uses a Standard SKU load balancer for network address translation (NAT) and load balancing (when used with secure LDAP). For more information about Azure load balancers, see [What is Azure Load Balancer?](/en-us/azure/load-balancer/load-balancer-overview) |
+| Network address translation (NAT) rules | Domain Services creates and uses two Inbound NAT rules on the load balancer for secure PowerShell remoting. If a Standard SKU load balancer is used, it will have an Outbound NAT Rule too. For the Basic SKU load balancer, no Outbound NAT rule is required. |
+| Load balancer rules | When a managed domain is configured for secure LDAP on TCP port 636, three rules are created and used on a load balancer to distribute the traffic. |
+
+Warning
+
+Don't delete or modify any of the network resource created by Domain Services, such as manually configuring the load balancer or rules. If you delete or modify any of the network resources, a Domain Services service outage may occur.
+
+## Network security groups and required ports
+
+A [network security group (NSG)](/en-us/azure/virtual-network/network-security-groups-overview) contains a list of rules that allow or deny network traffic in an Azure virtual network. When you deploy a managed domain, a network security group is created with a set of rules that let the service provide authentication and management functions. This default network security group is associated with the virtual network subnet your managed domain is deployed into.
+
+The following sections cover network security groups and Inbound and Outbound port requirements.
+
+### Inbound connectivity
+
+The following network security group Inbound rules are required for the managed domain to provide authentication and management services. Don't edit or delete these network security group rules for the virtual network subnet for your managed domain.
+
+| Source | Source service tag | Source port ranges | Destination | Service | Destination port ranges | Protocol | Action | Required | Purpose |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Service tag | AzureActiveDirectoryDomainServices | \* | Any | WinRM | 5986 | TCP | Allow | Yes | Management of your domain. |
+| Service tag | CorpNetSaw | \* | Any | RDP | 3389 | TCP | Allow | Optional | Debugging for support |
+
+Note that the **CorpNetSaw** service tag isn't available by using the Microsoft Entra admin center, and the network security group rule for **CorpNetSaw** has to be added by using [PowerShell](powershell-create-instance#create-a-network-security-group).
+
+Domain Services also relies on the Default Security rules AllowVnetInBound and AllowAzureLoadBalancerInBound.
+
+![Screenshot of network security group rules.](media/network-considerations/nsg.png)
+
+The AllowVnetInBound rule allows all traffic within the VNet which allows the DCs to properly communicate and replicate as well as allow domain join and other domain services to domain members. For more information about required ports for Windows, see [Service overview and network port requirements for Windows](/en-us/troubleshoot/windows-server/networking/service-overview-and-network-port-requirements).
+
+The AllowAzureLoadBalancerInBound rule is also required so that the service can properly communicate over the loadbalancer to manage the DCs. This network security group secures Domain Services and is required for the managed domain to work correctly. Don't delete this network security group. The load balancer won't work correctly without it.
+
+If needed, you can [create the required network security group and rules using Azure PowerShell](powershell-create-instance#create-a-network-security-group).
+
+Warning
+
+When you associate a misconfigured network security group or a user defined route table with the subnet in which the managed domain is deployed, you may disrupt Microsoft's ability to service and manage the domain. Synchronization between your Microsoft Entra tenant and your managed domain is also disrupted. Follow all listed requirements to avoid an unsupported configuration that could break sync, patching, or management.
+
+If you use secure LDAP, you can add the required TCP port 636 rule to allow external traffic if needed. Adding this rule doesn't place your network security group rules in an unsupported state. For more information, see [Lock down secure LDAP access over the internet](tutorial-configure-ldaps#lock-down-secure-ldap-access-over-the-internet)
+
+The Azure SLA doesn't apply to deployments that are blocked from updates or management by an improperly configured network security group or user defined route table. A broken network configuration can also prevent security patches from being applied.
+
+### Outbound connectivity
+
+For Outbound connectivity, you can either keep **AllowVnetOutbound** and **AllowInternetOutBound** or restrict Outbound traffic by using ServiceTags listed in the following table. If you use [Log Analytics](/en-us/azure/azure-monitor/logs/logs-data-export), add **EventHub** to outbound destinations.
+
+Make sure no other NSG with higher priority denies the Outbound connectivity. If Outbound connectivity is denied, replication won't work between replica sets.
+
+| Outbound port number | Protocol | Source | Destination | Action | Required | Purpose |
+| --- | --- | --- | --- | --- | --- | --- |
+| 443 | TCP | Any | AzureActiveDirectoryDomainServices | Allow | Yes | Communication with the Microsoft Entra Domain Services management service. |
+| 443 | TCP | Any | AzureMonitor | Allow | Yes | Monitoring of the virtual machines. |
+| 443 | TCP | Any | Storage | Allow | Yes | Communication with Azure Storage. |
+| 443 | TCP | Any | AzureActiveDirectory | Allow | Yes | Communication with Microsoft Entra ID. |
+| 443 | TCP | Any | GuestAndHybridManagement | Allow | Yes | Automated management of security patches. |
+
+Note
+
+The AzureUpdateDelivery and AzureFrontDoor.FirstParty tags are deprecated as of July 1, 2024. Microsoft Entra Domain Services manages WindowsUpdate independently, which removes the need for these tags. NSG adjustments aren't needed, with or without deprecated tags.
+
+### Port 5986 - management using PowerShell remoting
+
+- Used to perform management tasks using PowerShell remoting in your managed domain.
+- Without access to this port, your managed domain can't be updated, configured, backed-up, or monitored.
+- You can restrict inbound access to this port to the *AzureActiveDirectoryDomainServices* service tag.
+
+### Port 3389 - management using remote desktop
+
+- Used for remote desktop connections to domain controllers in your managed domain, this port cannot be changed or encapsulated into another port.
+- The default network security group rule uses the *CorpNetSaw*service tag to further restrict traffic.
+    - This service tag permits only secure access workstations on the Microsoft corporate network to use remote desktop to the managed domain.
+    - Access is only allowed with business justification, such as for management or troubleshooting scenarios.
+- This rule can be set to *Deny*, and only set to *Allow* when required. Most management and monitoring tasks are performed using PowerShell remoting. RDP is only used in the rare event that Microsoft needs to connect remotely to your managed domain for advanced troubleshooting.
+
+You can't manually select the *CorpNetSaw* service tag from the portal if you try to edit this network security group rule. You must use Azure PowerShell or the Azure CLI to manually configure a rule that uses the *CorpNetSaw* service tag.
+
+For example, you can use the following script to create a rule allowing RDP:
+
+```powershell
+Get-AzNetworkSecurityGroup -Name "nsg-name" -ResourceGroupName "resource-group-name" | Add-AzNetworkSecurityRuleConfig -Name "new-rule-name" -Access "Allow" -Protocol "TCP" -Direction "Inbound" -Priority "priority-number" -SourceAddressPrefix "CorpNetSaw" -SourcePortRange "*" -DestinationPortRange "3389" -DestinationAddressPrefix "*" | Set-AzNetworkSecurityGroup
+```
+
+### Other ports - synchronization with secondary controller, backup
+
+| Client port(s) | Server port | Service |
+| --- | --- | --- |
+| 1024-65535/TCP | 135/TCP | RPC Endpoint Mapper |
+| 1024-65535/TCP | 1024-65535/TCP | RPC for LSA, SAM, NetLogon |
+| 1024-65535/TCP/UDP | 389/TCP/UDP | LDAP |
+| 1024-65535/TCP | 636/TCP | LDAP SSL |
+| 1024-65535/TCP | 3268/TCP | LDAP GC |
+| 1024-65535/TCP | 3269/TCP | LDAP GC SSL |
+| 53,1024-65535/TCP/UDP | 53/TCP/UDP | DNS |
+| 1024-65535/TCP/UDP | 88/TCP/UDP | Kerberos |
+| 1024-65535/TCP | 445/TCP | SMB |
+| 1024-65535/TCP | 1024-65535/TCP | FRS RPC |
+
+- When configuring firewall rules or network security policies, it's crucial to consider other ports for synchronization with secondary controller.
+- If traffic restrictions are implemented for these ports, it's essential not to deny traffic between the IP addresses or the addressing range used by controllers of the service.
+- **Blocking communication via these ports between controllers will prevent the correct functioning of replication and data synchronization.** This causes errors in the backup process.
+- Ensure that security policies explicitly allow this internal communication to guarantee the integrity and availability of the service.
+
+For more information see [How to configure a firewall for Active Directory domains and trusts](/en-us/troubleshoot/windows-server/active-directory/config-firewall-for-ad-domains-and-trusts).
+
+## User-defined routes
+
+User-defined routes aren't created by default, and aren't needed for Domain Services to work correctly. If you're required to use route tables, avoid making any changes to the *0.0.0.0* route. Changes to this route disrupt Domain Services and puts the managed domain in an unsupported state.
+
+You must also route inbound traffic from the IP addresses included in the respective Azure service tags to the managed domain's subnet. For more information on service tags and their associated IP address from, see [Azure IP Ranges and Service Tags - Public Cloud](https://www.microsoft.com/en-us/download/details.aspx?id=56519).
+
+Caution
+
+These Azure datacenter IP ranges can change without notice. Ensure you have processes to validate you have the latest IP addresses.

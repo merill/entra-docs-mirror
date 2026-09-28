@@ -1,0 +1,337 @@
+---
+layout: FAQ
+title: On-premises Microsoft Entra Password Protection FAQ - Microsoft Entra ID | Microsoft Learn
+canonicalUrl: https://learn.microsoft.com/en-us/entra/identity/authentication/howto-password-ban-bad-on-premises-faq
+summary: >
+  <p>This section provides answers to many commonly asked questions about Microsoft Entra Password Protection.</p>
+uhfHeaderId: MSDocsHeader-Entra
+breadcrumb_path: /entra/breadcrumb/toc.json
+feedback_system: Standard
+feedback_product_url: https://feedback.azure.com/d365community/forum/79b1327d-d925-ec11-b6e6-000d3a4f06a4
+author: Justinha
+ms.author: justinha
+ms.service: entra-id
+ms.subservice: authentication
+manager: dougeby
+description: Review frequently asked questions for Microsoft Entra Password Protection in an on-premises Active Directory Domain Services environment
+ms.topic: how-to
+ms.date: 2025-01-14T00:00:00.0000000Z
+ms.reviewer: jsimmons
+locale: en-us
+document_id: bd810b22-4e2a-5a66-db90-dd39b1b5c565
+document_version_independent_id: 8e36df09-f7f1-dcbd-dc3d-93cbeed1b040
+original_content_git_url: https://github.com/MicrosoftDocs/entra-docs-pr/blob/live/docs/identity/authentication/howto-password-ban-bad-on-premises-faq.yml
+site_name: Docs
+depot_name: MSDN.entra-docs
+page_type: faq
+toc_rel: toc.json
+feedback_help_link_type: ''
+feedback_help_link_url: ''
+asset_id: identity/authentication/howto-password-ban-bad-on-premises-faq
+moniker_range_name: 
+monikers: []
+item_type: Content
+source_path: docs/identity/authentication/howto-password-ban-bad-on-premises-faq.yml
+cmProducts:
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/37da4cc9-0cfc-42a9-ba5e-805706b01ef8
+- https://authoring-docs-microsoft.poolparty.biz/devrel/b1cfdec6-b0c3-4209-818c-736879856e0e
+spProducts:
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/3661fb96-d414-4a4e-b7ad-9370637790dd
+- https://authoring-docs-microsoft.poolparty.biz/devrel/2d0723c1-cf38-4c30-ab3d-5df787b33270
+platformId: 05f31ea4-36c0-beb5-21cb-45acf98bfaba
+---
+
+# On-premises Microsoft Entra Password Protection FAQ - Microsoft Entra ID | Microsoft Learn
+
+This section provides answers to many commonly asked questions about Microsoft Entra Password Protection.
+
+## General questions
+
+### What guidance should users be given on how to select a secure password?
+
+Microsoft's current guidance on this topic can be found at the following link:
+
+[Microsoft Password Guidance](https://www.microsoft.com/research/publication/password-guidance)
+
+### Is on-premises Microsoft Entra Password Protection supported in non-public clouds?
+
+On-premises Microsoft Entra Password Protection is supported in both Azure Global and Azure Government clouds.
+
+The Microsoft Entra admin center allows modification of the on-premises-specific "Password protection for Windows Server Active Directory" configuration in non-supported clouds; such changes persist but never take effect. Registration of on-premises proxy agents or forests is unsupported in non-supported clouds, and any such registration attempts always fail.
+
+### How can I apply Microsoft Entra Password Protection benefits to a subset of my on-premises users?
+
+Not supported. Once deployed and enabled, Microsoft Entra Password Protection applies equally to all users.
+
+### What is the difference between a password change and a password set (or reset)?
+
+A password change is when a user chooses a new password after proving they have knowledge of the old password. For example, a password change is what happens when a user logs into Windows and is then prompted to choose a new password.
+
+A password set (sometimes called a password reset) is when an administrator replaces the password on an account with a new password, for example by using the Active Directory Users and Computers management tool. This operation requires a high level of privilege (usually Domain Admin), and the person performing the operation usually doesn't have knowledge of the old password. Help-desk scenarios often perform password sets, for instance when assisting a user who forgot their password. You'll also see password set events when a brand new user account is created for the first time with a password.
+
+The password validation policy behaves the same regardless of whether a password change or set is being done. The Microsoft Entra Password Protection DC Agent service does log different events to inform you whether a password change or set operation was done. See [Microsoft Entra Password Protection monitoring and logging](howto-password-ban-bad-on-premises-monitor).
+
+### Does Microsoft Entra Password Protection validate existing passwords after being installed?
+
+No - Microsoft Entra Password Protection can only enforce password policy on cleartext passwords during a password change or set operation. Once Active Directory accepts a password, only authentication-protocol-specific hashes of that password are persisted. The clear-text password is never persisted, therefore Microsoft Entra Password Protection can't validate existing passwords.
+
+After initial deployment of Microsoft Entra Password Protection, all users and accounts will eventually start using a Microsoft Entra Password Protection-validated password as their existing passwords expire normally over time. If desired, you can accelerate this process by a one-time manual expiration of user account passwords.
+
+Accounts configured with "password never expires" aren't forced to change their password unless manual expiration is done.
+
+### Why are duplicated password rejection events logged when attempting to set a weak password using the Active Directory Users and Computers management snap-in?
+
+The Active Directory Users and Computers management snap-in first attempts to set the new password using the Kerberos protocol. Upon failure, the snap-in makes a second attempt to set the password using a legacy (SAM RPC) protocol. The specific protocols used aren't important. If the new password is considered weak by Microsoft Entra Password Protection, this snap-in behavior produces two sets of password reset rejection events being logged.
+
+### Why are Microsoft Entra Password Protection password validation events being logged with an empty user name?
+
+Active Directory supports the ability to test a password to see if it passes the domain's current password complexity requirements, for example using the [NetValidatePasswordPolicy](/en-us/windows/win32/api/lmaccess/nf-lmaccess-netvalidatepasswordpolicy) api. When a password is validated in this way, the testing also includes validation by password-filter-dll based products such as Microsoft Entra Password Protection, but the user names passed to a given password filter dll are empty. In this scenario, Microsoft Entra Password Protection still validates the password using the currently in-effect password policy and issues an event log message to capture the outcome. However, the event log message will have empty user name fields.
+
+### I have hybrid users who attempt to change their password in Microsoft Entra ID and receive the response "We've seen that password too many times before. Choose something harder to guess." In this case, why don't I see a validation attempt on-premises?
+
+When a hybrid user changes their password in Microsoft Entra ID, whether through Microsoft Entra SSPR, MyAccount, or another Microsoft Entra password change mechanism, their password is evaluated against the global and custom banned password lists in the cloud. When the password reaches Active Directory through password-writeback, it's already validated in Microsoft Entra ID.
+
+Password resets and changes initiated in Microsoft Entra ID that fail validation for hybrid users can be found in the Microsoft Entra audit logs. See [Troubleshoot self-service password reset in Microsoft Entra ID](troubleshoot-sspr).
+
+### Is it supported to install Microsoft Entra Password Protection side by side with other password-filter-based products?
+
+Yes. Support for multiple registered password filter dlls is a core Windows feature and not specific to Microsoft Entra Password Protection. All registered password filter dlls must agree before a password is accepted.
+
+### How can I deploy and configure Microsoft Entra Password Protection in my Active Directory environment without using Azure?
+
+Not supported. Microsoft Entra Password Protection is an Azure feature that supports being extended into an on-premises Active Directory environment.
+
+### How can I modify the contents of the policy at the Active Directory level?
+
+Not supported. The policy can only be administered using the Microsoft Entra admin center. Also see the previous question.
+
+### Why is DFSR required for sysvol replication?
+
+FRS (the predecessor technology to DFSR) has many known problems and is entirely unsupported in newer versions of Windows Server Active Directory. Zero testing of Microsoft Entra Password Protection is done on FRS-configured domains.
+
+For more information, please see the following articles:
+
+[The Case for Migrating sysvol replication to DFSR](/en-us/archive/blogs/askds/the-case-for-migrating-sysvol-to-dfsr)
+
+[The End is Nigh for FRS](https://blogs.technet.microsoft.com/filecab/2014/06/25/the-end-is-nigh-for-frs)
+
+If your domain isn't already using DFSR, you MUST migrate it to use DFSR before installing Microsoft Entra Password Protection. For more information, see the following link:
+
+[SYSVOL Replication Migration Guide: FRS to DFS Replication](/en-us/previous-versions/windows/it-pro/windows-server-2008-R2-and-2008/dd640019%28v=ws.10%29)
+
+Warning
+
+The Microsoft Entra Password Protection DC Agent software currently installs on domain controllers in domains that are still using FRS for sysvol replication, but the software does NOT work properly in this environment. Negative side-effects include individual files failing to replicate, and sysvol restore procedures appearing to succeed but silently failing to replicate all files. You should migrate your domain to use DFSR as soon as possible, both for DFSR's inherent benefits and also to unblock the deployment of Microsoft Entra Password Protection. Future versions of the software are automatically disabled when running in a domain that is still using FRS.
+
+### How much disk space does the feature require on the domain sysvol share?
+
+The precise space usage varies since it depends on factors such as the number and length of the banned tokens in the Microsoft global banned list and the per-tenant custom list, plus encryption overhead. The contents of these lists are likely to grow in the future. With that in mind, a reasonable expectation is that the feature requires at least five (5) megabytes of space on the domain sysvol share.
+
+### Why is a reboot required to install or upgrade the DC agent software?
+
+This requirement is caused by core Windows behavior.
+
+### Is there any way to configure a DC agent to use a specific proxy server?
+
+No. Since the proxy server is stateless, it's not important which specific proxy server is used.
+
+### Is it okay to deploy the Microsoft Entra Password Protection Proxy service side by side with other services such as Microsoft Entra Connect?
+
+Yes. The Microsoft Entra Password Protection Proxy service and Microsoft Entra Connect should never conflict directly with each other.
+
+Unfortunately, the Microsoft Entra Password Protection Proxy software installs a version of the Microsoft Entra Connect Agent Updater service that is incompatible with the version installed by the [Microsoft Entra application proxy](/en-us/entra/identity/app-proxy) software. This incompatibility may result in the Agent Updater service being unable to contact Azure for software updates. It isn't recommended to install Microsoft Entra Password Protection Proxy and Microsoft Entra application proxy on the same machine.
+
+### In what order should the DC agents and proxies be installed and registered?
+
+Any ordering of Proxy agent installation, DC agent installation, forest registration, and Proxy registration is supported.
+
+### Should I be concerned about the performance hit on my domain controllers from deploying this feature?
+
+The Microsoft Entra Password Protection DC Agent service shouldn't significantly impact domain controller performance in an existing healthy Active Directory deployment.
+
+For most Active Directory deployments, password change operations are a small proportion of the overall workload on any given domain controller. As an example, imagine an Active Directory domain with 10,000 user accounts and a MaxPasswordAge policy set to 30 days. On average, this domain sees 10000/30=~333 password change operations each day, which is a minor number of operations for even a single domain controller. Consider a potential worst case scenario: suppose those ~333 password changes on a single DC were done over a single hour. For example, this scenario may occur when many employees all come to work on a Monday morning. Even in that case, we're still looking at ~333/60 minutes = six password changes per minute, which again isn't a significant load.
+
+However if your current domain controllers are already running at performance-limited levels (for example, maxed out with respect to CPU, disk space, disk I/O, and so on), it's advisable to add more domain controllers or expand available disk space, before deploying this feature. Refer to the previous question about sysvol disk space usage above.
+
+### I want to test Microsoft Entra Password Protection on just a few DCs in my domain. Is it possible to force user password changes to use those specific DCs?
+
+No. The Windows client OS controls which domain controller is used when a user changes their password. The domain controller is selected based on factors such as Active Directory site and subnet assignments, environment-specific network configuration, and so on. Microsoft Entra Password Protection doesn't control these factors and can't influence which domain controller is selected to change a user's password.
+
+One way to partially reach this goal would be to deploy Microsoft Entra Password Protection on all of the domain controllers in a given Active Directory site. This approach provides reasonable coverage for the Windows clients assigned to that site, and for the users that are logging into those clients and changing their passwords.
+
+### If I install the Microsoft Entra Password Protection DC Agent service on just the Primary Domain Controller (PDC), will all other domain controllers in the domain also be protected?
+
+No. When a user's password is changed on a given non-PDC domain controller, the clear-text password is never sent to the PDC (this idea is a common mis-perception). Once a new password is accepted on a given DC, that DC uses that password to create the various authentication-protocol-specific hashes of that password and then persists those hashes in the directory. The clear-text password isn't persisted. The updated hashes are then replicated to the PDC. User passwords may in some cases be changed directly on the PDC, again depending on various factors such as network topology and Active Directory site design. (See the previous question.)
+
+In summary, deployment of the Microsoft Entra Password Protection DC Agent service on the PDC is required to reach 100% security coverage of the feature across the domain. Deploying the feature on the PDC only doesn't provide Microsoft Entra Password Protection security benefits for any other DCs in the domain.
+
+### Why is custom smart lockout not working even after the agents are installed in my on-premises Active Directory environment?
+
+Custom smart lockout is only supported in Microsoft Entra ID. Changes to the custom smart lockout settings in the Microsoft Entra admin center have no effect on the on-premises Active Directory environment, even with the agents installed.
+
+### Is a System Center Operations Manager management pack available for Microsoft Entra Password Protection?
+
+No.
+
+### Why is Microsoft Entra ID still rejecting weak passwords even though I've configured the policy to be in Audit mode?
+
+Audit mode is only supported in the on-premises Active Directory environment. Microsoft Entra ID is implicitly always in "enforce" mode when it evaluates passwords.
+
+### My users see the traditional Windows error message when a password is rejected by Microsoft Entra Password Protection. Is it possible to customize this error message so that users know what really happened?
+
+No. The error message seen by users when a password is rejected by a domain controller is controlled by the client machine, not by the domain controller. This behavior happens whether a password is rejected by the default Active Directory password policies or by a password-filter-based solution such as Microsoft Entra Password Protection.
+
+## Password testing procedures
+
+You may want to do some basic testing of various passwords in order to validate proper operation of the software and to gain a better understanding of the [password evaluation algorithm](concept-password-ban-bad#how-are-passwords-evaluated). This section outlines a method for such testing that is designed to produce repeatable results.
+
+Why is it necessary to follow such steps? There are several factors that make it difficult to perform controlled, repeatable testing of passwords in the on-premises Active Directory environment:
+
+- The password policy is configured and persisted in Azure, and copies of the policy are synced periodically by the on-premises DC agent(s) using a polling mechanism. The latency inherent in this polling cycle may cause confusion. For example, if you configure the policy in Azure but forget to sync it to the DC agent, then your tests may not yield the expected results. The polling interval is currently hardcoded to be once per hour, but waiting an hour between policy changes is non-ideal for an interactive testing scenario.
+- Once a new password policy is synced down to a domain controller, more latency occurs while it replicates to other domain controllers. These delays can cause unexpected results if you test a password change against a domain controller that hasn't received the latest version of the policy.
+- Testing password changes via a user interface makes it difficult to have confidence in your results. For example, it's easy to mis-type an invalid password into a user interface, especially since most password user interfaces hide user input (for example, such as the Windows Ctrl-Alt-Delete -&gt; Change password UI).
+- It isn't possible to strictly control which domain controller is used when testing password changes from domain-joined clients. The Windows client OS selects a domain controller based on factors such as Active Directory site and subnet assignments, environment-specific network configuration, and so on.
+
+In order to avoid these problems, the following steps are based on command-line testing of password resets while logged into a domain controller.
+
+Warning
+
+Use these procedures only in a test environment. While the DC agent service is stopped, all incoming password changes and resets are accepted without validation. This also helps avoid the increased risks of logging into a domain controller.
+
+The following steps assume you've installed the DC agent on at least one domain controller, have installed at least one proxy, and have registered both the proxy and the forest.
+
+1. Log on to a domain controller using Domain Admin credentials or other credentials that have sufficient privileges to create test user accounts and reset passwords. Ensure that the domain controller has the DC agent software installed and has been rebooted.
+2. Open up Event Viewer and navigate to the [DC Agent Admin event log](howto-password-ban-bad-on-premises-monitor#dc-agent-admin-event-log).
+3. Open an elevated command prompt window.
+4. Create a test account for doing password testing
+
+    There are many ways to create a user account, but a command-line option is offered here as a way to make it easy during repetitive testing cycles:
+
+    ```text
+    net.exe user <testuseraccountname> /add <password>
+    ```
+
+    For discussion purposes below, assume that we have created a test account named "ContosoUser", for example:
+
+    ```text
+    net.exe user ContosoUser /add <password>
+    ```
+5. Sign in to the [Microsoft Entra admin center](https://entra.microsoft.com) as at least an [Authentication Administrator](../role-based-access-control/permissions-reference#authentication-administrator).
+6. Browse to Protection &gt; Authentication methods &gt; Password protection.
+7. Modify the Microsoft Entra Password Protection policy as needed for the testing you want to perform. For example, you may decide to configure either Enforced or Audit Mode, or you may decide to modify the list of banned terms in your custom banned passwords list.
+8. Synchronize the new policy by stopping and restarting the DC agent service.
+
+    This step can be accomplished in various ways. One way would be to use the Service Management administrative console, by right-clicking on the Microsoft Entra Password Protection DC Agent service and choosing "Restart". Another way may be performed from the command prompt window like so:
+
+    ```text
+    net stop AzureADPasswordProtectionDCAgent && net start AzureADPasswordProtectionDCAgent
+    ```
+9. Check the Event Viewer to verify that a new policy has been downloaded.
+
+    Each time the DC agent service is stopped and started, you should see two 30006 events issued in close succession. The first 30006 event will reflect the policy that was cached on disk in the sysvol share. The second 30006 event (if present) should have an updated Tenant policy date, and if so will reflect the policy that was downloaded from Azure. The Tenant policy date value is currently coded to display the approximate timestamp that the policy was downloaded from Azure.
+
+    If the second 30006 event doesn't appear, you should troubleshoot the problem before continuing.
+
+    The 30006 events will look similar to this example:
+
+    ```text
+    The service is now enforcing the following Azure password policy.
+    
+    Enabled: 1
+    AuditOnly: 0
+    Global policy date: ‎2018‎-‎05‎-‎15T00:00:00.000000000Z
+    Tenant policy date: ‎2018‎-‎06‎-‎10T20:15:24.432457600Z
+    Enforce tenant policy: 1
+    ```
+
+    For example, changing between Enforced and Audit mode will result in the AuditOnly flag being modified (the policy listed with AuditOnly=0 is in Enforced mode). Changes to the custom banned password list aren't directly reflected in the 30006 event above and aren't logged anywhere else for security reasons. Successfully downloading the policy from Azure after this change will also include the modified custom banned password list.
+10. Run a test by trying to reset a new password on the test user account.
+
+    This step can be done from the command prompt window like so:
+
+    ```text
+    net.exe user ContosoUser <password>
+    ```
+
+    After running the command, you can get more information about the outcome of the command by looking in the event viewer. Password validation outcome events are documented in the [DC Agent Admin event log](howto-password-ban-bad-on-premises-monitor#dc-agent-admin-event-log) topic; you'll use such events to validate the outcome of your test in addition to the interactive output from the net.exe commands.
+
+    Let's try an example: attempting to set a password that is banned by the Microsoft global list (note that list is [not documented](concept-password-ban-bad#global-banned-password-list) but we can test here against a known banned term). This example assumes that you have configured the policy to be in Enforced mode, and have added zero terms to the custom banned password list.
+
+    ```text
+    net.exe user ContosoUser PassWord
+    The password doesn't meet the password policy requirements. Check the minimum password length, password complexity, and password history requirements.
+    
+    More help is available by typing NET HELPMSG 2245.
+    ```
+
+    Per the documentation, because our test was a password reset operation you should see a 10017 and a 30005 event for the ContosoUser user.
+
+    The 10017 event should look like this example:
+
+    ```text
+    The reset password for the specified user was rejected because it didn't comply with the current Azure password policy. For more information, please see the correlated event log message.
+    
+    UserName: ContosoUser
+    FullName: 
+    ```
+
+    The 30005 event should look like this example:
+
+    ```text
+    The reset password for the specified user was rejected because it matched at least one of the tokens present in the Microsoft global banned password list of the current Azure password policy.
+    
+    UserName: ContosoUser
+    FullName: 
+    ```
+
+    That was fun - let's try another example! Now, we'll attempt to set a password that is banned by the custom banned list while the policy is in Audit mode. This example assumes that you've completed the following steps: configured the policy to be in Audit mode, added the term "lachrymose" to the custom banned password list, and synchronized the resultant new policy to the domain controller by cycling the DC agent service as previously described.
+
+    Ok, set a variation of the banned password:
+
+    ```text
+    net.exe user ContosoUser LaChRymoSE!1
+    The command completed successfully.
+    ```
+
+    Remember, this time it succeeded because the policy is in Audit mode. You should see a 10025 and a 30007 event for the ContosoUser user.
+
+    The 10025 event should look like this example:
+
+    ```text
+    The reset password for the specified user would normally have been rejected because it didn't comply with the current Azure password policy. The current Azure password policy is configured for audit-only mode so the password was accepted. Please see the correlated event log message for more details.
+    
+    UserName: ContosoUser
+    FullName: 
+    ```
+
+    The 30007 event should look like this example:
+
+    ```text
+    The reset password for the specified user would normally be rejected because it matches at least one of the tokens present in the per-tenant banned password list of the current Azure password policy. The current Azure password policy is configured for audit-only mode so the password was accepted.
+    
+    UserName: ContosoUser
+    FullName: 
+    ```
+11. Continue testing various passwords of your choice and checking the results in the event viewer using the procedures outlined in the previous steps. If you need to change the policy in the Microsoft Entra admin center, don't forget to synchronize the new policy down to the DC agent as described earlier.
+
+We've covered procedures that enable you to do controlled testing of Microsoft Entra Password Protection's password validation behavior. Resetting user passwords from the command line directly on a domain controller may seem an odd means of doing such testing, but as described previously it's designed to produce repeatable results. As you're testing various passwords, keep the [password evaluation algorithm](concept-password-ban-bad#how-are-passwords-evaluated) in mind as it may help to explain results that you didn't expect.
+
+Warning
+
+When all testing is completed don't forget to delete any user accounts created for testing purposes!
+
+## Additional content
+
+The following links aren't part of the core Microsoft Entra Password Protection documentation but may be a useful source of additional information on the feature.
+
+[Microsoft Entra Password Protection is now generally available!](https://techcommunity.microsoft.com/t5/Azure-Active-Directory-Identity/Azure-AD-Password-Protection-is-now-generally-available/ba-p/377487)
+
+[Email Phishing Protection Guide – Part 15: Implement the Microsoft Entra Password Protection Service (for On-Premises too!)](http://kmartins.com/2018/10/14/email-phishing-protection-guide-part-15-implement-the-microsoft-azure-ad-password-protection-service-for-on-premises-too/)
+
+[Microsoft Entra Password Protection and Smart Lockout are now in Public Preview!](https://techcommunity.microsoft.com/t5/Azure-Active-Directory-Identity/Azure-AD-Password-Protection-and-Smart-Lockout-are-now-in-Public/ba-p/245423#M529)
+
+## Microsoft Premier\Unified support training available
+
+If you want to learn more about Microsoft Entra Password Protection and how to deploy it, you can use a Microsoft proactive service. This service is available to customers with a Premier or Unified support contract. The service is called Microsoft Entra ID: Password Protection. Contact your Customer Success Account Manager for more information.

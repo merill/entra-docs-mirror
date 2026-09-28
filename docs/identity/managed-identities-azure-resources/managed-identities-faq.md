@@ -1,0 +1,223 @@
+---
+layout: Conceptual
+title: Managed identities for Azure resources frequently asked questions - Managed identities for Azure resources | Microsoft Learn
+canonicalUrl: https://learn.microsoft.com/en-us/entra/identity/managed-identities-azure-resources/managed-identities-faq
+uhfHeaderId: MSDocsHeader-Entra
+breadcrumb_path: /entra/breadcrumb/toc.json
+feedback_system: Standard
+feedback_product_url: https://feedback.azure.com/d365community/forum/22920db1-ad25-ec11-b6e6-000d3a4f0789
+author: kengaderdus
+ms.author: kengaderdus
+ms.service: entra-id
+ms.subservice: managed-identities
+manager: dougeby
+description: Frequently asked questions about managed identities
+ms.topic: faq
+ms.date: 2025-02-27T00:00:00.0000000Z
+locale: en-us
+document_id: e6aa599e-644c-0aa6-689f-6679719f9d04
+document_version_independent_id: 74c03e83-e397-ec6a-fa78-5080bac9aa16
+original_content_git_url: https://github.com/MicrosoftDocs/entra-docs-pr/blob/live/docs/identity/managed-identities-azure-resources/managed-identities-faq.md
+site_name: Docs
+depot_name: MSDN.entra-docs
+page_type: conceptual
+interactive_type: azurecli
+toc_rel: toc.json
+feedback_help_link_type: ''
+feedback_help_link_url: ''
+asset_id: identity/managed-identities-azure-resources/managed-identities-faq
+moniker_range_name: 
+monikers: []
+item_type: Content
+source_path: docs/identity/managed-identities-azure-resources/managed-identities-faq.md
+cmProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/68ec7f3a-2bc6-459f-b959-19beb729907d
+- https://authoring-docs-microsoft.poolparty.biz/devrel/2ed91286-6cf7-4b83-810d-75d0ee3b09dd
+spProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/90370425-aca4-4a39-9533-d52e5e002a5d
+- https://authoring-docs-microsoft.poolparty.biz/devrel/6735bd7e-4f7b-457d-b58c-29e6f0198677
+platformId: 86f4e18c-1cf8-0010-d352-b9a89cf71bc3
+---
+
+# Managed identities for Azure resources frequently asked questions - Managed identities for Azure resources | Microsoft Learn
+
+## Administration
+
+### How can you find resources that have a managed identity?
+
+You can find the list of resources that have a system-assigned managed identity by using the following Azure CLI Command:
+
+```azurecli
+az resource list --query "[?identity.type=='SystemAssigned'].{Name:name, principalId:identity.principalId}" --output table
+```
+
+### Which Azure role-based access control (RBAC) permissions are required to use a managed identity on a resource?
+
+- System-assigned managed identity: You need to have write permissions over the resource. For example, for virtual machines you need `Microsoft.Compute/virtualMachines/write`. This action is included in resource specific built-in roles like [Virtual Machine Contributor](/en-us/azure/role-based-access-control/built-in-roles#virtual-machine-contributor).
+- Assigning user-assigned managed identities to resources: You need write permissions over the resource. For example, for virtual machines you need `Microsoft.Compute/virtualMachines/write`. You need `Microsoft.ManagedIdentity/userAssignedIdentities/*/assign/action` action over the user-assigned identity. This action is included in the [Managed Identity Operator](/en-us/azure/role-based-access-control/built-in-roles#managed-identity-operator) built-in role.
+- Managing user-assigned identities: To create or delete user-assigned managed identities, you need the [Managed Identity Contributor](/en-us/azure/role-based-access-control/built-in-roles#managed-identity-contributor) role assignment.
+- Managing role assignments for managed identities: You need the [Owner](/en-us/azure/role-based-access-control/built-in-roles#all) or [User Access Administrator](/en-us/azure/role-based-access-control/built-in-roles#all) role assignment over the resource to which you're granting access. You'll need the [Reader](/en-us/azure/role-based-access-control/built-in-roles#all) role assignment to the resource with a system-assigned identity, or to the user-assigned identity that is being given the role assignment. If you don't have read access, you can search by "User, group, or service principal" to find the identity's backing service principal, instead of searching by managed identity while adding the role assignment. [Read more about assigning Azure roles](/en-us/azure/role-based-access-control/role-assignments-portal).
+
+### How do I prevent the creation of user-assigned managed identities?
+
+You can keep your users from creating user-assigned managed identities using [Azure Policy](/en-us/azure/governance/policy/overview)
+
+1. Sign in to the [Azure portal](https://portal.azure.com) and go to **Policy**.
+2. Choose **Definitions**
+3. Select **+ Policy definition** and enter the necessary information.
+4. In the policy rule section, paste:
+
+    ```json
+    {
+      "mode": "All",
+      "policyRule": {
+        "if": {
+          "field": "type",
+          "equals": "Microsoft.ManagedIdentity/userAssignedIdentities"
+        },
+        "then": {
+          "effect": "deny"
+        }
+      },
+      "parameters": {}
+    }
+    
+    ```
+
+After creating the policy, assign it to the resource group that you would like to use.
+
+1. Navigate to resource groups.
+2. Find the resource group that you're using for testing.
+3. Choose **Policies** from the left menu.
+4. Select **Assign policy**
+5. In the **Basics**section, provide:
+    1. **Scope** The resource group that we're using for testing
+    2. **Policy definition**: The policy that we created earlier.
+6. Leave all other settings at their defaults and choose **Review + Create**
+
+At this point, any attempt to create a user-assigned managed identity in the resource group fails.
+
+![Screenshot showing a policy violation.](media/known-issues/policy-violation.png)
+
+## Concepts
+
+### Do managed identities have a backing app object?
+
+No, managed identities and Microsoft Entra App Registrations aren't the same thing in the directory.
+
+App registrations have two components: an application object and a service principal object. A managed identity only has a service principal object.
+
+Managed identities don't have an application object in the directory, which is what is commonly used to grant app permissions for Microsoft Graph. Instead, Microsoft Graph permissions for managed identities need to be granted directly to the service principal.
+
+### What is the credential associated with a managed identity? How long is it valid and how often is it rotated?
+
+Note
+
+How managed identities authenticate is an internal implementation detail that is subject to change without notice.
+
+Managed identities use certificate-based authentication. Each managed identity’s credential has an expiration of 90 days and it's rolled after 45 days.
+
+### What identity will IMDS default to if I don't specify the identity in the request?
+
+- If system assigned managed identity is enabled and no identity is specified in the request, Azure Instance Metadata Service (IMDS) defaults to the system assigned managed identity.
+- If system assigned managed identity isn't enabled, and only one user assigned managed identity exists, IMDS defaults to that single user assigned managed identity. 
+
+> 
+> If another user assigned managed identity is assigned to the resource for any reason, your requests to IMDS will start failing with the error `Multiple user assigned identities exist, please specify the clientId / resourceId of the identity in the token request`. We highly recommend you explicitly specify an identity in your request, even if only one user assigned managed identity currently exists for the resource.
+- If system assigned managed identity isn't enabled, and multiple user assigned managed identities exist, then you're required to specify a managed identity in the request.
+
+## Limitations
+
+### Can the same managed identity be used across multiple regions?
+
+In short, yes you can use user assigned managed identities in more than one Azure region. The longer answer is that while user assigned managed identities are created as regional resources the associated [service principal](../../identity-platform/app-objects-and-service-principals#service-principal-object) (SP) created in Microsoft Entra ID is available globally. The service principal can be used from any Azure region and its availability is dependent on the availability of Microsoft Entra ID. For example, if you created a user assigned managed identity in the South-Central region and that region becomes unavailable this issue only impacts [control plane](/en-us/azure/azure-resource-manager/management/control-plane-and-data-plane) activities on the managed identity itself. The activities performed by any resources already configured to use the managed identities wouldn't be impacted.
+
+### Does managed identities for Azure resources work with Azure Cloud Services (Classic)?
+
+Managed identities for Azure resources don’t have support for [Azure Cloud Services (classic)](/en-us/azure/cloud-services/cloud-services-choose-me) at this time.
+
+### What is the security boundary of managed identities for Azure resources?
+
+The security boundary of the identity is the resource to which it's attached. For example, the security boundary for a virtual machine with managed identities for Azure resources enabled, is the virtual machine. Any code running on that VM, is able to call the managed identities endpoint and request tokens. The experience is similar experience when working with other resources that support managed identities.
+
+### Will managed identities be recreated automatically if I move a subscription to another directory?
+
+No, if you move a subscription to another directory, you have to manually re-create them and grant Azure role assignments again.
+
+- For system assigned managed identities: disable and re-enable.
+- For user assigned managed identities: delete, re-create, and attach them again to the necessary resources (for example, virtual machines)
+
+### Can I use a managed identity to access a resource in a different directory/tenant?
+
+No, managed identities don't currently support cross-directory scenarios.
+
+### Are there any rate limits that apply to managed identities?
+
+Managed identities limits have dependencies on Azure service limits, Azure Instance Metadata Service (IMDS) limits, and Microsoft Entra service limits.
+
+- **Azure service limits** define the number of create operations that can be performed at the tenant and subscription levels. User assigned managed identities also have [limitations](/en-us/azure/azure-resource-manager/management/azure-subscription-service-limits#managed-identity-limits) around how they may be named.
+- **IMDS** In general, requests to IMDS are limited to five requests per second. Requests exceeding this threshold are rejected with 429 responses. Requests to the Managed Identity category are limited to 20 requests per second and 5 concurrent requests. You can read more at the [Azure Instance Metadata Service (Windows)](/en-us/azure/virtual-machines/windows/instance-metadata-service?tabs=windows#managed-identity) article.
+- **Microsoft Entra service** Each managed identity counts towards the object quota limit in a Microsoft Entra tenant as described in [Microsoft Entra service limits and restrictions](../users/directory-service-limits-restrictions).
+
+### Is it possible to move a user-assigned managed identity to a different resource group/subscription?
+
+Moving a user-assigned managed identity to a different resource group isn't supported. If you need to use a managed identity in a different resource group or subscription, you would need to create a new user-assigned managed identity and assign the necessary permissions to it.
+
+### Are managed identities tokens cached?
+
+Managed identity tokens are cached by the underlying Azure infrastructure for performance and resiliency purposes: the back-end services for managed identities maintain a cache per resource URI for around 24 hours. It can take several hours for changes to a managed identity's permissions to take effect, for example. Today, it isn't possible to force a managed identity's token to be refreshed before its expiry. For more information, see [Limitation of using managed identities for authorization](managed-identity-best-practice-recommendations#limitation-of-using-managed-identities-for-authorization).
+
+### Are managed identities soft deleted?
+
+Yes, Managed Identities are soft deleted for 30 days. You can view the soft deleted managed identity service principal, but you can't restore or permanently delete it.
+
+### What happens to tokens after a managed identity is deleted?
+
+When a managed identity is deleted, an Azure resource that was previously associated with that identity can no longer request new tokens for that identity. Tokens that were issued before the identity was deleted will still be valid until their original expiry. Some target endpoints' authorization systems may carry out other checks in the directory for the identity, in which case the request fails as the object can't be found. However some systems, like Azure RBAC, will continue to accept requests from that token until it expires.
+
+## Directory object quota for managed identities
+
+Each managed identity has a service principal in Microsoft Entra ID. This service principal counts toward the tenant's directory object quota, together with other directory objects such as users, groups, applications, devices, and service principals.
+
+To preserve directory capacity for other essential objects, creation of a managed identity is blocked when the new service principal would cause directory usage to reach or exceed **98%** of the tenant's total directory object quota.
+
+The 98% threshold applies to total directory object usage. It isn't a separate quota that counts only managed identities.
+
+Important
+
+This validation affects the creation of new managed identity service principals. Existing managed identities continue to work, and their ability to obtain tokens isn't affected.
+
+### Operations affected by the quota
+
+The directory quota validation can affect the following operations:
+
+- Creating a user-assigned managed identity.
+- Enabling a system-assigned managed identity on an Azure resource.
+- Re-enabling a system-assigned managed identity if the operation requires a new service principal.
+
+Assigning an existing user-assigned managed identity to another Azure resource doesn't create another service principal. Therefore, the assignment doesn't consume another directory object and isn't blocked by this validation.
+
+### How the 98% threshold works
+
+Before Microsoft Entra creates the service principal for a managed identity, it evaluates the tenant's current directory object usage.
+
+Creation is blocked if adding the service principal would cause directory usage to reach or exceed 98% of the tenant's total quota.
+
+For example, if a tenant has a quota of 300,000 directory objects, the managed identity creation threshold is 294,000 objects. A request that would increase usage to 294,000 objects is blocked.
+
+The remaining capacity is available for other directory operations and essential objects. It doesn't increase the tenant's total directory object quota.
+
+### Error message
+
+When managed identity creation is blocked, you receive an error similar to the following message:
+
+> 
+> The directory object quota limit for the Tenant has been reached. Creation of new managed identities is blocked. Please ask your administrator to increase the directory quota limit or delete objects to reduce the used quota.
+
+Important
+
+Soft-deleted objects count torwards the overall quota usage.
+
+### Resolve a blocked managed identity operation
+
+After directory usage falls below the 98% threshold, or after Microsoft Support increases the tenant's quota, retry creating or enabling the managed identity.

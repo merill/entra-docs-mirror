@@ -1,0 +1,139 @@
+---
+layout: Conceptual
+title: Manage access to apps - Microsoft Entra ID | Microsoft Learn
+canonicalUrl: https://learn.microsoft.com/en-us/entra/identity/enterprise-apps/what-is-access-management
+uhfHeaderId: MSDocsHeader-Entra
+breadcrumb_path: /entra/breadcrumb/toc.json
+feedback_system: Standard
+feedback_product_url: https://feedback.azure.com/d365community/forum/22920db1-ad25-ec11-b6e6-000d3a4f0789
+author: omondiatieno
+ms.author: jomondi
+ms.service: entra-id
+ms.subservice: enterprise-apps
+manager: dougeby
+description: Describes how Microsoft Entra ID enables organizations to specify the apps to which each user has access.
+ms.topic: concept-article
+ms.date: 2024-08-25T00:00:00.0000000Z
+ms.reviewer: ergreenl
+ms.custom: enterprise-apps
+locale: en-us
+document_id: 505a457a-6fd3-7fac-942f-f975883a495a
+document_version_independent_id: 97bc6852-8ce4-261d-473c-89949c152478
+original_content_git_url: https://github.com/MicrosoftDocs/entra-docs-pr/blob/live/docs/identity/enterprise-apps/what-is-access-management.md
+site_name: Docs
+depot_name: MSDN.entra-docs
+page_type: conceptual
+toc_rel: toc.json
+feedback_help_link_type: ''
+feedback_help_link_url: ''
+asset_id: identity/enterprise-apps/what-is-access-management
+moniker_range_name: 
+monikers: []
+item_type: Content
+source_path: docs/identity/enterprise-apps/what-is-access-management.md
+cmProducts:
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
+- https://authoring-docs-microsoft.poolparty.biz/devrel/63959238-cb90-4871-a33d-4a5519097e47
+spProducts:
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
+- https://authoring-docs-microsoft.poolparty.biz/devrel/78d87f42-5582-4a6b-90be-7db2f12b34e6
+platformId: 30bf5b83-70e9-89da-443a-db61d6fea726
+---
+
+# Manage access to apps - Microsoft Entra ID | Microsoft Learn
+
+Integrating an app into your organization's identity system brings challenges in access management, usage evaluation, and reporting. IT Administrators or help desk staff usually need to oversee app access. Access assignment can fall to a general or divisional IT team, but ideally, business decision makers should be involved, giving approval before IT completes the process.
+
+Other organizations invest in integration with an existing automated identity and access management system, like Role-Based Access Control (RBAC) or Attribute-Based Access Control (ABAC). Both the integration and rule development tend to be specialized and expensive. Monitoring or reporting on either management approach has its own separate, costly, and complex investment.
+
+## How does Microsoft Entra ID help?
+
+Microsoft Entra ID supports extensive access management for configured applications, enabling organizations to easily achieve the right access policies ranging from automatic, attribute-based assignment (ABAC or RBAC scenarios) through delegation and including administrator management. With Microsoft Entra ID, you can easily achieve complex policies, combining multiple management models for a single application and can even reuse management rules across applications with the same audiences.
+
+With Microsoft Entra ID, usage and assignment reporting is fully integrated, enabling administrators to easily report on assignment state, assignment errors, and even usage.
+
+### Assigning users and groups to an app
+
+Microsoft Entra application assignment focuses on two primary assignment modes:
+
+- **Individual assignment** An IT admin with directory Cloud Application Administrator permissions can select individual user accounts and grant them access to the application.
+- **Group-based assignment (requires Microsoft Entra ID P1 or P2)** An IT admin with directory Cloud Application permissions can assign a group to the application. Specific users' access is determined by whether they're members of the group at the time they try to access the application. In other words, an administrator can effectively create an assignment rule stating "any current member of the assigned group has access to the application." With this assignment option, administrators can benefit from any of Microsoft Entra group management options, including attribute-based [dynamic membership groups](/en-us/entra/fundamentals/how-to-manage-groups), external system groups (for example, on-premises Active Directory or Workday), or Administrator-managed or self-service-managed groups. A single group can be easily assigned to multiple apps, making sure that applications with assignment affinity can share assignment rules, reducing the overall management complexity.
+
+    Note
+
+    [Nested group](/en-us/entra/fundamentals/how-to-manage-groups) memberships aren't supported for group-based assignment to applications at this time.
+
+With these two assignment modes, administrators can achieve any desirable assignment management approach.
+
+### Requiring user assignment for an app
+
+With certain types of applications, you have the option of requiring users to be assigned to the application. By doing so, you prevent everyone from signing in except those users you explicitly assign to the application. The following types of applications support this option:
+
+- Applications configured for federated single sign-on (SSO) with SAML-based authentication
+- Application Proxy applications that use Microsoft Entra Pre-Authentication
+- Applications, which are built on the Microsoft Entra application platform that use OAuth 2.0 / OpenID Connect Authentication after a user or admin consents to that application. Certain enterprise applications offer more control over who is allowed to sign in.
+
+When user assignment is required, only those users you assign to the application (either through direct user assignment or based on group membership) are able to sign in. They can access the app on the My Apps portal or by using a direct link.
+
+When user assignment isn't required, unassigned users don't see the app on their My Apps, but they can still sign in to the application itself (also known as SP-initiated sign-on) or they can use the **User Access URL** in the application’s **Properties** page (also known as IDP-initiated sign on). For more information on requiring user assignment configurations, See [Configure an application](add-application-portal-configure)
+
+This setting doesn't affect whether or not an application appears on My Apps. Applications appear on users' My Apps portal once you assign a user or group to the application.
+
+Note
+
+When an application requires assignment, user consent for that application isn't allowed. This is true even if users consent for that app would have otherwise been allowed. Be sure to [grant tenant-wide admin consent](grant-admin-consent) to apps that require assignment.
+
+For some applications, the option to require user assignment isn't available in the application's properties. In these cases, you can use PowerShell to set the appRoleAssignmentRequired property on the service principal.
+
+### Determining the user experience for accessing apps
+
+Microsoft Entra ID provides [several customizable ways to deploy applications](end-user-experiences) to end users in your organization:
+
+- Microsoft Entra My Apps
+- Microsoft 365 application launcher
+- Direct sign-on to federated apps (service-pr)
+- Deep links to federated, password-based, or existing apps
+
+You can determine whether users assigned to an enterprise app can see it in My Apps and Microsoft 365 application launcher.
+
+## Example: Complex application assignment with Microsoft Entra ID
+
+Consider an application like Salesforce. In many organizations, Salesforce is primarily used by the marketing and sales teams. Often, members of the marketing team have highly privileged access to Salesforce, while members of the sales team get limited access. In many cases, a broad population of information workers gets restricted access to the application. Exceptions to these rules complicate matters. It's often the prerogative of the marketing or sales leadership teams to grant a user access or change their roles independently of these generic rules.
+
+With Microsoft Entra ID, applications like Salesforce can be preconfigured for single sign-on (SSO) and automated provisioning. Once the application is configured, an Administrator can take the one-time action to create and assign the appropriate groups. In this example, an administrator could execute the following assignments:
+
+- [Dynamic groups](/en-us/entra/fundamentals/how-to-manage-groups) can be defined to automatically represent all members of the marketing and sales teams using attributes like department or role:
+
+    - All members of marketing groups would be assigned to the "marketing" role in Salesforce
+    - All members of sales team groups would be assigned to the "sales" role in Salesforce. A further refinement could use multiple groups that represent regional sales teams assigned to different Salesforce roles.
+- To enable the exception mechanism, a self-service group could be created for each role. For example, the "Salesforce marketing exception" group can be created as a self-service group. The group can be assigned to the Salesforce marketing role and the marketing leadership team can be made owner. Members of the marketing leadership team could add or remove users, set a join policy, or even approve or deny individual users' requests to join. This mechanism is supported through an information worker appropriate experience that doesn't require specialized training for owners or members.
+
+In this case, all assigned users would be automatically provisioned to Salesforce. As they're added to different groups, their role assignment is updated in Salesforce. Users can discover and access Salesforce through My Apps, Office web clients, or by navigating to their organizational Salesforce sign in page. Administrators can easily view usage and assignment status using Microsoft Entra ID reporting.
+
+Administrators can employ [Microsoft Entra Conditional Access](../conditional-access/concept-conditional-access-users-groups) to set access policies for specific roles. These policies can include whether access is permitted outside the corporate environment and even multifactor authentication or device requirements to achieve access in various cases.
+
+## Access to Microsoft applications
+
+Microsoft Applications (like Exchange, SharePoint, Yammer, and so on) are assigned and managed a bit differently than non-Microsoft SaaS applications or other applications, which you integrate with Microsoft Entra ID for single sign-on.
+
+There are three main ways that a user can get access to a Microsoft-published application.
+
+- For applications in the Microsoft 365 or other paid suites, users are granted access through **license assignment** either directly to their user account, or through a group using our group-based license assignment capability.
+- For applications that Microsoft or a non-Microsoft organization publishes freely for anyone to use, users can be granted access through [user consent](configure-user-consent). The users sign in to the application with their Microsoft Entra work or school account and allow it to have access to some limited set of data on their account.
+- For applications that Microsoft or a non-Microsoft organization publishes freely for anyone to use, users can also be granted access through [administrator consent](manage-consent-requests). This means that an administrator has determined the application can be used by everyone in the organization, so they sign in to the application with a [Privileged Role Administrator](../role-based-access-control/permissions-reference#privileged-role-administrator) role and grant access to everyone in the organization.
+
+Some applications combine these methods. For example, certain Microsoft applications are part of a Microsoft 365 subscription, but still require consent.
+
+Users can access Microsoft 365 applications through their Office 365 portals. You can also show or hide Microsoft 365 applications in the My Apps with the [Office 365 visibility toggle](hide-application-from-user-portal) in your directory's **User settings**.
+
+As with enterprise apps, you can [assign users](assign-user-or-group-access-portal) to certain Microsoft applications via the Microsoft Entra admin center or, using PowerShell.
+
+## Preventing application access through local accounts
+
+Microsoft Entra ID enables your organization to set up single sign-on to protect how users authenticate to applications with Conditional Access, multi-factor authentication, etc. Some applications historically have their own local user store and allow users to sign into the application using local credentials or an application-specific backup authentication method, instead of using single sign-on. These application capabilities could be misused and allow users to retain access to applications even after they are no longer assigned to the application in Microsoft Entra ID or can no longer sign into Microsoft Entra ID, and could allow attackers to attempt to compromise the application without appearing in the Microsoft Entra ID logs. To ensure that sign ins to these applications are protected by Microsoft Entra ID:
+
+- Identify which applications connected to your directory for single sign-on allow end users to bypass single sign-on with a local application credential or a backup authentication method. You will need to review the documentation provided by the application provider to understand if this is possible, and what settings are available. Then, in those applications, disable the settings that allow end users to bypass SSO. Test the end user experience has been secured by opening a browser in InPrivate, connecting to the applications' sign in page, providing the identity of a user in your tenant, and verify that there is no option to sign in other than via Microsoft Entra.
+- If your application provides an API to manage user passwords, remove the local passwords or set a unique password for each user using the APIs. This will prevent end users from signing into the application with local credentials.
+- If your application provides an API to manage users, configure Microsoft Entra user provisioning to that application to disable or delete user accounts when users are no longer in scope of the application or the tenant.

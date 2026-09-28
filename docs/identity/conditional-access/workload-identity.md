@@ -1,0 +1,183 @@
+---
+layout: Conceptual
+title: Microsoft Entra Conditional Access for workload identities - Microsoft Entra ID | Microsoft Learn
+canonicalUrl: https://learn.microsoft.com/en-us/entra/identity/conditional-access/workload-identity
+uhfHeaderId: MSDocsHeader-Entra
+breadcrumb_path: /entra/breadcrumb/toc.json
+feedback_system: Standard
+feedback_product_url: https://feedback.azure.com/d365community/forum/22920db1-ad25-ec11-b6e6-000d3a4f0789
+author: kenwith
+ms.author: kenwith
+ms.service: entra-id
+ms.subservice: conditional-access
+manager: dougeby
+description: Protecting workload identities with Conditional Access policies
+ms.topic: how-to
+ms.date: 2026-03-24T00:00:00.0000000Z
+ms.reviewer: swethar
+locale: en-us
+document_id: 60d23869-94f5-22cc-425e-4bf675d84ce0
+document_version_independent_id: 5105047f-04bf-87ef-ee8e-3e9bf9b5ac3a
+original_content_git_url: https://github.com/MicrosoftDocs/entra-docs-pr/blob/live/docs/identity/conditional-access/workload-identity.md
+site_name: Docs
+depot_name: MSDN.entra-docs
+page_type: conceptual
+toc_rel: toc.json
+feedback_help_link_type: ''
+feedback_help_link_url: ''
+asset_id: identity/conditional-access/workload-identity
+moniker_range_name: 
+monikers: []
+item_type: Content
+source_path: docs/identity/conditional-access/workload-identity.md
+cmProducts:
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
+- https://authoring-docs-microsoft.poolparty.biz/devrel/9d7be3ef-f27c-4c7f-9eba-67c3cd429995
+spProducts:
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
+- https://authoring-docs-microsoft.poolparty.biz/devrel/feeb50f3-b677-44f9-b3a6-5f2f58182b0d
+platformId: 5e50c647-8422-c108-3496-89df6a82365e
+---
+
+# Microsoft Entra Conditional Access for workload identities - Microsoft Entra ID | Microsoft Learn
+
+## Overview
+
+Conditional Access policies historically applied only to users when they access apps and services like SharePoint Online. We're now extending support for Conditional Access policies to be applied to service principals owned by the organization. We call this capability Conditional Access for workload identities.
+
+A [workload identity](../../workload-id/workload-identities-overview) is an identity that allows an application or service principal access to resources, sometimes in the context of a user. These workload identities differ from traditional user accounts as they:
+
+- Can’t perform multifactor authentication.
+- Often have no formal lifecycle process.
+- Need to store their credentials or secrets somewhere.
+
+These differences make workload identities harder to manage and put them at higher risk for compromise.
+
+Important
+
+Workload Identities Premium licenses are required to create or modify Conditional Access policies scoped to service principals. In directories without appropriate licenses, existing Conditional Access policies for workload identities continue to function, but can't be modified. For more information, see [Microsoft Entra Workload ID](https://www.microsoft.com/security/business/identity-access/microsoft-entra-workload-identities#office-StandaloneSKU-k3hubfz).
+
+Note
+
+Policy can be applied to single tenant service principals that are registered in your tenant. Microsoft and third-party SaaS applications, including multitenant apps, are not covered by these policies. Managed identities aren't covered by policy. Managed identities could be included in an [access review](../../id-governance/access-reviews-overview) instead.
+
+Note
+
+While service principals can be added to groups, Conditional Access policies assigned to a group that contains a service principal are not enforced for that service principal. To enforce a Conditional Access policy for a service principal, it must be assigned directly to the policy as a workload identity.
+
+Conditional Access for workload identities enables blocking service principals:
+
+- From outside of known public IP ranges.
+- Based on risk detected by Microsoft Entra ID Protection.
+- In combination with [authentication contexts](concept-conditional-access-cloud-apps#authentication-context).
+
+## Implementation
+
+### Create a location-based Conditional Access policy
+
+Create a location based Conditional Access policy that applies to service principals.
+
+1. Sign in to the [Microsoft Entra admin center](https://entra.microsoft.com) as at least a [Conditional Access Administrator](../role-based-access-control/permissions-reference#conditional-access-administrator).
+2. Browse to **Entra ID** &gt; **Conditional Access** &gt; **Policies**.
+3. Select **New policy**.
+4. Give your policy a name. Create a meaningful standard for the names of your policies.
+5. Under **Assignments**, select **Users or workload identities**.
+    1. Under **What does this policy apply to?**, select **Workload identities**.
+    2. Under **Include**, choose **Select service principals**, and select the appropriate service principals from the list.
+6. Under **Target resources** &gt; **Resources (formerly cloud apps)** &gt; **Include**, select **All resources (formerly 'All cloud apps')**. The policy applies only when a service principal requests a token.
+7. Under **Conditions** &gt; **Locations**, include **Any location** and exclude **Selected locations** where you want to allow access.
+8. Under **Grant**, **Block access** is the only available option. Access is blocked when a token request is made from outside the allowed range.
+9. Your policy can be saved in **Report-only** mode, allowing administrators to estimate the effects, or policy is enforced by turning policy **On**.
+10. Select **Create** to complete your policy.
+
+### Create a risk-based Conditional Access policy
+
+Create a risk-based Conditional Access policy that applies to service principals.
+
+[![Creating a Conditional Access policy with a workload identity and risk as a condition.](media/workload-identity/conditional-access-workload-identity-risk-policy.png)](media/workload-identity/conditional-access-workload-identity-risk-policy.png#lightbox)
+
+1. Sign in to the [Microsoft Entra admin center](https://entra.microsoft.com) as at least a [Conditional Access Administrator](../role-based-access-control/permissions-reference#conditional-access-administrator).
+2. Browse to **Entra ID** &gt; **Conditional Access** &gt; **Policies**.
+3. Select **New policy**.
+4. Give your policy a name. Create a meaningful standard for the names of your policies.
+5. Under **Assignments**, select **Users or workload identities**.
+    1. Under **What does this policy apply to?**, select **Workload identities**.
+    2. Under **Include**, choose **Select service principals**, and select the appropriate service principals from the list.
+6. Under **Target resources** &gt; **Resources (formerly cloud apps)** &gt; **Include**, select **All resources (formerly 'All cloud apps')**. The policy applies only when a service principal requests a token.
+7. Under **Conditions** &gt; **Service principal risk**
+    1. Set the **Configure** toggle to **Yes**.
+    2. Select the levels of risk where you want this policy to trigger.
+    3. Select **Done**.
+8. Under **Grant**, **Block access** is the only available option. Access is blocked when the specified risk levels are seen.
+9. Your policy can be saved in **Report-only** mode, allowing administrators to estimate the effects, or policy is enforced by turning policy **On**.
+10. Select **Create** to complete your policy.
+
+## Roll back
+
+If you wish to roll back this feature, you can delete or disable any created policies.
+
+## Sign-in logs
+
+The sign-in logs are used to review how policy is enforced for service principals or the expected affects of policy when using report-only mode.
+
+1. Browse to **Entra ID** &gt; **Monitoring & health** &gt; **Sign-in logs** &gt; **Service principal sign-ins**.
+2. Select a log entry and choose the **Conditional Access** tab to view evaluation information.
+
+Failure reason when Conditional Access blocks a Service Principal: "Access has been blocked due to Conditional Access policies."
+
+### Report-only mode
+
+To view results of a location-based policy, go to the **Report-only** tab of events in the **Sign-in report**, or use the **Conditional Access Insights and Reporting** workbook.
+
+To view results of a risk-based policy, refer to the **Report-only** tab of events in the **Sign-in report**.
+
+## Reference
+
+### Finding the objectID
+
+You can get the objectID of the service principal from Microsoft Entra Enterprise Applications. The Object ID in Microsoft Entra App registrations can’t be used. This identifier is the Object ID of the app registration, not of the service principal.
+
+1. Browse to **Entra ID** &gt; **Enterprise apps**, find the application you registered.
+2. From the **Overview** tab, copy the **Object ID** of the application. This identifier is the unique to the service principal, used by Conditional Access policy to find the calling app.
+
+### Microsoft Graph
+
+Sample JSON for location-based configuration using the Microsoft Graph beta endpoint.
+
+```json
+{
+  "displayName": "Name",
+  "state": "enabled OR disabled OR enabledForReportingButNotEnforced",
+  "conditions": {
+    "applications": {
+      "includeApplications": [
+        "All"
+      ]
+    },
+    "clientApplications": {
+      "includeServicePrincipals": [
+        "[Service principal Object ID] OR ServicePrincipalsInMyTenant"
+      ],
+      "excludeServicePrincipals": [
+        "[Service principal Object ID]"
+      ]
+    },
+    "locations": {
+      "includeLocations": [
+        "All"
+      ],
+      "excludeLocations": [
+        "[Named location ID] OR AllTrusted"
+      ]
+    }
+  },
+  "grantControls": {
+    "operator": "and",
+    "builtInControls": [
+      "block"
+    ]
+  }
+}
+```

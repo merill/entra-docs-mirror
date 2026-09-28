@@ -1,0 +1,148 @@
+---
+layout: Conceptual
+title: Best practices for Microsoft Entra roles - Microsoft Entra ID | Microsoft Learn
+canonicalUrl: https://learn.microsoft.com/en-us/entra/identity/role-based-access-control/best-practices
+uhfHeaderId: MSDocsHeader-Entra
+breadcrumb_path: /entra/breadcrumb/toc.json
+feedback_system: Standard
+feedback_product_url: https://feedback.azure.com/d365community/forum/22920db1-ad25-ec11-b6e6-000d3a4f0789
+author: rolyon
+ms.author: rolyon
+ms.service: entra-id
+ms.subservice: role-based-access-control
+manager: pmwongera
+description: Best practices for using Microsoft Entra roles.
+ms.topic: best-practice
+ms.date: 2026-06-01T00:00:00.0000000Z
+ms.reviewer: vincesm
+ms.custom: it-pro, sfi-ga-nochange, sfi-image-nochange
+ai-usage: ai-assisted
+locale: en-us
+document_id: 71c33632-8e34-0ffa-1793-9896d4c9b905
+document_version_independent_id: 60110109-bd6f-e43d-fb2f-1abf1d5af2cf
+original_content_git_url: https://github.com/MicrosoftDocs/entra-docs-pr/blob/live/docs/identity/role-based-access-control/best-practices.md
+site_name: Docs
+depot_name: MSDN.entra-docs
+page_type: conceptual
+toc_rel: toc.json
+feedback_help_link_type: ''
+feedback_help_link_url: ''
+asset_id: identity/role-based-access-control/best-practices
+moniker_range_name: 
+monikers: []
+item_type: Content
+source_path: docs/identity/role-based-access-control/best-practices.md
+cmProducts:
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
+spProducts:
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
+platformId: 52916ca4-2fe2-188e-159c-cbb2f3f62db4
+---
+
+# Best practices for Microsoft Entra roles - Microsoft Entra ID | Microsoft Learn
+
+This article describes some of the best practices for using Microsoft Entra role-based access control (Microsoft Entra RBAC). These best practices are derived from our experience with Microsoft Entra RBAC and the experiences of customers like yourself. We encourage you to also read our detailed security guidance at [Securing privileged access for hybrid and cloud deployments in Microsoft Entra ID](security-planning).
+
+## 1. Apply principle of least privilege
+
+When planning your access control strategy, it's a best practice to manage to least privilege. Least privilege means you grant your administrators exactly the permission they need to do their job. There are three aspects to consider when you assign a role to your administrators: a specific set of permissions, over a specific scope, for a specific period of time. Avoid assigning broader roles at broader scopes even if it initially seems more convenient to do so. By limiting roles and scopes, you limit what resources are at risk if the security principal is ever compromised. Microsoft Entra RBAC supports over 65 [built-in roles](permissions-reference). There are Microsoft Entra roles to manage directory objects like users, groups, and applications, and also to manage Microsoft 365 services like Exchange, SharePoint, and Intune. To better understand Microsoft Entra built-in roles, see [Understand roles in Microsoft Entra ID](concept-understand-roles). If there isn't a built-in role that meets your need, you can create your own [custom roles](custom-create).
+
+### Finding the right roles
+
+Follow these steps to help you find the right role.
+
+1. Sign in to the [Microsoft Entra admin center](https://entra.microsoft.com).
+2. Navigate to **Entra ID** &gt; **Roles & admins** &gt; **All roles**.
+3. Use the **Service** filter to narrow down the list of roles.
+
+    [![Roles and administrators page in admin center with Service filter open.](media/best-practices/roles-administrators.png)](media/best-practices/roles-administrators.png#lightbox)
+4. Refer to the [Microsoft Entra built-in roles](permissions-reference) documentation. Permissions associated with each role are listed together for better readability. To understand the structure and meaning of role permissions, see [How to understand role permissions](privileged-roles-permissions#how-to-understand-role-permissions).
+5. Refer to the [Least privileged role by task](delegate-by-task) documentation.
+
+## 2. Use Privileged Identity Management to grant just-in-time access
+
+One of the principles of least privilege is that access should be granted only when required. [Microsoft Entra Privileged Identity Management (PIM)](../../id-governance/privileged-identity-management/pim-configure) lets you grant just-in-time access to your administrators. Microsoft recommends that you use PIM in Microsoft Entra ID. Using PIM, a user can be made eligible for a Microsoft Entra role where they can then activate the role for a limited time when needed. Privileged access is automatically removed when the timeframe expires. You can also configure PIM settings to require approval, receive notification emails when someone activates their role assignment, or other role settings. Notifications provide an alert when new users are added to highly privileged roles. For more information, see [Configure Microsoft Entra role settings in Privileged Identity Management](../../id-governance/privileged-identity-management/pim-how-to-change-default-settings).
+
+## 3. Turn on multifactor authentication for all your administrator accounts
+
+[Based on our studies](https://techcommunity.microsoft.com/t5/azure-active-directory-identity/your-pa-word-doesn-t-matter/ba-p/731984), your account is 99.9% less likely to be compromised if you use multifactor authentication (MFA).
+
+You can enable MFA on Microsoft Entra roles using two methods:
+
+- [Role settings](../../id-governance/privileged-identity-management/pim-how-to-change-default-settings) in Privileged Identity Management
+- [Conditional Access](../conditional-access/policy-old-require-mfa-admin)
+
+## 4. Configure recurring access reviews to revoke unneeded permissions over time
+
+Access reviews enable organizations to review administrator's access regularly to make sure only the right people have continued access. Regular auditing your administrators is crucial because of following reasons:
+
+- A malicious actor can compromise an account.
+- People move teams within a company. If there's no auditing, they can amass unnecessary access over time.
+
+Microsoft recommends that you use access reviews to find and remove role assignments that are no longer needed. This helps you reduce the risk of unauthorized or excessive access and maintain your compliance standards.
+
+For information about access reviews for roles, see [Create an access review of Azure resource and Microsoft Entra roles in PIM](../../id-governance/privileged-identity-management/pim-create-roles-and-resource-roles-review). For information about access reviews of groups that are assigned roles, see [Create an access review of groups and applications in Microsoft Entra ID](../../id-governance/create-access-review).
+
+## 5. Limit the number of Global Administrators to less than 5
+
+As a best practice, Microsoft recommends that you assign the Global Administrator role to **fewer than five** people in your organization. Global Administrators essentially have unrestricted access, and it is in your best interest to keep the attack surface low. As stated previously, all of these accounts should be protected with multifactor authentication.
+
+If you have 5 or more privileged Global Administrator role assignments, a **Global Administrators** alert card is displayed on the Microsoft Entra Overview page to help you monitor Global Administrator role assignments.
+
+[![Screenshot of the Microsoft Entra Overview page that shows a card with the number of privileged role assignments.](media/best-practices/overview-privileged-roles-card.png)](media/best-practices/overview-privileged-roles-card.png#lightbox)
+
+By default, when a user signs up for a Microsoft cloud service, a Microsoft Entra tenant is created and the user is assigned the Global Administrators role. Users who are assigned the Global Administrator role can read and modify almost every administrative setting in your Microsoft Entra organization. With a few exceptions, Global Administrators can also read and modify all configuration settings in your Microsoft 365 organization. Global Administrators also have the ability to elevate their access to read data.
+
+Microsoft recommends that organizations have two cloud-only emergency access accounts permanently assigned the [Global Administrator](/en-us/entra/identity/role-based-access-control/permissions-reference#global-administrator) role. These accounts are highly privileged and aren't assigned to specific individuals. The accounts are limited to emergency or "break glass" scenarios where normal accounts can't be used or all other administrators are accidentally locked out. These accounts should be created following the [emergency access account recommendations](/en-us/entra/identity/role-based-access-control/security-emergency-access).
+
+## 6. Limit the number of privileged role assignments to less than 10
+
+Some roles include privileged permissions, such as the ability to update credentials. Since these roles can potentially lead to elevation of privilege, you should limit the use of these privileged role assignments to **fewer than 10** in your organization. If you exceed 10 privileged role assignments, a warning is displayed on the Roles and administrators page.
+
+[![Screenshot of the Microsoft Entra roles and administrators page that shows the privileged role assignments warning.](media/best-practices/privileged-role-assignments-warning.png)](media/best-practices/privileged-role-assignments-warning.png#lightbox)
+
+You can identify roles, permissions, and role assignments that are privileged by looking for the **PRIVILEGED** label. For more information, see [Privileged roles and permissions in Microsoft Entra ID](privileged-roles-permissions).
+
+## 7. Use groups for Microsoft Entra role assignments and delegate the role assignment
+
+If you have an external governance system that takes advantage of groups, then you should consider assigning roles to Microsoft Entra groups, instead of individual users. You can also manage role-assignable groups in PIM to ensure that there are no standing owners or members in these privileged groups. For more information, see [Privileged Identity Management (PIM) for Groups](../../id-governance/privileged-identity-management/concept-pim-for-groups).
+
+You can assign an owner to role-assignable groups. That owner decides who is added to or removed from the group, so indirectly, decides who gets the role assignment. In this way, a Privileged Role Administrator can delegate role management on a per-role basis by using groups. For more information, see [Use Microsoft Entra groups to manage role assignments](groups-concept).
+
+## 8. Activate multiple roles at once using PIM for Groups
+
+It might be the case that an individual has five or six eligible assignments to Microsoft Entra roles through PIM. They'll have to activate each role individually, which can reduce productivity. Worse still, they can also have tens or hundreds of Azure resources assigned to them, which aggravates the problem.
+
+In this case, you should use [Privileged Identity Management (PIM) for Groups](../../id-governance/privileged-identity-management/concept-pim-for-groups). Create a PIM for Groups and grant it permanent access to multiple roles (Microsoft Entra ID and/or Azure). Make that user an eligible member or owner of this group. With just one activation, they'll have access to all the linked resources.
+
+![PIM for Groups diagram showing activating multiple roles at once](media/best-practices/pim-for-groups.png)
+
+## 9. Use cloud native accounts for Microsoft Entra roles
+
+Avoid using on-premises synced accounts for Microsoft Entra role assignments. If your on-premises account is compromised, it can compromise your Microsoft Entra resources as well.
+
+## 10. Use layered controls for fine-grained access governance
+
+Microsoft Entra ID provides several complementary capabilities that work together to help you enforce least-privilege access at a granular level. No single feature covers every authorization scenario, so combine these controls in layers based on your organization's requirements:
+
+| Control | What it does | When to use it |
+| --- | --- | --- |
+| [Administrative units](administrative-units) | Scope role assignments to a specific subset of users, groups, or devices. | Delegate administration to regional or departmental admins without granting tenant-wide permissions. |
+| [Custom roles](custom-create) | Define roles with only the permissions a job function requires. | Built-in roles are too broad or too narrow for a specific responsibility. |
+| [Privileged Identity Management (PIM)](../../id-governance/privileged-identity-management/pim-configure) | Grant just-in-time, time-bound, approval-based role activation. | Eliminate standing privileged access for users in privileged roles, including administrators and developers. |
+| [Conditional Access](../conditional-access/overview) | Evaluate real-time signals (user risk, device compliance, location, application) to enforce or block access. | Apply context-based access decisions that adapt to changing risk conditions. |
+| [Entitlement management](../../id-governance/entitlement-management-overview) | Bundle resources into access packages with automated request, approval, and expiration workflows. | Govern access for projects, teams, or cross-organization collaboration at scale. |
+| [Continuous Access Evaluation (CAE)](../conditional-access/concept-continuous-access-evaluation) | Re-evaluate access during an active session in two scenarios: critical event evaluation (such as account disable, password reset, or admin token revocation) and Conditional Access policy evaluation (such as network location change). | Enforce policy changes in near-real-time instead of waiting for token expiration. |
+| [Custom security attributes](../../fundamentals/custom-security-attributes-overview) with [Azure attribute-based access control (ABAC)](/en-us/azure/role-based-access-control/conditions-custom-security-attributes) | Tag users and service principals with business attributes, then gate access to supported Azure resources (currently Azure Blob Storage and Azure Queue Storage data actions) by attribute condition on a role assignment. | Replace large numbers of explicit role assignments with a single attribute-conditional assignment, and categorize hundreds of apps for inventory and reporting. |
+
+**Example layered approach:** Assign a custom role scoped to an administrative unit so a regional helpdesk admin can only reset passwords for users in their region. Require PIM activation so the role is time-bound and approval-based. Apply a Conditional Access policy that requires a compliant device and multifactor authentication when the admin activates the role. Use access reviews in entitlement management to periodically validate that the admin still needs the assignment.
+
+Note
+
+Availability of the controls in the preceding table depends on your Microsoft Entra license tier. For example, custom roles and Conditional Access require Microsoft Entra ID P1, and administrative units require Microsoft Entra ID P1 for administrators scoped to an administrative unit (creation and basic membership are available with Microsoft Entra ID Free). Privileged Identity Management requires Microsoft Entra ID P2 or Microsoft Entra ID Governance, while entitlement management and access reviews require Microsoft Entra ID Governance or Microsoft Entra Suite (some capabilities operate with Microsoft Entra ID P2). Continuous Access Evaluation's critical event evaluation is available in all tenants; the Conditional Access policy evaluation portion depends on Conditional Access, which requires Microsoft Entra ID P1. To compare what's included in each tier, see [Microsoft Entra plans and pricing](https://www.microsoft.com/en-us/security/business/microsoft-entra-pricing).
+
+To audit what these layered controls have granted, see [Understand who has access to what](custom-overview#understand-who-has-access-to-what).
+
+For more information about designing a least-privilege access strategy, see [Securing privileged access for hybrid and cloud deployments in Microsoft Entra ID](security-planning).

@@ -1,0 +1,271 @@
+---
+layout: Conceptual
+title: Migrate Okta federation to Microsoft Entra authentication - Microsoft Entra ID | Microsoft Learn
+canonicalUrl: https://learn.microsoft.com/en-us/entra/identity/enterprise-apps/migrate-okta-federation
+uhfHeaderId: MSDocsHeader-Entra
+breadcrumb_path: /entra/breadcrumb/toc.json
+feedback_system: Standard
+feedback_product_url: https://feedback.azure.com/d365community/forum/22920db1-ad25-ec11-b6e6-000d3a4f0789
+author: omondiatieno
+ms.author: jomondi
+ms.service: entra-id
+ms.subservice: enterprise-apps
+manager: martinco
+description: Migrate Okta-federated applications to managed authentication under Microsoft Entra ID. See how to migrate federation in a staged manner.
+ms.topic: how-to
+ms.date: 2024-12-06T00:00:00.0000000Z
+ms.reviewer: gasinh
+ms.custom: kr2b-contr-experiment, not-enterprise-apps, sfi-image-nochange
+locale: en-us
+document_id: 0b4eb058-63aa-900d-9e64-e28eabc225ff
+document_version_independent_id: f3589424-d704-c815-e0b6-0d4441772b74
+original_content_git_url: https://github.com/MicrosoftDocs/entra-docs-pr/blob/live/docs/identity/enterprise-apps/migrate-okta-federation.md
+site_name: Docs
+depot_name: MSDN.entra-docs
+page_type: conceptual
+toc_rel: toc.json
+feedback_help_link_type: ''
+feedback_help_link_url: ''
+asset_id: identity/enterprise-apps/migrate-okta-federation
+moniker_range_name: 
+monikers: []
+item_type: Content
+source_path: docs/identity/enterprise-apps/migrate-okta-federation.md
+cmProducts:
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
+spProducts:
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
+platformId: 21f57046-57ff-2d4f-d9b7-45646ca94733
+---
+
+# Migrate Okta federation to Microsoft Entra authentication - Microsoft Entra ID | Microsoft Learn
+
+In this tutorial, learn to federate Office 365 tenants with Okta for single sign-on (SSO).
+
+You can migrate federation to Microsoft Entra ID in a staged manner to ensure a good authentication experience for users. In a staged migration, you can test reverse federation access to remaining Okta SSO applications.
+
+Note
+
+Scenario described in this tutorial is only one possible way of implementing the migration. You should try to adapt the information to your specific setup.
+
+## Prerequisites
+
+- An Office 365 tenant federated to Okta for SSO
+- A Microsoft Entra Connect server or Microsoft Entra Connect cloud provisioning agents configured for user provisioning to Microsoft Entra ID
+- One of the following roles: Application Administrator, Cloud Application Administrator, or Hybrid Identity Administrator.
+
+## Configure Microsoft Entra Connect for authentication
+
+Customers that federate their Office 365 domains with Okta might not have a valid authentication method in Microsoft Entra ID. Before you migrate to managed authentication, validate Microsoft Entra Connect and configure it for user sign-in.
+
+Set up the sign-in method:
+
+- **Password hash synchronization**- an extension of the directory synchronization feature implemented by Microsoft Entra Connect server or cloud-provisioning agents
+    - Use this feature to sign in to Microsoft Entra services like Microsoft 365
+    - Sign in to the service with the password to sign in to the on-premises Active Directory instance
+    - See, [What is password hash synchronization with Microsoft Entra ID?](../hybrid/connect/whatis-phs)
+- **Pass-through authentication**- sign in to on-premises and cloud applications with the same passwords
+    - When users sign in through Microsoft Entra ID, the pass-through authentication agent validates passwords against the on-premises AD
+    - See, [User sign-in with Microsoft Entra pass-through authentication](../hybrid/connect/how-to-connect-pta)
+- **Seamless SSO**- signs in users on corporate desktops connected to the corporate network
+    - Users have access to cloud applications without other on-premises components
+    - See, [Microsoft Entra seamless SSO](../hybrid/connect/how-to-connect-sso)
+
+To create a seamless authentication user experience in Microsoft Entra ID, deploy seamless SSO to password hash synchronization or pass-through authentication.
+
+For prerequisites of seamless SSO see, [Quickstart: Microsoft Entra seamless single sign-on](../hybrid/connect/how-to-connect-sso-quick-start#step-1-check-the-prerequisites).
+
+For this tutorial, you configure password hash synchronization and seamless SSO.
+
+### Configure Microsoft Entra Connect for password hash synchronization and seamless SSO
+
+1. On the Microsoft Entra Connect server, open the **Microsoft Entra Connect** app.
+2. Select **Configure**.
+3. Select **Change user sign-in**.
+4. Select **Next**.
+5. Enter the credentials of the Hybrid Identity Administrator of the Microsoft Entra Connect server.
+6. The server is configured for federation with Okta. Change the selection to **Password Hash Synchronization**.
+7. Select **Enable single sign-on**.
+8. Select **Next**.
+9. For the local on-premises system, enter the domain administrator credentials.
+10. Select **Next**.
+11. On the final page, select **Configure**.
+12. Ignore the warning for Microsoft Entra hybrid join.
+
+## Configure staged rollout features
+
+Before you test defederating a domain, in Microsoft Entra ID use a cloud authentication staged rollout to test defederating users.
+
+Learn more: [Migrate to cloud authentication using Staged Rollout](../hybrid/connect/how-to-connect-staged-rollout)
+
+After you enable password hash sync and seamless SSO on the Microsoft Entra Connect server, configure a staged rollout:
+
+1. Sign in to the [Microsoft Entra admin center](https://entra.microsoft.com) as at least a [Hybrid Identity Administrator](../role-based-access-control/permissions-reference#hybrid-identity-administrator).
+2. Browse to **Entra ID** &gt; **Entra Connect** &gt; **Connect Sync**.
+3. Confirm **Password Hash Sync** is enabled in the tenant.
+4. Select **Enable staged rollout for managed user sign-in**.
+5. After the server configuration, **Password Hash Sync** setting can change to **On**.
+6. Enable the setting.
+7. **Seamless single sign-on** is **Off**. If you enable it, an error appears because you enabled it in the tenant.
+8. Select **Manage groups**.
+
+    ![Screenshot of the Enable staged rollout features page in the Microsoft Entra admin center. A Manage groups button appears.](media/migrate-okta-federation/password-hash-sync.png)
+9. Add a group to the password hash sync rollout.
+10. Wait about 30 minutes for the feature to take effect in your tenant.
+11. When the feature takes effect, users aren't redirected to Okta when attempting to access Office 365 services.
+
+The staged rollout feature has some unsupported scenarios:
+
+- Legacy authentication protocols such as Post Office Protocol 3 (POP3) and Simple Mail Transfer Protocol (SMTP) aren't supported.
+- If you configured Microsoft Entra hybrid join for Okta, the Microsoft Entra hybrid join flows go to Okta until the domain is defederated.
+    - A sign-on policy remains in Okta for legacy authentication of Microsoft Entra hybrid join Windows clients.
+
+## Create an Okta app in Microsoft Entra ID
+
+Users that converted to managed authentication might need access to applications in Okta. For user access to those applications, register a Microsoft Entra application that links to the Okta home page.
+
+Configure the enterprise application registration for Okta.
+
+1. Sign in to the [Microsoft Entra admin center](https://entra.microsoft.com) as at least a [Cloud Application Administrator](../role-based-access-control/permissions-reference#cloud-application-administrator).
+2. Browse to **Entra ID** &gt; **Enterprise apps** &gt; **All applications**.
+
+    ![Screenshot of the left menu of the Microsoft Entra admin center.](media/migrate-okta-federation/enterprise-application.png)
+3. Select **New application**.
+
+    ![Screenshot that shows the All applications page in the Microsoft Entra admin center. A new application is visible.](media/migrate-okta-federation/new-application.png)
+4. Select **Create your own application**.
+5. On the menu, name the Okta app.
+6. Select **Register an application you're working on to integrate with Microsoft Entra ID**.
+7. Select **Create**.
+8. Select **Accounts in any organizational directory (Any Microsoft Entra Directory - Multitenant)**.
+9. Select **Register**.
+
+    ![Screenshot of Register an application.](media/migrate-okta-federation/register-change-application.png)
+10. On the Microsoft Entra ID menu, select **App registrations**.
+11. Open the created registration.
+
+![Screenshot of the App registrations page in the Microsoft Entra admin center. The new app registration appears.](media/migrate-okta-federation/app-registration.png)
+
+1. Record the Tenant ID and Application ID.
+
+Note
+
+You need the Tenant ID and Application ID to configure the identity provider in Okta.
+
+![Screenshot of the Okta Application Access page in the Microsoft Entra admin center. The Tenant ID and Application ID appear.](media/migrate-okta-federation/record-ids.png)
+
+1. On the left menu, select **Certificates & secrets**.
+2. Select **New client secret**.
+3. Enter a secret name.
+4. Enter its expiration date.
+5. Record the secret value and ID.
+
+Note
+
+The value and ID don't appear later. If you don't record the information, you must regenerate a secret.
+
+1. On the left menu, select **API permissions**.
+2. Grant the application access to the OpenID Connect (OIDC) stack.
+3. Select **Add a permission**.
+4. Select **Microsoft Graph**
+5. Select **Delegated permissions**.
+6. In the OpenID permissions section, add **email**, **openid**, and **profile**.
+7. Select **Add permissions**.
+8. Select **Grant admin consent for &lt;tenant domain name&gt;**.
+9. Wait for the **Granted** status to appear.
+
+    ![Screenshot of the API permissions page with a message for granted consent.](media/migrate-okta-federation/grant-consent.png)
+10. On the left menu, select **Branding**.
+11. For **Home page URL**, add your user application home page.
+12. In the Okta administration portal, to add a new identity provider, select **Security** then **Identity Providers**.
+13. Select **Add Microsoft**.
+
+    ![Screenshot of the Okta administration portal. Add Microsoft appears in the Add Identity Provider list.](media/migrate-okta-federation/configure-idp.png)
+14. On the **Identity Provider** page, enter the Application ID in the **Client ID** field.
+15. Enter the client secret in the **Client Secret** field.
+16. Select **Show Advanced Settings**. By default, this configuration ties the user principal name (UPN) in Okta to the UPN in Microsoft Entra ID for reverse-federation access.
+
+    Important
+
+    If UPNs in Okta and Microsoft Entra ID don't match, select an attribute that's common between users.
+17. Complete autoprovisioning selections.
+18. By default, if no match appears for an Okta user, the system attempts to provision the user in Microsoft Entra ID. If you migrated provisioning away from Okta, select **Redirect to Okta sign-in page**.
+
+    ![Screenshot of the General Settings page in the Okta admin portal. The option for redirecting to the Okta sign-in page appears.](media/migrate-okta-federation/redirect-okta.png)
+
+You created the identity provider (IDP). Send users to the correct IDP.
+
+1. On the **Identity Providers** menu, select **Routing Rules** then **Add Routing Rule**.
+2. Use one of the available attributes in the Okta profile.
+3. To direct sign-ins from devices and IPs to Microsoft Entra ID, set up the policy seen in following image. In this example, the **Division** attribute is unused on all Okta profiles. It's a good choice for IDP routing.
+4. Record the redirect URI to add it to the application registration.
+
+    ![Screenshot of the redirect URI location.](media/migrate-okta-federation/application-registration.png)
+5. On the application registration, on the left menu, select **Authentication**.
+6. Select **Add a platform**
+7. Select **Web**.
+8. Add the redirect URI you recorded in the IDP in Okta.
+9. Select **Access tokens** and **ID tokens**.
+10. In the admin console, select **Directory**.
+11. Select **People**.
+12. To edit the profile, select a test user.
+13. In the profile, add **ToAzureAD**. See the following image.
+14. Select **Save**.
+
+    ![Screenshot of the Okta admin portal. Profile settings appear, and the Division box has ToAzureAD.](media/migrate-okta-federation/profile-editing.png)
+15. Sign in to the [Microsoft 356 portal](https://portal.office.com) as the modified user. If your user isn't in the managed authentication pilot, your action enters a loop. To exit the loop, add the user to the managed authentication experience.
+
+## Test Okta app access on pilot members
+
+After you configure the Okta app in Microsoft Entra ID and configure the IDP in the Okta portal, assign the application to users.
+
+1. In the Microsoft Entra admin center, browse to **Entra ID** &gt; **Enterprise apps**.
+2. Select the app registration you created.
+3. Go to **Users and groups**.
+4. Add the group that correlates with the managed authentication pilot.
+
+    Note
+
+    You can add users and groups from the **Enterprise applications** page. You can't add users from the **App registrations** menu.
+
+    ![Screenshot of the Users and groups page of the Microsoft Entra admin center. A group called Managed Authentication Staging Group appears.](media/migrate-okta-federation/add-group.png)
+5. Wait about 15 minutes.
+6. Sign in as a managed authentication pilot user.
+7. Go to [My Apps](https://myapplications.microsoft.com).
+
+    ![Screenshot of the My Apps gallery. An icon for Okta Application Access appears.](media/migrate-okta-federation/my-applications.png)
+8. To return to the Okta home page, select the **Okta Application Access** tile.
+
+## Test managed authentication on pilot members
+
+After you configure the Okta reverse-federation app, ask users to conduct testing on the managed authentication experience. We recommend you configure company branding to help users recognize the tenant.
+
+Learn more: [Configure your company branding](../../fundamentals/how-to-customize-branding).
+
+Important
+
+Before you defederate the domains from Okta, identify needed Conditional Access policies. You can secure your environment before cut-off. See, [Tutorial: Migrate Okta sign-on policies to Microsoft Entra Conditional Access](migrate-okta-sign-on-policies-conditional-access).
+
+## Defederate Office 365 domains
+
+When your organization is comfortable with the managed authentication experience, you can defederate your domain from Okta. To begin, use the following commands to connect to Microsoft Graph PowerShell. If you don't have the Microsoft Graph PowerShell module, download it by entering `Install-Module Microsoft.Graph`.
+
+1. In PowerShell, sign in to Microsoft Entra ID by using a Hybrid Identity Administrator account.
+
+    ```powershell
+     Connect-MgGraph -Scopes "Domain.ReadWrite.All", "Directory.AccessAsUser.All"
+    ```
+2. To convert the domain, run the following command:
+
+    ```powershell
+     Update-MgDomain -DomainId contoso.com -AuthenticationType "Managed"
+    ```
+3. Verify that the domain is converted to managed by running the following command. The Authentication type should be set to managed.
+
+    ```powershell
+    Get-MgDomain -DomainId contoso.com
+    ```
+
+After you set the domain to managed authentication, you defederate your Office 365 tenant from Okta while maintaining user access to the Okta home page.

@@ -1,0 +1,296 @@
+---
+layout: Conceptual
+title: Plan a Microsoft Entra application proxy deployment - Microsoft Entra ID | Microsoft Learn
+canonicalUrl: https://learn.microsoft.com/en-us/entra/identity/app-proxy/conceptual-deployment-plan
+uhfHeaderId: MSDocsHeader-Entra
+breadcrumb_path: /entra/breadcrumb/toc.json
+feedback_system: Standard
+feedback_product_url: https://feedback.azure.com/d365community/forum/22920db1-ad25-ec11-b6e6-000d3a4f0789
+author: kenwith
+ms.author: kenwith
+ms.service: entra-id
+ms.subservice: app-proxy
+manager: dougeby
+description: An end-to-end guide for planning the deployment of application proxy within your organization
+ms.topic: how-to
+ms.date: 2026-03-25T00:00:00.0000000Z
+ms.reviewer: KaTabish
+ai-usage: ai-assisted
+locale: en-us
+document_id: 073654f9-cc8c-adaf-72e5-0075d78f9f2a
+document_version_independent_id: 073654f9-cc8c-adaf-72e5-0075d78f9f2a
+original_content_git_url: https://github.com/MicrosoftDocs/entra-docs-pr/blob/live/docs/identity/app-proxy/conceptual-deployment-plan.md
+site_name: Docs
+depot_name: MSDN.entra-docs
+page_type: conceptual
+toc_rel: toc.json
+feedback_help_link_type: ''
+feedback_help_link_url: ''
+asset_id: identity/app-proxy/conceptual-deployment-plan
+moniker_range_name: 
+monikers: []
+item_type: Content
+source_path: docs/identity/app-proxy/conceptual-deployment-plan.md
+cmProducts:
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
+spProducts:
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
+platformId: b3fd977e-d099-7e57-5588-0ca3a6283dd1
+---
+
+# Plan a Microsoft Entra application proxy deployment - Microsoft Entra ID | Microsoft Learn
+
+## Overview
+
+Microsoft Entra application proxy is a secure and cost-effective remote access solution for on-premises applications. It provides an immediate transition path for "Cloud First" organizations to manage access to legacy on-premises applications that aren’t yet capable of using modern protocols. For more introductory information, see [What is application proxy](overview-what-is-app-proxy).
+
+Application proxy is recommended for giving remote users access to internal resources. Application proxy replaces the need for a VPN or reverse proxy for these remote access use cases. It isn't intended for users who are on the corporate network. Users who access application proxy on the intranet might experience performance issues.
+
+This article includes the resources you need to plan, operate, and manage Microsoft Entra application proxy.
+
+## Plan your implementation
+
+The following section provides a broad view of the key planning elements that set you up for an efficient deployment experience.
+
+### Prerequisites
+
+You need to meet the following prerequisites before beginning your implementation. You can see more information on setting up your environment, including these prerequisites, in the [tutorial for adding an on-premises application](application-proxy-add-on-premises-application).
+
+- **Connectors**: Connectors are lightweight agents that you can deploy onto:
+
+    - Physical hardware on-premises
+    - A virtual machine (VM) hosted within any hypervisor solution
+    - A VM hosted in Azure to enable outbound connection to the application proxy service.
+- See [Microsoft Entra private network connectors](../../global-secure-access/concept-connectors) for a more detailed overview.
+
+    - Connector machines must [be enabled for Transport Layer Security (TLS) 1.2](application-proxy-add-on-premises-application) before installing the connectors.
+    - If possible, deploy connectors in the [same network and segment as the back-end web application servers](application-proxy-network-topology). It's best to deploy connectors after you complete a discovery of applications.
+    - Each connector group should have at least two connectors to provide high availability and scale. Having three connectors is optimal for servicing a machine at any point. Review the [connector capacity table](../../global-secure-access/concept-connectors#specifications-and-sizing-requirements) to help decide the type of machine for the connector.
+- **Network access settings**: Microsoft Entra private network connectors [connect to Azure via HTTPS (Transmission Control Protocol (TCP) Port 443) and HTTP (TCP Port 80)](application-proxy-add-on-premises-application).
+
+    - Terminating connector TLS traffic isn't supported and prevents connectors from establishing a secure channel with their respective Microsoft Entra application proxy endpoints.
+    - Avoid all forms of inline inspection on outbound TLS communications between connectors and Azure. Internal inspection between a connector and backend applications is possible, but could degrade the user experience, and as such, isn't recommended.
+    - Load balancing of the connectors themselves isn't supported or necessary.
+
+### Important considerations before configuring Microsoft Entra application proxy
+
+The following core requirements must be met to configure and implement Microsoft Entra application proxy.
+
+- **Azure onboarding**: Before you deploy application proxy, user identities must be synchronized from an on-premises directory or created directly within your Microsoft Entra tenants. Identity synchronization allows Microsoft Entra ID to preauthenticate users before granting them access to application proxy published applications and to have the necessary user identifier information to perform single sign-on (SSO).
+- **Conditional Access requirements**: Using application proxy for intranet access isn't recommended because it adds latency that affects users. Use application proxy with preauthentication and Conditional Access policies for remote access from the internet. An approach to provide Conditional Access for intranet use is to modernize applications so they can directly authenticate with Microsoft Entra ID. For more information, see [Resources for migrating applications to Microsoft Entra ID](../enterprise-apps/migration-resources).
+- **Service limits**: To protect against overconsumption of resources by individual tenants, there are throttling limits set per application and tenant. To see these limits, refer to [Microsoft Entra service limits and restrictions](../users/directory-service-limits-restrictions). These throttling limits are based on a benchmark beyond typical usage volume and provide ample buffer for most deployments.
+- **Public certificate**: If you're using custom domain names, you must procure a TLS certificate. Depending on your organizational requirements, getting a certificate can take some time and it's best to begin the process as early as possible. Microsoft Entra application proxy supports standard, [wildcard](application-proxy-wildcard), or SAN-based certificates. For more information, see [Configure custom domains with Microsoft Entra application proxy](how-to-configure-custom-domain).
+- **Domain requirements**: To use Kerberos Constrained Delegation (KCD) for single sign-on, ensure both the connector server and application server are domain-joined and either in the same domain or in trusted domains. The connector service runs under the local system account and shouldn't use a custom identity. For more information, see [KCD for single sign-on](how-to-configure-sso-with-kcd).
+- **DNS records for URLs**
+
+    - Before using custom domains in application proxy you must create a CNAME record in public Domain Name System (DNS), allowing clients to resolve the custom defined external URL to the predefined application proxy address. Failing to create a CNAME record for an application that uses a custom domain prevents remote users from connecting to the application. Steps required to add CNAME records can vary from DNS provider to provider, so learn how to [manage DNS records and record sets by using the Microsoft Entra admin center](/en-us/azure/dns/dns-operations-recordsets-portal).
+    - Similarly, connector hosts must be able to resolve the internal URL of applications being published.
+- **Administrative rights and roles**
+
+    - **Connector installation** requires local admin rights to the Windows server that it's being installed on. It also requires a minimum of an *Application Administrator* role to authenticate and register the connector instance to your Microsoft Entra tenant.
+    - **Application publishing and administration** require the *Application Administrator* role. Application Administrators can manage all applications in the directory including registrations, SSO settings, user, and group assignments and licensing, application proxy settings, and consent. It doesn't grant the ability to manage Conditional Access. The *Cloud Application Administrator* role has all the abilities of the Application Administrator, except that it doesn't allow management of application proxy settings.
+- **Licensing**: Application proxy is available through a Microsoft Entra ID P1 or P2 subscription. Refer to the [Microsoft Entra pricing page](https://www.microsoft.com/security/business/microsoft-entra-pricing) for a full list of licensing options and features.
+
+### Discover applications for migration
+
+Compile an inventory of all in-scope applications that are being published via application proxy by collecting the following information:
+
+| Information Type | Information to collect |
+| --- | --- |
+| Service Type | For example: SharePoint, SAP, CRM, Custom Web Application, API |
+| Application platform | For example: Windows Internet Information Services (IIS), Apache on Linux, Tomcat, NGINX |
+| Domain membership | Web server’s fully qualified domain name (FQDN) |
+| Application location | Where the web server or farm is located in your infrastructure |
+| Internal access | The exact URL used when accessing the application internally.  If a farm, what type of load balancing is in use?  Whether the application draws content from sources other than itself. Determine if the application operates over WebSockets. |
+| External access | The vendor solution that the application might already be exposed through, externally.  The URL you want to use for external access. If SharePoint, ensure Alternate Access Mappings are configured per [the SharePoint Alternate Access Mappings guidance](/en-us/SharePoint/administration/configure-alternate-access-mappings). If not, you need to define external URLs. |
+| Public certificate | If using a custom domain, procure a certificate with a corresponding subject name. If a certificate exists, note the serial number and location from where it can be obtained. |
+| Authentication type | The type of authentication supported by the application, such as Basic, Windows Integrated Authentication, forms-based, header-based, and claims. If the application is configured to run under a specific domain account, note the Fully Qualified Domain Name (FQDN) of the service account. If SAML-based, the identifier and reply URLs.  If header-based, the vendor solution and specific requirement for handling authentication type. |
+| Connector group name | The logical name for the group of connectors that are designated to provide the conduit and SSO to the backend application. |
+| Users/Groups access | The users or user groups that are granted external access to the application. |
+| More requirements | Note any more remote access or security requirements that should be factored into publishing the application. |
+
+You can download the [application inventory spreadsheet](https://aka.ms/appdiscovery) to inventory your apps.
+
+### Define organizational requirements
+
+The following are areas for which you should define your organization’s business requirements. Each area contains examples of requirements.
+
+**Access**
+
+- Remote users with domain-joined or Microsoft Entra joined devices can access published applications securely with seamless single sign-on (SSO).
+- Remote users with approved personal devices can securely access published applications provided they're enrolled in MFA and registered the Microsoft Authenticator app on their mobile phone as an authentication method.
+
+**Governance**
+
+- Administrators can define and monitor the lifecycle of user assignments to applications published through application proxy.
+
+**Security**
+
+- Only users assigned to applications via group membership or individually can access those applications.
+
+**Performance**
+
+- There's no degradation of application performance compared to accessing the application from the internal network.
+
+**User Experience**
+
+- Users are aware of how to access their applications by using familiar company URLs on any device platform.
+
+**Auditing**
+
+- Administrators can audit user access activity.
+
+### Best practices for a pilot
+
+Determine the amount of time and effort needed to fully commission a single application for remote access with single sign-on (SSO). Do so by running a pilot that considers its initial discovery, publishing, and general testing. Using a simple IIS-based web application that is already preconfigured for integrated Windows authentication (IWA) would help establish a baseline, as the setup requires minimal effort to successfully pilot remote access and SSO.
+
+The following design elements should increase the success of your pilot implementation directly in a production tenant.
+
+**Connector management**:
+
+Connectors play a key role in providing the on-premises conduit to your applications. Using the **Default** connector group is adequate for initial pilot testing of published applications before commissioning them into production. Successfully tested applications can then be moved to production connector groups.
+
+**Application management**:
+
+Your workforce is most likely to remember an external URL that's familiar and relevant. Avoid publishing your application using our predefined msappproxy.net or onmicrosoft.com suffixes. Instead, provide a familiar top-level verified domain, prefixed with a logical hostname such as *intranet.&lt;customers\_domain&gt;.com*.
+
+Restrict visibility of the pilot application’s icon to a pilot group by hiding its launch icon from the Azure MyApps portal. When ready for production you can scope the app to its respective targeted audience, either in the same preproduction tenant, or by also publishing the application in your production tenant.
+
+**Single sign-on settings**: Some SSO settings have specific dependencies that can take time to set up, so avoid change control delays by ensuring dependencies are addressed ahead of time. The process includes domain joining connector hosts to perform SSO using Kerberos Constrained Delegation (KCD) and taking care of other time-consuming activities.
+
+**TLS Between Connector Host and Target Application**: Security is paramount, so TLS between the connector host and target applications should always be used. Particularly if the web application is configured for forms-based authentication (FBA), as user credentials are then effectively transmitted in clear text.
+
+**Implement incrementally and test each step**. Conduct basic functional testing after publishing an application to ensure that all user and business requirements are met:
+
+Test and validate general access to the web application with preauthentication disabled. If successful, then enable preauthentication and assign users and groups. Then test and validate access. Next, add the SSO method for your application and test again to validate access. Finally, apply Conditional Access and MFA policies as required. Test and validate access.
+
+**Troubleshooting Tools**: Start troubleshooting by checking access to the published application directly from the browser on the connector host. Ensure the application works as expected. Simplify your setup to isolate issues, such as using a single connector and disabling SSO. Tools like Telerik’s Fiddler can help debug access or content issues by tracing traffic, including for mobile platforms like iOS and Android. For more information, see the [troubleshooting guide](application-proxy-troubleshoot).
+
+## Implement your solution
+
+### Deploy application proxy
+
+The steps to deploy your application proxy are covered in the [tutorial for adding an on-premises application for remote access](application-proxy-add-on-premises-application). If the installation isn't successful, select **Troubleshoot application proxy** in the portal or use the troubleshooting guide [for Problems with installing the application proxy Agent Connector](../../global-secure-access/troubleshoot-connectors).
+
+### Publish applications via application proxy
+
+Publishing applications assumes that you satisfied all the prerequisites and that you have several connectors showing as registered and active in the application proxy page.
+
+You can also publish applications by using [Microsoft Graph PowerShell](/en-us/powershell/microsoftgraph/overview).
+
+Best practices to follow when publishing an application:
+
+- **Use connector groups**: Assign a connector group that is designated for publishing each respective application. Each connector group should have at least two connectors to provide high availability and scale. Having three connectors is optimal in case you need to service a machine at any point. Additionally, see [Understand Microsoft Entra private network connector groups](../../global-secure-access/concept-connector-groups) to see how you can also use connector groups to segment your connectors by network or location.
+- **Set backend application timeout**: The setting is useful in scenarios where the application might require more than 75 seconds to process a client transaction. For example, when a client sends a query to a web application that acts as a front end to a database. The front end sends the query to its back-end database server and waits for a response, but by the time it receives a response, the client side of the conversation times out. Setting the time-out to Long provides 180 seconds for longer transactions to complete.
+- **Use appropriate cookie types**
+
+    - **HTTP-Only Cookie**: Provides extra security by having application proxy include the HTTPOnly flag in set-cookie HTTP response headers. The setting helps to mitigate exploits such as cross-site scripting (XSS). Leave set to **No** for clients/user agents that do require access to the session cookie. For example, RDP/MTSC client connecting to a Remote Desktop Gateway published via application proxy.
+    - **Secure Cookie**: When a cookie is set with the Secure attribute, the user agent (Client-side app) only includes the cookie in HTTP requests if the request is transmitted over a TLS secured channel. The setting helps mitigate the risk of a cookie being compromised over clear text channels, so should be enabled.
+    - **Persistent Cookie**: Allows the application proxy session cookie to persist between browser closures by remaining valid until it either expires or is deleted. Used for scenarios where a rich application such as Office accesses a document within a published web application, without the user being reprompted for authentication. Enable with caution however, as persistent cookies can ultimately leave a service at risk of unauthorized access, if not used with other compensating controls. This setting should only be used for older applications that can't share cookies between processes. It's better to update your application to handle sharing cookies between processes instead of using the setting.
+- **Translate URLs in Headers**: You enable the setting for scenarios where internal DNS can't be configured to match the organization’s public namespace (also known as split DNS). Unless your application requires the original host header in the client request, leave the value set to **Yes**. The alternative is to have the connector use the FQDN in the internal URL for routing of the actual traffic, and the FQDN in the external URL, as the host-header. In most cases the alternative should allow the application to function as normal, when accessed remotely, but your users lose the benefits of having a matching inside and outside URL.
+- **Translate URLs in application body**: Turn on Application Body link translation for an app when you want the links from that app to be translated in responses back to the client. If enabled, the function provides a best effort attempt at translating all internal links that application proxy finds in HTML and CSS responses being returned to clients. It's useful when publishing apps that contain either hard-coded absolute or NetBIOS shortname links in the content, or apps with content that links to other on-premises applications.
+
+For scenarios where a published app links to other published apps, enable link translation for each application so that you have control over the user experience at the per-app level.
+
+For example, suppose that you have three applications published through application proxy that all link to each other: Benefits, Expenses, and Travel, plus a fourth app, Feedback that isn't published through application proxy.
+
+![Diagram showing how link translation converts internal URLs to external URLs in published application content.](media/app-proxy-deployment-plan/link-translation.png) When link translation is enabled for the Benefits app, links to the Expenses and Travel apps are redirected to their external URLs, allowing external users to access them. However, links from Expenses and Travel back to Benefits don't work unless link translation is also enabled for those apps. The Feedback app link isn't redirected because it lacks an external URL, preventing external users from accessing it via the Benefits app. For more information, see [link translation and redirect options](application-proxy-configure-hard-coded-link-translation).
+
+### Access your application
+
+Manage access to application proxy published resources by selecting the approach that best fits your scenario and scalability requirements. Common methods include syncing on-premises groups via Microsoft Entra Connect, creating Dynamic Groups in Microsoft Entra ID based on user attributes, enabling self-service groups managed by resource owners, or combining these strategies. Explore the linked resources to understand the benefits of each method.
+
+The most straightforward way of assigning users access to an application is to go to **Users and Groups** from the left-hand pane of your published application and directly assigning groups or individuals.
+
+![Users and Groups page showing the Add user button for application access assignment.](media/app-proxy-deployment-plan/add-user.png)
+
+You can also allow users to self-service access to your application by assigning a group that they aren't currently a member of and configuring the self-serve options.
+
+![Self-service application access settings dialog in application properties.](media/app-proxy-deployment-plan/allow-access.png)
+
+If enabled, users sign in to the MyApps portal to request access. They're either automatically approved and added to the self-service group or require approval from a designated approver.
+
+Guest users can also be [invited to access internal applications published via application proxy through Microsoft Entra B2B](../../external-id/add-users-information-worker).
+
+For on-premises applications that are normally accessible anonymously, requiring no authentication, you might want to disable the option located in the application’s **Properties**.
+
+![Application Properties showing User assignment required toggle.](media/app-proxy-deployment-plan/assignment-required.png)
+
+Leaving the option set to No allows users to access the on-premises application via Microsoft Entra application proxy without permissions, so use with caution.
+
+Once your application is published, it should be accessible by typing its external URL in a browser or by its icon at [https://myapps.microsoft.com](https://myapps.microsoft.com/).
+
+### Enable preauthentication
+
+Verify that your application is accessible through application proxy by accessing it via the external URL.
+
+1. Browse to **Entra ID** &gt; **Enterprise apps** &gt; **All applications** and choose the app you want to manage.
+2. Select **application proxy**.
+3. In the **Pre-Authentication** field, use the dropdown list to select **Microsoft Entra ID**, and select **Save**. With preauthentication enabled, Microsoft Entra ID first authenticates users. If single sign-on is set up, the back-end application also verifies the user before granting access. Switching the preauthentication mode from Passthrough to Microsoft Entra ID secures the external URL with HTTPS, ensuring that any application initially using HTTP now operates over HTTPS.
+
+### Enable single sign-on
+
+SSO improves user experience and security by allowing users to sign in once with Microsoft Entra ID. After preauthentication, the private network connector signs in to the on-premises application for the user, making it appear as if the user signed in directly.
+
+Choosing the **Passthrough** option allows users to access the published application without ever having to authenticate to Microsoft Entra ID.
+
+To enable SSO, your application must preauthenticate users with Microsoft Entra ID. Without preauthentication, SSO options are unavailable.
+
+Read [Single sign-on to applications in Microsoft Entra ID](../enterprise-apps/what-is-single-sign-on) to help you choose the most appropriate SSO method when configuring your applications.
+
+### Working with other types of applications
+
+Microsoft Entra application proxy supports applications built with the [Microsoft Authentication Library (MSAL)](../../identity-platform/v2-overview). It handles native client apps by using Microsoft Entra ID tokens in client request headers to preauthenticate users.
+
+Learn about available configurations of application proxy. Read [publishing native and mobile client apps](application-proxy-configure-native-client-application) and [claims-based applications](application-proxy-configure-for-claims-aware-applications).
+
+### Strengthen security with Conditional Access
+
+Application security requires an advanced set of security capabilities that can protect from and respond to complex threats on-premises and in the cloud. Use Conditional Access policies to control access to your applications based on many conditions like location, risk, device type, device compliance, and more. For examples of policies you might deploy, see the article [Conditional Access templates](../conditional-access/concept-conditional-access-policy-common).
+
+The following capabilities can be used to support Microsoft Entra application proxy:
+
+- User and location-based Conditional Access: Keep sensitive data protected by limiting user access based on geo-location or an IP address with [location-based Conditional Access policies](../conditional-access/concept-assignment-network).
+- Device-based Conditional Access: Ensure only enrolled, approved, and compliant devices can access corporate data with [device-based Conditional Access](../conditional-access/concept-conditional-access-grant).
+- Application-based Conditional Access: Work doesn't have to stop when a user isn't on the corporate network. [Secure access to corporate cloud and on-premises apps](../conditional-access/policy-all-users-device-compliance) and maintain control with Conditional Access.
+- Risk-based Conditional Access: Protect your data from malicious hackers with a [risk-based Conditional Access policy](../conditional-access/overview) that can be applied to all apps and all users, whether on-premises or in the cloud.
+- Microsoft Entra My Apps: With your application proxy service deployed, and applications securely published, offer your users a simple hub to discover and access all their applications. Increase productivity with self-service capabilities, such as the ability to request access to new apps and groups or manage access to these resources on behalf of others, through [My Apps](https://aka.ms/AccessPanelDPDownload).
+
+## Manage your implementation
+
+### Required roles
+
+Microsoft advocates the principle of granting the least possible privilege to perform needed tasks with Microsoft Entra ID. [Review the different Microsoft Entra roles that are available](../role-based-access-control/permissions-reference) and choose the right one to address the needs of each persona. Some roles must be applied temporarily and removed after the deployment is completed.
+
+| Business role | Business tasks | Microsoft Entra roles |
+| --- | --- | --- |
+| Help desk admin | Handles basic user support tasks like resetting passwords, invalidating refresh tokens, and checking service health. | Helpdesk Administrator |
+| Identity admin | Read Microsoft Entra sign-in reports and audit logs to debug application proxy related issues. | Security reader |
+| Application owner | Create and manage all aspects of enterprise applications, application registrations, and application proxy settings. | Application Administrator |
+| Infrastructure admin | Certificate Rollover Owner | Application Administrator |
+
+Minimizing the number of people who have access to secure information or resources helps reduce the chance of a malicious actor obtaining unauthorized access, or an authorized user inadvertently impacting a sensitive resource.
+
+To manage administrative access effectively and ensure proper auditing, use just-in-time (JIT) access with [Privileged Identity Management](../../id-governance/privileged-identity-management/pim-configure). This approach provides on-demand privileged access to Azure resources and Microsoft Entra ID only when needed.
+
+### Reporting and monitoring
+
+Microsoft Entra ID provides insights into your organization’s application usage and operational health through [audit logs and reports](../monitoring-health/concept-provisioning-logs?context=azure/active-directory/manage-apps/context/manage-apps-context). Application proxy also makes it easy to monitor connectors from the Microsoft Entra admin center and Windows Event Logs.
+
+#### Application audit logs
+
+These logs provide detailed information about sign-ins to applications configured with application proxy and the device and the user accessing the application. [Audit logs](../monitoring-health/concept-provisioning-logs?context=azure/active-directory/manage-apps/context/manage-apps-context) are located in the Microsoft Entra admin center and in [Audit API](/en-us/graph/api/resources/directoryaudit) for export. Additionally, [usage and insights reports](../monitoring-health/concept-usage-insights-report?context=azure/active-directory/manage-apps/context/manage-apps-context) are also available for your application.
+
+#### Private network connector monitoring
+
+The connectors and the service take care of all the high availability tasks. You can monitor the status of your connectors from the application proxy page in the Microsoft Entra admin center. For more information about connector maintenance, see [Microsoft Entra private network connectors](../../global-secure-access/concept-connectors#maintenance).
+
+#### Windows event logs and performance counters
+
+Connectors have both admin and session logs. The admin logs include key events and their errors. The session logs include all the transactions and their processing details. Logs and counters are located in Windows Event Logs. For more information, see [Microsoft Entra private network connectors](../../global-secure-access/concept-connectors). Follow the [tutorial to configure event log data sources in Azure Monitor](/en-us/azure/azure-monitor/agents/data-sources-windows-events).
+
+### Troubleshooting guide and steps
+
+Learn more about common issues and how to resolve them with our guide to [troubleshooting](application-proxy-troubleshoot) error messages.

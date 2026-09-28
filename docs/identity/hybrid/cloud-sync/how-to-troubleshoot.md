@@ -1,0 +1,296 @@
+---
+layout: Conceptual
+title: Microsoft Entra Cloud Sync troubleshooting - Microsoft Entra ID | Microsoft Learn
+canonicalUrl: https://learn.microsoft.com/en-us/entra/identity/hybrid/cloud-sync/how-to-troubleshoot
+uhfHeaderId: MSDocsHeader-Entra
+breadcrumb_path: /entra/breadcrumb/toc.json
+feedback_system: Standard
+feedback_product_url: https://feedback.azure.com/d365community/forum/22920db1-ad25-ec11-b6e6-000d3a4f0789
+author: omondiatieno
+ms.author: jomondi
+ms.service: entra-id
+manager: pmwongera
+description: This article describes how to troubleshoot problems that might arise with the cloud provisioning agent.
+ms.date: 2026-08-21T00:00:00.0000000Z
+ms.topic: troubleshooting
+ms.subservice: hybrid-cloud-sync
+ms.custom: sfi-ga-nochange, sfi-image-nochange, msecd-doc-authoring-1024
+locale: en-us
+document_id: 2840c768-ec73-0f79-e56d-b142817fbbf4
+document_version_independent_id: 91c3b7ad-d6d5-94b3-d1d4-e95e12cc5063
+original_content_git_url: https://github.com/MicrosoftDocs/entra-docs-pr/blob/live/docs/identity/hybrid/cloud-sync/how-to-troubleshoot.md
+site_name: Docs
+depot_name: MSDN.entra-docs
+page_type: conceptual
+toc_rel: ../toc.json
+feedback_help_link_type: ''
+feedback_help_link_url: ''
+asset_id: identity/hybrid/cloud-sync/how-to-troubleshoot
+moniker_range_name: 
+monikers: []
+item_type: Content
+source_path: docs/identity/hybrid/cloud-sync/how-to-troubleshoot.md
+cmProducts:
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
+spProducts:
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
+platformId: 494b2fb2-d655-bd49-d6ad-d4f702944815
+---
+
+# Microsoft Entra Cloud Sync troubleshooting - Microsoft Entra ID | Microsoft Learn
+
+Cloud sync has many different dependencies and interactions, which can give rise to various problems. This article helps you troubleshoot these problems. It introduces the typical areas for you to focus on, how to gather additional information, and the various techniques you can use to track down problems.
+
+## Agent problems
+
+When you troubleshoot agent problems, you verify that the agent was installed correctly, and that it communicates with Microsoft Entra ID. In particular, some of the first things that you want to verify with the agent are:
+
+- Is it installed?
+- Is the agent running locally?
+- Is the agent in the portal?
+- Is the agent marked as healthy?
+
+You can verify these items in the portal and on the local server that's running the agent.
+
+### Microsoft Entra admin center agent verification
+
+To verify that Azure detects the agent, and that the agent is healthy, follow these steps:
+
+1. Sign in to the [Microsoft Entra admin center](https://entra.microsoft.com) as at least a [Hybrid Identity Administrator](../../role-based-access-control/permissions-reference#hybrid-identity-administrator).
+2. Browse to **Entra ID** &gt; **Entra Connect** &gt; **Cloud sync**.
+
+    [![Screenshot that shows the Microsoft Entra Connect Cloud Sync home page.](../../../includes/media/cloud-sync-sign-in/cloud-sync-configurations.png)](../../../includes/media/cloud-sync-sign-in/cloud-sync-configurations.png#lightbox)
+
+1. Select **cloud sync**.
+2. You should see the agents you've installed. Verify that the agent in question is there. If all is well, you will see the *active* (green) status for the agent.
+
+### Verify the required open ports
+
+Verify that the Microsoft Entra provisioning agent is able to communicate successfully with Azure datacenters. If there's a firewall in the path, make sure that the following ports to outbound traffic are open:
+
+| Port number | How it's used |
+| --- | --- |
+| 80 | Downloading certificate revocation lists (CRLs), while validating the TLS/SSL certificate. |
+| 443 | Handling all outbound communication with the Application Proxy service. |
+
+If your firewall enforces traffic according to originating users, also open ports 80 and 443 for traffic from Windows services that run as a network service.
+
+### Allow access to URLs
+
+Allow access to the following URLs:
+
+| URL | Port | How it's used |
+| --- | --- | --- |
+| `*.msappproxy.net``*.servicebus.windows.net` | 443/HTTPS | Communication between the connector and the Application Proxy cloud service. |
+| `crl3.digicert.com``crl4.digicert.com``ocsp.digicert.com``crl.microsoft.com``oneocsp.microsoft.com``ocsp.msocsp.com` | 80/HTTP | The connector uses these URLs to verify certificates. |
+| `login.windows.net``secure.aadcdn.microsoftonline-p.com``*.microsoftonline.com``*.microsoftonline-p.com``*.msauth.net``*.msauthimages.net``*.msecnd.net``*.msftauth.net``*.msftauthimages.net``*.phonefactor.net``enterpriseregistration.windows.net``management.azure.com``policykeyservice.dc.ad.msft.net``ctldl.windowsupdate.com``www.microsoft.com/pkiops` | 443/HTTPS | The connector uses these URLs during the registration process. |
+| `ctldl.windowsupdate.com` | 80/HTTP | The connector uses this URL during the registration process. |
+
+You can allow connections to `*.msappproxy.net`, `*.servicebus.windows.net`, and other of the preceding URLs, if your firewall or proxy lets you configure access rules based on domain suffixes. If not, you need to allow access to the [Azure IP ranges and service tags - public cloud](https://www.microsoft.com/download/details.aspx?id=56519). The IP ranges are updated each week.
+
+Important
+
+Avoid all forms of inline inspection and termination on outbound TLS communications between Microsoft Entra private network connectors and Microsoft Entra application proxy cloud services.
+
+### DNS name resolution for Microsoft Entra application proxy endpoints
+
+Public DNS records for Microsoft Entra application proxy endpoints are chained CNAME records, pointing to an A record. This ensures fault tolerance and flexibility. It’s guaranteed that the Microsoft Entra private network connector always accesses host names with the domain suffixes `*.msappproxy.net` or `*.servicebus.windows.net`.
+
+However, during the name resolution, the CNAME records might contain DNS records with different host names and suffixes. Due to this, you must ensure that the device can resolve all the records in the chain, and allows connection to the resolved IP addresses. Because the DNS records in the chain might be changed from time to time, we can't provide you with any list DNS records.
+
+### On the local server
+
+To verify that the agent is running, follow these steps:
+
+1. On the server with the agent installed, open **Services**. Do this by going to **Start** &gt; **Run** &gt; **Services.msc**.
+2. Under **Services**, make sure **Microsoft Entra Connect Agent Updater** and **Microsoft Entra Provisioning Agent** are there. Also confirm that their status is *Running*.
+
+    ![Screenshot of local services and their status.](media/how-to-troubleshoot/troubleshoot-1.png)
+
+### Common agent installation problems
+
+The following sections describe some common agent installation problems, and typical resolutions of those problems.
+
+#### Agent failed to start
+
+You might receive an error message that states:
+
+*Service 'Microsoft Entra Provisioning Agent' failed to start. Verify that you have sufficient privileges to start the system services.*
+
+This problem is typically caused by a group policy. The policy prevented permissions from being applied to the local NT Service sign-in account created by the installer (`NT SERVICE\AADConnectProvisioningAgent`). These permissions are required to start the service.
+
+To resolve this problem, follow these steps:
+
+1. Sign in to the server with an administrator account.
+2. Open **Services** by going to **Start** &gt; **Run** &gt; **Services.msc**.
+3. Under **Services**, double-click **Microsoft Entra Provisioning Agent**.
+4. On the **Log On** tab, change **This account** to a domain admin. Then restart the service.
+
+    ![Screenshot that shows options available from the log on tab.](media/how-to-troubleshoot/troubleshoot-3.png)
+
+#### Agent times out or certificate isn't valid
+
+You might get the following error message when you attempt to register the agent.
+
+![Screenshot that shows a time-out error message.](media/how-to-troubleshoot/troubleshoot-4.png)
+
+This problem is usually caused by the agent being unable to connect to the hybrid identity service. To resolve this problem, configure an outbound proxy.
+
+The provisioning agent supports the use of an outbound proxy. You can configure it by editing the following agent .config file: *C:\Program Files\Microsoft Azure AD Connect Provisioning Agent\AADConnectProvisioningAgent.exe.config*.
+
+Add the following lines into it, toward the end of the file, just before the closing `</configuration>` tag. Replace the variables `[proxy-server]` and `[proxy-port]` with your proxy server name and port values.
+
+```xml
+    <system.net>
+        <defaultProxy enabled="true" useDefaultCredentials="true">
+            <proxy
+                usesystemdefault="true"
+                proxyaddress="http://[proxy-server]:[proxy-port]"
+                bypassonlocal="true"
+            />
+        </defaultProxy>
+    </system.net>
+```
+
+#### Agent registration fails with security error
+
+You might get an error message when you install the cloud provisioning agent. This problem is typically caused by the agent being unable to run the PowerShell registration scripts, due to local PowerShell execution policies.
+
+To resolve this problem, change the PowerShell execution policies on the server. You need to have machine and user policies set as `Undefined` or `RemoteSigned`. If they're set as `Unrestricted`, you'll see this error. For more information, see [PowerShell execution policies](/en-us/powershell/module/microsoft.powershell.core/about/about_execution_policies).
+
+### Log files
+
+By default, the agent emits minimal error messages and stack trace information. You can find these trace logs in the following folder: *C:\ProgramData\Microsoft\Azure AD Connect Provisioning Agent\Trace*.
+
+To gather additional details for troubleshooting agent-related problems, follow these steps.
+
+1. [Install the AADCloudSyncTools PowerShell module](reference-powershell#install-the-aadcloudsynctools-powershell-module).
+2. Use the `Export-AADCloudSyncToolsLogs`PowerShell cmdlet to capture the information. You can use the following options to fine-tune your data collection.
+    - `SkipVerboseTrace` to only export current logs without capturing verbose logs (default = false).
+    - `TracingDurationMins` to specify a different capture duration (default = 3 minutes).
+    - `OutputPath` to specify a different output path (default = user’s Documents folder).
+
+## Object synchronization problems
+
+In the portal, you can use provisioning logs to help track down and troubleshoot object synchronization problems. To view the logs, select **Logs**.
+
+![Screenshot that shows the logs button.](media/how-to-troubleshoot/log-1.png)
+
+Provisioning logs provide a wealth of information on the state of the objects being synchronized between your on-premises Active Directory environment and Azure.
+
+![Screenshot that shows information about provisioning logs.](media/how-to-troubleshoot/log-2.png)
+
+You can filter the view to focus on specific problems, such as dates. You can also search the logs for activities relating to an Active Directory object using its Active Directory `ObjectGuid`. Double-click an individual event to see additional information.
+
+![Screenshot that shows the provisioning logs dropdown list information.](media/how-to-troubleshoot/log-3.png)
+
+This information provides detailed steps and where the synchronization problem is occurring. In this way, you can pinpoint the exact spot of the problem.
+
+#### Skipped objects
+
+If you have been synchronizing users and groups from Active Directory, you may be unable to locate one or more groups in Microsoft Entra ID. This could be due to synchronization having not yet completed or not yet caught up with the creation of the object in Active Directory, a sync error that is blocking the object being created in Microsoft Entra ID, or a synchronization rule scoping rule might be applied that is excluding the object.
+
+If you restart sync, and then when the provisioning cycle completes, search the provisioning log for activities relating to an object using that object's Active Directory `ObjectGuid`. If an event with an Identity containing only a Source ID and a Status of `Skipped` is present in the log, this can indicate that the agent filtered the Active Directory object because it was out of scope.
+
+By default, the scoping rules exclude the following objects from being synchronized to Microsoft Entra ID:
+
+- users, groups and contacts with `IsCriticalSystemObject` set to TRUE, including many of the built-in users and groups in Active Directory
+- replication victim objects
+
+Additional restrictions can be present in the [synchronization schema](concept-attributes).
+
+#### Microsoft Entra object deletion threshold
+
+If you have an implementation topology with Microsoft Entra Connect and Microsoft Entra Cloud Sync, both exporting to the same Microsoft Entra tenant, or if you completely moved from using Microsoft Entra Connect to Microsoft Entra Cloud Sync, you might get the following export error message when you're deleting or moving multiple objects out of the defined scope:
+
+![Screenshot that shows the export error.](media/how-to-troubleshoot/log-4.png)
+
+This error isn't related to the [accidental deletions prevention feature](/en-us/azure/active-directory/cloud-sync/how-to-accidental-deletes) of Microsoft Entra Connect cloud sync. It's triggered by the [accidental deletion prevention feature](../connect/how-to-connect-sync-feature-prevent-accidental-deletes) set in the Microsoft Entra directory from Microsoft Entra Connect. If you don't have a Microsoft Entra Connect server installed from which you could toggle the feature, you can use the ["AADCloudSyncTools"](/en-us/azure/active-directory/cloud-sync/reference-powershell) PowerShell module installed with the Microsoft Entra Connect cloud sync agent to disable the setting on the tenant and allow the blocked deletions to export after confirming they are expected and should be allowed. Use the following command:
+
+```PowerShell
+Disable-AADCloudSyncToolsDirSyncAccidentalDeletionPrevention -tenantId "aaaabbbb-0000-cccc-1111-dddd2222eeee"
+```
+
+During the next provisioning cycle, the objects that were marked for deletion should be deleted from the Microsoft Entra directory successfully.
+
+## Provisioning quarantined problems
+
+Cloud sync monitors the health of your configuration, and places unhealthy objects in a quarantine state. If most or all of the calls made against the target system consistently fail because of an error (for example, invalid admin credentials), the sync job is marked as in quarantine.
+
+![Screenshot that shows the quarantine status.](media/how-to-troubleshoot/quarantine-1.png)
+
+By selecting the status, you can see additional information about the quarantine. You can also obtain the error code and message.
+
+![Screenshot that shows additional information about the quarantine.](media/how-to-troubleshoot/quarantine-2.png)
+
+Right-clicking on the status will bring up additional options to:
+
+- View the provisioning logs.
+- View the agents.
+- Clear the quarantine.
+
+![Screenshot that shows the right-click menu options.](media/how-to-troubleshoot/quarantine-4.png)
+
+### Resolve a quarantine
+
+There are two different ways to resolve a quarantine. You can clear the quarantine, or you can restart the provisioning job.
+
+#### Clear the quarantine
+
+To clear the watermark and run a delta sync on the provisioning job after you have verified it, simply right-click on the status and select **Clear quarantine**.
+
+You should see a notice that the quarantine is clearing.
+
+![Screenshot that shows the notice that the quarantine is clearing.](media/how-to-troubleshoot/quarantine-5.png)
+
+Then you should see the status on your agent as healthy.
+
+![Screenshot that shows the agent status is healthy.](media/how-to-troubleshoot/quarantine-6.png)
+
+#### Restart the provisioning job
+
+Use the portal to restart the provisioning job. On the agent configuration page, select **Restart sync**.
+
+![Screenshot that shows options on the agent configuration page.](media/how-to-troubleshoot/quarantine-3.png)
+
+Alternatively, you can use Microsoft Graph to [restart the provisioning job](/en-us/graph/api/synchronization-synchronizationjob-restart?tabs=http&amp;view=graph-rest-beta&amp;preserve-view=true). You have full control over what you restart. You can choose to clear:
+
+- Escrows, to restart the escrow counter that accrues toward quarantine status.
+- Quarantine, to remove the application from quarantine.
+- Watermarks.
+
+Use the following request:
+
+`POST /servicePrincipals/{id}/synchronization/jobs/{jobId}/restart`
+
+## Directory service authorization failures
+
+If you encounter the **AzureDirectoryServiceAuthorizationFailed** quarantine error code, the most likely cause is that you don't have a service principal for the directory synchronization service application in your tenant. You can check this by querying Microsoft Graph API as in the following example:
+
+```http
+GET /servicePrincipals?$filter=displayName eq 'Microsoft Entra AD Synchronization Service'
+```
+
+If no matching service principal is found, you can trigger creation of a new service principal by enabling synchronization (even it it's already enabled) with the following Microsoft Graph API request:
+
+```http
+PATCH /organization/<your tenant ID>
+
+Request body:
+
+{ "onPremisesSyncEnabled": true }
+```
+
+If you run the first query again, you should see that the service principal has been restored in your tenant. After this, it may take up to 24 hours for the authorization errors to go away completely and for synchronization to resume as normal. If the errors persist beyond that point, reach out to support for further assistance.
+
+## Password writeback
+
+To enable and use password writeback with cloud sync, keep the following in mind:
+
+- If you need to update the [gMSA permissions](how-to-gmsa-cmdlets#using-set-aadcloudsyncpermissions), it might take an hour or more for these permissions to replicate to all the objects in your directory. If you don't assign these permissions, writeback can appear to be configured correctly, but users might encounter errors when they update their on-premises passwords from the cloud. Permissions must be applied to **This object and all descendant objects** for **Unexpire Password** to appear.
+- If passwords for some user accounts aren't written back to the on-premises directory, make sure that inheritance isn't disabled for the account in the on-premises Active Directory Domain Services (AD DS) environment. Write permissions for passwords must be applied to descendant objects for the feature to work correctly.
+- Password policies in the on-premises AD DS environment might prevent password resets from being correctly processed. If you're testing this feature and want to reset passwords for users more than once per day, the group policy for the minimum password age must be set to 0. You can find this setting in the following location: **Computer Configuration** &gt; **Policies** &gt; **Windows Settings** &gt; **Security Settings** &gt; **Account Policies**, within **gpmc.msc**.
+    - If you update the group policy, wait for the updated policy to replicate, or use the `gpupdate /force` command.
+    - For passwords to be changed immediately, the minimum password age must be set to 0. However, if users adhere to the on-premises policies, and the minimum password age is set to a value greater than 0, password writeback doesn't work after the on-premises policies are evaluated.

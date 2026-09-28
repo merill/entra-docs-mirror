@@ -1,0 +1,93 @@
+---
+layout: Conceptual
+title: Configuration management in Tenant Governance - Microsoft Entra ID Governance | Microsoft Learn
+canonicalUrl: https://learn.microsoft.com/en-us/entra/id-governance/tenant-governance/configuration-management
+uhfHeaderId: MSDocsHeader-Entra
+breadcrumb_path: /entra/breadcrumb/toc.json
+feedback_system: Standard
+feedback_product_url: https://feedback.azure.com/d365community/forum/79b1327d-d925-ec11-b6e6-000d3a4f06a4
+author: OWinfreyATL
+ms.author: owinfrey
+ms.service: entra-id-governance
+manager: dougeby
+description: Learn about configuration management capabilities in Microsoft Entra Tenant Governance, including baselines and drift monitoring
+ms.topic: concept-article
+ms.date: 2026-06-05T00:00:00.0000000Z
+ai-usage: ai-assisted
+locale: en-us
+document_id: 11bf4ac6-07d1-7705-eca6-6cc39548becc
+document_version_independent_id: 11bf4ac6-07d1-7705-eca6-6cc39548becc
+original_content_git_url: https://github.com/MicrosoftDocs/entra-docs-pr/blob/live/docs/id-governance/tenant-governance/configuration-management.md
+site_name: Docs
+depot_name: MSDN.entra-docs
+page_type: conceptual
+toc_rel: toc.json
+feedback_help_link_type: ''
+feedback_help_link_url: ''
+asset_id: id-governance/tenant-governance/configuration-management
+moniker_range_name: 
+monikers: []
+item_type: Content
+source_path: docs/id-governance/tenant-governance/configuration-management.md
+cmProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/07bb3e10-d135-43ff-bc8b-360497cb39fa
+spProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/12e559b9-eaf6-4aee-9af7-62334e15f863
+platformId: 749e47a0-442e-7211-331f-f0ae9e4faab5
+---
+
+# Configuration management in Tenant Governance - Microsoft Entra ID Governance | Microsoft Learn
+
+Configuration management in Microsoft Entra Tenant Governance lets you define configuration baselines, monitor tenants for drift, and generate snapshots of current settings. This article explains the core concepts: resources, baselines, monitors, monitoring results, configuration drifts, and snapshot jobs.
+
+Note
+
+Configuration management is built on the Microsoft Graph [Tenant Configuration Management APIs](/en-us/graph/unified-tenant-configuration-management-concept-overview), which are generally available. These APIs provide the configuration-as-code capabilities described in this article, including snapshots, baselines, monitors, and drift detection.
+
+## Resources
+
+A **resource** represents a macro configuration component that you can manage through configuration-as-code. The tenant configuration management solution supports hundreds of resource types that you can include in your configuration baselines. Each resource defines multiple properties that the solution can manage.
+
+For example, a Conditional Access policy in Microsoft Entra ID is represented by the `microsoft.entra.conditionalaccesspolicy` resource. That resource exposes properties such as `ExcludedUsers`, `IncludedGroups`, and `State` that you can define in your configuration baseline. For a full list of resources, see [Overview of Tenant Configuration Management](/en-us/graph/unified-tenant-configuration-management-concept-overview).
+
+## Baselines
+
+A **baseline** is the JSON representation of the configuration you want to monitor for a given tenant. It consists of a list of resources and the defined values for their associated properties. A baseline can contain multiple instances of a given resource type.
+
+For example, a configuration baseline can define multiple instances of Exchange Online transport rules as part of its definition. To learn more about configuration baselines, see [Configuration baseline](/en-us/graph/api/resources/configurationbaseline?view=graph-rest-1.0&amp;preserve-view=true).
+
+## Monitors
+
+**Monitors** are core to the tenant configuration management solution. They run the processes responsible for continuously monitoring your tenants for configuration drifts. Each monitor references a JSON configuration baseline that specifies the resources to validate. The monitor definition also includes a name, description, schedule frequency, and a configuration mode that specifies the actions to perform when drifts are detected.
+
+Note
+
+The Unified Tenant Configuration Management service principal must have read permissions for the resource types defined in the associated baselines. This requirement applies to both monitors and snapshot jobs. See [Authentication setup](/en-us/graph/utcm-authentication-setup) to learn how to grant the required permissions.
+
+To learn more about monitors, see [configurationMonitor](/en-us/graph/api/resources/configurationmonitor?view=graph-rest-1.0&amp;preserve-view=true).
+
+## Monitoring results
+
+Every time a monitor executes based on its specified schedule, it produces a **monitoring result** that summarizes the execution. A monitoring result contains the execution duration, a status that indicates whether resource evaluation succeeded, and a count of detected drifts.
+
+If drifts are detected, the monitoring result reports their presence but doesn't include drift details. To get detailed information about each drift, query the associated configuration drift objects.
+
+To learn more about monitoring results, see [configurationMonitoringResult](/en-us/graph/api/configurationmonitoringresult-get?view=graph-rest-1.0&amp;preserve-view=true).
+
+## Configuration drifts
+
+When a delta exists between what a configuration baseline defines and the actual settings on a tenant, Tenant Governance reports a **configuration drift**. Configuration drifts are associated with a monitor and contain detailed information about the detected delta. Each drift object identifies the affected resource and lists each property whose current value differs from the baseline definition.
+
+After you remediate a detected drift, the next monitor execution automatically marks the configuration drift object as `fixed`. To learn more about configuration drifts, see [configurationDrift](/en-us/graph/api/resources/configurationdrift?view=graph-rest-1.0&amp;preserve-view=true).
+
+## Snapshot jobs
+
+When you initiate a request to generate a snapshot, an asynchronous job collects the current state of the specified resources. This **snapshot job** generates the actual JSON content of the requested snapshot. When the job completes, it returns a status of `succeeded` and a `resourceLocation` URL where you can download the JSON snapshot.
+
+Important
+
+Snapshot jobs and their associated snapshots have a retention period of 7 days, after which they're deleted. Download and store generated snapshots before the retention period expires.
+
+The generated snapshot schema matches the schema of configuration baselines. Use a snapshot as-is to create monitors.
+
+To learn more about snapshot jobs, see [configurationSnapshotJob](/en-us/graph/api/resources/configurationsnapshotjob?view=graph-rest-1.0&amp;preserve-view=true).

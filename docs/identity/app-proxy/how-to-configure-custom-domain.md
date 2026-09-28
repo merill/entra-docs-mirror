@@ -1,0 +1,166 @@
+---
+layout: Conceptual
+title: Custom domains in Microsoft Entra application proxy - Microsoft Entra ID | Microsoft Learn
+canonicalUrl: https://learn.microsoft.com/en-us/entra/identity/app-proxy/how-to-configure-custom-domain
+uhfHeaderId: MSDocsHeader-Entra
+breadcrumb_path: /entra/breadcrumb/toc.json
+feedback_system: Standard
+feedback_product_url: https://feedback.azure.com/d365community/forum/22920db1-ad25-ec11-b6e6-000d3a4f0789
+author: kenwith
+ms.author: kenwith
+ms.service: entra-id
+ms.subservice: app-proxy
+manager: dougeby
+description: Configure and manage custom domains in Microsoft Entra application proxy to use your own domain name.
+ms.topic: how-to
+ms.date: 2026-03-25T00:00:00.0000000Z
+ms.reviewer: KaTabish
+ai-usage: ai-assisted
+ms.custom: sfi-image-nochange
+locale: en-us
+document_id: b02dcd45-9c54-a6cf-ef04-f307f1f816ed
+document_version_independent_id: b02dcd45-9c54-a6cf-ef04-f307f1f816ed
+original_content_git_url: https://github.com/MicrosoftDocs/entra-docs-pr/blob/live/docs/identity/app-proxy/how-to-configure-custom-domain.md
+site_name: Docs
+depot_name: MSDN.entra-docs
+page_type: conceptual
+toc_rel: toc.json
+feedback_help_link_type: ''
+feedback_help_link_url: ''
+asset_id: identity/app-proxy/how-to-configure-custom-domain
+moniker_range_name: 
+monikers: []
+item_type: Content
+source_path: docs/identity/app-proxy/how-to-configure-custom-domain.md
+cmProducts:
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
+spProducts:
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
+platformId: 3c210c7e-5a42-115a-89a2-d3dbeb6e7317
+---
+
+# Custom domains in Microsoft Entra application proxy - Microsoft Entra ID | Microsoft Learn
+
+## Overview
+
+When you publish an application through Microsoft Entra application proxy, you create an external URL for your users. This URL gets the default domain *`yourtenant.msappproxy.net`*. For example, if you publish an app named *Expenses* in your tenant named *Contoso*, the external URL is *`https://expenses-contoso.msappproxy.net`*. If you want to use your own domain name instead of *`msappproxy.net`*, you can configure a custom domain for your application.
+
+## Benefits of custom domains
+
+It's a good idea to set up custom domains for your apps whenever possible. Some reasons to use custom domains include:
+
+- Links between apps work even outside the corporate network. Without a custom domain, if your app is hard-coding internal links to targets outside the application proxy, and the links aren't externally resolvable, they break. When your internal and external URLs are the same, you avoid this problem. If you're not able to use custom domains, see [Redirect hardcoded links for apps published with Microsoft Entra application proxy](application-proxy-configure-hard-coded-link-translation) for other ways to address this issue.
+- Your users have an easier experience, because they get to the app with the same URL from inside or outside your network. There's no need to learn different internal and external URLs, or track their current location.
+- You can control your branding and create the URLs you want. A custom domain can help build your users' confidence, because users see and use a familiar name instead of *`msappproxy.net`*.
+- Some configurations only work with custom domains. For example, you need custom domains for apps that use Security Assertion Markup Language (SAML). You use SAML when you’re using Active Directory Federation Services (AD FS) but can’t use WS-Federation. For more information, see [Work with claims-aware apps in application proxy](application-proxy-configure-for-claims-aware-applications).
+
+If you're not able to make the internal and external URLs match, it's not as important to use custom domains. But you can still take advantage of the other benefits.
+
+## DNS configuration options
+
+There are several options for setting up your Domain Name System (DNS) configuration, depending on your requirements:
+
+### Same internal and external URL, but different behavior
+
+If you don't want your internal users to be directed through the application proxy, you can set up a *split-brain DNS*. A split DNS infrastructure directs name resolution based on host location. It directs internal hosts to an internal domain name server and external hosts to an external domain name server.
+
+![Diagram showing split-brain DNS architecture with internal hosts routing to on-premises server and external hosts routing through application proxy.](media/application-proxy-configure-custom-domain/split-brain-dns.png)
+
+### Different internal and external URLs
+
+When internal and external URLs are different, don't configure split-brain behavior. The URL determines user routing. In this case, you change only the external DNS, and route the external URL to the application proxy endpoint.
+
+When you select a custom domain for an external URL, an information bar shows the CNAME entry you need to add to the external DNS provider. You can always see this information by going to the app's **Application proxy** page.
+
+## Set up and use custom domains
+
+To configure an on-premises app to use a custom domain, you need a verified Microsoft Entra custom domain, a Personal Information Exchange (PFX) certificate for the custom domain, and an on-premises app to configure.
+
+Important
+
+You're responsible for maintaining DNS records that redirect your custom domains to the *`msappproxy.net`* domain. If you choose to later delete your application or tenant, make sure to also delete associated DNS records for application proxy to prevent misuse of dangling DNS records.
+
+### Create and verify a custom domain
+
+To create and verify a custom domain:
+
+1. Sign in to the [Microsoft Entra admin center](https://entra.microsoft.com) as at least an [Application Administrator](../role-based-access-control/permissions-reference#application-administrator).
+2. Browse to **Entra ID** &gt; **Domain names**.
+3. Select **Add custom domain**.
+4. Enter your custom domain name and select **Add Domain**.
+5. On the domain page, copy the TXT record information for your domain.
+6. Go to your domain registrar and create a new TXT record for your domain, based on your copied DNS information.
+7. After you register the domain, on the domain's page in Microsoft Entra ID, select **Verify**. After the domain status is **Verified**, you can use the domain across all your Microsoft Entra configurations, including application proxy.
+
+For more detailed instructions, see [Add your custom domain name using the Microsoft Entra admin center](../../fundamentals/add-custom-domain).
+
+### Configure an app to use a custom domain
+
+To publish your app through application proxy with a custom domain:
+
+1. For a new app, in the Microsoft Entra admin center, browse to **Entra ID** &gt; **Enterprise applications** &gt; **Application proxy**.
+2. Select **New application**. In the **On-premises applications** section, select **Add an on-premises application**.
+
+    For an app already in **Enterprise applications**, select it from the list, and then select **Application proxy** in the left navigation.
+3. On the application proxy settings page, enter a **Name** if you're adding your own on-premises application.
+4. In the **Internal URL** field, enter the internal URL for your app.
+5. In the **External URL** field, drop down the list and select the custom domain you want to use.
+6. Select **Add**.
+
+    ![Application proxy configuration page showing custom domain field and certificate settings.](media/application-proxy-configure-custom-domain/application-proxy.png)
+7. If the domain already has a certificate, the **Certificate** field displays the certificate information. Otherwise, select the **Certificate** field.
+
+    ![Certificate field with upload option in application proxy settings.](media/application-proxy-configure-custom-domain/certificate.png)
+8. On the **SSL certificate** page, browse to and select your PFX certificate file. Enter the password for the certificate, and select **Upload Certificate**. For more information about certificates, see the Certificates for custom domains section. If the certificate isn't valid, or there's a problem with the password, you see an error message. The [Application proxy FAQ](application-proxy-faq) contains some troubleshooting steps you can try.
+
+    ![SSL certificate upload page with fields for certificate file selection and password.](media/application-proxy-configure-custom-domain/ssl-certificate.png)
+
+    Tip
+
+    A custom domain only needs its certificate uploaded once. After that, the uploaded certificate is applied automatically when you use the custom domain for other apps.
+9. If you added a certificate, on the **Application proxy** page, select **Save**.
+10. In the information bar on the **Application proxy** page, note the CNAME entry you need to add to your DNS zone.
+
+    ![Information bar displaying CNAME entry required for DNS zone configuration.](media/application-proxy-configure-custom-domain/dns-info.png)
+11. Follow the instructions at [Manage DNS records and record sets by using the Microsoft Entra admin center](/en-us/azure/dns/dns-operations-recordsets-portal) to add a DNS record that redirects the new external URL to the *`msappproxy.net`* domain in Azure DNS. If a different DNS provider is used, contact the vendor for the instructions.
+
+    Important
+
+    Ensure that you're properly using a CNAME record that points to the *`msappproxy.net`* domain. Don't point records to IP addresses or server DNS names since they aren't static and might affect the resiliency of the service.
+
+    Note
+
+    The CNAME record you create in this step is for the application's external URL hostname (for example, `expenses.contoso.com`), which is different from the TXT record you created during domain verification in step 6 (for example, `contoso.com`). Because these records are on different DNS names, they don't conflict with each other or with [RFC 1912](https://www.ietf.org/rfc/rfc1912.txt), which prohibits a CNAME from coexisting with other record types at the same name.
+12. To check that the DNS record is configured correctly, use the nslookup command to confirm that your external URL is reachable and the *`msappproxy.net`* domain appears as an alias.
+
+Your application is now set up to use the custom domain. Be sure to assign users to your application before you test or release it.
+
+To change the domain for an app, select a different domain from the dropdown list in **External URL** on the app's **Application proxy** page. Upload a certificate for the updated domain, if necessary, and update the DNS record. If you don't see the custom domain you want in the dropdown list in **External URL**, it might not be verified.
+
+For more detailed instructions for application proxy, see [Tutorial: Add an on-premises application for remote access through application proxy in Microsoft Entra ID](application-proxy-add-on-premises-application).
+
+## Certificates for custom domains
+
+A certificate creates the secure Transport Layer Security (TLS) connection for your custom domain.
+
+### Certificate formats
+
+You must use a PFX certificate to ensure all required intermediate certificates are included. The certificate must include the private key.
+
+Most common certificate signature methods are supported such as Subject Alternative Name (SAN).
+
+You can use wildcard certificates as long as the wildcard matches the external URL. You must use wildcard certificates for [wildcard applications](application-proxy-wildcard). If you want to use the certificate to also access subdomains, you must add the subdomain wildcards as subject alternative names in the same certificate. For example, a certificate for *\*.adventure-works.com* fails for *\*.apps.adventure-works.com* unless you add *`*.apps.adventure-works.com`* as a subject alternative name.
+
+You can use certificates issued by your own public key infrastructure (PKI) if the certificate chain is installed on your client devices. Microsoft Intune can deploy these certificates to managed devices. For nonmanaged devices, you must manually install these certificates.
+
+Avoid using a private root certificate authority (CA) since the private root CA would also need to be pushed to client machines, which might introduce many challenges.
+
+### Certificate management
+
+All certificate management is through the individual application pages. Go to the application's **Application proxy** page to access the **Certificate** field.
+
+If you upload a certificate, **new** apps use it, as long as they're configured to use it. However, you need to upload the certificate again for apps that were already there when you uploaded it.
+
+When a certificate expires, you get a warning telling you to upload another certificate. If the certificate is revoked, your users might see a security warning when accessing the app. To update the certificate for an app, navigate to the **Application proxy** page for the app, select **Certificate**, and upload a new certificate. Old certificates that aren't being used by other apps are automatically deleted.

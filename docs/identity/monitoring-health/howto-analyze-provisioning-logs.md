@@ -1,0 +1,243 @@
+---
+layout: Conceptual
+title: How to analyze the Microsoft Entra provisioning logs - Microsoft Entra ID | Microsoft Learn
+canonicalUrl: https://learn.microsoft.com/en-us/entra/identity/monitoring-health/howto-analyze-provisioning-logs
+uhfHeaderId: MSDocsHeader-Entra
+breadcrumb_path: /entra/breadcrumb/toc.json
+feedback_system: Standard
+feedback_product_url: https://feedback.azure.com/d365community/forum/22920db1-ad25-ec11-b6e6-000d3a4f0789
+author: jenniferf-skc
+ms.author: jfields
+ms.service: entra-id
+ms.subservice: monitoring-health
+manager: dougeby
+description: Learn how to view, download, and analyze Microsoft Entra provisioning logs by using the admin center, Microsoft Graph, and Microsoft MCP Server for Enterprise.
+ms.topic: how-to
+ms.date: 2026-08-03T00:00:00.0000000Z
+ms.reviewer: arvinh
+ms.custom: sfi-image-nochange
+locale: en-us
+document_id: 5f6994a8-96a1-8fdb-5c5d-44952cea6dc3
+document_version_independent_id: 85740e78-4e55-c279-e08f-343f2b82334f
+original_content_git_url: https://github.com/MicrosoftDocs/entra-docs-pr/blob/live/docs/identity/monitoring-health/howto-analyze-provisioning-logs.md
+site_name: Docs
+depot_name: MSDN.entra-docs
+page_type: conceptual
+toc_rel: toc.json
+feedback_help_link_type: ''
+feedback_help_link_url: ''
+asset_id: identity/monitoring-health/howto-analyze-provisioning-logs
+moniker_range_name: 
+monikers: []
+item_type: Content
+source_path: docs/identity/monitoring-health/howto-analyze-provisioning-logs.md
+cmProducts:
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
+- https://authoring-docs-microsoft.poolparty.biz/devrel/5fc61396-d075-4560-aece-fdbda73d243f
+spProducts:
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
+- https://authoring-docs-microsoft.poolparty.biz/devrel/ad9437c1-8cda-4537-ad69-b4b263652e13
+platformId: ba60ba8b-f2d4-253f-335f-885ebfed7bf7
+---
+
+# How to analyze the Microsoft Entra provisioning logs - Microsoft Entra ID | Microsoft Learn
+
+The Microsoft Entra provisioning logs provide details about the provisioning events that occur in your tenant. You can use the information captured in the provisioning logs to help troubleshoot issues with a provisioned user.
+
+This article describes how to view and download the provisioning logs, analyze the logs by using Microsoft Graph or Microsoft MCP Server for Enterprise, and troubleshoot common errors.
+
+## Prerequisites
+
+- A working Microsoft Entra tenant with a Microsoft Entra ID P1 or P2 license associated with it.
+- [Reports Reader](../role-based-access-control/permissions-reference#reports-reader) is the least privileged role required to access the provisioning logs.
+- Application owners can also view logs applications that they own.
+    - For a full list of roles, see [Least privileged role by task](../role-based-access-control/delegate-by-task#monitoring-and-health---audit-and-sign-in-logs-least-privileged-roles).
+
+## How to view the provisioning logs
+
+There are several ways to view or analyze the Provisioning logs:
+
+- View in the Microsoft Entra admin center.
+- Stream logs to [Azure Monitor](../app-provisioning/application-provisioning-log-analytics) through diagnostic settings.
+- Analyze logs through [Workbook](howto-use-workbooks) templates.
+- Access logs programmatically through the [Microsoft Graph API](/en-us/graph/api/resources/provisioningobjectsummary).
+- Ask natural-language questions about the logs by using [Microsoft MCP Server for Enterprise](/en-us/graph/mcp-server/overview).
+- [Download the logs](howto-download-logs) as a CSV or JSON file.
+
+To access the logs in the Microsoft Entra admin center:
+
+1. Sign in to the [Microsoft Entra admin center](https://entra.microsoft.com) as at least a [Reports Reader](../role-based-access-control/permissions-reference#reports-reader).
+2. Browse to **Entra ID** &gt; **Monitoring & health** &gt; **Provisioning logs**.
+
+## How to download the provisioning logs
+
+To download the provisioning logs, select **Download** from the **Provisioning logs** page. Set the filters as specific as possible to reduce the size and time of the download.
+
+![Screenshot of the download button in the provisioning logs.](media/howto-analyze-provisioning-logs/download.png)
+
+### CSV format
+
+The CSV download includes three files:
+
+- **ProvisioningLogs**: Downloads all the logs, except the provisioning steps and modified properties.
+- **ProvisioningLogs\_ProvisioningSteps**: Contains the provisioning steps and the change ID. You can use the change ID to join the event with the other two files.
+- **ProvisioningLogs\_ModifiedProperties**: Contains the attributes that were changed and the change ID. You can use the change ID to join the event with the other two files.
+
+### JSON format
+
+To open the JSON file, use a text editor such as [Microsoft Visual Studio Code](https://aka.ms/vscode). Visual Studio Code makes the file easier to read by providing syntax highlighting. You can also open the JSON file by using browsers in an uneditable format, such as [Microsoft Edge](https://aka.ms/msedge).
+
+#### Prettify the JSON file
+
+The JSON file is downloaded in a format to reduce the size of the download. This format can make the payload hard to read. To prettify the file, there are two options:
+
+- Use [Visual Studio Code to format the JSON](https://code.visualstudio.com/docs/languages/json#_formatting).
+- Use PowerShell to format the JSON. This script produces a JSON output in a format that includes tabs and spaces:
+
+    `$JSONContent = Get-Content -Path "<PATH TO THE PROVISIONING LOGS FILE>" | ConvertFrom-JSON`
+
+    `$JSONContent | ConvertTo-Json > <PATH TO OUTPUT THE JSON FILE>`
+
+#### Parse the JSON file
+
+You can use any programming language that you're comfortable with. The following examples are in PowerShell.
+
+- [Read the JSON file](/en-us/powershell/module/microsoft.powershell.utility/convertfrom-json):
+
+    `$JSONContent = Get-Content -Path "<PATH TO THE PROVISIONING LOGS FILE>" | ConvertFrom-JSON`
+
+Now you can parse the data according to your scenario. Here are a couple of examples:
+
+- Output all job IDs in the JSON file:
+
+    `foreach ($provitem in $JSONContent) { $provitem.jobId }`
+- Output all change IDs for events where the action was "create":
+
+    ```powershell
+    foreach ($provitem in $JSONContent) {
+       if ($provItem.action -eq 'Create') {
+           $provitem.changeId
+       }
+    }
+    ```
+
+## What you should know
+
+Here are some tips and considerations for analyzing the provisioning logs:
+
+- The Microsoft Entra admin center stores reported provisioning data for 30 days if you have a premium edition and 7 days if you have a free edition. You can route the provisioning logs to [Azure Monitor logs](../app-provisioning/application-provisioning-log-analytics) for retention beyond 30 days.
+- You can use the change ID attribute as unique identifier, which can be helpful when you're interacting with product support, for example.
+- You might see skipped events for users who aren't in scope.
+
+    - Example 1: If the scope is set to `all users and groups` and setup scoping filters, you might see skipped logs for users that don't meet the scoping criteria.
+    - Example 2: If the scope is set to `assigned users and groups`, you might continue to see users in the logs as skipped, even though they aren't assigned to the application. The way the provisioning service receives changes from the directory causes these users to appear.
+- The provisioning logs don't show role imports (applies to Amazon Web Services, Salesforce, and Zendesk). You can find the logs for role imports in the audit logs.
+- Some error codes contain `AzureActiveDirectory` in the name. These error codes refer to Microsoft Entra ID, but could not be rebranded from Azure Active Directory.
+
+## Analyze provisioning logs with Microsoft MCP Server for Enterprise (Preview)
+
+Microsoft MCP Server for Enterprise lets you use natural-language prompts to analyze provisioning logs in an MCP-enabled AI client. The server translates a prompt into a read-only Microsoft Graph request, runs the request with your delegated permissions, and summarizes the response.
+
+Important
+
+Microsoft MCP Server for Enterprise is in preview. It's currently available only in the global service and supports read-only operations. Review [Overview of Microsoft MCP Server for Enterprise](https://github.com/mcp/microsoft/EnterpriseMCP) for current availability and limitations.
+
+### Prerequisites
+
+In addition to the prerequisites for this article:
+
+- An administrator must [provision Microsoft MCP Server for Enterprise and configure an MCP client](https://github.com/mcp/microsoft/EnterpriseMCP).
+- The MCP client must be granted the `MCP.ProvisioningLog.Read.All` delegated permission.
+- You must sign in to the MCP client with a work or school account that has a supported Microsoft Entra role. Reports Reader is the least privileged supported role.
+
+Microsoft MCP Server for Enterprise supports delegated, user-interactive access only. It doesn't support application-only access.
+
+### Ask questions about provisioning activity
+
+Open your configured MCP client, select its agent mode if required, and ask a specific question about the provisioning activity that you want to investigate. For example:
+
+| Scenario | Example prompt |
+| --- | --- |
+| Review recent failures | `Show me recent provisioning errors.` |
+| Review a user's history | `Show recent provisioning events for the user with ID <user-id>.` |
+| Review successful creates | `Show me recent successful provisioning create operations.` |
+| Review successful deletes | `Were any users successfully deleted by the provisioning service?` |
+| Review successful disables | `Were any users successfully disabled by the provisioning service?` |
+
+Use an object ID instead of a display name when possible. You can also include a time range, application name, status, or provisioning action to make the request more specific.
+
+The AI agent can use the MCP server's query-suggestion tool to select an appropriate Microsoft Graph request and then run the request with the read-only Microsoft Graph tool. For example, the prompt `Show me recent provisioning errors` can result in this request:
+
+```http
+GET https://graph.microsoft.com/v1.0/auditLogs/provisioning?$filter=provisioningStatusInfo/status eq 'failure'&$orderby=activityDateTime desc&$top=5
+```
+
+The prompt `Show recent provisioning events for the user with ID <user-id>` can result in this request:
+
+```http
+GET https://graph.microsoft.com/v1.0/auditLogs/provisioning?$filter=sourceIdentity/id eq '<user-id>'&$orderby=activityDateTime desc&$top=5
+```
+
+The provisioning logs API supports `$filter`, `$orderby`, `$top`, and `$skiptoken`. Filters are case-sensitive. For supported properties and query behavior, see [List provisioningObjectSummary](/en-us/graph/api/provisioningobjectsummary-list).
+
+Tip
+
+Review the Microsoft Graph request shown by the AI agent before relying on its summary. Confirm that filters, object IDs, status values, actions, and time ranges match your investigation. Ask a follow-up question if you need more records or details from `provisioningSteps`, `modifiedProperties`, or `provisioningStatusInfo`.
+
+### What you should know
+
+- The MCP server can't restart a job, provision an object, or change a provisioning configuration. Use the Microsoft Entra admin center, Microsoft Graph, or PowerShell for write operations.
+- Microsoft MCP Server for Enterprise queries the same Microsoft Graph provisioning log data and is subject to the same provisioning log retention period.
+- MCP requests are subject to Microsoft Graph throttling and the MCP server limits.
+- The MCP server honors the signed-in user's role and the delegated scopes granted to the MCP client. It doesn't expand the user's access to provisioning data.
+- Natural-language responses are generated summaries. For investigations and support cases, verify the underlying Microsoft Graph request and use identifiers such as `changeId`, `jobId`, and object IDs from the response.
+
+## Error codes
+
+Use the following table to better understand how to resolve errors that you find in the provisioning logs.
+
+| Error code | Description |
+| --- | --- |
+| Conflict,EntryConflict | Correct the conflicting attribute values in either Microsoft Entra ID or the application.Or, review your matching attribute configuration if the conflicting user account was supposed to be matched and taken over. For more information on configuring matching attributes, see [Customize user provisioning attribute-mappings for SaaS applications in Microsoft Entra ID](../app-provisioning/customize-application-attributes). |
+| TooManyRequests | The target app rejected this attempt to update the user because the app is receiving too many requests. There's nothing to do. This attempt is automatically retried and Microsoft was notified of this issue. |
+| InternalServerError | The target app returned an unexpected error. A service issue with the target application might be preventing it from working. This attempt is automatically retried in 40 minutes. |
+| InsufficientRights,MethodNotAllowed,NotPermitted,Unauthorized | Microsoft Entra ID authenticated with the target application but wasn't authorized to perform the update. Review any instructions that the target application provided, along with the respective application. For more information, see [Tutorials for integrating applications with Microsoft Entra ID](../saas-apps/tutorial-list). |
+| UnprocessableEntity | The target application returned an unexpected response. The configuration of the target application might not be correct, or a service issue with the target application might be preventing it from working. |
+| WebExceptionProtocolError | An HTTP protocol error occurred while connecting to the target application. There's nothing to do. This attempt is automatically retried in 40 minutes. |
+| InvalidAnchor | A user that was previously created or matched by the provisioning service no longer exists. Ensure that the user exists. To force a new matching of all users, use the Microsoft Graph API to [restart the job](/en-us/graph/api/synchronization-synchronizationjob-restart?tabs=http&amp;view=graph-rest-beta&amp;preserve-view=true).Restarting provisioning triggers an initial cycle, which can take time to complete. Restarting provisioning also deletes the cache that the provisioning service uses to operate. That means all users and groups in the tenant must be evaluated again, and certain provisioning events might be dropped. |
+| NotImplemented | The target app returned an unexpected response. The configuration of the app might not be correct, or a service issue with the target app might be preventing it from working. Review any instructions that the target application provided, along with the respective application. For more information, see [Tutorials for integrating applications with Microsoft Entra ID](../saas-apps/tutorial-list). |
+| MandatoryFieldsMissing,MissingValues | The user couldn't be created because required values are missing. Correct the missing attribute values in the source record, or review your matching attribute configuration to ensure that the required fields aren't omitted. For more information, see [Customize user provisioning attribute-mappings for SaaS applications in Microsoft Entra ID](../app-provisioning/customize-application-attributes). |
+| SchemaAttributeNotFound | The operation couldn't be performed because an attribute was specified that doesn't exist in the target application. Ensure that your configuration is correct by referring to [Customize user provisioning attribute-mappings for SaaS applications in Microsoft Entra ID](../app-provisioning/customize-application-attributes). |
+| InternalError | An internal service error occurred within the Microsoft Entra provisioning service. There's nothing to do. This attempt is automatically retried in 40 minutes. |
+| InvalidDomain | The operation couldn't be performed because an attribute value contains an invalid domain name. Update the domain name on the user or add it to the permitted list in the target application. |
+| Timeout | The operation couldn't be completed because the target application took too long to respond. There's nothing to do. This attempt is automatically retried in 40 minutes. |
+| LicenseLimitExceeded | The user couldn't be created in the target application because there are no available licenses for this user. Procure more licenses for the target application.Or, review your user assignments and attribute mapping configuration to ensure that the correct users are assigned with the correct attributes. |
+| DuplicateTargetEntries | The operation couldn't be completed because more than one user in the target application was found with the configured matching attributes. Remove the duplicate user from the target application, or reconfigure your attribute mappings. For more information, see [Customize user provisioning attribute-mappings for SaaS applications in Microsoft Entra ID](../app-provisioning/customize-application-attributes). |
+| DuplicateSourceEntries | The operation couldn't be completed because more than one user was found with the configured matching attributes. Remove the duplicate user, or reconfigure your attribute mappings. For more information, see [Customize user provisioning attribute-mappings for SaaS applications in Microsoft Entra ID](../app-provisioning/customize-application-attributes). |
+| ImportSkipped | When each user is evaluated, the system tries to import the user from the source system. This error commonly occurs when the user who's being imported is missing the matching property defined in your attribute mappings. Without a value present on the user object for the matching attribute, the system can't evaluate scoping, matching, or export changes. The presence of this error doesn't indicate that the user is in scope, because you haven't yet evaluated scoping for the user. |
+| EntrySynchronizationSkipped | The provisioning service successfully queried the source system and identified the user. No further action was taken on the user and they were skipped. The user might have been out of scope or already existed in the target system with no further changes required. |
+| SystemForCrossDomainIdentityManagementMultipleEntriesInResponse | A GET request to retrieve a user or group received multiple users or groups in the response. The system expects to receive only one user or group in the response. For example, if you do a [GET Group request](../app-provisioning/use-scim-to-provision-users-and-groups#get-group) to retrieve a group, provide a filter to exclude members, and your System for Cross-Domain Identity Management (SCIM) endpoint returns the members, this error appears. |
+| SystemForCrossDomainIdentityManagementServiceIncompatible | The Microsoft Entra provisioning service is unable to parse the response from the non-Microsoft application. Work with the application developer to ensure that the SCIM server is compatible with the [Microsoft Entra SCIM client](../app-provisioning/use-scim-to-provision-users-and-groups#understand-the-azure-ad-scim-implementation). |
+| SchemaPropertyCanOnlyAcceptValue | The property in the target system can only accept one value, but the property in the source system has multiple. Ensure that you either map a single-valued attribute to the property that is throwing an error, update the value in the source to be single-valued, or remove the attribute from the mappings. |
+
+## Error codes for cross-tenant synchronization
+
+Use the following table to better understand how to resolve errors that you find in the provisioning logs for [cross-tenant synchronization](../multi-tenant-organizations/cross-tenant-synchronization-configure). Some error codes map to more than one cause, so there are multiple rows for the same error code.
+
+| Error code | Cause | Solution |
+| --- | --- | --- |
+| AzureActiveDirectoryForbidden | The dirSync enabled property is set to true. As a result, the provisioning service cannot update user properties such as immutableId and extensionProperty1-15. | Remove the attribute from your attribute mappings to prevent failures. |
+| AzureActiveDirectoryForbidden | External collaboration settings blocked invitations. | Navigate to user settings and ensure that [external collaboration settings](../../external-id/external-collaboration-settings-configure) are permitted. |
+| AzureActiveDirectoryCannotUpdateObjectsOriginatedInExternalService | The source of authority for the user is Exchange Online. The provisioning service can't update one or more exchange attributes on the user (ex: extensionAttribute 1 - 15). This impacts users that existed in the target tenant when the dirSyncEnabled property changed from "True" to "False." | Update the attribute directly in the target tenant's [exchange online](/en-us/powershell/module/exchange/set-mailuser?view=exchange-ps&amp;preserve-view=true). For example: `Set-MailUser -Identity CloudMailUser5 -CustomAttribute2 "Updated with EXO PowerShell"` |
+| AzureActiveDirectoryCannotUpdateObjectsOriginatedInExternalService | The synchronization engine couldn't update one or more user properties in the target tenant.The operation failed in Microsoft Graph API because of Source of Authority (SOA) enforcement. Currently, the following properties show up in the list:`Mail``showInAddressList` | In some cases (for example when `showInAddressList` property is part of the user update), the synchronization engine might automatically retry the (user) update without the offending property. Otherwise, you need to update the property directly in the target tenant. |
+| AzureDirectoryB2BManagementPolicyCheckFailure | The cross-tenant synchronization policy allowing automatic redemption failed.The synchronization engine checks to ensure that the administrator of the target tenant created an inbound cross-tenant synchronization policy allowing automatic redemption. The synchronization engine also checks if the administrator of the source tenant enabled an outbound policy for automatic redemption. | Ensure that the automatic redemption setting was enabled for both the source and target tenants. For more information, see [Automatic redemption setting](../multi-tenant-organizations/cross-tenant-synchronization-overview#automatic-redemption-setting). |
+| AzureActiveDirectoryQuotaLimitExceeded | The number of objects in the tenant exceeds the directory limit.Microsoft Entra ID has limits for the number of objects that can be created in a tenant. | Check whether the quota can be increased. For information about the directory limits and steps to increase the quota, see [Microsoft Entra service limits and restrictions](../users/directory-service-limits-restrictions). |
+| InvitationCreationFailure | The Microsoft Entra provisioning service attempted to invite the user in the target tenant. That invitation failed. | Further investigation likely requires contacting support. |
+| InvitationCreationFailureUserAccountDisabled | The Microsoft Entra provisioning service attempted to invite the user in the target tenant. That invitation failed. | The user exists in the target tenant, but the account is disabled and invitation is pending. Enable the user account in the target tenant and attempt to provision the user again. |
+| InvitationCreationFailureInvalidPropertyValue | Potential causes:\* The Primary SMTP Address is an invalid value.\* UserType isn't guest or member\* Group email Address isn't supported | Potential solutions:\* The Primary SMTP Address has an invalid value. Resolving this issue likely requires updating the mail property of the source user. For more information, see [Prepare for directory synchronization to Microsoft 365](https://aka.ms/DirectoryAttributeValidations)\* Ensure that the userType property is provisioned as type guest or member. Check your attribute mappings to understand how the userType attribute is mapped.\* The email address of the user matches with the email address of a group in the tenant. Update the email address for one of the two objects. |
+| InvitationCreationFailureAmbiguousUser | The invited user has a proxy address that matches an internal user in the target tenant. The proxy address must be unique. | To resolve this error, delete the existing internal user in the target tenant or remove this user from sync scope. |
+| AzureActiveDirectoryCannotUpdateObjectsMasteredOnPremises | If the user in the target tenant was originally synchronized from AD to Microsoft Entra ID and converted to an external user, the source of authority is still on-premises and the user can't be updated. | The user can't be updated with cross-tenant synchronization. |
+| EntityTypeNotSupported | Groups can be used to determine what users are in scope for provisioning. Groups objects cannot be synchronized. | No customer action is required. This is a skipped event. If you are using the provisioning on-demand, ensure that you choose a user rather than a group to provision. |
+| AzureActiveDirectoryConflictEncountered | There is a conflicting object in the target tenant. | Check if there is a contact in the target tenant with the same mail. Delete the contact from the target tenant to ensure that the B2B user can be updated. Take care to migrate any group memberships from the contact to the B2B user as needed. |

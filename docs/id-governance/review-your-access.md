@@ -1,0 +1,172 @@
+---
+layout: Conceptual
+title: Review your access to groups & apps in access reviews - Microsoft Entra ID Governance | Microsoft Learn
+canonicalUrl: https://learn.microsoft.com/en-us/entra/id-governance/review-your-access
+uhfHeaderId: MSDocsHeader-Entra
+breadcrumb_path: /entra/breadcrumb/toc.json
+feedback_system: Standard
+feedback_product_url: https://feedback.azure.com/d365community/forum/79b1327d-d925-ec11-b6e6-000d3a4f06a4
+author: OWinfreyATL
+ms.author: owinfrey
+ms.service: entra-id-governance
+manager: dougeby
+description: Learn how to review your own access to groups or applications in access reviews.
+editor: markwahl-msft
+ms.subservice: access-reviews
+ms.topic: how-to
+ms.date: 2025-06-18T00:00:00.0000000Z
+ms.reviewer: mwahl
+ms.custom: sfi-image-nochange
+locale: en-us
+document_id: 179cbeed-d9aa-3b5d-56c9-46eebf8706b0
+document_version_independent_id: 1df6bc01-ee77-ecfb-704a-0b471e89b92d
+original_content_git_url: https://github.com/MicrosoftDocs/entra-docs-pr/blob/live/docs/id-governance/review-your-access.md
+site_name: Docs
+depot_name: MSDN.entra-docs
+page_type: conceptual
+toc_rel: toc.json
+feedback_help_link_type: ''
+feedback_help_link_url: ''
+asset_id: id-governance/review-your-access
+moniker_range_name: 
+monikers: []
+item_type: Content
+source_path: docs/id-governance/review-your-access.md
+cmProducts:
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ac4b7417-d4c2-43d4-94bf-f22fa1416b34
+spProducts:
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/68876bab-7da4-4e70-b295-395b3a255a1f
+platformId: ca42aae8-e21d-fbee-5102-1eb716171782
+---
+
+# Review your access to groups & apps in access reviews - Microsoft Entra ID Governance | Microsoft Learn
+
+Microsoft Entra ID simplifies how enterprises manage access to groups or applications in Microsoft Entra ID and other Microsoft Online Services with a feature called access reviews.
+
+This article describes how to review your own access to a group or an application.
+
+## Review your access using My Apps
+
+The first step to perform an access review is to find and open the access review.
+
+Important
+
+There could be delays in receiving email and in some cases it could take up to 24 hours. Add azure-noreply@microsoft.com to your safe recipients list to make sure that you're receiving all emails.
+
+1. Look for an email from Microsoft that asks you to review access. Here's an example email to review your access to a group.
+
+    ![Example email from Microsoft to review your access to a group](media/review-your-access/access-review-email.png)
+2. Select the **Review access** link to open the access review.
+
+If you don't have the email, you can find your pending access reviews by following these steps.
+
+1. Sign in to the My Apps portal at https://myapps.microsoft.com.
+
+    ![My Apps portal listing apps you have permissions to](media/review-your-access/myapps-access-panel.png)
+2. In the upper-right corner of the page, select the user symbol, which displays your name and default organization. If more than one organization is listed, select the organization that requested an access review.
+3. On the right side of the page, select the **Access reviews** tile to see a list of the pending access reviews.
+
+    If the tile isn't visible, there are no access reviews to perform for that organization and no action is needed at this time.
+
+    ![Pending access reviews list for your apps and groups](media/review-your-access/access-reviews-list.png)
+4. Select the **Begin review** link for the access review you want to perform.
+
+### Perform the access review
+
+Once you have opened the access review, you can see your access.
+
+1. Review your access and decide whether you still need access.
+
+    If the request is to review access for others, the page looks different. For more information, see [Review access to groups or applications](perform-access-review).
+
+    ![Screenshot that shows an open access review asking whether you still need access to a group.](media/review-your-access/perform-access-review.png)
+2. Select **Yes** to keep your access or select **No** to remove your access.
+3. If you select **Yes**, you might need to specify a justification in the **Reason** box.
+
+    ![Screenshot that shows a completed access review that asks whether you still need access to a group, with &quot;Yes&quot; selected.](media/review-your-access/perform-access-review-submit.png)
+4. Select **Submit**.
+
+    Your selection is submitted and you're returned to the My Apps portal.
+
+    If you want to change your response, reopen the access reviews page and update your response. You can change your response at any time until the access review ends.
+
+    Note
+
+    If you indicated that you no longer need access, you aren't removed immediately. You're removed when the review ends or when an administrator stops the review.
+
+## Review your own access using My Access (New)
+
+You can try the new experience with the updated user interface in My Access a couple of different ways:
+
+### My Apps portal
+
+1. Sign in to the My Apps portal at https://myapps.microsoft.com.
+
+    ![My Apps portal listing apps you have permissions to](media/review-your-access/myapps-access-panel.png)
+2. Select the **Access reviews** tile to see a list of pending access reviews.
+
+    Note
+
+    If the **Access reviews** tile isn't visible, there are no access reviews to perform for that organization and no action is needed at this time.
+3. Select on **Try it!** in the banner at the top of the page to go to the new My Access experience.
+
+    ![Pending access reviews list for apps and groups with the new experience available banner displayed during the preview](media/review-your-access/banner-your-access.png)
+4. Continue in the section **Perform the access review**.
+
+### Email
+
+Important
+
+There could be delays in receiving email and in some cases it could take up to 24 hours. Add azure-noreply@microsoft.com to your safe recipients list to make sure that you're receiving all emails.
+
+1. Look for an email from Microsoft asking you to review access. You can see an example email message below:
+
+![Example email from Microsoft to review access to a group](media/review-your-access/access-review-email-preview.png)
+
+1. Select the **Review access** link to open the access review.
+2. Continue in the section **Perform the access review**.
+
+Note
+
+If clicking start review takes you to **My Apps** follow the steps listed in the section titled **My Apps Portal**.
+
+### Directly at My Access
+
+You can also view your pending access reviews by using your browser to open My Access.
+
+1. Sign in to the My Access at https://myaccess.microsoft.com/
+2. Select **Access reviews** from the menu on the left side bar to see a list of pending access reviews assigned to you.
+
+    ![access reviews in the menu](media/review-your-access/access-review-menu.png)
+
+### Perform the access review
+
+1. Under Groups and Apps you can see:
+
+    - **Name** The name of the access review.
+    - **Due** The due date for the review. After this date denied users could be removed from the group or app being reviewed.
+    - **Resource** The name of the resource under review.
+    - **Progress** The number of users reviewed over the total number of users part of this access review.
+2. Select on the name of an Access review to get started.
+
+    ![Pending access reviews list for apps and groups](media/review-your-access/access-reviews-list-preview.png)
+3. Review your access and decide whether you still need access.
+
+    If the request is to review access for others, the page looks different. For more information, see [Review access to groups or applications](perform-access-review).
+
+    ![Open access review asking whether you still need access to a group](media/review-your-access/review-access-preview.png)
+4. Select **Yes** to keep your access or select **No** to remove your access.
+5. If you select **Yes**, you might need to specify a justification in the **Reason** box.
+
+    ![Completed access review asking whether you still need access to a group](media/review-your-access/review-access-yes-preview.png)
+6. Select **Submit**.
+
+    Your selection is submitted and you're returned to the My Access page.
+
+    If you want to change your response, reopen the access reviews page and update your response. You can change your response at any time until the access review ends.
+
+    Note
+
+    If you indicated that you no longer need access, you aren't removed immediately. You're removed when the review ends or when an administrator stops the review.

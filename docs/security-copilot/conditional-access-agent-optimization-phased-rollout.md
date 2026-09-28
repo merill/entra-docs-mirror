@@ -1,0 +1,142 @@
+---
+layout: Conceptual
+title: Conditional Access Optimization Agent phased rollout | Microsoft Learn
+canonicalUrl: https://learn.microsoft.com/en-us/entra/security-copilot/conditional-access-agent-optimization-phased-rollout
+uhfHeaderId: MSDocsHeader-Entra
+breadcrumb_path: /entra/breadcrumb/toc.json
+feedback_system: Standard
+feedback_product_url: https://feedback.azure.com/d365community/forum/79b1327d-d925-ec11-b6e6-000d3a4f06a4
+author: cilwerner
+ms.author: cwerner
+manager: pmwongera
+description: Learn about the phased rollout capability for the Security Copilot for Microsoft Entra optimization agent.
+ms.reviewer: jodah
+ms.date: 2026-05-22T00:00:00.0000000Z
+ms.service: entra-id
+ms.subservice: conditional-access
+ms.topic: concept-article
+ms.custom: security-copilot
+ms.collection: msec-ai-copilot
+locale: en-us
+document_id: 96386ba2-d2c9-558b-f323-9f3df4fb5ec0
+document_version_independent_id: 96386ba2-d2c9-558b-f323-9f3df4fb5ec0
+original_content_git_url: https://github.com/MicrosoftDocs/entra-docs-pr/blob/live/docs/security-copilot/conditional-access-agent-optimization-phased-rollout.md
+site_name: Docs
+depot_name: MSDN.entra-docs
+page_type: conceptual
+toc_rel: toc.json
+feedback_help_link_type: ''
+feedback_help_link_url: ''
+asset_id: security-copilot/conditional-access-agent-optimization-phased-rollout
+moniker_range_name: 
+monikers: []
+item_type: Content
+source_path: docs/security-copilot/conditional-access-agent-optimization-phased-rollout.md
+cmProducts:
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/46e3c7c4-fe77-4a6e-b40a-44c569819fa5
+spProducts:
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/d0c6fab8-2d7d-4bb0-bf40-589e08d7c132
+platformId: 76d8d543-78f8-b5cc-dc59-d8d2626aab77
+---
+
+# Conditional Access Optimization Agent phased rollout | Microsoft Learn
+
+The Conditional Access Optimization Agent for Microsoft Entra includes a phased rollout capability that helps organizations deploy new Conditional Access policies safely and efficiently. This Microsoft Security Copilot feature in Microsoft Entra enables administrators to introduce policies gradually, monitor their impact, and minimize disruptions. This phased rollout capability provides gradual deployment of new policies to minimize the chance of widespread disruption to end users and reduce the need for manual analysis and planning, saving weeks of effort. As with all aspects of the Conditional Access Optimization Agent, administrators retain full control of the policy changes, such as group selection, rollout pacing, and deployment. Clear reasoning for the rollout plan is also provided to maintain transparency.
+
+This article explains how the phased rollout process works, outlines prerequisites, and describes the built-in safeguards that help ensure a smooth deployment.
+
+## Prerequisites
+
+- You must have at least the [Microsoft Entra ID P1](../identity/conditional-access/overview#license-requirements) license.
+- You must have available [security compute units (SCU)](/en-us/copilot/security/manage-usage).
+- [Conditional Access Administrator](../identity/role-based-access-control/permissions-reference#conditional-access-administrator) and [Security Administrator](../identity/role-based-access-control/permissions-reference#security-administrator) roles can modify phased rollout settings.
+- Tenants must have at least five defined groups that are currently used in Conditional Access policies for the agent to generate a phased rollout plan.
+
+## How it works
+
+Any report-only policy that applies to *all users* is eligible for a phased rollout. The agent can suggest a phased rollout plan for policies it creates, or administrators can apply phased rollout to any existing report-only policy that targets all users. The agent analyzes sign-in data and existing policies to define a phased rollout plan.
+
+Because there are five distinct phases to a rollout plan, you must have at least five groups for the rollout plan to apply. To determine which groups to use, the agent looks at groups that were previously or are currently used in Conditional Access policies. The agent looks at those groups to see how other Conditional Access policies affected them, to gauge potential impact. The agent looks at the size of the groups and then uses all these factors to assign the groups to the phases starting with the low impact groups and ending with the higher impact groups.
+
+There are three steps in the phased rollout process:
+
+1. Agent identifies a report-only policy for phased rollout
+2. Administrator reviews, edits, and accepts the rollout plan
+3. Administrator executes the approved rollout plan
+
+You can review the groups included in each phase and make changes before and during the phased rollout. When the first phase starts, a *new* policy is created and turned on for the groups included in the first phase. The original report-only mode policy remains intact.
+
+## Agent identifies a report-only policy for phased rollout
+
+The agent can suggest a phased rollout plan when it creates new policies or to existing any report-only policy that targets all users. The rollout plans include five phases, starting with small, low-risk groups and progressing to larger, high-risk groups. There are a few ways to find the phased rollout suggestions in the Microsoft Entra admin center:
+
+- For agent-created policies, look for **Suggested phased rollout** in the **Actions taken by agent** column in the list of suggestions.
+
+    [![Screenshot of the agent suggestions with a phased rollout type highlighted.](media/conditional-access-agent-optimization-phased-rollout/phased-rollout-suggestions.png)](media/conditional-access-agent-optimization-phased-rollout/phased-rollout-suggestions-expanded.png#lightbox)
+- For existing report-only policies, browse to the **Phased rollout** tab on the **Conditional Access - Policies** page. This dedicated tab provides a full lifecycle view of your phased rollout process.
+
+    [![Screenshot of the Conditional Access policies page with the Phased rollout menu highlighted.](media/conditional-access-agent-optimization-phased-rollout/phased-rollout-menu-option.png)](media/conditional-access-agent-optimization-phased-rollout/phased-rollout-menu-option.png#lightbox)
+- Use the **Show policies eligible for phased rollout** filter button on the Conditional Access policies list to find policies that qualify for a phased rollout.
+
+    [![Screenshot of policy list with a phased rollout type highlighted.](media/conditional-access-agent-optimization-phased-rollout/phased-rollout-policy-list.png)](media/conditional-access-agent-optimization-phased-rollout/phased-rollout-policy-list.png#lightbox)
+
+### Administrator reviews, edits, and accepts the rollout plan
+
+Administrators need to review the details of the plan, including the groups included in each phase, the timing of each phase, and how the plan is executed.
+
+1. Sign in to the [Microsoft Entra admin center](https://entra.microsoft.com) as at least a [Security Administrator](../identity/role-based-access-control/permissions-reference#security-administrator).
+2. Browse to **Conditional Access Optimization Agent** or **Conditional Access - Policies** and select a policy with the phased rollout suggestion.
+
+    1. From the **Conditional Access - Policies** page, select **Generate plan** from the panel that opens.
+3. From the Conditional Access Optimization Agent policy details page or after the plan is generated, select **Review phases**.
+
+    [![Screenshot of a phased rollout policy suggestion.](media/conditional-access-agent-optimization-phased-rollout/phased-rollout-review-phases-button.png)](media/conditional-access-agent-optimization-phased-rollout/phased-rollout-review-phases-button.png#lightbox)
+4. Select **Edit Groups** to edit the groups included in the phase.
+
+    [![Screenshot of the phases that can be edited with the edit groups button highlighted.](media/conditional-access-agent-optimization-phased-rollout/phased-rollout-edit-groups-button.png)](media/conditional-access-agent-optimization-phased-rollout/phased-rollout-edit-groups-button.png#lightbox)
+5. Select the **Start phased rollout** button from either the policy details panel or the phased rollout details page. The agent creates the new policy in report-only mode.
+
+Tip
+
+You can pause rollout, or mark the rollout complete at any time.
+
+## Administrator executes the approved rollout plan
+
+Once you start a phased rollout, the agent helps you progress. The phased rollout suggestion is present throughout the rollout process and can show no action needed, suggest progressing to the next phase, or suggest rolling back. The guidance appears in both the Conditional Access Optimization Agent suggestion list and the Conditional Access - Policies list. Both policies indicate that the phased rollout deployment is in progress.
+
+You're provided several options to manage the phased rollout during deployment. During each phase, the agent monitors activity related to the policy to make sure there's no errors or issues. You can adjust the groups for phases that haven't started yet. Moving between phases or completing the deployment is done using the buttons at the top of the page.
+
+- Select **Move to next phase** to advance each phase of the rollout.
+- Select **Roll back to previous phase** to cancel the current phase and return to the previous phase.
+- Select **Mark rollout as complete** to apply the new policy to all groups and complete the deployment.
+
+[![Screenshot of a phased rollout plan in manual execution mode.](media/conditional-access-agent-optimization-phased-rollout/phased-rollout-manual-details.png)](media/conditional-access-agent-optimization-phased-rollout/phased-rollout-manual-details.png#lightbox)
+
+## Built-in safeguards
+
+Once the phased rollout begins, you can't update the policy's grant controls. If changes are made to the grant controls, the phased rollout is canceled. If more than 10% of sign-ins are blocked by the new policy during any phase, the rollout is immediately paused. The administrator is notified and troubleshooting guidance is provided, which includes a report showing why sign-ins failed. This guidance always appears when a rollback is recommended, helping administrators quickly identify and resolve issues before resuming the rollout.
+
+## Signals used for phased rollout group recommendations
+
+To ensure a safe and effective rollout of Conditional Access policies, the Conditional Access Optimization Agent analyzes several key signals to recommend the best groups for each stage of deployment. This approach helps minimize disruption while maximizing security coverage.
+
+- **Group size and reach**: The agent considers the size of each group relative to your total user base. Starting with smaller, representative groups allows for safer testing before expanding to broader populations.
+- **Historical policy performance**: The agent analyzes how users in a group have interacted with existing policies over time.
+    - High success rates indicate users are already meeting security requirements.
+    - High block rates might indicate potential friction points that need addressing before a strict rollout.
+    - The agent also looks at how often policies apply to the group's sign-ins.
+- **Usage patterns**: The agent assesses the volume of activity for each group. Groups with high activity levels provide more data points for validation, while low-activity groups might not generate enough signals for a confident pilot.
+- **Existing security controls**: The agent identifies which types of controls are already effective for the group to effectively suggest new policy types, reducing the likelihood of user confusion or lockout.
+- **Recent administrative context**: The agent considers groups that have been recently involved in policy changes or administrative actions, to ensure suggestions are current and reflect the latest organizational changes, rather than relying solely on static group definitions.
+
+## Frequently asked questions
+
+### How does the phased rollout capability work?
+
+After selecting the groups that each phase applies to, the agent creates a duplicate Conditional Access policy that only includes the group of the first phase. The original Conditional Access policy persists in report-only mode and targets all users, so you can continue to collect data. When the deployment advances to the next phase, the batch of groups is added to the enabled Conditional Access policy. The agent monitors how each stage affects the sign-ins associated with this policy. If the success rate drops below 90%, the phased rollout stops and the enabled policy is placed back into report-only mode. You can then review the logs to determine why sign-ins were failing before attempting the phased rollout again.
+
+### Do I have to turn on phased rollout?
+
+The phased rollout capability is turned on by default. To turn it off, go to the **Settings** tab on the Conditional Access Optimization Agent page. Under **Phased rollout**, switch the toggle to **Off**.

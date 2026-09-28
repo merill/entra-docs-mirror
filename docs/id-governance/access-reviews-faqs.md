@@ -1,0 +1,88 @@
+---
+layout: Conceptual
+title: Access Reviews FAQs - Microsoft Entra ID Governance | Microsoft Learn
+canonicalUrl: https://learn.microsoft.com/en-us/entra/id-governance/access-reviews-faqs
+uhfHeaderId: MSDocsHeader-Entra
+breadcrumb_path: /entra/breadcrumb/toc.json
+feedback_system: Standard
+feedback_product_url: https://feedback.azure.com/d365community/forum/79b1327d-d925-ec11-b6e6-000d3a4f06a4
+author: OWinfreyATL
+ms.author: owinfrey
+ms.service: entra-id-governance
+manager: dougeby
+description: Frequently asked questions about Access Reviews.
+ms.subservice: access-reviews
+ms.topic: faq
+ms.date: 2026-03-12T00:00:00.0000000Z
+ms.reviewer: jgangadhar
+ms.custom: template-tutorial
+locale: en-us
+document_id: 81c06560-1d38-b341-fa35-3bc06708d02b
+document_version_independent_id: 81c06560-1d38-b341-fa35-3bc06708d02b
+original_content_git_url: https://github.com/MicrosoftDocs/entra-docs-pr/blob/live/docs/id-governance/access-reviews-faqs.md
+site_name: Docs
+depot_name: MSDN.entra-docs
+page_type: conceptual
+toc_rel: toc.json
+feedback_help_link_type: ''
+feedback_help_link_url: ''
+asset_id: id-governance/access-reviews-faqs
+moniker_range_name: 
+monikers: []
+item_type: Content
+source_path: docs/id-governance/access-reviews-faqs.md
+cmProducts:
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ac4b7417-d4c2-43d4-94bf-f22fa1416b34
+- https://authoring-docs-microsoft.poolparty.biz/devrel/b1cfdec6-b0c3-4209-818c-736879856e0e
+spProducts:
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/68876bab-7da4-4e70-b295-395b3a255a1f
+- https://authoring-docs-microsoft.poolparty.biz/devrel/2d0723c1-cf38-4c30-ab3d-5df787b33270
+platformId: 55dbf80f-36f1-6ed7-fe17-937b8d7466c0
+---
+
+# Access Reviews FAQs - Microsoft Entra ID Governance | Microsoft Learn
+
+In this article, you find answers to commonly asked questions about [access reviews](access-reviews-overview). Check back to this page frequently as changes happen often, and answers are continually being added.
+
+## Frequently asked questions
+
+### Can I stop a recurring access review series at any time?
+
+While there's no direct "**Stop**" button for a series, you can edit the series to set an earlier end date. This prevents new review instances from being generated after that date.
+
+### Do access reviews reflect real-time changes to users or access during the review period?
+
+No. Access reviews capture a snapshot of access at the start of each review instance. Any changes made to user assignments, group membership, or reviewer configuration after the review begins aren't reflected in that instance. These updates will instead be captured in the next instance of the review if it's a recurring review. At the start of each recurrence, the system reevaluates and retrieves the latest information about users, resources, and reviewers.
+
+### I completed an access review but don’t see any changes yet. Why?
+
+When a reviewer completes an access review, it means they submit their decisions. However, changes to access aren't applied until the review reaches its scheduled end date.
+
+If the review is set to **auto-apply**, the system applies the decisions shortly after the end date. **If auto-apply isn't enabled**, you must manually apply the results. You can confirm whether auto-apply is enabled in the review’s configuration settings.
+
+Note
+
+Even if a reviewer completes their review early, for example on day 1 of a 10-day review, access changes still won’t take effect until the end of the review period.
+
+### What happens if reviewers miss the review deadline?
+
+If reviewers don’t take action by the review end date, the system automatically applies the admin-configured default decision, for example either approve, deny, or take recommendations, for users who weren’t reviewed.
+
+### How can admins view upcoming reviews in a recurring series?
+
+There are several scenarios where the system is unable to apply review outcomes, especially for denied users:
+
+- **Reviewing members of a synced on-premises Windows Server Active Directory group**: If the group is synced from on-premises Windows Server Active Directory, the group can't be managed in Microsoft Entra ID and therefore membership can't be changed. -**Reviewing a resource (role, group, or application) with nested groups assigned**: For users who have membership through a nested group, the system doesn't remove their membership from the nested group, and therefore they retain access to the resource being reviewed.
+- **User not found**: A user not being found, or other similar errors, can also result in an apply result not being completed.
+- **Reviewing the members of mail enabled group**: The group can't be managed in Microsoft Entra ID, so membership can't be changed.
+- **The Application uses group assignment**: Reviewing an Application that uses group assignment won't remove the members of those groups, so they retain the existing access from the group relationship for the application assignment.
+
+### Why don’t new group owners appear as reviewers during an ongoing group access review?
+
+When a group or team access review starts, only the group owners at the time the review begins are assigned as reviewers. If group ownership changes during the review, for example, new owners are added or existing ones are removed, those changes don't affect the current instance. The original reviewers remain unchanged. However, for recurring reviews, any updates to group ownership will be reflected in the next review instance.
+
+### How can I see which reviewers were notified for an access review?
+
+Once an access review starts, you can use the [contactedReviewers](/en-us/graph/api/resources/accessreviewreviewer) API to retrieve the list of all users who were, or would have been, notified via email to perform reviews. Even in scenarios where notifications were turned off, the API still provides the list of reviewers along with timestamps indicating when notification would happen.

@@ -1,0 +1,306 @@
+---
+layout: Conceptual
+title: Manage app consent policies - Microsoft Entra ID | Microsoft Learn
+canonicalUrl: https://learn.microsoft.com/en-us/entra/identity/enterprise-apps/manage-app-consent-policies
+uhfHeaderId: MSDocsHeader-Entra
+breadcrumb_path: /entra/breadcrumb/toc.json
+feedback_system: Standard
+feedback_product_url: https://feedback.azure.com/d365community/forum/22920db1-ad25-ec11-b6e6-000d3a4f0789
+author: omondiatieno
+ms.author: jomondi
+ms.service: entra-id
+ms.subservice: enterprise-apps
+manager: dougeby
+description: Learn how to manage built-in and custom app consent policies to control when consent can be granted.
+ms.topic: how-to
+ms.date: 2026-01-22T00:00:00.0000000Z
+ms.reviewer: ergreenl, phsignor
+ms.custom: enterprise-apps
+zone_pivot_groups: enterprise-apps-minus-portal-aad
+locale: en-us
+document_id: 819bffaf-da09-9370-762f-fe657a6cc7d0
+document_version_independent_id: ec50883b-345f-db49-1127-267456733c00
+original_content_git_url: https://github.com/MicrosoftDocs/entra-docs-pr/blob/live/docs/identity/enterprise-apps/manage-app-consent-policies.md
+site_name: Docs
+depot_name: MSDN.entra-docs
+page_type: conceptual
+toc_rel: toc.json
+feedback_help_link_type: ''
+feedback_help_link_url: ''
+asset_id: identity/enterprise-apps/manage-app-consent-policies
+moniker_range_name: 
+monikers: []
+item_type: Content
+source_path: docs/identity/enterprise-apps/manage-app-consent-policies.md
+cmProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/5fc61396-d075-4560-aece-fdbda73d243f
+spProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/ad9437c1-8cda-4537-ad69-b4b263652e13
+platformId: df7c8b2f-2649-ffee-5fdf-4113a76ca158
+---
+
+# Manage app consent policies - Microsoft Entra ID | Microsoft Learn
+
+App consent policies are a way to manage the permissions that apps have to access data in your organization. They're used to control what apps users can consent to and to ensure that apps meet certain criteria before they can access data. These policies help organizations maintain control over their data and ensure they only grant access to trusted apps. With [Microsoft Graph](/en-us/graph/overview) and [Microsoft Graph PowerShell](/en-us/powershell/microsoftgraph/get-started?view=graph-powershell-1.0&amp;preserve-view=true), you can view and manage app consent policies.
+
+In this article, you learn how to manage built-in and custom app consent policies to control when consent can be granted. App consent policies can be assigned to specific users or groups using custom roles, or you can set a default app consent policy for end-users in your organization.
+
+Note
+
+There are other ways to give a user or service principal the ability to grant consent besides using app consent policies. Don't use the list of principals assigned roles with consent policies attached as an exhaustive list of what can grant consent in your organization.
+
+## App consent policy segments
+
+An app consent policy consists of one or more "include" condition sets and zero or more "exclude" condition sets. For an event to be considered in an app consent policy, it must match *at least* one "include" condition set, and must not match *any* "exclude" condition set. The exclusion and inclusions are used to determine whether the actor affected by the given policy can grant consent or not.
+
+There are three main parts of app consent policies:
+
+- **Metadata:** Properties of an app consent policy hold information such as the ID, the description, and the display name of the consent policy.
+- **Included condition sets:** A collection of condition sets that a given app consent request must match *at least one of* for the policy to pass. This collection must have at least *one* condition set. Each condition set contains rules that describe characteristics of an app consent request, such as verified publisher status, permissions requested, and more.
+- **Excluded condition sets:** A collection of condition sets that a given app consent request shouldn't match *any* of to pass. This collection can be empty (it can contain zero excluded condition sets). Each condition set contains rules that describe characteristics of an app consent request, such as verified publisher status, permissions requested, and more.
+
+### Supported conditions
+
+Each condition set consists of several conditions. For an event to match a condition set, *all* conditions in the condition set must be met. For example, a condition set might specify "Client applications that are publisher verified, created in this tenant, and requesting Microsoft Graph delegated Mail.Read" wouldn't match on a consent request for a client application that is publisher verified, created in the tenant, and requesting openid and profile scopes.
+
+Condition sets include one or more properties used to define characteristics of the app or permissions requested. A full list of the properties is located [here.](/en-us/graph/api/resources/permissiongrantconditionset)
+
+## Built-in consent policies
+
+Every tenant comes with a set of app consent policies that are the same across all tenants. Some of these built-in policies are used in existing built-in directory roles. For example, the `microsoft-application-admin` app consent policy describes the conditions under which the Application Administrator and Cloud Application Administrator roles are allowed to grant tenant-wide admin consent. Built-in policies can be used in custom directory roles or to configure an organization's default consent policy. These policies can't be edited. A list of the built-in policies are:
+
+- **microsoft-user-default-low:** All low risk permissions consentable by member type users by default.
+- **microsoft-user-default-recommended:** Permissions consentable based on Microsoft's current recommendations.
+- **microsoft-user-default-allow-consent-apps:** Popular mail clients consentable for users
+- **microsoft-all-application-permissions:** Includes all application permissions (app roles), for all APIs, for any client application.
+- **microsoft-dynamically-managed-permissions-for-chat:** Includes dynamically managed permissions allowed for chat resource-specific consent.
+- **microsoft-all-application-permissions-for-chat:** Includes all chat resource-specific application permissions, for all APIs, for any client application.
+- **microsoft-dynamically-managed-permissions-for-team:** Includes dynamically managed permissions allowed for team resource-specific consent.
+- **microsoft-pre-approval-apps-for-chat:** Includes apps that preapproved by permission grant pre-approval policy for chat resource specific consent.
+- **microsoft-pre-approval-apps-for-team:** Includes apps that preapproved by the permission grant pre-approval policy for team resource specific consent.
+- **microsoft-all-application-permissions-verified:** Includes all application permissions (app roles), for all APIs, for client applications from verified publishers or which were registered in this organization.
+- **microsoft-application-admin:** Permissions consentable by Application Administrators.
+- **microsoft-company-admin:** Permissions consentable by Company Administrators.
+
+Warning
+
+Microsoft-user-default-recommended and microsoft-user-default-allow-consent-apps are a Microsoft managed policies. The conditions included in the policies are automatically updated based on Microsoft's latest security recommendations for end-user consent.
+
+## Microsoft recommended current settings
+
+### Microsoft recommended user consent policy
+
+The setting labeled "Let Microsoft manage your consent settings," the Microsoft managed policy, will update with Microsoft's latest recommended default consent settings. This is also the default for a new tenant. The setting's rules are currently: End users can consent for any user consentable delegated permissions EXCEPT:
+
+- For Microsoft Graph: `Files.Read.All`, `Files.ReadWrite.All`, `Sites.Read.All`, `Sites.ReadWrite.All`, `Mail.Read`, `Mail.ReadWrite`, `Mail.ReadBasic`, `Mail.Read.Shared`, `Mail.ReadBasic.Shared`, `Mail.ReadWrite.Shared`, `MailboxItem.Read`, `Calendars.Read`, `Calendars.ReadBasic`, `Calendars.ReadWrite`, `Calendars.Read.Shared`, `Calendars.ReadWrite.Shared`, `Chat.Read`, `Chat.ReadWrite`, `OnlineMeetings.Read`, `OnlineMeetings.ReadWrite`, `MailBoxFolder.Read`, `MailBoxFolder.ReadWrite`, `MailBoxSettings.Read`, `MailBoxSettings.ReadWrite`, `Contacts.ReadWrite`, `Contacts.Read.Shared`, `Contacts.ReadWrite.Shared`, `Tasks.Read`, `Tasks.Read.Shared`, `Tasks.ReadWrite`, `Tasks.ReadWrite.Shared`, `People.Read`.
+- For Office 365 Exchange Online: `EAS.AccessAsUser.All`, `EWS.AccessAsUser.All`, `IMAP.AccessAsUser.All`, `POP.AccessAsUser.All`.
+
+### Mail client policy
+
+An additional policy enabled by default is the **microsoft-user-allow-default-consent-apps** policy. This policy allows end-users in your organization to consent for popular mail applications for mail permissions. When this policy is enabled, end users are able to consent for specific delegated mail permissions (All Microsoft Graph and Office 365 Exchange Online permissions listed above) for the following applications:
+
+- Apple Mail (application ID: f8d98a96-0999-43f5-8af3-69971c7bb423)
+- Spark Email (application ID:b50c1dbd-1855-4e54-b07c-d3c3029e93d3)
+- eM Client (application ID:e9a7fea1-1cc0-4cd9-a31b-9137ca5deedd)
+- Android-Samsung (application ID:8acd33ea-7197-4a96-bc33-d7cc7101262f)
+- Android-Mail (application ID:2cee05de-2b8f-45a2-8289-2a06ca32c4c8)
+- Thunderbird (application ID:9e5f94bc-e8a4-4e73-b8be-63364c29d753)
+
+## Multiple policies or authorization mechanisms to grant consent
+
+A user can have more than one policy that allows them to give consent. Each policy is evaluated separately (as in, an exclusion from one policy does not affect inclusions of another policy) and the user only needs one policy to approve to be allowed to consent for a specific event. For example, an application admin can consent to everything a regular user can (thanks to the default policy applied to all users), and they also have broader permissions through the microsoft-application-admin policy, which lets them approve requests for any API permission—except Microsoft Graph app roles.
+
+Similarly, a user or service principal can be given the ability to grant consent through means other than an app consent policy. For example: a user that is assigned as 'owner' to a service principal can grant consent for the app roles that service principal exposes, even if that user hasn't been assigned any roles with consent policies attached; an application assigned the `Application.ReadWrite.All` application permission can grant consent for any app role (except those exposed by Microsoft Graph). The user or service principal only needs one authorization mechanism to approve to be allowed to grant consent for a specific event.
+
+## Prerequisites
+
+- A user or service with one of the following roles:
+    - Privileged Role Administrator directory role
+    - A custom directory role with the necessary [permissions to manage app consent policies](../role-based-access-control/custom-consent-permissions#managing-app-consent-policies)
+    - The Microsoft Graph app role (application permission) `Policy.ReadWrite.PermissionGrant` when connecting as an app or a service
+- Familiarize yourself with (Permission grant condition sets)[/graph/api/resources/permissiongrantconditionset?view=graph-rest-1.0]
+
+::: zone pivot="ms-powershell"
+
+To manage app consent policies for applications with Microsoft Graph PowerShell, connect to [Microsoft Graph PowerShell](/en-us/powershell/microsoftgraph/get-started?view=graph-powershell-1.0&amp;preserve-view=true).
+
+```powershell
+Connect-MgGraph -Scopes "Policy.ReadWrite.PermissionGrant"
+```
+
+## List existing app consent policies
+
+It's a good idea to start by getting familiar with the existing app consent policies in your organization:
+
+1. List all app consent policies. This shows all built-in policies and any custom policies your organization created:
+
+    ```powershell
+    Get-MgPolicyPermissionGrantPolicy | ft Id, DisplayName, Description
+    ```
+2. View the "include" condition sets of a policy:
+
+    ```powershell
+    Get-MgPolicyPermissionGrantPolicyInclude -PermissionGrantPolicyId "microsoft-application-admin" | fl
+    ```
+3. View the "exclude" condition sets:
+
+    ```powershell
+    Get-MgPolicyPermissionGrantPolicyExclude -PermissionGrantPolicyId "microsoft-application-admin" | fl
+    ```
+
+## Create a custom app consent policy using PowerShell
+
+Follow these steps to create a custom app consent policy:
+
+1. Create a new empty app consent policy.
+
+    ```powershell
+    $params = @{
+     Id          = "my-custom-policy"
+     DisplayName = "My first custom consent policy"
+     Description = "This is a sample custom app consent policy."
+    }
+    
+    New-MgPolicyPermissionGrantPolicy @params
+    ```
+2. Add "include" condition sets.
+
+    ```powershell
+    # Include delegated permissions classified "low", for apps from verified publishers
+    New-MgPolicyPermissionGrantPolicyInclude `
+        -PermissionGrantPolicyId "my-custom-policy" `
+        -PermissionType "delegated" `
+        -PermissionClassification "low" `
+        -ClientApplicationsFromVerifiedPublisherOnly
+    $params = @{
+      PermissionGrantPolicyId                     = "my-custom-policy"
+      PermissionType                               = "delegated"
+      PermissionClassification                     = "low"
+      ClientApplicationsFromVerifiedPublisherOnly  = $true
+    }
+    
+    New-MgPolicyPermissionGrantPolicyInclude @params
+    ```
+
+    Repeat this step to add more "include" condition sets.
+3. Optionally, add "exclude" condition sets.
+
+    ```powershell
+    # Retrieve the service principal for the Azure Management API
+    $azureApi = Get-MgServicePrincipal -Filter "servicePrincipalNames/any(n:n eq 'https://management.azure.com/')"
+    
+    # Exclude delegated permissions for the Azure Management API
+    New-MgPolicyPermissionGrantPolicyExclude `
+        -PermissionGrantPolicyId "my-custom-policy" `
+        -PermissionType "delegated" `
+        -ResourceApplication $azureApi.AppId
+    $params = @{
+     PermissionGrantPolicyId = "my-custom-policy"
+     PermissionType           = "delegated"
+     ResourceApplication      = $azureApi.AppId
+    }
+    
+    New-MgPolicyPermissionGrantPolicyExclude @params
+    ```
+
+    Repeat this step to add more "exclude" condition sets.
+
+After creating the app consent policy, you need to assign it to a custom role in Microsoft Entra ID. You then need to assign users to that custom role, which is attached to the app consent policy you created. For more information on how to assign the app consent policy to a custom role, see [App consent permissions for custom roles](../role-based-access-control/custom-consent-permissions).
+
+## Delete a custom app consent policy using PowerShell
+
+The following cmdlet shows how you can delete a custom app consent policy.
+
+```powershell
+   Remove-MgPolicyPermissionGrantPolicy -PermissionGrantPolicyId "my-custom-policy"
+```
+
+::: zone-end
+
+::: zone pivot="ms-graph"
+
+To manage app consent policies, sign in to [Graph Explorer](https://developer.microsoft.com/graph/graph-explorer) with one of the roles listed in the prerequisite section.
+
+You need to consent to the `Policy.ReadWrite.PermissionGrant` permission.
+
+## List existing app consent policies using Microsoft Graph
+
+It's a good idea to start by getting familiar with the existing app consent policies in your organization:
+
+1. List all app consent policies. This shows all built-in policies and any custom policies your organization created:
+
+    ```http
+    GET /policies/permissionGrantPolicies?$select=id,displayName,description
+    ```
+2. View the "include" condition sets of a policy:
+
+    ```http
+    GET /policies/permissionGrantPolicies/{ microsoft-application-admin }/includes
+    ```
+3. View the "exclude" condition sets:
+
+    ```http
+    GET /policies/permissionGrantPolicies/{ microsoft-application-admin }/excludes
+    ```
+
+## Create a custom app consent policy using Microsoft Graph
+
+Follow these steps to create a custom app consent policy:
+
+1. Create a new empty app consent policy.
+
+    ```http
+    POST https://graph.microsoft.com/v1.0/policies/permissionGrantPolicies
+    Content-Type: application/json
+    
+    {
+      "id": "my-custom-policy",
+      "displayName": "My first custom consent policy",
+      "description": "This is a sample custom app consent policy"
+    }
+    ```
+2. Add "include" condition sets.
+
+    Include delegated permissions classified "low" for apps from verified publishers
+
+    ```http
+    POST https://graph.microsoft.com/v1.0/policies/permissionGrantPolicies/{ my-custom-policy }/includes
+    Content-Type: application/json
+    
+    {
+      "permissionType": "delegated",
+      "PermissionClassification": "low",
+      "clientApplicationsFromVerifiedPublisherOnly": true
+    }
+    ```
+
+    Repeat this step to add more "include" condition sets.
+3. Optionally, add "exclude" condition sets. Exclude delegated permissions for the Azure Management API (appId 00001111-aaaa-2222-bbbb-3333cccc4444)
+
+    ```http
+    POST https://graph.microsoft.com/v1.0/policies/permissionGrantPolicies/my-custom-policy /excludes
+    Content-Type: application/json
+    
+    {
+      "permissionType": "delegated",
+      "resourceApplication": "00001111-aaaa-2222-bbbb-3333cccc4444 "
+    }
+    ```
+
+    Repeat this step to add more "exclude" condition sets.
+
+After creating the app consent policy, you need to assign it to a custom role in Microsoft Entra ID. You then need to assign users to that custom role, which is attached to the app consent policy you created. For more information on how to assign the app consent policy to a custom role, see [App consent permissions for custom roles](../role-based-access-control/custom-consent-permissions).
+
+## Delete a custom app consent policy Microsoft Graph
+
+1. The following shows how you can delete a custom app consent policy.
+
+    ```http
+    DELETE https://graph.microsoft.com/v1.0/policies/permissionGrantPolicies/ my-custom-policy
+    ```
+
+::: zone-end
+
+Warning
+
+Deleted app consent policies can't be restored. If you accidentally delete a custom app consent policy, you need to re-create the policy.

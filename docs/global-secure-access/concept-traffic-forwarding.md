@@ -1,0 +1,139 @@
+---
+layout: Conceptual
+title: Global Secure Access traffic forwarding profiles - Global Secure Access | Microsoft Learn
+canonicalUrl: https://learn.microsoft.com/en-us/entra/global-secure-access/concept-traffic-forwarding
+uhfHeaderId: MSDocsHeader-Entra
+breadcrumb_path: /entra/breadcrumb/toc.json
+feedback_system: Standard
+feedback_product_url: https://feedback.azure.com/d365community/forum/79b1327d-d925-ec11-b6e6-000d3a4f06a4
+author: HULKsmashGithub
+ms.author: jayrusso
+ms.service: global-secure-access
+manager: dougeby
+description: Learn how Global Secure Access traffic forwarding profiles route traffic and how multiple Private Access profiles provide granular application and assignment control.
+ms.topic: concept-article
+ms.date: 2026-09-20T00:00:00.0000000Z
+ms.reviewer: katabish
+ai-usage: ai-assisted
+locale: en-us
+document_id: 4b8cc02c-8839-d850-4255-07b56af6e1ce
+document_version_independent_id: 6354f2fc-476c-650a-e5b3-afcd05cfb491
+original_content_git_url: https://github.com/MicrosoftDocs/entra-docs-pr/blob/live/docs/global-secure-access/concept-traffic-forwarding.md
+site_name: Docs
+depot_name: MSDN.entra-docs
+page_type: conceptual
+toc_rel: toc.json
+feedback_help_link_type: ''
+feedback_help_link_url: ''
+asset_id: global-secure-access/concept-traffic-forwarding
+moniker_range_name: 
+monikers: []
+item_type: Content
+source_path: docs/global-secure-access/concept-traffic-forwarding.md
+cmProducts:
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/d5321f31-a36c-484d-a808-69f9088f4f84
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
+spProducts:
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/6032d191-3b2e-4df1-9108-c955546973aa
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
+platformId: 446060bb-a2be-3f82-d9a9-5963bea56923
+---
+
+# Global Secure Access traffic forwarding profiles - Global Secure Access | Microsoft Learn
+
+## Overview
+
+You use traffic forwarding profiles in Global Secure Access to apply policies to the network traffic that your organization wants to secure and manage. Network traffic is evaluated against the traffic forwarding profiles you configure. The applicable profile is applied, and traffic is forwarded through the service to the appropriate applications and resources.
+
+This article describes the traffic forwarding profiles and how they work.
+
+## Traffic forwarding
+
+**Traffic forwarding** enables you to configure the type of network traffic to tunnel through Microsoft Entra Private Access and Microsoft Entra Internet Access. You set up profiles to manage how specific types of traffic are handled.
+
+When traffic comes through Global Secure Access, the service evaluates the traffic type first through the **Microsoft access profile**, then through the **Private access profile**, and finally through the **Internet access profile**. Traffic that doesn't match these profile types isn't forwarded to Global Secure Access.
+
+For each traffic forwarding profile, you can configure:
+
+- Which users and devices receive the profile.
+- Which device platforms receive the profile.
+- Which traffic is forwarded to the service.
+- Which Conditional Access policies apply to the resources.
+
+## Profile priority and assignment
+
+You can assign traffic forwarding profiles to users, groups, devices, and device platforms. User and device assignments are evaluated together with device-platform assignments.
+
+When multiple enabled profiles for the same traffic type apply to a user and device, only the applicable profile with the highest priority is used by the client.
+
+For assignment details and examples, see [Assign users and devices to traffic forwarding profiles](how-to-manage-users-groups-assignment).
+
+## Microsoft traffic
+
+The Microsoft traffic forwarding profile includes Microsoft Teams, SharePoint Online, Exchange Online, and other Microsoft apps. Traffic forwarding policies are grouped based on the workload - for example, Exchange Online. You can choose to either forward the traffic from each group to Global Secure Access, or to bypass it.
+
+Microsoft traffic is forwarded to the service through either [remote network connectivity](concept-remote-network-connectivity), such as branch office location, or through the [Global Secure Access client](how-to-install-windows-client).
+
+[Learn more about the Microsoft traffic profile](concept-microsoft-traffic-profile)
+
+### Licensing
+
+Microsoft traffic profile requires the following licenses:
+
+- Microsoft Entra ID P1 or P2 (prerequisite).
+
+## Private access
+
+Private Access traffic forwarding profiles route traffic to private resources through the Global Secure Access client. Private resource definitions come from Quick Access and Private Access enterprise applications.
+
+Every tenant has a default Private Access profile. You can also create custom Private Access profiles to:
+
+- Provide different application sets to different users or devices.
+- Separate traffic acquisition by device platform, such as desktop and mobile platforms.
+- Gradually deploy Private Access to selected users, groups, or devices.
+- Exclude privileged or sensitive applications from a broadly assigned profile.
+
+Each custom profile has its own acquisition rules, assignments, status, and priority. During preview, you can create up to 10 custom Private Access profiles.
+
+Private access traffic is forwarded by the [Global Secure Access client](concept-clients).
+
+### Licensing
+
+Private Access profile requires the following licenses:
+
+- Microsoft Entra ID P1 or P2 (prerequisite).
+- Microsoft Entra Private Access or Microsoft Entra Suite.
+
+## Internet access
+
+With the internet access profile, you can route traffic to the public internet, including traffic to SaaS apps. This traffic forwarding profile consists of a prepopulated list of regular expressions for fully qualified domain names (FQDNs) and IP addresses representing the public internet.
+
+Note
+
+Internet access profile does not include internet destinations that are available in the Microsoft traffic profile. For complete coverage, enable the Microsoft traffic profile together with the Internet access profile.
+
+Internet access traffic can be forwarded to the service by connecting through the [Global Secure Access desktop client](how-to-install-windows-client).
+
+### Licensing
+
+Internet Access profile requires the following licenses:
+
+- Microsoft Entra ID P1 or P2 (prerequisite).
+- Microsoft Entra Internet Access or Microsoft Entra Suite.
+
+## Microsoft Entra traffic
+
+The Microsoft Entra traffic profile is a dedicated system profile within Global Secure Access that handles all authentication and identity-related traffic for Microsoft Entra services. This profile operates independently of other traffic profiles (such as Private or Internet Access), ensuring that identity traffic is always acquired and protected, regardless of SKU or license assignment. As a system managed profile, admins don't see it in the portal.
+
+Key characteristics:
+
+- **Always on with any profile**: Microsoft Entra traffic automatically enables whenever any other traffic forwarding profile is active. You can't enable or disable it independently.
+- **Highest policy priority**: Microsoft Entra traffic is prioritized in the client policy to ensure it's always processed first, leveraging mTLS and certificate-based authentication for secure tunneling.
+- **No explicit assignment needed**: You don't need explicit user or branch assignment. Microsoft Entra traffic is included automatically with any active profile.
+- **Comprehensive coverage**: The profile covers a defined set of FQDNs and IP ranges associated with Microsoft Entra authentication endpoints, including login, Graph API, and certificate validation services.
+
+Note
+
+If you use Network conditions in Conditional Access policies, enable Conditional Access signaling for Microsoft Entra ID in Global Secure Access. See [Enable Global Secure Access signaling for Conditional Access](how-to-source-ip-restoration).

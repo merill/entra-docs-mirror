@@ -1,0 +1,160 @@
+---
+layout: Conceptual
+title: Plan application migration to Microsoft Entra ID - Microsoft Entra ID | Microsoft Learn
+canonicalUrl: https://learn.microsoft.com/en-us/entra/identity/enterprise-apps/migrate-adfs-apps-phases-overview
+uhfHeaderId: MSDocsHeader-Entra
+breadcrumb_path: /entra/breadcrumb/toc.json
+feedback_system: Standard
+feedback_product_url: https://feedback.azure.com/d365community/forum/22920db1-ad25-ec11-b6e6-000d3a4f0789
+author: omondiatieno
+ms.author: jomondi
+ms.service: entra-id
+ms.subservice: enterprise-apps
+manager: dougeby
+description: This article discusses the advantages of Microsoft Entra ID and provides a four-phase guide for planning and executing a migration strategy with detailed planning and exit criteria.
+ms.topic: concept-article
+ms.date: 2023-05-31T00:00:00.0000000Z
+ms.reviewer: gasinh
+ms.collection: M365-identity-device-management
+locale: en-us
+document_id: 04f1bc8c-1697-1958-f320-9a636d830636
+document_version_independent_id: ad7f9d23-57ec-266e-6304-f96025896d4a
+original_content_git_url: https://github.com/MicrosoftDocs/entra-docs-pr/blob/live/docs/identity/enterprise-apps/migrate-adfs-apps-phases-overview.md
+site_name: Docs
+depot_name: MSDN.entra-docs
+page_type: conceptual
+toc_rel: toc.json
+feedback_help_link_type: ''
+feedback_help_link_url: ''
+asset_id: identity/enterprise-apps/migrate-adfs-apps-phases-overview
+moniker_range_name: 
+monikers: []
+item_type: Content
+source_path: docs/identity/enterprise-apps/migrate-adfs-apps-phases-overview.md
+cmProducts:
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
+- https://authoring-docs-microsoft.poolparty.biz/devrel/63959238-cb90-4871-a33d-4a5519097e47
+spProducts:
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
+- https://authoring-docs-microsoft.poolparty.biz/devrel/78d87f42-5582-4a6b-90be-7db2f12b34e6
+platformId: c67c359d-031d-284b-f4a4-c49cf6a9aa3e
+---
+
+# Plan application migration to Microsoft Entra ID - Microsoft Entra ID | Microsoft Learn
+
+In this article, you learn about the benefits of Microsoft Entra ID and how to plan for migrating your application authentication. This article gives an overview of the planning and exit criteria to help you plan your migration strategy and understand how Microsoft Entra authentication can support your organizational goals.
+
+The process is broken into four phases. Each phase contains detailed planning and exit criteria that help you plan your migration strategy and understand how Microsoft Entra authentication supports your organizational goals.
+
+## Introduction
+
+Today, your organization requires numerous applications for users to get work done. You likely continue to add, develop, or retire apps every day. Users access these applications from a vast range of corporate and personal devices, and locations. They open apps in many ways, including:
+
+- Through a company homepage, or portal
+- By bookmarking or adding favorites on their browsers
+- Through a vendor’s URL for software as a service (SaaS) apps
+- Links pushed directly to user’s desktops or mobile devices via a mobile device/application management (MDM/ MAM) solution
+
+Your applications are likely using the following types of authentication:
+
+- Security Assertion Markup Language (SAML) or OpenID Connect (OIDC) via an on-premises or cloud-hosted Identity and Access Management (IAM) solutions federation solution (such as Active Directory Federation Services (ADFS), Okta, or Ping)
+- Kerberos or NTLM via Active Directory
+- Header-based authentication via Ping Access
+
+To ensure that the users can easily and securely access applications, your goal is to have a single set of access controls and policies across your on-premises and cloud environments.
+
+[Microsoft Entra ID](../../fundamentals/what-is-entra) offers a universal identity platform that provides your employees, partners, and customers a single identity to access the applications they want. The platform boosts collaboration from any platform and device.
+
+[![Diagram showing Microsoft Entra connectivity.](media/migrate-adfs-apps-phases-overview/connectivity.png)](media/migrate-adfs-apps-phases-overview/connectivity.png#lightbox)
+
+Microsoft Entra ID has a full suite of identity management capabilities. Standardizing your app authentication and authorization to Microsoft Entra ID gets you the benefits that these capabilities provide.
+
+You can find more migration resources at [https://aka.ms/migrateapps](migration-resources)
+
+## Plan your migration phases and project strategy
+
+When technology projects fail, it's often due to mismatched expectations, the right stakeholders not being involved, or a lack of communication. Ensure your success by planning the project itself.
+
+### The phases of migration
+
+Before we get into the tools, you should understand how to think through the migration process. Through several direct-to-customer workshops, we recommend the following four phases:
+
+![Diagram showing the phases of migration.](media/migrate-adfs-apps-phases-overview/phases-of-migration.png)
+
+### Assemble the project team
+
+Application migration is a team effort, and you need to ensure that you have all the vital positions filled. Support from senior business leaders is important. Ensure that you involve the right set of executive sponsors, business decision-makers, and subject matter experts (SMEs.)
+
+During the migration project, one person might fulfill multiple roles, or multiple people fulfill each role, depending on your organization’s size and structure. You might also have a dependency on other teams that play a key role in your security landscape.
+
+The following table includes the key roles and their contributions:
+
+| Role | Contributions |
+| --- | --- |
+| **Project Manager** | Project coach accountable for guiding the project, including: - gain executive support - bring in stakeholders - manage schedules, documentation, and communications |
+| **Identity Architect / Microsoft Entra App Administrator** | Responsible for the following tasks: - design the solution in cooperation with stakeholders - document the solution design and operational procedures for handoff to the operations team - manage the preproduction and production environments |
+| **On premises AD operations team** | The organization that manages the different on-premises identity sources such as AD forests, LDAP directories, HR systems, and so on. - perform any remediation tasks needed before synchronizing - Provide the service accounts required for synchronization - provide access to configure federation to Microsoft Entra ID |
+| **IT Support Manager** | A representative from the IT support organization who can provide input on the supportability of this change from a helpdesk perspective. |
+| **Security Owner** | A representative from the security team that can ensure that the plan meets the security requirements of your organization. |
+| **Application technical owners** | Includes technical owners of the apps and services that integrate with Microsoft Entra ID. They provide the applications’ identity attributes that should include in the synchronization process. They usually have a relationship with CSV representatives. |
+| **Application business Owners** | Representative colleagues who can provide input on the user experience and usefulness of this change from a user’s perspective. This representative also owns the overall business aspect of the application, which might include managing access. |
+| **Pilot group of users** | Users who test as a part of their daily work, the pilot experience, and provide feedback to guide the rest of the deployments. |
+
+### Plan communications
+
+Effective business engagement and communication are the keys to success. It's important to give stakeholders and end-users an avenue to get information and keep informed of schedule updates. Educate everyone about the value of the migration, what the expected timelines are, and how to plan for any temporary business disruption. Use multiple avenues such as briefing sessions, emails, one-to-one meetings, banners, and town halls.
+
+Based on the communication strategy that you choose for the app you might want to remind users of the pending downtime. You should also verify that there are no recent changes or business impacts that would require to postpone the deployment.
+
+In the following table, you find the minimum suggested communication to keep your stakeholders informed:
+
+## Plan phases and project strategy
+
+| Communication | Audience |
+| --- | --- |
+| Awareness and business / technical value of project | All except end users |
+| Solicitation for pilot apps | - App business owners- App technical owners- Architects and Identity team |
+
+**Phase 1- Discover and Scope**:
+
+| Communication | Audience |
+| --- | --- |
+| - Solicitation for application information- Outcome of scoping exercise | - App technical owners- App business owners |
+
+**Phase 2- Classify apps and plan pilot**:
+
+| Communication | Audience |
+| --- | --- |
+| - Outcome of classifications and what that means for migration schedule- Preliminary migration schedule | - App technical owners - App business owners |
+
+**Phase 3 – Plan migration and testing**:
+
+| Communication | Audience |
+| --- | --- |
+| - Outcome of application migration testing | - App technical owners- App business owners |
+| - Notification that migration is coming and explanation of resultant end-user experiences.- Downtimes coming and complete communications, including what they should now do, feedback, and how to get help | - End users (and all others) |
+
+**Phase 4 – Manage and gain insights**:
+
+| Communication | Audience |
+| --- | --- |
+| Available analytics and how to access | - App technical owners- App business owners |
+
+## Migration states communication dashboard
+
+Communicating the overall state of the migration project is crucial, as it shows progress, and helps app owners whose apps are coming up for migration to prepare for the move. You can put together a simple dashboard using Power BI or other reporting tools to provide visibility into the status of applications during the migration.
+
+The migration states you might consider using are as follows:
+
+| Migration states | Action plan |
+| --- | --- |
+| **Initial Request** | Find the app and contact the owner for more information |
+| **Assessment Complete** | App owner evaluates the app requirements and returns the app questionnaire |
+| **Configuration in Progress** | Develop the changes necessary to manage authentication against Microsoft Entra ID |
+| **Test Configuration Successful** | Evaluate the changes and authenticate the app against the test Microsoft Entra tenant in the test environment |
+| **Production Configuration Successful** | Change the configurations to work against the production AD tenant and assess the app authentication in the test environment |
+| **Complete / Sign Off** | Deploy the changes for the app to the production environment and execute against the production Microsoft Entra tenant |
+
+This phase ensures app owners know what the app migration and testing schedule are when their apps are up for migration. They also know what the results are from other migrated apps. You might also consider providing links to your bug tracker database for owners to be able to file and view issues for apps that are being migrated.

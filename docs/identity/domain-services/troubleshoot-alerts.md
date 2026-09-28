@@ -1,0 +1,626 @@
+---
+layout: Conceptual
+title: Common alerts and resolutions in Microsoft Entra Domain Services - Microsoft Entra ID | Microsoft Learn
+canonicalUrl: https://learn.microsoft.com/en-us/entra/identity/domain-services/troubleshoot-alerts
+uhfHeaderId: MSDocsHeader-Entra
+breadcrumb_path: /entra/breadcrumb/toc.json
+feedback_system: Standard
+feedback_product_url: https://feedback.azure.com/d365community/forum/22920db1-ad25-ec11-b6e6-000d3a4f0789
+author: Justinha
+ms.author: justinha
+ms.service: entra-id
+ms.subservice: domain-services
+manager: dougeby
+description: Learn how to resolve common alerts generated as part of the health status for Microsoft Entra Domain Services
+ms.assetid: 54319292-6aa0-4a08-846b-e3c53ecca483
+ms.topic: troubleshooting
+ms.date: 2025-02-19T00:00:00.0000000Z
+locale: en-us
+document_id: 94938549-12ce-d9b3-fa2b-22d2fe1b8466
+document_version_independent_id: 9bbdfcb1-e9a4-243c-490e-352219758346
+original_content_git_url: https://github.com/MicrosoftDocs/entra-docs-pr/blob/live/docs/identity/domain-services/troubleshoot-alerts.md
+site_name: Docs
+depot_name: MSDN.entra-docs
+page_type: conceptual
+toc_rel: toc.json
+feedback_help_link_type: ''
+feedback_help_link_url: ''
+asset_id: identity/domain-services/troubleshoot-alerts
+moniker_range_name: 
+monikers: []
+item_type: Content
+source_path: docs/identity/domain-services/troubleshoot-alerts.md
+cmProducts:
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
+- https://authoring-docs-microsoft.poolparty.biz/devrel/68ec7f3a-2bc6-459f-b959-19beb729907d
+- https://authoring-docs-microsoft.poolparty.biz/devrel/20ed8455-bc18-4537-87a4-83784e7b2a39
+spProducts:
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
+- https://authoring-docs-microsoft.poolparty.biz/devrel/90370425-aca4-4a39-9533-d52e5e002a5d
+- https://authoring-docs-microsoft.poolparty.biz/devrel/9a7f703b-30bb-4d62-9eb4-97213f571849
+platformId: 207b0358-0f1f-5b6f-d998-1961f262c65d
+---
+
+# Common alerts and resolutions in Microsoft Entra Domain Services - Microsoft Entra ID | Microsoft Learn
+
+As a central part of identity and authentication for applications, Microsoft Entra Domain Services sometimes has problems. If you run into issues, there are some common alerts and associated troubleshooting steps to help you get things running again. At any time, you can also [open an Azure support request](/en-us/azure/active-directory/fundamentals/how-to-get-support) for more troubleshooting help.
+
+This article provides troubleshooting information for common alerts in Domain Services.
+
+## AADDS100: Missing directory
+
+### Alert message
+
+*The Microsoft Entra directory associated with your managed domain may have been deleted. The managed domain is no longer in a supported configuration. Microsoft cannot monitor, manage, patch, and synchronize your managed domain.*
+
+### Resolution
+
+When you move an Azure subscription to a new Microsoft Entra directory, it usually causes this error. Additionally, deleting the old Microsoft Entra directory associated with Domain Services also causes this error.
+
+This error is unrecoverable. To resolve the alert, [delete your existing managed domain](delete-aadds) and recreate it in your new directory. If you have trouble deleting the managed domain, [open an Azure support request](/en-us/azure/active-directory/fundamentals/how-to-get-support) for more troubleshooting help.
+
+## AADDS101: Azure AD B2C is running in this directory
+
+Important
+
+Effective May 1, 2025, Azure Active Directory B2C (Azure AD B2C) is no longer available for new customers to purchase. To learn more, see [Is Azure AD B2C still available to purchase?](/en-us/azure/active-directory-b2c/faq?tabs=app-reg-ga#azure-ad-b2c-end-of-sale) in our FAQ.
+
+### Alert message
+
+*Microsoft Entra Domain Services cannot be enabled in an Azure AD B2C Directory.*
+
+### Resolution
+
+Domain Services automatically synchronizes with a Microsoft Entra directory. If the Microsoft Entra directory is configured for B2C, Domain Services can't be deployed and synchronized.
+
+To use Domain Services, you must recreate your managed domain in a non-Azure AD B2C directory using the following steps:
+
+1. [Delete the managed domain](delete-aadds) from your existing Microsoft Entra directory.
+2. Create a new Microsoft Entra directory that isn't an Azure AD B2C directory.
+3. [Create a replacement managed domain](tutorial-create-instance).
+
+The managed domain's health automatically updates itself within two hours and removes the alert.
+
+## AADDS103: Address is in a public IP range
+
+### Alert message
+
+*The IP address range for the virtual network in which you have enabled Microsoft Entra Domain Services is in a public IP range. Microsoft Entra Domain Services must be enabled in a virtual network with a private IP address range. This configuration impacts Microsoft's ability to monitor, manage, patch, and synchronize your managed domain.*
+
+### Resolution
+
+Before you begin, make sure you understand [private IP v4 address spaces](https://en.wikipedia.org/wiki/Private_network#Private_IPv4_address_spaces).
+
+Inside a virtual network, VMs can make requests to Azure resources in the same IP address range as configured for the subnet. If you configure a public IP address range for a subnet, requests routed within a virtual network may not reach the intended web resources. This configuration can lead to unpredictable errors with Domain Services.
+
+Note
+
+If you own the IP address range in the internet that is configured in your virtual network, this alert can be ignored. However, Microsoft Entra Domain Services can't commit to the [SLA](https://azure.microsoft.com/support/legal/sla/active-directory-ds/v1_0/) with this configuration since it can lead to unpredictable errors.
+
+To resolve this alert, delete your existing managed domain and recreate it in a virtual network with a private IP address range. This process is disruptive as the managed domain is unavailable and any custom resources you created like OUs or service accounts are lost.
+
+1. [Delete the managed domain](delete-aadds) from your directory.
+2. To update the virtual network IP address range, search for and select *Virtual network* in the Microsoft Entra admin center. Select the virtual network for Domain Services that incorrectly has a public IP address range set.
+3. Under **Settings**, select *Address Space*.
+4. Update the address range by choosing the existing address range and editing it, or by adding an address range. Make sure the new IP address range is in a private IP range. When ready, **Save** the changes.
+5. Select **Subnets** in the left-hand navigation.
+6. Choose the subnet you wish to edit, or create another subnet.
+7. Update or specify a private IP address range then **Save** your changes.
+8. [Create a replacement managed domain](tutorial-create-instance). Make sure you pick the updated virtual network subnet with a private IP address range.
+
+The managed domain's health automatically updates itself within two hours and removes the alert.
+
+## AADDS106: Your Azure subscription is not found
+
+### Alert message
+
+*Your Azure subscription associated with your managed domain has been deleted. Microsoft Entra Domain Services requires an active subscription to continue functioning properly.*
+
+### Resolution
+
+Domain Services requires an active subscription, and can't be moved to a different subscription. If the Azure subscription that the managed domain was associated with is deleted, you must recreate an Azure subscription and managed domain.
+
+1. [Create an Azure subscription](/en-us/azure/cost-management-billing/manage/create-subscription).
+2. [Delete the managed domain](delete-aadds) from your existing Microsoft Entra directory.
+3. [Create a replacement managed domain](tutorial-create-instance).
+
+## AADDS107: Your Azure subscription is disabled
+
+### Alert message
+
+*Your Azure subscription associated with your managed domain is not active. Microsoft Entra Domain Services requires an active subscription to continue functioning properly.*
+
+### Resolution
+
+Domain Services requires an active subscription. If the Azure subscription that the managed domain was associated with isn't active, you must renew it to reactivate the subscription.
+
+1. [Renew your Azure subscription](/en-us/azure/cost-management-billing/manage/subscription-disabled).
+2. Once the subscription is renewed, a Domain Services notification lets you re-enable the managed domain.
+
+When the managed domain is enabled again, the managed domain's health automatically updates itself within two hours and removes the alert.
+
+## AADDS108: Subscription moved directories
+
+### Alert message
+
+*The subscription used by Microsoft Entra Domain Services has been moved to another directory. Microsoft Entra Domain Services needs to have an active subscription in the same directory to function properly.*
+
+### Resolution
+
+Domain Services requires an active subscription, and can't be moved to a different subscription. If the Azure subscription that the managed domain was associated with is moved, you have two options:
+
+- Move the subscription back to the previous directory, or
+- [Delete your managed domain](delete-aadds) from the existing directory and [create a replacement managed domain in the chosen subscription](tutorial-create-instance).
+
+## AADDS109: Resources for your managed domain cannot be found
+
+### Alert message
+
+*A resource that is used for your managed domain has been deleted. This resource is needed for Microsoft Entra Domain Services to function properly.*
+
+### Resolution
+
+Domain Services creates resources to function properly, such as public IP addresses, virtual network interfaces, and a load balancer. If any of these resources are deleted, the managed domain is in an unsupported state and prevents the domain from being managed. For more information on these resources, see [Network resources used by Domain Services](network-considerations#network-resources-used-by-azure-ad-ds).
+
+This alert is generated when one of these required resources is deleted. If the resource was deleted less than 4 hours ago, there's a chance that the Azure platform can automatically recreate the deleted resource. The following steps outline how to check the health status and timestamp for resource deletion:
+
+1. In the [Microsoft Entra admin center](https://entra.microsoft.com), search for and select **Domain Services**. Choose your managed domain, such as *aaddscontoso.com*.
+2. In the left-hand navigation, select **Health**.
+3. In the health page, select the alert with the ID *AADDS109*.
+4. The alert has a timestamp for when it was first found. If that timestamp is less than 4 hours ago, the Azure platform may be able to automatically recreate the resource and resolve the alert by itself.
+
+    For different reasons, the alert can be older than 4 hours. In that case, you can [delete the managed domain](delete-aadds) and then [create a replacement managed domain](tutorial-create-instance) for an immediate fix, or you can open a support request to fix the instance. Depending on the nature of the problem, support can require a restore from backup.
+
+## AADDS110: The subnet associated with your managed domain is full
+
+### Alert message
+
+*The subnet selected for deployment of Microsoft Entra Domain Services is full, and does not have space for the additional domain controller that needs to be created.*
+
+### Resolution
+
+The virtual network subnet for Domain Services needs sufficient IP addresses for the automatically created resources. This IP address space includes the need to create replacement resources if there's a maintenance event. To minimize the risk of running out of available IP addresses, don't deploy other resources, such as your own VMs, into the same virtual network subnet as the managed domain.
+
+This error is unrecoverable. To resolve the alert, [delete your existing managed domain](delete-aadds) and recreate it. If you have trouble deleting the managed domain, [open an Azure support request](/en-us/azure/active-directory/fundamentals/how-to-get-support) for more help.
+
+## AADDS111: Service principal unauthorized
+
+### Alert message
+
+*A service principal that Microsoft Entra Domain Services uses to service your domain is not authorized to manage resources on the Azure subscription. The service principal needs to gain permissions to service your managed domain.*
+
+### Resolution
+
+Some automatically generated service principals are used to manage and create resources for a managed domain. If the access permissions for one of these service principals is changed, the domain is unable to correctly manage resources. The following steps show you how to understand and then grant access permissions to a service principal:
+
+1. Read about [Azure role-based access control and how to grant access to applications in the Microsoft Entra admin center](/en-us/azure/role-based-access-control/role-assignments-portal).
+2. Review the access that the service principal with the ID *abba844e-bc0e-44b0-947a-dc74e5d09022* has and grant the access that was denied at an earlier date.
+
+## AADDS112: Not enough IP address in the managed domain
+
+### Alert message
+
+*We have identified that the subnet of the virtual network in this domain may not have enough IP addresses. Microsoft Entra Domain Services needs at-least two available IP addresses within the subnet it is enabled in. We recommend having at-least 3-5 spare IP addresses within the subnet. This may have occurred if other virtual machines are deployed within the subnet, thus exhausting the number of available IP addresses or if there is a restriction on the number of available IP addresses in the subnet.*
+
+### Resolution
+
+The virtual network subnet for Domain Services needs enough IP addresses for the automatically created resources. This IP address space includes the need to create replacement resources if there's a maintenance event. To minimize the risk of running out of available IP addresses, don't deploy other resources, such as your own VMs, into the same virtual network subnet as the managed domain.
+
+To resolve this alert, delete your existing managed domain and re-create it in a virtual network with a large enough IP address range. This process is disruptive as the managed domain is unavailable and any custom resources you've created like OUs or service accounts are lost.
+
+1. [Delete the managed domain](delete-aadds) from your directory.
+2. To update the virtual network IP address range, search for and select *Virtual network* in the Microsoft Entra admin center. Select the virtual network for the managed domain that has the small IP address range.
+3. Under **Settings**, select *Address Space*.
+4. Update the address range by choosing the existing address range and editing it, or by adding another address range. Make sure the new IP address range is large enough for the managed domain's subnet range. When ready, **Save** the changes.
+5. Select **Subnets** in the left-hand navigation.
+6. Choose the subnet you wish to edit, or create another subnet.
+7. Update or specify a large enough IP address range then **Save** your changes.
+8. [Create a replacement managed domain](tutorial-create-instance). Make sure you pick the updated virtual network subnet with a large enough IP address range.
+
+The managed domain's health automatically updates itself within two hours and removes the alert.
+
+## AADDS113: Resources are unrecoverable
+
+### Alert message
+
+*The resources used by Microsoft Entra Domain Services were detected in an unexpected state and cannot be recovered.*
+
+### Resolution
+
+Domain Services creates resources to function properly, such as public IP addresses, virtual network interfaces, and a load balancer. If any of these resources are modified, the managed domain is in an unsupported state and can't be managed. For more information about these resources, see [Network resources used by Domain Services](network-considerations#network-resources-used-by-azure-ad-ds).
+
+This alert is generated when one of these required resources is modified and can't automatically be recovered by Domain Services. To resolve the alert, [open an Azure support request](/en-us/azure/active-directory/fundamentals/how-to-get-support) to fix the instance.
+
+## AADDS114: Subnet invalid
+
+### Alert message
+
+*The subnet selected for deployment of Microsoft Entra Domain Services is invalid, and cannot be used.*
+
+### Resolution
+
+This error is unrecoverable. To resolve the alert, [delete your existing managed domain](delete-aadds) and recreate it. If you have trouble deleting the managed domain, [open an Azure support request](/en-us/azure/active-directory/fundamentals/how-to-get-support) for more help.
+
+## AADDS115: Resources are locked
+
+### Alert message
+
+*One or more of the network resources used by the managed domain cannot be operated on as the target scope has been locked.*
+
+### Resolution
+
+Resource locks can be applied to Azure resources to prevent change or deletion. As Domain Services is a managed service, the Azure platform needs the ability to make configuration changes. If a resource lock is applied on some of the Domain Services components, the Azure platform can't perform its management tasks.
+
+To check for resource locks on the Domain Services components and remove them, complete the following steps:
+
+1. For each of the managed domain's network components in your resource group, such as virtual network, network interface, or public IP address, check the operation logs in the Microsoft Entra admin center. These operation logs should indicate why an operation is failing and where a resource lock is applied.
+2. Select the resource where a lock is applied, then under **Locks**, select and remove the lock(s).
+
+## AADDS116: Resources are unusable
+
+### Alert message
+
+*One or more of the network resources used by the managed domain cannot be operated on due to policy restriction(s).*
+
+### Resolution
+
+Policies are applied to Azure resources and resource groups that control what configuration actions are allowed. As Domain Services is a managed service, the Azure platform needs the ability to make configuration changes. If a policy is applied on some of the Domain Services components, the Azure platform may not be able to perform its management tasks.
+
+To check for applied policies on the Domain Services components and update them, complete the following steps:
+
+1. For each of the managed domain's network components in your resource group, such as virtual network, NIC, or public IP address, check the operation logs in the Microsoft Entra admin center. These operation logs should indicate why an operation is failing and where a restrictive policy is applied.
+2. Select the resource where a policy is applied, then under **Policies**, select and edit the policy so it's less restrictive.
+
+## AADDS120: The managed domain has encountered an error onboarding one or more custom attributes
+
+### Alert message
+
+*The following Microsoft Entra extension properties have not successfully onboarded as a custom attribute for synchronization. This may happen if a property conflicts with the built-in schema: [extensions]*
+
+### Resolution
+
+Warning
+
+If a custom attribute's LDAPName conflicts with an existing AD built-in schema attribute, it can't be onboarded and results in an error. Contact Microsoft Support if your scenario is blocked. For more information, see [Onboarding Custom Attributes](https://aka.ms/aadds-customattr).
+
+Review the [Domain Services Health](check-health) alert and see which Microsoft Entra extension properties failed to onboard successfully. Navigate to the **Custom Attributes** page to find the expected Domain Services LDAPName of the extension. Make sure the LDAPName doesn't conflict with another AD schema attribute, or that it's one of the allowed built-in AD attributes.
+
+Then follow these steps to retry onboarding the custom attribute in the **Custom Attributes** page:
+
+1. Select the attributes that were unsuccessful, then select **Remove** and **Save**.
+2. Wait for the health alert to be removed, or verify that the corresponding attributes have been removed from the **AADDSCustomAttributes**OU from a domain-joined VM.
+    - **Note:** If the corresponding attributes are not removed from the **AADDSCustomAttributes**OU within a day:
+        1. Check that **Azure AD Domain Services Sync** manifest's *addIns*section doesn't include corresponding attributes.
+            - By **Portal &gt; App registrations &gt; select "All applications" &gt; "Azure AD Domain Services Sync" &gt; Left blade &gt; Manifest**
+        2. The AADDS DC Administrator can manually remove corresponding attributes from the **AADDSCustomAttributes** OU **if** the *addIns* section doesn't include corresponding attributes. The alert should be cleared within two hours of manual deletion.
+3. Select **Add** and choose the desired attributes again, then select **Save**.
+
+Upon successful onboarding, Domain Services back fills synchronized users and groups with the onboarded custom attribute values. The custom attribute values appear gradually, depending on the size of the tenant. To check the backfill status, go to [Domain Services Health](check-health) and verify the **Synchronization with Microsoft Entra ID** monitor timestamp has updated within the last hour.
+
+## AADDS122: Group policy object conflict detected (preview)
+
+### Alert message
+
+*Group Policy Object conflict detected. Please review the GPO settings on the domain controllers.*
+
+### Resolution
+
+Review the domains GPO settings and fix the entries which have issues. In the case where a GPO cannot be fixed steps are provided to restore from backup in [Restore GPO from backup](group-policy).
+
+4 alerts are sent in case of a GPO conflict after every 7 days if there is no resolution. After 30 days, the system will automatically fix any lingering issues automatically and the alerts will be cleared.
+
+Warning
+
+Automatic resolution may lead to loss of data from a GPO point of view, but is necessary for us to maintain the domain in a healthy state. Make sure the alert is fixed in time to avoid any loss of data.
+
+## AADDS123: Kerberos RC4 usage detected for service ticket issuance
+
+### Alert message
+
+*Microsoft Entra Domain Services detected Kerberos RC4 usage for service ticket issuance that can block security enforcement related to [CVE-2026-20833](https://www.cve.org/CVERecord?id=CVE-2026-20833).*
+
+### Resolution
+
+Windows security updates related to CVE-2026-20833 move Kerberos KDC behavior to AES-first defaults and reduce RC4 usage. If workloads still rely on RC4, authentication failures can occur when enforcement is enabled.
+
+To resolve this alert, complete the following steps:
+
+1. Turn off RC4 from the managed domain's security settings by following [Security settings](secure-your-domain). Unless you have workloads, devices, or services that are explicitly dependent on RC4, no need to go to to the next steps.
+2. Turn on security events for the managed domain by following [Enable security and DNS audits for Microsoft Entra Domain Services](security-audit-events). Use [Sample query 7](security-audit-events#sample-query-7) to identify RC4 dependencies.
+3. Monitor Kerberos ticket event IDs **4768** and **4769** to identify RC4 dependencies that block enforcement.
+4. For service accounts synced from on-premises via Microsoft Entra Connect that temporarily require RC4, explicitly configure the affected service account **msDS-SupportedEncryptionTypes** value in your on-premises Active Directory to include RC4 as documented in [How to manage Kerberos KDC usage of RC4 for service account ticket issuance changes related to CVE-2026-20833](https://support.microsoft.com/en-us/topic/how-to-manage-kerberos-kdc-usage-of-rc4-for-service-account-ticket-issuance-changes-related-to-cve-2026-20833-1ebcda33-720a-4da8-93c1-b0496e1910dc). The updated attribute syncs to the managed domain through Microsoft Entra Connect.
+5. Keep domain-wide Kerberos security hardened by using [Security settings](secure-your-domain) and avoid broad RC4 enablement unless no other mitigation is possible.
+6. Continue monitoring Kerberos-related system events and Domain Services health until the alert is removed.
+
+The managed domain's health automatically updates itself within two hours and removes the alert when RC4 dependencies are remediated.
+
+### Self-service RC4 configuration
+
+Members of the *AAD DC Administrators* group can configure RC4 deprecation settings directly on the managed domain. The configuration files are hosted on an encrypted SMB share on each domain controller.
+
+#### Access the configuration files
+
+Connect to the hidden SMB share on your domain controller using the following UNC path:
+
+```
+\\<domain-controller-name>\CustomerExecutionScripts$
+```
+
+Replace `<domain-controller-name>` with the hostname of your managed domain's domain controller. The share requires SMB encryption and grants:
+
+- **Full access** to *Domain Admins*
+- **Change access** to *AAD DC Administrators*
+
+The share contains the following files:
+
+| File | Description |
+| --- | --- |
+| `rc4-configuration.json` | Customer-editable configuration file. Edit this file to change RC4 settings. |
+| `rc4-status.json` | Auto-generated status file. Don't edit this file. Check it to verify applied changes. |
+| `README.txt` | Usage instructions and reference. |
+
+#### How to use
+
+1. Connect to the `CustomerExecutionScripts$` share on the domain controller.
+2. Edit `rc4-configuration.json` with your desired settings.
+3. Save the file.
+4. Wait for the next evaluation cycle (approximately 10 minutes).
+5. Check `rc4-status.json` for confirmation of applied changes.
+
+Note
+
+Don't delete or rename `rc4-configuration.json`, `rc4-status.json`, or `README.txt`. The service depends on these files.
+
+#### Configuration options
+
+| Setting | Value | Description |
+| --- | --- | --- |
+| `rc4DefaultDisablementPhase` | `0` | No change. RC4 is fully permitted, no logging. |
+| `rc4DefaultDisablementPhase` | `1` | Audit mode. Logs warnings when RC4 is used, but continues to allow it. |
+| `rc4DefaultDisablementPhase` | `2` | Enforcement mode. Blocks RC4 for AES-capable accounts. |
+| `defaultDomainSupportedEncTypes` | `24` | AES only (most secure, April 2026 enforcement default). |
+| `defaultDomainSupportedEncTypes` | `36` | RC4 + AES256 (recommended for non-Windows legacy interop). |
+| `defaultDomainSupportedEncTypes` | `56` | AES only with session keys (secure, preferred over 24 for modern clients). |
+| `defaultDomainSupportedEncTypes` | `60` | AES + RC4 with session keys (recommended for transition). |
+| `serviceAccountsRequiringRc4` | Array of strings | List of `sAMAccountName` values for service accounts that need RC4 support added to their `msDS-SupportedEncryptionTypes` attribute. |
+
+Only the values listed in the table are accepted. Invalid values are rejected, and `rc4-status.json` shows validation errors.
+
+#### Configuration examples
+
+Start with audit mode to identify RC4 usage before enforcing (recommended first step):
+
+```json
+{
+    "version": 1,
+    "rc4DefaultDisablementPhase": 1,
+    "defaultDomainSupportedEncTypes": 60,
+    "serviceAccountsRequiringRc4": []
+}
+```
+
+Move to enforcement mode with exceptions for specific service accounts:
+
+```json
+{
+    "version": 1,
+    "rc4DefaultDisablementPhase": 2,
+    "defaultDomainSupportedEncTypes": 24,
+    "serviceAccountsRequiringRc4": ["svc-legacy-app", "svc-old-service"]
+}
+```
+
+#### Verify applied changes
+
+After the evaluation cycle completes, check `rc4-status.json` on the same share to confirm changes are applied. Each setting shows a `status` value:
+
+| Status | Description |
+| --- | --- |
+| `InSync` | Desired and actual values match. No change needed. |
+| `Applied` | A change was just applied to match the desired value. |
+| `Drift` | A difference exists between desired and actual values before remediation runs. |
+
+Service account statuses in `rc4-status.json`:
+
+| Status | Description |
+| --- | --- |
+| `Updated` | RC4 flag was successfully added to the account. |
+| `AlreadyCompliant` | Account already had the RC4 flag set. No change needed. |
+| `NotFound` | Account `sAMAccountName` wasn't found in the directory. |
+| `Failed` | An error occurred updating the account. See the `errors` array for details. |
+
+If `configurationValid` is `false` in the status file, the configuration file has a syntax or validation error. Review the `errors` array for details and correct `rc4-configuration.json`.
+
+#### Status examples
+
+All settings in sync, no remediation needed:
+
+```json
+{
+    "lastEvaluated": "2026-05-04T14:30:00Z",
+    "lastRemediated": "2026-05-04T14:30:00Z",
+    "configurationValid": true,
+    "currentState": {
+        "rc4DefaultDisablementPhase": {
+            "desired": 1,
+            "actual": 1,
+            "status": "InSync"
+        },
+        "defaultDomainSupportedEncTypes": {
+            "desired": 60,
+            "actual": 60,
+            "status": "InSync"
+        },
+        "serviceAccounts": []
+    },
+    "errors": []
+}
+```
+
+Changes applied with service account updates:
+
+```json
+{
+    "lastEvaluated": "2026-05-04T14:30:00Z",
+    "lastRemediated": "2026-05-04T14:30:00Z",
+    "configurationValid": true,
+    "currentState": {
+        "rc4DefaultDisablementPhase": {
+            "desired": 2,
+            "actual": 1,
+            "status": "Applied"
+        },
+        "defaultDomainSupportedEncTypes": {
+            "desired": 24,
+            "actual": 60,
+            "status": "Applied"
+        },
+        "serviceAccounts": [
+            {
+                "account": "svc-legacy-app",
+                "status": "Updated",
+                "previousEncTypes": 24,
+                "currentEncTypes": 28
+            },
+            {
+                "account": "svc-old-service",
+                "status": "AlreadyCompliant",
+                "previousEncTypes": 28,
+                "currentEncTypes": 28
+            }
+        ]
+    },
+    "errors": []
+}
+```
+
+Partial failure with service account errors:
+
+```json
+{
+    "lastEvaluated": "2026-05-04T14:30:00Z",
+    "lastRemediated": "2026-05-04T14:30:00Z",
+    "configurationValid": true,
+    "currentState": {
+        "rc4DefaultDisablementPhase": {
+            "desired": 2,
+            "actual": 2,
+            "status": "InSync"
+        },
+        "defaultDomainSupportedEncTypes": {
+            "desired": 24,
+            "actual": 24,
+            "status": "InSync"
+        },
+        "serviceAccounts": [
+            {
+                "account": "svc-legacy-app",
+                "status": "Updated",
+                "previousEncTypes": 24,
+                "currentEncTypes": 28
+            },
+            {
+                "account": "svc-missing",
+                "status": "NotFound",
+                "previousEncTypes": null,
+                "currentEncTypes": null
+            },
+            {
+                "account": "svc-broken",
+                "status": "Failed",
+                "previousEncTypes": null,
+                "currentEncTypes": null
+            }
+        ]
+    },
+    "errors": [
+        "Failed to update service account 'svc-broken': Access is denied."
+    ]
+}
+```
+
+Important
+
+This configuration is applied independently on each domain controller (DC) in the managed domain. A KDC service restart is performed automatically when registry values change. To avoid a simultaneous KDC restart on all DCs (which causes a temporary Kerberos authentication outage), space the rollout across DCs. If your domain has multiple replica sets, ensure the configuration is applied to each DC. Monitor `rc4-status.json` on each DC to confirm all controllers have successfully applied the new settings.
+
+Warning
+
+Windows updates for CVE-2026-20833 enforce RC4 hardening in phases. Plan and complete remediation before full enforcement:
+
+- **January 13, 2026 - Initial deployment phase:** Updates introduce audit signals and preparation controls.
+- **April 2026 - Enforcement phase (manual rollback available):** Default Kerberos KDC behavior shifts to AES-first, and RC4-dependent scenarios can start failing unless explicitly configured.
+- **July 2026 - Enforcement phase (final):** Updates remove rollback support and keep enforcement enabled.
+
+Before RC4 is permanently disabled, the Domain Services team runs a controlled advance dependency test to help you identify and remediate RC4 dependencies. For details about the schedule and how to prepare, see [RC4 deprecation advance dependency test](rc4-deprecation-advance-dependency-test).
+
+## AADDS500: Synchronization has not completed in a while
+
+### Alert message
+
+*The managed domain was last synchronized with Microsoft Entra ID on [date]. Users may be unable to sign-in on the managed domain or group memberships may not be in sync with Azure AD.*
+
+### Resolution
+
+[Check the Domain Services health](check-health) for any alerts that indicate problems in the configuration of the managed domain. Problems with the network configuration can block the synchronization from Microsoft Entra ID. If you're able to resolve alerts that indicate a configuration issue, wait two hours and check back to see if the synchronization has successfully completed.
+
+The following common reasons cause synchronization to stop in a managed domain:
+
+- Required network connectivity is blocked. To learn more about how to check the Azure virtual network for problems and what's required, see [troubleshoot network security groups](alert-nsg) and the [network requirements for Domain Services](network-considerations).
+- Password synchronization wasn't set up or successfully completed when the managed domain was deployed. You can set up password synchronization for [cloud-only users](tutorial-create-instance#enable-user-accounts-for-azure-ad-ds) or [hybrid users from on-premises](tutorial-configure-password-hash-sync).
+
+## AADDS501: A backup has not been taken in a while
+
+### Alert message
+
+*The managed domain was last backed up on [date].*
+
+### Resolution
+
+[Check the Domain Services health](check-health) for alerts that indicate problems in the configuration of the managed domain. Problems with the network configuration can block the Azure platform from successfully taking backups. If you're able to resolve alerts that indicate a configuration issue, wait two hours and check back to see if the synchronization has successfully completed.
+
+## AADDS503: Suspension due to disabled subscription
+
+### Alert message
+
+*The managed domain is suspended because the Azure subscription associated with the domain is not active.*
+
+### Resolution
+
+Warning
+
+If a managed domain is suspended for an extended period of time, there's a danger of it being deleted. Resolve the reason for suspension as quickly as possible. For more information, see [Understand the suspended states for Domain Services](suspension).
+
+Domain Services requires an active subscription. If the Azure subscription that the managed domain was associated with isn't active, you must renew it to reactivate the subscription.
+
+1. [Renew your Azure subscription](/en-us/azure/cost-management-billing/manage/subscription-disabled).
+2. Once the subscription is renewed, a Domain Services notification lets you re-enable the managed domain.
+
+When the managed domain is enabled again, the managed domain's health automatically updates itself within two hours and removes the alert.
+
+## AADDS504: Suspension due to an invalid configuration
+
+### Alert message
+
+*The managed domain is suspended due to an invalid configuration. The service has been unable to manage, patch, or update the domain controllers for your managed domain for a long time.*
+
+### Resolution
+
+Warning
+
+If a managed domain is suspended for an extended period of time, there's a danger of it being deleted. Resolve the reason for suspension as quickly as possible. For more information, see [Understand the suspended states for Domain Services](suspension).
+
+[Check the Domain Services health](check-health) for alerts that indicate problems in the configuration of the managed domain. If you're able to resolve alerts that indicate a configuration issue, wait two hours and check back to see if the synchronization has completed. When ready, [open an Azure support request](/en-us/azure/active-directory/fundamentals/how-to-get-support) to re-enable the managed domain.
+
+## AADDS600: Unresolved health alerts for 30 days
+
+### Alert Message
+
+*Microsoft can’t manage the domain controllers for this managed domain due to unresolved health alerts [IDs]. This is blocking critical security updates for these domain controllers. Follow steps in the alert to resolve the issue. Failure to resolve this issue within 30 days will result in suspension of the managed domain.*
+
+### Resolution
+
+Warning
+
+If a managed domain is suspended for an extended period of time, there's a danger of it being deleted. Resolve the reason for suspension as quickly as possible. For more information, see [Understand the suspended states for Domain Services](suspension).
+
+[Check the Domain Services health](check-health) for alerts that indicate problems in the configuration of the managed domain. If you're able to resolve alerts that indicate a configuration issue, wait six hours and check back to see if the alert is removed. [Open an Azure support request](/en-us/azure/active-directory/fundamentals/how-to-get-support) if you need assistance.

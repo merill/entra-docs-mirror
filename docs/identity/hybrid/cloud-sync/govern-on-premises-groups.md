@@ -1,0 +1,228 @@
+---
+layout: Conceptual
+title: Govern on-premises Active Directory Domain Services (Kerberos) application access with groups from the cloud - Microsoft Entra ID | Microsoft Learn
+canonicalUrl: https://learn.microsoft.com/en-us/entra/identity/hybrid/cloud-sync/govern-on-premises-groups
+uhfHeaderId: MSDocsHeader-Entra
+breadcrumb_path: /entra/breadcrumb/toc.json
+feedback_system: Standard
+feedback_product_url: https://feedback.azure.com/d365community/forum/22920db1-ad25-ec11-b6e6-000d3a4f0789
+author: omondiatieno
+ms.author: jomondi
+ms.service: entra-id
+manager: pmwongera
+description: This article provides an overview of how to use cloud sync to govern on-premises application access using groups.
+ms.date: 2025-09-04T00:00:00.0000000Z
+ms.topic: concept-article
+ms.subservice: hybrid-cloud-sync
+locale: en-us
+document_id: 8924730f-61cc-4e29-7db1-df43dc75d939
+document_version_independent_id: 8924730f-61cc-4e29-7db1-df43dc75d939
+original_content_git_url: https://github.com/MicrosoftDocs/entra-docs-pr/blob/live/docs/identity/hybrid/cloud-sync/govern-on-premises-groups.md
+site_name: Docs
+depot_name: MSDN.entra-docs
+page_type: conceptual
+toc_rel: ../toc.json
+feedback_help_link_type: ''
+feedback_help_link_url: ''
+asset_id: identity/hybrid/cloud-sync/govern-on-premises-groups
+moniker_range_name: 
+monikers: []
+item_type: Content
+source_path: docs/identity/hybrid/cloud-sync/govern-on-premises-groups.md
+cmProducts:
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
+spProducts:
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
+platformId: b7344483-33c4-2aef-780c-d1efc82693b8
+---
+
+# Govern on-premises Active Directory Domain Services (Kerberos) application access with groups from the cloud - Microsoft Entra ID | Microsoft Learn
+
+Important
+
+The preview of Group Writeback v2 in Microsoft Entra Connect Sync is deprecated and no longer supported.
+
+You can use Microsoft Entra Cloud Sync to provision cloud security groups to on-premises Active Directory Domain Services (AD DS).
+
+If you use Group Writeback v2 in Microsoft Entra Connect Sync, you should move your sync client to Microsoft Entra Cloud Sync. To check if you're eligible to move to Microsoft Entra Cloud Sync, use the user synchronization wizard.
+
+If you can't use Microsoft Cloud Sync as recommended by the wizard, you can run Microsoft Entra Cloud Sync side-by-side with Microsoft Entra Connect Sync. In that case, you might run Microsoft Entra Cloud Sync only to provision cloud security groups to on-premises AD DS.
+
+If you provision Microsoft 365 groups to AD DS, you can keep using Group Writeback v1.
+
+This article outlines the scenarios to use Microsoft Entra ID Governance for on-premises applications that are integrated with Active Directory Domain Services (AD DS).
+
+**Scenario(s) covered:** Manage on-premises applications with Active Directory groups that are provisioned from and managed in the cloud. Microsoft Entra Cloud Sync allows you to fully govern application assignments in AD DS while taking advantage of Microsoft Entra ID Governance features to control and remediate any access related requests.
+
+For more information about how to govern applications that aren't integrated with AD DS, see [Govern access for applications in your environment](/en-us/entra/id-governance/identity-governance-applications-prepare).
+
+## Supported scenarios
+
+If you want to control whether a user can connect to an Active Directory application that uses Windows authentication, you can use the application proxy and a Microsoft Entra security group. If an application checks a user's AD DS group memberships by using Kerberos or Lightweight Directory Access Protocol (LDAP), then you can use Cloud Sync group provisioning to ensure the user has those group memberships before they access the application.
+
+The following sections discuss three options that are supported with Cloud Sync group provisioning. The scenario options are meant to ensure users assigned to the application have group memberships when they authenticate to the application.
+
+- Convert the Source of Authority (SOA) of groups in AD DS that are synchronized to Microsoft Entra ID by using Microsoft Entra Connect Sync or Microsoft Entra Cloud Sync.
+- Create a new group and update the application, if it already exists, to check for the new group
+- Create a new group and update the existing groups, the application was checked for, to include the new group as a member
+
+Before you begin, ensure that you're a domain administrator in the domain where the application is installed. Ensure you can sign into a domain controller, or have the [Remote Server Administration tools](/en-us/troubleshoot/windows-server/system-management-components/remote-server-administration-tools) for AD DS administration installed on your Windows PC.
+
+Microsoft Entra ID has an application proxy service that enables users to access on-premises applications by signing in with their Microsoft Entra account. For more information about how to configure app proxy, see [Add an on-premises application for remote access through application proxy in Microsoft Entra ID](/en-us/entra/identity/app-proxy/application-proxy-add-on-premises-application).
+
+## Prerequisites
+
+The following prerequisites are required to implement this scenario:
+
+- Microsoft Entra account with at least a [Hybrid Identity Administrator](../../role-based-access-control/permissions-reference#hybrid-identity-administrator) role.
+- On-premises Active Directory Domain Services (AD DS) environment with Windows Server 2016 operating system or later.
+
+    - Required for AD DS schema attribute - *msDS-ExternalDirectoryObjectId*.
+- Provisioning agent with build version [1.1.1367.0](reference-version-history#1113700) or later.
+
+    Note
+
+    The permissions to the service account are assigned only during a clean install. If you upgrade from a previous version, assign permissions manually by using PowerShell:
+
+    ```powershell
+    $credential = Get-Credential
+    
+    Set-AAD DSCloudSyncPermissions -PermissionType UserGroupCreateDelete -TargetDomain "FQDN of domain" -TargetDomainCredential $credential
+    ```
+
+    Make sure you allow Read, Write, Create, and Delete all properties for all descendant groups and users.
+
+    These permissions aren't applied to AdminSDHolder objects by default by the [Microsoft Entra provisioning agent gMSA PowerShell cmdlets](how-to-gmsa-cmdlets#grant-permissions-to-a-specific-domain).
+- The provisioning agent must be able to communicate with one or more domain controllers on the port TCP/389 for Lightweight Directory Access Protocol (LDAP) and TCP/3268 for Global Catalog.
+
+    - Required for Global Catalog lookup to filter out invalid membership references.
+- Microsoft Entra Connect with build version [2.2.8.0](../connect/reference-connect-version-history#2280) or later.
+
+    - Required to support on-premises user membership synchronized using Microsoft Entra Connect.
+    - Required to synchronize `AD DS:user:objectGUID` to `Microsoft Entra ID:user:onPremisesObjectIdentifier`.
+
+For more information, see [cloud sync supported groups and scale limits](/en-us/entra/identity/hybrid/cloud-sync/how-to-prerequisites?tabs=public-cloud#supported-groups-and-scale-limits).
+
+## Supported groups
+
+For this scenario, only the following groups are supported:
+
+- Only cloud-created or Source of Authority (SOA) converted security groups are supported.
+- Assigned or dynamic membership groups.
+- Contain on-premises synchronized users or cloud-created security groups.
+- On-premises synchronized users that are members of the cloud-created security group can be from the same domain or other domains from the same forest
+- The forest must support Universal groups because the cloud-created security group is written back to AD DS with [Universal group scope](/en-us/windows-server/identity/ad-ds/manage/understand-security-groups#group-scope)
+- No more than 50,000 members
+- Each direct child nested group counts as one member in the referencing group
+
+## Considerations when provisioning groups back to AD DS
+
+If you provision a group back to AD DS after you convert Group SOA, provision it back to its original organizational unit (OU). This practice ensures that Microsoft Entra Cloud Sync recognizes the converted group as the same one already in AD DS.
+
+Cloud Sync recognizes the converted group because both groups share the same security identifier (SID). If you provision the group to a different OU, it maintains the same SID, and Microsoft Entra Cloud Sync updates the existing group, but you might experience problems with access control lists. Permissions don't always transfer cleanly across containers and only explicit permissions are provisioned with the group. Inherited permissions from the original OU or Group Policy Object permissions applied to the OU don't get provisioned with the group.
+
+Before you convert the SOA, consider the following recommended steps:
+
+1. Move the groups you plan to convert the SOA for to specific organizational units if possible. If you can't move the groups, set the OU path for each group to the original OU path before you convert SOA of the groups. For more information about how to set the original OU path, see [Provision users and groups from Microsoft Entra ID to Active Directory](how-to-configure-entra-to-active-directory).
+2. Make the SOA change.
+3. When provisioning the groups to AD DS, set the attribute mapping as explained in [Provision users and groups from Microsoft Entra ID to Active Directory](how-to-configure-entra-to-active-directory).
+4. Perform an on-demand provisioning first before enabling provisioning for rest of the groups.
+
+For more information about how to configure the target location for groups that are provisioned to AD DS, see [Configure the target container](/en-us/entra/identity/hybrid/cloud-sync/how-to-configure-entra-to-active-directory#configure-the-target-container).
+
+## Govern on-premises AD DS based apps using Group SOA
+
+In this scenario, when a group in the AD DS domain is used by an application, you can convert the SOA of the group to Microsoft Entra. Then you can provision the membership changes to the group made in Microsoft Entra, such as through entitlement management or access reviews, back to AD DS by using Microsoft Entra Cloud Sync. In this model, you don’t need to change the app or create new groups.
+
+![Screenshot of a conceptual diagram of the switch to Group Source of Authority.](../../../includes/governance/media/governance-on-premises-active-directory-apps/source-of-authority-switch.png)
+
+Use the following steps for applications to use the Group SOA option.
+
+### Create an application and convert SOA
+
+1. Using the Microsoft Entra admin center, create an application in Microsoft Entra ID that represents the AD DS based application, and configure the application to require user assignment.
+2. Ensure that the AD DS group you plan to convert is already synchronized to Microsoft Entra, and that the membership of the AD DS group is only users and optionally other groups that are also synchronized to Microsoft Entra. If the group or any members of the group aren't represented in Microsoft Entra, you can't convert the SOA of the group.
+3. Convert the SOA to your existing synchronized cloud group.
+4. After you convert the SOA, use [Group Provisioning to AD DS](/en-us/entra/identity/hybrid/cloud-sync/how-to-configure-entra-to-active-directory) to provision subsequent changes to this group back to AD DS. Once group provisioning is enabled, Microsoft Entra Cloud Sync recognizes that a converted group is the same group as the one already in AD DS, because both groups have the same security identifier (SID). Provisioning the converted cloud group to AD DS then updates the existing AD DS group instead of creating a new one.
+
+### Configure Microsoft Entra features to manage the membership of the SOA converted group
+
+1. Create an [access package](/en-us/entra/id-governance/entitlement-management-access-package-create). Add the application and the security group from the previous steps as resources in the access package. Configure a direct assignment policy in the access package.
+2. In [Entitlement Management](/en-us/entra/id-governance/entitlement-management-overview), assign the synced users who need access to the AD DS based app to the access package.
+3. Wait for the Microsoft Entra Cloud Sync to complete its next synchronization. Using Active Directory Users and Computers, confirm that the correct users are present as members of the group.
+4. In your AD DS domain monitoring, allow only the [gMSA account](/en-us/entra/identity/hybrid/cloud-sync/how-to-prerequisites#group-managed-service-accounts) that runs the provisioning agent, [authorization to change the membership](/en-us/windows/security/threat-protection/auditing/audit-security-group-management) in the new AD DS group.
+
+For more information, see [Embracing cloud-first posture: Convert Group Source of Authority to the cloud (Preview)](../concept-source-of-authority-overview).
+
+## Govern on-premises AD DS with newly provisioned cloud security groups
+
+In this scenario, you update the application to check for the SID, name, or distinguished name of a new groups created by Cloud Sync group provisioning. This scenario applies to:
+
+- Deployments for new applications being connected to an AD DS domain for the first time.
+- New cohorts of users accessing the application.
+- For application modernization, to reduce the dependency on existing AD DS groups.
+
+Applications that currently check for membership of the `Domain Admins` group need to be updated to also check for a newly created AD DS group.
+
+Follow the steps in the next sections to configure applications to use new groups.
+
+### Create an application and group
+
+1. Using the Microsoft Entra admin center, create an application in Microsoft Entra ID representing the AD DS-based application and configure the application to require user assignment.
+2. Create a new security group in Microsoft Entra ID.
+3. Use [Group Provisioning to AD DS](how-to-configure-entra-to-active-directory) to provision this group to AD DS.
+4. Launch Active Directory Users and Computers and wait for the resulting new AD DS group to be created in the AD DS domain. When it's present, record the distinguished name, domain, account name, and SID of the new AD DS group.
+
+### Configure application to use new group
+
+1. If the application uses AD DS via LDAP, configure the application with the distinguished name of the new AD DS group. If the application uses AD DS via Kerberos, configure the application with the SID or the domain and account name of the new AD DS group.
+2. Create an [access package](../../../id-governance/entitlement-management-access-package-create). Add the application and the security group from the previous steps as resources in the access package. Configure a direct assignment policy in the access package.
+3. In [Entitlement Management](../../../id-governance/entitlement-management-overview), assign the synced users who need access to the AD DS based app to the access package.
+4. Wait for the new AD DS group to be updated with the new members. Using Active Directory Users and Computers, confirm that the correct users are present as members of the group.
+5. In your AD DS domain monitoring, allow only the [gMSA account](how-to-prerequisites#group-managed-service-accounts) that runs the provisioning agent [authorization to change the membership](/en-us/windows/security/threat-protection/auditing/audit-security-group-management) in the new AD DS group.
+
+You can now govern access to the AD DS application through this new access package.
+
+## Configure the existing groups option
+
+In this scenario option, you add a new AD DS security group as a nested group member of an existing group. This scenario is applicable to deployments for applications that have a hardcoded dependency on a particular group account name, SID, or distinguished name.
+
+Nesting that group into the application's existing AD DS group allows:
+
+- Microsoft Entra users who are assigned by a governance feature and who then access the app to have the appropriate Kerberos ticket. This ticket contains the existing group's SID. The nesting is allowed by AD DS group nesting rules.
+
+If the app uses LDAP and follows nested group membership, the app sees that the Microsoft Entra users have the existing group as one of their memberships.
+
+### Determine eligibility of existing group
+
+1. Launch Active Directory Users and Computers and record the distinguished name, type, and scope of the existing AD DS group used by the application.
+2. If the existing group is `Domain Admins`, `Domain Guests`, `Domain Users`, `Enterprise Admins`, `Enterprise Key Admins`, `Group Policy Creation Owners`, `Key Admins`, `Protected Users`, or `Schema Admins`, then you need to change the application to use a new group as described above, as these groups can't be used by cloud sync.
+3. If the group has Global scope, change the group to have Universal scope. A global group can't have universal groups as members.
+
+### Create application and group
+
+1. In the Microsoft Entra admin center, create an application in Microsoft Entra ID representing the AD DS-based application and configure the application to require user assignment.
+2. Create a new security group in Microsoft Entra ID.
+3. Use [Group Provisioning to AD DS](how-to-configure-entra-to-active-directory) to provision this group to AD DS.
+4. Launch Active Directory Users and Computers and wait for the resulting new AD DS group to be created in the AD DS domain. When it's present, record the distinguished name, domain, account name, and SID of the new AD DS group.
+
+### Configure application to use new group
+
+1. Using Active Directory Users and Computers, add the new AD DS group as a member of the existing AD DS group.
+2. Create an [access package](../../../id-governance/entitlement-management-access-package-create). Add the application from step #1 and the security group from step #3 as described in the **Create application and group** section above as resources in the Access Package. Configure a direct assignment policy in the access package.
+3. In [Entitlement Management](../../../id-governance/entitlement-management-overview), assign the synced users who need access to the AD DS based app to the access package including any user members of the existing AD DS group who still need access.
+4. Wait for the new AD DS group to be updated with the new members. Using Active Directory Users and Computers, confirm that the correct users are present as members of the group.
+5. Using Active Directory Users and Computers, remove the existing members, apart from the new AD DS group, from the existing AD DS group.
+6. In your AD DS domain monitoring, allow only the [gMSA account](how-to-prerequisites#group-managed-service-accounts) that runs the provisioning agent [authorization to change the membership](/en-us/windows/security/threat-protection/auditing/audit-security-group-management) in the new AD DS group.
+
+Then you can govern access to the AD DS application by using the new access package.
+
+## Troubleshoot app access
+
+A user in the new AD DS group who signs in to a domain-joined device might have a ticket from a domain controller that doesn't include the new AD DS group membership. The ticket might be issued before Cloud Sync provisioned the user to the new AD DS group. The user can't use the ticket for access to the application. They must wait for the ticket to expire, and for a new ticket to be issued. Or they must purge their tickets, sign out, and then sign back into the domain. For more information, see [klist](/en-us/windows-server/administration/windows-commands/klist).
+
+## Existing Microsoft Entra Connect group writeback v2 customers
+
+If you use Microsoft Entra Connect group writeback v2, you need to move to Cloud Sync provisioning to AD DS before you can take advantage of Cloud Sync group provisioning. For more information, see [Migrate Microsoft Entra Connect Sync group writeback V2 to Microsoft Entra Cloud Sync](migrate-group-writeback).

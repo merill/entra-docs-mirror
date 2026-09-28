@@ -1,0 +1,185 @@
+---
+layout: Conceptual
+title: Microsoft Entra Connect Health - Diagnose duplicated attribute synchronization errors - Microsoft Entra ID | Microsoft Learn
+canonicalUrl: https://learn.microsoft.com/en-us/entra/identity/hybrid/connect/how-to-connect-health-diagnose-sync-errors
+uhfHeaderId: MSDocsHeader-Entra
+breadcrumb_path: /entra/breadcrumb/toc.json
+feedback_system: Standard
+feedback_product_url: https://feedback.azure.com/d365community/forum/22920db1-ad25-ec11-b6e6-000d3a4f0789
+author: boscoMW
+ms.author: bmutunga
+ms.service: entra-id
+manager: pmwongera
+description: This document describes the diagnosis process of duplicated attribute synchronization errors and a potential fix of the orphaned object scenarios directly from the [Microsoft Entra admin center](https://entra.microsoft.com).
+editor: billmath
+ms.subservice: hybrid-connect
+ms.tgt_pltfrm: na
+ms.topic: how-to
+ms.date: 2026-09-10T00:00:00.0000000Z
+locale: en-us
+document_id: 5c542e26-abd8-5b88-e5b7-1d5171dba600
+document_version_independent_id: 8683c48b-8bc9-b735-2e8d-68fcd5442c47
+original_content_git_url: https://github.com/MicrosoftDocs/entra-docs-pr/blob/live/docs/identity/hybrid/connect/how-to-connect-health-diagnose-sync-errors.md
+site_name: Docs
+depot_name: MSDN.entra-docs
+page_type: conceptual
+toc_rel: ../toc.json
+feedback_help_link_type: ''
+feedback_help_link_url: ''
+asset_id: identity/hybrid/connect/how-to-connect-health-diagnose-sync-errors
+moniker_range_name: 
+monikers: []
+item_type: Content
+source_path: docs/identity/hybrid/connect/how-to-connect-health-diagnose-sync-errors.md
+cmProducts:
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
+spProducts:
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
+platformId: aac57b27-f1da-1f6f-a37c-685b7e1b755b
+---
+
+# Microsoft Entra Connect Health - Diagnose duplicated attribute synchronization errors - Microsoft Entra ID | Microsoft Learn
+
+Use this article to understand common duplicated attribute synchronization scenarios and follow the diagnostic workflow in Microsoft Entra Connect Health.
+
+## Overview
+
+Taking one step farther to highlight sync errors, Microsoft Entra Connect Health introduces self-service remediation. It troubleshoots duplicated attribute sync errors and fixes objects that are orphaned from Microsoft Entra ID. The diagnosis feature has these benefits:
+
+- It provides a diagnostic procedure that narrows down duplicated attribute sync errors. And it gives specific fixes.
+- It applies a fix for dedicated scenarios from Microsoft Entra ID to resolve the error in a single step.
+- No upgrade or configuration is required to enable this feature. For more information about Microsoft Entra ID, see [Identity synchronization and duplicate attribute resiliency](how-to-connect-syncservice-duplicate-attribute-resiliency).
+
+## Problems
+
+### A common scenario
+
+When **QuarantinedAttributeValueMustBeUnique** and **AttributeValueMustBeUnique** sync errors happen, it's common to see a **UserPrincipalName** or **Proxy Addresses** conflict in Microsoft Entra ID. You might solve the sync errors by updating the conflicting source object from the on-premises side. The sync error will be resolved after the next sync. For example, this image indicates that two users have a conflict of their **UserPrincipalName**. Both are **Joe.J@contoso.com**. The conflicting objects are quarantined in Microsoft Entra ID.
+
+![Diagram that shows a common duplicated attribute synchronization error scenario.](media/how-to-connect-health-diagnose-sync-errors/iidfixcommoncase.png)
+
+### Orphaned object scenario
+
+Occasionally, you might find that an existing user loses the **Source Anchor**. The deletion of the source object happened in on-premises Active Directory. But the change of deletion signal never got synchronized to Microsoft Entra ID. This loss happens for reasons like sync engine issues or domain migration. When the same object gets restored or recreated, logically, an existing user should be the user to sync from the **Source Anchor**.
+
+When an existing user is a cloud-only object, you can also see the conflicting user synchronized to Microsoft Entra ID. The user can't be matched in sync to the existing object. There's no direct way to remap the **Source Anchor**. See more about the [existing knowledge base](https://support.microsoft.com/help/2647098).
+
+As an example, the existing object in Microsoft Entra ID preserves the license of Joe. A newly synchronized object with a different **Source Anchor** occurs in a duplicated attribute state in Microsoft Entra ID. Changes for Joe in on-premises Active Directory won't be applied to Joe’s original user (existing object) in Microsoft Entra ID.
+
+![Diagram that shows an orphaned object synchronization error scenario.](media/how-to-connect-health-diagnose-sync-errors/iidfixorphanedcase.png)
+
+## Diagnostic and troubleshooting steps in Connect Health
+
+The diagnose feature supports user objects with the following duplicated attributes:
+
+| Attribute name | Synchronization error types |
+| --- | --- |
+| UserPrincipalName | QuarantinedAttributeValueMustBeUnique or AttributeValueMustBeUnique |
+| ProxyAddresses | QuarantinedAttributeValueMustBeUnique or AttributeValueMustBeUnique |
+| SipProxyAddress | AttributeValueMustBeUnique |
+| OnPremiseSecurityIdentifier | AttributeValueMustBeUnique |
+
+Important
+
+To access this feature, **Contributor** permissions from Azure RBAC, is required at minimum.
+
+Follow the steps from the [Microsoft Entra admin center](https://entra.microsoft.com) to narrow down the sync error details and provide more specific solutions:
+
+From the [Microsoft Entra admin center](https://entra.microsoft.com), take a few steps to identify specific fixable scenarios:
+
+1. In Microsoft Entra Connect Health, select **Sync errors**, and then select the **Duplicate Attribute** category.
+2. Find the affected object. Expand the row to review its details.
+3. Select **Fix this error** to open **Error Details**. This action is available only for supported duplicate-attribute errors.
+4. Compare the conflicting and existing objects, and then select **Troubleshoot** to open the **Fix Synchronization Error** diagnostic wizard.
+
+The wizard provides a directory query to help verify the affected user, asks diagnostic questions, and provides expandable guidance before you continue to a proposed resolution.
+
+[![Screenshot of the Connect Health Fix Synchronization Error wizard with callouts for the suggested directory query, diagnostic answer choices, and guidance.](media/how-to-connect-health-diagnose-sync-errors/connect-health-sync-diagnostic-wizard.png)](media/how-to-connect-health-diagnose-sync-errors/connect-health-sync-diagnostic-wizard.png#lightbox)
+
+The panel can show the following statuses:
+
+| Status | What does it mean? |
+| --- | --- |
+| Not Started | You haven't completed the guided process. Depending on the diagnostic result, you might be able to fix the sync error directly from Microsoft Entra ID. |
+| Manual Fix Required | The error doesn't meet the criteria for an available portal fix. For example, the conflicting objects aren't supported user objects or the guided process found no applicable fix. [Read more about on-premises fixes](https://support.microsoft.com/help/2647098). |
+| Pending Sync | A fix was applied, and the service is waiting for the next sync cycle to clear the error. |
+
+Important
+
+The diagnostic status column will reset after each sync cycle.
+
+1. In the **Identity Verification** step, answer the questions about the on-premises and Microsoft Entra objects. The answers help identify an orphaned object case.
+2. Review the proposed resolution in **Review & Apply**. If no portal fix is available based on your answers, close the panel and use the displayed manual resolution guidance. The status changes to **Manual Fix Required** for the current sync cycle.
+3. If the panel identifies a supported orphaned object case, select **Apply Fix**. The status changes to **Pending Sync**.
+4. After the next sync cycle, the error should be removed from the list.
+
+## How to answer the diagnosis questions
+
+### Does the user exist in your on-premises Active Directory?
+
+This question tries to identify the source object of the existing user from on-premises Active Directory.
+
+1. Check if Microsoft Entra ID has an object with the provided **UserPrincipalName**. If not, answer **No**.
+2. If it does, check whether the object is still in scope for syncing.
+    - Search in the Microsoft Entra connector space by using the DN.
+    - If the object is found in the **Pending Add** state, answer **No**. Microsoft Entra Connect can't connect the object to the right Microsoft Entra object.
+    - If the object isn't found, answer **Yes**.
+
+In these examples, the question tries to identify whether **Joe Jackson** still exists in on-premises Active Directory. For the **common scenario**, both users **Joe Johnson** and **Joe Jackson** are present in on-premises Active Directory. The quarantined objects are two different users.
+
+![Diagram that shows a common duplicated attribute synchronization error scenario.](media/how-to-connect-health-diagnose-sync-errors/iidfixcommoncase.png)
+
+For the **orphaned object scenario**, only the single user **Joe Johnson** is present in on-premises Active Directory:
+
+![Diagram that shows the does-user-exist question for an orphaned object synchronization error scenario.](media/how-to-connect-health-diagnose-sync-errors/iidfixorphanedcase.png)
+
+### Do both of these accounts belong to the same user?
+
+This question checks an incoming conflicting user and the existing user object in Microsoft Entra ID to see if they belong to the same user.
+
+1. The conflicting object is newly synced to Microsoft Entra ID. Compare the objects' attributes:
+    - Display Name
+    - UserPrincipalName or SignInName
+    - ObjectID
+2. If Microsoft Entra ID fails to compare them, check whether Active Directory has objects with the provided **UserPrincipalNames**. Answer **No** if you find both.
+
+In the following example, the two objects belong to the same user **Joe Johnson**.
+
+![Diagram that shows the same-user question for an orphaned object synchronization error scenario.](media/how-to-connect-health-diagnose-sync-errors/iidfixorphanedcase.png)
+
+## What happens after the fix is applied in the orphaned object scenario
+
+Based on the answers to the preceding questions, you'll see the **Apply Fix** button when there's a fix available from Microsoft Entra ID. In this case, the on-premises object is syncing with an unexpected Microsoft Entra object. The two objects are mapped by using the **Source Anchor**. The **Apply Fix** change takes these or similar steps:
+
+1. Updates the **Source Anchor** to the correct object in Microsoft Entra ID.
+2. Deletes the conflicting object in Microsoft Entra ID if it's present.
+
+![Diagram that shows the synchronization error scenario after the fix is applied.](media/how-to-connect-health-diagnose-sync-errors/iidfixafterfix.png)
+
+Important
+
+The **Apply Fix** change applies only to orphaned object cases.
+
+After the preceding steps, the user can access the original resource, which is a link to an existing object. The **Diagnose status** value in the list view updates to **Pending Sync**. The sync error will be resolved after the next sync. Connect Health will no longer show the resolved sync error in the list view.
+
+## Failures and error messages
+
+**User with conflicting attribute is soft deleted in the Microsoft Entra ID. Ensure the user is hard deleted before retry.** The user with conflicting attribute in Microsoft Entra ID should be cleaned before you can apply fix. Check out [how to delete the user permanently in Microsoft Entra ID](../../../fundamentals/users-restore) before retrying the fix. The user will also be automatically deleted permanently after 30 days in soft deleted state.
+
+**Updating source anchor to cloud-based user in your tenant is not supported.** Cloud-based user in Microsoft Entra ID should not have source anchor. Updating source anchor is not supported in this case. Manual fix is required from on premises.
+
+**The fix process failed to update the values.** The specific settings such as [UserWriteback in Microsoft Entra Connect](how-to-connect-preview#user-writeback) is not supported. Please disable in the settings.
+
+## FAQ
+
+**Q.** What happens if execution of the **Apply Fix** fails?**A.** If execution fails, it's possible that Microsoft Entra Connect is running an export error. Refresh the portal page and retry after the next sync. The default sync cycle is 30 minutes.
+
+**Q.** What if the **existing object** should be the object to be deleted?**A.** If the **existing object** should be deleted, the process doesn't involve a change of **Source Anchor**. Usually, you can fix it from on-premises Active Directory.
+
+**Q.** What permission does a user need to apply the fix?**A.** **Contributor** from Azure RBAC, has permissions to access the diagnostic and troubleshooting process. This is the minimum permission you need.
+
+**Q.** Do I have to configure Microsoft Entra Connect or update the Microsoft Entra Connect Health agent for this feature?**A.** No, the diagnosis process is a complete cloud-based feature.
+
+**Q.** If the existing object is soft deleted, will the diagnosis process make the object active again?**A.** No, the fix won't update object attributes other than **Source Anchor**.

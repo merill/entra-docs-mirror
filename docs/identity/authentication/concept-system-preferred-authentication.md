@@ -1,0 +1,212 @@
+---
+layout: Conceptual
+title: System-preferred authentication in Microsoft Entra ID - Microsoft Entra ID | Microsoft Learn
+canonicalUrl: https://learn.microsoft.com/en-us/entra/identity/authentication/concept-system-preferred-authentication
+uhfHeaderId: MSDocsHeader-Entra
+breadcrumb_path: /entra/breadcrumb/toc.json
+feedback_system: Standard
+feedback_product_url: https://feedback.azure.com/d365community/forum/22920db1-ad25-ec11-b6e6-000d3a4f0789
+author: Justinha
+ms.author: justinha
+ms.service: entra-id
+ms.subservice: authentication
+manager: dougeby
+description: Learn how system-preferred authentication evaluates methods to prompt users with the most secure sign-in option for both first-factor and second-factor authentication.
+ms.topic: overview
+ms.date: 2026-09-01T00:00:00.0000000Z
+ms.reviewer: msft-poulomi
+ms.custom: msecd-doc-authoring-1012
+ai-usage: ai-assisted
+locale: en-us
+document_id: e6cc51d2-5871-bf7b-32f0-8d617809a36a
+document_version_independent_id: e6cc51d2-5871-bf7b-32f0-8d617809a36a
+original_content_git_url: https://github.com/MicrosoftDocs/entra-docs-pr/blob/live/docs/identity/authentication/concept-system-preferred-authentication.md
+site_name: Docs
+depot_name: MSDN.entra-docs
+page_type: conceptual
+toc_rel: toc.json
+feedback_help_link_type: ''
+feedback_help_link_url: ''
+asset_id: identity/authentication/concept-system-preferred-authentication
+moniker_range_name: 
+monikers: []
+item_type: Content
+source_path: docs/identity/authentication/concept-system-preferred-authentication.md
+cmProducts:
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/798bd9d1-9cc5-4fc7-b0e5-8699d1f6ce2a
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
+spProducts:
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/b5dc5f65-34a8-4bfc-9917-97d1e20c88b2
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
+platformId: f9078ab7-0ffa-8ba2-7330-cc11dca39548
+---
+
+# System-preferred authentication in Microsoft Entra ID - Microsoft Entra ID | Microsoft Learn
+
+System-preferred authentication prompts users to sign in by using the most secure method they registered. It's an important security enhancement for users who authenticate by using less secure methods like passwords or SMS.
+
+For example, if a user registered both a password and a passkey, system-preferred authentication prompts the user to sign in with the passkey instead of the password. The user can still choose to sign in by using another method, but they're first prompted to try the most secure method they registered.
+
+System-preferred authentication is a Microsoft managed setting, which is a three-state policy (enabled, disabled, or Microsoft managed). If you don't want to enable system-preferred authentication, change the state from **Microsoft managed** to **Disabled**, or exclude users and groups from the policy.
+
+Note
+
+The **Microsoft managed** state behavior affects both first-factor and multifactor authentication and is being gradually deployed to tenants through September 2026. If your tenant or users don't experience system-preferred authentication as the first factor when the **State** is **Microsoft managed**, the rollout isn't deployed yet for your tenant.
+
+After system-preferred authentication is enabled, the authentication system does all the work. Users don't need to set any authentication method as their default because the system always determines and presents the most secure method they registered.
+
+## How system-preferred authentication applies to sign-in
+
+System-preferred authentication has three modes:
+
+- **Disabled** - No change to sign-in logic.
+- **Enabled** - System-preferred authentication applies to second-factor only. The existing sign-in behavior continues to apply for first-factor authentication.
+- **Microsoft managed** - System-preferred authentication applies to both first-factor and second-factor authentication. The system evaluates which credentials are registered for the user and selects the highest-ranked method for each authentication step.
+
+Both **Enabled** and **Microsoft managed** modes allow administrators to include or exclude specific users or groups.
+
+Tip
+
+If you don't want system-preferred authentication to apply to first-factor authentication, switch from **Microsoft managed** to **Enabled**. The **Enabled** state applies system-preferred logic to second-factor only.
+
+Note
+
+System-preferred authentication is scoped to users, not devices. Administrators include or exclude users or groups but can't assign the feature to specific devices or device groups.
+
+### Known limitations
+
+- When you change the policy for a target group, the change might not take effect on the user's very next sign-in. It applies to all subsequent sign-ins after that.
+- Conditional Access policy is validated only for second-factor authentication and doesn't apply to first-factor authentication. Authentication happens first, and then Conditional Access evaluates authorization. System-preferred authentication doesn't override Conditional Access policies or authentication strength requirements.
+
+### Windows Hello for Business and macOS Platform SSO at first-factor sign-in
+
+Windows Hello for Business and macOS Platform SSO are device-bound passkeys that work only as a first factor. Because the **Microsoft managed** state applies system-preferred authentication at the first factor, these credentials can be offered before the password.
+
+To avoid prompting users for a device-bound credential that they don't use or can't complete on their current device, system-preferred authentication offers Windows Hello for Business or macOS Platform SSO at the first factor only when the user most recently signed in with a passkey. The behavior depends on which passkeys the user registered:
+
+- If the user has a passkey other than Windows Hello for Business or macOS Platform SSO, system-preferred authentication prompts for the passkey at the first factor, just as it already prompts for that passkey at second-factor sign-in.
+- If the user's only registered passkey is Windows Hello for Business or macOS Platform SSO, and the user most recently signed in with a passkey, system-preferred authentication prompts for passkey sign-in at the first factor.
+- If the user's only registered passkey is Windows Hello for Business or macOS Platform SSO, and the user's most recent sign-in wasn't with a passkey, system-preferred authentication skips it at the first factor and prompts the next highest-ranked method in the user's credential order instead.
+
+Users can always select **Sign in another way** to choose a different registered method.
+
+## Enable system-preferred authentication in the Microsoft Entra admin center
+
+By default, system-preferred authentication is Microsoft managed for all users.
+
+1. Sign in to the [Microsoft Entra admin center](https://entra.microsoft.com) as at least an [Authentication Policy Administrator](../role-based-access-control/permissions-reference#authentication-policy-administrator).
+2. Browse to **Microsoft Entra ID** &gt; **Authentication methods** &gt; **Settings**.
+3. For **System-preferred authentication**, choose **Microsoft-managed**, **Enabled**, or **Disabled**, and include or exclude any users. Excluded groups take precedence over include groups.
+4. After you finish making any changes, select **Save**.
+
+## Enable system-preferred authentication by using Graph APIs
+
+To enable system-preferred authentication in advance, choose a single target group for the schema configuration, as shown in the Request example.
+
+### Authentication method feature configuration properties
+
+By default, system-preferred authentication is [Microsoft managed](concept-authentication-default-enablement#microsoft-managed-settings).
+
+| Property | Type | Description |
+| --- | --- | --- |
+| excludeTarget | featureTarget | A single entity that is excluded from this feature. You can only exclude one group from system-preferred authentication, which can be a dynamic or nested group. |
+| includeTarget | featureTarget | A single entity that is included in this feature. You can only include one group for system-preferred authentication, which can be a dynamic or nested group. |
+| State | advancedConfigState | Possible values are:**enabled** explicitly enables the feature for the selected group.**disabled** explicitly disables the feature for the selected group.**default** allows Microsoft Entra ID to manage whether the feature is enabled or not for the selected group. |
+
+### Feature target properties
+
+System-preferred authentication can be enabled only for a single group, which can be a dynamic or nested group.
+
+| Property | Type | Description |
+| --- | --- | --- |
+| ID | String | ID of the entity targeted. |
+| targetType | featureTargetType | The kind of entity targeted, such as group, role, or administrative unit. The possible values are: 'group', 'administrativeUnit', 'role', 'unknownFutureValue'. |
+
+Use the following API endpoint to enable **systemCredentialPreferences** and include or exclude groups:
+
+```text
+https://graph.microsoft.com/v1.0/policies/authenticationMethodsPolicy
+```
+
+Note
+
+In Graph Explorer, you need to consent to the **Policy.ReadWrite.AuthenticationMethod** permission.
+
+### Request
+
+The following example excludes a sample target group and includes all users. For more information, see [Update authenticationMethodsPolicy](/en-us/graph/api/authenticationmethodspolicy-update).
+
+```http
+PATCH https://graph.microsoft.com/v1.0/policies/authenticationMethodsPolicy
+Content-Type: application/json
+
+{
+    "systemCredentialPreferences": {
+        "state": "enabled",
+        "excludeTargets": [
+            {
+                "id": "aaaaaaaa-0000-1111-2222-bbbbbbbbbbbb",
+                "targetType": "group"
+            }
+        ],
+        "includeTargets": [
+            {
+                "id": "all_users",
+                "targetType": "group"
+            }
+        ]
+    }
+}
+```
+
+## FAQ
+
+### How does system-preferred authentication determine the most secure method?
+
+When a user signs in, the authentication process checks which methods are registered. The user is prompted to sign in with the most secure method according to the following order. The method order is dynamic and updates as the security landscape changes. Users can always cancel and choose a different available sign-in method. If your organization has Conditional Access policies that require specific authentication methods, those policies continue to take priority over the system-preferred authentication order.
+
+When in the **Microsoft managed** state, the system evaluates available credentials and selects the highest-ranked method for both first-factor and second-factor authentication.
+
+| Rank | Credential | Category | Meets requirement for |
+| --- | --- | --- | --- |
+| 1 | [Temporary Access Pass (TAP)](howto-authentication-temporary-access-pass) | Recovery | 1FA + MFA |
+| 2 | [Passkey](concept-authentication-passkeys-fido2)^1^ | Phishing-resistant | 1FA + MFA |
+| 3 | [Certificate-based authentication (CBA)](concept-certificate-based-authentication) | Phishing-resistant | 1FA or 1FA + MFA |
+| 4 | [Microsoft Authenticator notifications](concept-authentication-authenticator-app) | Passwordless | 1FA + MFA |
+| 5 | [External multifactor authentication (MFA)](how-to-authentication-external-method-manage) | — | MFA |
+| 6 | [Time-based one-time password (TOTP)](concept-authentication-oath-tokens)^2^ | — | MFA |
+| 7 | [Telephony](concept-authentication-phone-options)^3^ | — | MFA |
+| 8 | QR code | Frontline worker | 1FA |
+| 9 | Password | — | 1FA |
+
+^1^Includes security keys, passkeys in Authenticator app, synced passkeys, Windows Hello for Business, and macOS Platform SSO.
+
+^2^Includes hardware or software TOTP from Microsoft Authenticator, Authenticator Lite, or third-party applications.
+
+^3^Includes SMS and voice calls.
+
+Important
+
+Certificate-based authentication (CBA) was previously placed last in the system-preferred authentication order due to known issues with CBA and system-preferred authentication. Now that those issues are resolved, starting March 18th, 2026, certificate-based authentication moved to the third position in the authentication order.
+
+With the current Microsoft managed behavior, users are directed to the best available authentication methods for both first and second factors based on the system-preferred MFA ordering. While this avoids presenting the password page by default, users on devices without certificates will fail immediately during CBA and must manually select **Sign in another way** to continue with an alternate method.
+
+### How does system-preferred authentication affect the NPS extension?
+
+System-preferred authentication doesn't affect users who sign in by using the Network Policy Server (NPS) extension. Those users don't see any change to their sign-in experience.
+
+### How does system-preferred authentication work for federated users?
+
+For federated users, first-factor sign-in is unchanged. System-preferred authentication doesn't apply at the first factor, so federated users continue to be routed to their external identity provider to sign in. System-preferred authentication applies only to second-factor authentication for these users.
+
+### How does system-preferred authentication affect first-factor sign-in?
+
+When set to **Microsoft managed**, the system applies the credential ranking to both first-factor and second-factor authentication. For example, if a user has both a password and a passkey registered, they're prompted with the passkey at first-factor sign-in instead of the password. The user can still select other sign-in options.
+
+When set to **Enabled**, the credential ranking applies only to second-factor authentication. First-factor sign-in behavior remains unchanged.
+
+### Can users still choose a different sign-in method?
+
+Yes. System-preferred authentication prompts users with the highest-ranked credential, but users can still choose other allowed methods during sign-in.

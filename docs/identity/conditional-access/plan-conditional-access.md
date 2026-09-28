@@ -1,0 +1,371 @@
+---
+layout: Conceptual
+title: Plan Your Microsoft Entra Conditional Access Deployment - Microsoft Entra ID | Microsoft Learn
+canonicalUrl: https://learn.microsoft.com/en-us/entra/identity/conditional-access/plan-conditional-access
+uhfHeaderId: MSDocsHeader-Entra
+breadcrumb_path: /entra/breadcrumb/toc.json
+feedback_system: Standard
+feedback_product_url: https://feedback.azure.com/d365community/forum/22920db1-ad25-ec11-b6e6-000d3a4f0789
+author: kenwith
+ms.author: kenwith
+ms.service: entra-id
+ms.subservice: conditional-access
+manager: martinco
+description: Plan your Conditional Access policies to balance security and productivity. Learn how to design and deploy effective policies for your organization.
+ms.topic: how-to
+ms.date: 2026-06-01T00:00:00.0000000Z
+ms.reviewer: joflore
+ms.custom:
+- sfi-image-nochange
+- ai-gen-docs-bap
+- ai-gen-title
+- ai-seo-date:09/02/2025
+- ai-gen-description
+ai-usage: ai-assisted
+locale: en-us
+document_id: 1e4eb266-d556-29dd-8c22-1b0221a048a7
+document_version_independent_id: 3b4c4a89-85a8-5948-3ad2-efc7459945c2
+original_content_git_url: https://github.com/MicrosoftDocs/entra-docs-pr/blob/live/docs/identity/conditional-access/plan-conditional-access.md
+site_name: Docs
+depot_name: MSDN.entra-docs
+page_type: conceptual
+toc_rel: toc.json
+feedback_help_link_type: ''
+feedback_help_link_url: ''
+asset_id: identity/conditional-access/plan-conditional-access
+moniker_range_name: 
+monikers: []
+item_type: Content
+source_path: docs/identity/conditional-access/plan-conditional-access.md
+cmProducts:
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
+spProducts:
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
+platformId: 2cffc93c-7ef9-89d3-61cc-54a36f0c75be
+---
+
+# Plan Your Microsoft Entra Conditional Access Deployment - Microsoft Entra ID | Microsoft Learn
+
+## Overview
+
+Planning your Conditional Access deployment is critical to achieving your organization's access strategy for apps and resources. Conditional Access policies provide significant configuration flexibility. However, this flexibility means you need to plan carefully to avoid undesirable results.
+
+[Microsoft Entra Conditional Access](overview) combines signals like user, device, and location to automate decisions and enforce organizational access policies for resources. These Conditional Access policies help you balance security and productivity by enforcing security controls when needed and staying out of the user’s way when they aren't.
+
+Conditional Access forms the basis of [Microsoft’s Zero Trust security policy engine](https://www.microsoft.com/security/business/zero-trust).
+
+![Diagram showing a high level Conditional Access overview.](media/plan-conditional-access/conditional-access-overview-how-it-works.png)
+
+Microsoft provides [security defaults](../../fundamentals/security-defaults) that ensure a basic level of security for tenants without Microsoft Entra ID P1 or P2. With Conditional Access, you can create policies that give the same protection as security defaults, but with more granularity. Conditional Access and security defaults aren't meant to be combined because creating Conditional Access policies prevents you from enabling security defaults.
+
+## Prerequisites
+
+- A working Microsoft Entra tenant with Microsoft Entra ID P1, P2, or a trial license enabled. If needed, [create one for free](https://azure.microsoft.com/pricing/purchase-options/azure-account?cid=msft_learn).
+    - Microsoft Entra ID P2 is required to include Microsoft Entra ID Protection risk in Conditional Access policies.
+- Admins who interact with Conditional Access need one of the following role assignments, depending on the tasks they're performing. To follow the [Zero Trust principle of least privilege](/en-us/security/zero-trust/), consider using [Privileged Identity Management (PIM)](../../id-governance/privileged-identity-management/pim-configure)to activate privileged role assignments just in time.
+    - Read Conditional Access policies and configurations.
+        - [Security Reader](../role-based-access-control/permissions-reference#security-reader)
+    - Create, modify, or restore soft-deleted Conditional Access policies.
+        - [Conditional Access Administrator](../role-based-access-control/permissions-reference#conditional-access-administrator)
+- A test user (not an admin) to check that policies work as expected before deploying to real users. If you need to create a user, see [Quickstart: Add new users to Microsoft Entra ID](../../fundamentals/how-to-create-delete-users).
+- A group that includes the test user. If you need to create a group, see [Create a group and add members in Microsoft Entra ID](/en-us/entra/fundamentals/how-to-manage-groups).
+
+### Communicate change
+
+Communication is critical to the success of any new functionality. Let users know how their experience changes, when it changes, and how to get support if they have issues.
+
+## Conditional Access policy components
+
+Conditional Access policies determine who can access your resources, what resources they can access, and under what conditions. Policies can grant access, limit access with session controls, or block access. You [build a Conditional Access policy](concept-conditional-access-policies) by defining the if-then statements like:
+
+| If an assignment is met | Apply the access controls |
+| --- | --- |
+| If you're a user in Finance accessing the Payroll application | Require multifactor authentication and a compliant device |
+| If you aren't a member of Finance accessing the Payroll application | Block access |
+| If your user risk is high | Require a multifactor authentication and a secure password change |
+
+### User exclusions
+
+Conditional Access policies are powerful tools. We recommend excluding the following accounts from your policies:
+
+- **Emergency access** or **break-glass**accounts to prevent lockout due to policy misconfiguration. In the unlikely scenario where all administrators are locked out, your emergency access administrative account can be used to sign in and recover access.
+    - More information can be found in the article, [Manage emergency access accounts in Microsoft Entra ID](../role-based-access-control/security-emergency-access).
+- **Service accounts** and **Service principals**, such as the Microsoft Entra Connect Sync Account. Service accounts are noninteractive accounts that aren't tied to any specific user. They're typically used by backend services to allow programmatic access to applications, but they're also used to sign in to systems for administrative purposes. Calls made by service principals aren't blocked by Conditional Access policies scoped to users. Use Conditional Access for workload identities to define policies that target service principals.
+    - If your organization uses these accounts in scripts or code, replace them with [managed identities](../managed-identities-azure-resources/overview).
+
+### Ask the right questions
+
+Here are common questions about [assignments and access controls](concept-conditional-access-cloud-apps). Record the answers for each policy before creating it.
+
+#### Users or workload identities
+
+- Which users, groups, directory roles, or workload identities are included in or excluded from the policy?
+- What emergency access accounts or groups should you exclude from the policy?
+
+#### Target resources
+
+Does this policy apply to an application, user action, or authentication context? If so:
+
+- What applications or services does the policy apply to?
+- What user actions are subject to this policy?
+- What authentication contexts does this policy apply to?
+
+##### Filter for applications
+
+[Using filter for applications to include or exclude applications instead of individually specifying them](concept-filter-for-applications) helps organizations:
+
+- Scale and target any number of applications easily
+- Manage applications with similar policy requirements
+- Reduce the number of individual policies
+- Reduce errors while editing policies: No need to add or remove applications manually from the policy. Just manage the attributes.
+- Overcome policy size constraints
+
+#### Conditions
+
+- Which device platforms are included in or excluded from the policy?
+- What are the organization’s known network locations?
+    - What locations are included in or excluded from the policy?
+- What client app types are included in or excluded from the policy?
+- Do you need to target specific device attributes?
+- If you use [Microsoft Entra ID Protection](../../id-protection/concept-identity-protection-risks), do you want to incorporate sign-in or user risk?
+
+#### Block or grant controls
+
+Do you want to grant access to resources by requiring one or more of the following?
+
+- Multifactor authentication
+- Device marked as compliant
+- Using a Microsoft Entra hybrid joined device
+- Using an approved client app
+- App protection policy applied
+- Password change
+- Terms of Use accepted
+
+**Block access** is a powerful control. Apply it only when you understand the impact. Policies with block statements might have unintended side effects. Test and validate before enabling the control at scale. Use [policy impact or report-only mode](concept-conditional-access-report-only#reviewing-results) to understand potential impact when you make changes.
+
+#### Session controls
+
+Do you want to enforce any of the following access controls on cloud apps?
+
+- Use app enforced restrictions
+- Use Conditional Access App control
+- Enforce sign-in frequency
+- Use persistent browser sessions
+- Customize continuous access evaluation
+
+### Combining policies
+
+When you create and assign policies, consider how access tokens work. [Access tokens](../../identity-platform/access-tokens) grant or deny access based on whether the user making a request is authorized and authenticated. If the requester proves they're who they claim to be, they can use the protected resources or functionality.
+
+**Access tokens are issued by default if a Conditional Access policy condition doesn't trigger an access control**.
+
+This policy doesn't prevent the app from blocking access on its own.
+
+For example, consider a simplified policy example where:
+
+Users: FINANCE GROUP  Accessing: PAYROLL APP  Access control: Multifactor authentication
+
+- User A is in the FINANCE GROUP, they're required to perform multifactor authentication to access the **PAYROLL APP**.
+- User B is **not** in the FINANCE GROUP, is issued an access token and is allowed to access the **PAYROLL APP** without performing multifactor authentication.
+
+To ensure users outside the finance group can't access the payroll app, create a separate policy to block all other users, like this simplified policy:
+
+Users: Include All Users / Exclude FINANCE GROUP  Accessing: PAYROLL APP  Access control: Block access 
+
+Now, when User B attempts to access the **PAYROLL APP**, they're blocked.
+
+## Recommendations
+
+Based on our experience with Conditional Access and supporting other customers, here are some recommendations.
+
+### Apply Conditional Access policies to every app
+
+**Ensure that every app has at least one Conditional Access policy applied**. From a security perspective, it's better to [create a policy that includes **All resources (formerly 'All cloud apps')**](policy-all-users-mfa-strength). This practice ensures you don't need to update Conditional Access policies every time you onboard a new application.
+
+Tip
+
+Be careful when using block and all resources in a single policy. This combination could lock out admins, and exclusions can't be configured for important endpoints such as Microsoft Graph.
+
+### Minimize the number of Conditional Access policies
+
+Creating a policy for each app isn't efficient and makes managing policies difficult. Conditional Access has a limit of 240 policies per tenant. This 240-policy limit includes Conditional Access policies in any state, including report-only mode, on, or off.
+
+Analyze your apps and group them by the same resource requirements for the same users. For example, if all Microsoft 365 apps or all HR apps have the same requirements for the same users, create a single policy and include all the apps it applies to.
+
+Conditional Access policies are contained in a JSON file, and that file has a size limit that a single policy usually doesn't exceed. If you use a long list of GUIDs in your policy, you might hit this limit. If you encounter these limits, try these alternatives:
+
+- [Use groups or roles to include or exclude users instead of listing each user individually](concept-conditional-access-users-groups).
+- [Use filter for applications to include or exclude applications instead of individually specifying them](concept-filter-for-applications).
+
+### Govern and manage policies at scale
+
+As your organization grows, managing Conditional Access policies at scale requires deliberate governance practices. Conditional Access has a hard limit of 240 policies per tenant across all policy states (see Minimize the number of Conditional Access policies and [Microsoft Entra service limits and restrictions](../users/directory-service-limits-restrictions)), so scaling effectively means *consolidating* policies, not adding more. Consider these strategies to maintain control over a large policy set:
+
+- **Establish naming and ownership conventions.** Adopt a consistent naming convention that identifies each policy's purpose, target, and scope at a glance. Because Conditional Access policies don't have a built-in owner attribute, encode ownership in the policy name (for example, a team prefix) and maintain an out-of-band registry that maps each policy to a responsible admin or team.
+- **Audit and consolidate regularly.** Review your policies periodically to remove redundant or conflicting rules. Where it's enabled in your tenant, the [Conditional Access Optimization Agent](../../security-copilot/conditional-access-agent-optimization) with Microsoft Security Copilot can analyze your existing policies, identify gaps in coverage, and suggest consolidation opportunities. The agent requires Microsoft Security Copilot with provisioned security compute units (SCUs) and Microsoft Entra ID P1, so it isn't available in every tenant; for details, see the agent [prerequisites](../../security-copilot/conditional-access-agent-optimization#prerequisites).
+- **Monitor impact with reporting tools.** Use the [Conditional Access Insights and Reporting workbook](howto-conditional-access-insights-reporting) to visualize policy impact across your tenant. Stream sign-in logs to a Log Analytics workspace so you can query trends, identify policy conflicts, and track coverage over time. The workbook requires Microsoft Entra ID P1 and a Log Analytics workspace that's receiving sign-in logs; for details, see the workbook [prerequisites](howto-conditional-access-insights-reporting#prerequisites).
+- **Troubleshoot efficiently.** When users report access issues, use the [What If tool](what-if-tool) to simulate sign-in scenarios and identify which policies apply. For deeper investigation, review the Conditional Access details on individual sign-in events in the [sign-in logs](troubleshoot-conditional-access).
+- **Protect policy changes.** Enable [protected actions](../role-based-access-control/protected-actions-add) to require additional verification before anyone creates, modifies, or deletes Conditional Access policies.
+- **Automate policy management.** Manage Conditional Access policies programmatically with the [Microsoft Graph `conditionalAccessPolicy` API](/en-us/graph/api/resources/conditionalaccesspolicy) and [Microsoft Graph PowerShell](/en-us/powershell/microsoftgraph/) to bulk-create, version, and audit policies. Adopt a policy-as-code workflow with source control and continuous integration so changes are reviewable, testable, and reversible.
+
+### Configure report-only mode
+
+[Enable policies in report-only mode](howto-conditional-access-insights-reporting). After you save a policy in report-only mode, you see the effect on real-time sign-ins in the sign-in logs. From the sign-in logs, select an event and go to the **Report-only** tab to see the result of each report-only policy.
+
+View the aggregate effects of your Conditional Access policies in the **Insights and Reporting workbook**. To access the workbook, you need an Azure Monitor subscription and you need to [stream your sign-in logs to a log analytics workspace](../monitoring-health/howto-integrate-activity-logs-with-azure-monitor-logs).
+
+### Plan for disruption
+
+Reduce the risk of lockout during unforeseen disruptions by [planning resilience strategies](../authentication/concept-resilient-controls) for your organization.
+
+### Enable protected actions
+
+Enable [protected actions](/en-us/entra/identity/role-based-access-control/protected-actions-add) to add another layer of security to attempts to create, change, or delete Conditional Access policies. Organizations can require a fresh multifactor authentication or other grant control before changing policy.
+
+### Configure guest user settings
+
+For external organizations you know and have a relationship with, you might want to trust multifactor authentication, device compliance, or hybrid device claims presented by guests to your Conditional Access policies. For more information, see [Manage cross-tenant access settings for B2B collaboration](../../external-id/cross-tenant-access-settings-b2b-collaboration#to-change-inbound-trust-settings-for-mfa-and-device-claims). There are some caveats related to how B2B users work with Microsoft Entra ID Protection, for more information see [Microsoft Entra ID Protection for B2B Users](../../id-protection/concept-identity-protection-b2b).
+
+### Set naming standards for your policies
+
+A naming standard helps you find policies and understand their purpose without opening them. Name your policy to show:
+
+- A sequence number
+- The cloud apps it applies to
+- The response
+- Who it applies to
+- When it applies
+
+![Diagram showing the example naming standards for policies.](media/plan-conditional-access/11.png)
+
+**Example**: A policy to require MFA for marketing users accessing the Dynamics CRP app from external networks might be:
+
+![Diagram showing a sample naming standard.](media/plan-conditional-access/naming-example.png)
+
+A descriptive name helps you keep an overview of your Conditional Access implementation. The sequence number is helpful if you need to reference a policy in a conversation. For example, when you talk to an admin on the phone, you can ask them to open policy CA01 to solve an issue.
+
+#### Naming standards for emergency access controls
+
+In addition to your active policies, implement disabled policies that act as secondary [resilient access controls in outage or emergency scenarios](../authentication/concept-resilient-controls). Your naming standard for contingency policies should include:
+
+- ENABLE IN EMERGENCY at the beginning to make the name stand out among the other policies.
+- The name of the disruption it should apply to.
+- An ordering sequence number to help the admin know in which order policies should be enabled.
+
+**Example**: The following name shows that this policy is the first of four policies to enable if there's an MFA disruption:
+
+- EM01 - ENABLE IN EMERGENCY: MFA Disruption [1/4] - Exchange SharePoint: Require Microsoft Entra hybrid join For VIP users.
+
+### Block countries/regions from which you never expect a sign-in
+
+Microsoft Entra ID lets you create [named locations](concept-assignment-network). Create a list of allowed countries/regions, and then create a network block policy with these "allowed countries/regions" as an exclusion. This option creates less overhead for customers based in smaller geographic locations. **Be sure to exclude your emergency access accounts from this policy**.
+
+## Deploy Conditional Access policies
+
+When you're ready, deploy your Conditional Access policies in phases. Start with a few core Conditional Access policies like the ones that follow. Many policies are available as [Conditional Access policy templates](concept-conditional-access-policy-common). By default, each policy created from a template is in report-only mode. Test and monitor usage, to ensure the intended result, before turning on each policy.
+
+Deploy policies in the following three phases to balance security improvements with minimal user disruption. Organizations can adjust timelines based on their size, complexity, and change management capabilities.
+
+Important
+
+Before deploying any policy:
+
+- Verify [emergency access accounts](/en-us/entra/fundamentals/zero-trust-protect-engineering-systems#emergency-access-accounts-are-configured-appropriately) are excluded from all policies
+- Test policies with a pilot group before organization-wide rollout
+- Ensure users have registered required authentication methods
+- Communicate changes to affected users and provide supporting documentation
+
+### Phase 1: Foundation (Week 1-2)
+
+Establish baseline security controls and prepare for MFA enforcement. **Prerequisites:** Ensure users can register for MFA before enabling enforcement policies.
+
+| Conditional Access policy | Scenario | License requirement |
+| --- | --- | --- |
+| [Block legacy authentication](/en-us/entra/fundamentals/zero-trust-protect-identities#block-legacy-authentication) | All users | Microsoft Entra ID P1 |
+| [Secure the MFA registration (My Security Info) page](/en-us/entra/fundamentals/zero-trust-protect-identities#secure-the-mfa-registration-my-security-info-page) | All users | Microsoft Entra ID P1 |
+| [Privileged Microsoft Entra built-in roles enforce phishing-resistant methods](/en-us/entra/fundamentals/zero-trust-protect-identities#privileged-microsoft-entra-built-in-roles-are-targeted-with-conditional-access-policies-to-enforce-phishing-resistant-methods) | Privileged users | Microsoft Entra ID P1 |
+
+### Phase 2: Core authentication (Week 2-3)
+
+Enforce MFA for all users and guests, and protect mobile devices with [app protection policies](/en-us/intune/intune-service/apps/app-protection-policy). **Key impact:** Users will be required to use MFA for all sign-ins and use approved apps with app protection on mobile devices. Ensure communication plan is executed and support resources are available.
+
+| Conditional Access policy | Scenario | License requirement |
+| --- | --- | --- |
+| [All user sign-in activity uses strong authentication methods](/en-us/entra/fundamentals/zero-trust-monitor-detect#all-user-sign-in-activity-uses-strong-authentication-methods) | All users | Microsoft Entra ID P1 |
+| [Guest access is protected by strong authentication methods](/en-us/entra/fundamentals/zero-trust-protect-tenants#guest-access-is-protected-by-strong-authentication-methods) | Guest access | Microsoft Entra ID P1 |
+| [Require approved client apps or app protection policy](/en-us/entra/identity/conditional-access/howto-policy-approved-app-or-app-protection) | Mobile users | Microsoft Entra ID P1 |
+| [Require multifactor authentication for device join and device registration using user action](/en-us/entra/fundamentals/zero-trust-protect-identities#require-multifactor-authentication-for-device-join-and-device-registration-using-user-action) | All users | Microsoft Entra ID P1 |
+
+### Phase 3: Advanced protection (Week 3-4)
+
+Add risk-based policies and advanced attack prevention controls. **License requirement:** Risk-based policies require Microsoft Entra ID P2 licenses.
+
+| Conditional Access policy | Scenario | License requirement |
+| --- | --- | --- |
+| [Restrict high risk sign-ins](/en-us/entra/fundamentals/zero-trust-response-remediation#restrict-high-risk-sign-ins) | All users | Microsoft Entra ID P2 |
+| [Restrict access to high risk users](/en-us/entra/fundamentals/zero-trust-response-remediation#restrict-access-to-high-risk-users) | All users | Microsoft Entra ID P2 |
+| [User sign-in activity uses token protection](/en-us/entra/fundamentals/zero-trust-protect-identities#user-sign-in-activity-uses-token-protection) | All users | Microsoft Entra ID P1 |
+| [Restrict device code flow](/en-us/entra/fundamentals/zero-trust-protect-identities#restrict-device-code-flow) | All users | Microsoft Entra ID P1 |
+| [Authentication transfer is blocked](/en-us/entra/fundamentals/zero-trust-protect-identities#authentication-transfer-is-blocked) | All users | Microsoft Entra ID P1 |
+| [Conditional Access policies for Privileged Access Workstations (PAW) are configured](/en-us/entra/fundamentals/zero-trust-protect-engineering-systems#conditional-access-policies-for-privileged-access-workstations-are-configured) | Privileged users | Microsoft Entra ID P1 |
+
+Tip
+
+Enable each policy in report-only mode for at least one week before enforcement. Review sign-in logs and communicate changes to users before moving to the next phase.
+
+Note
+
+Privileged Access Workstations (PAW) require significant infrastructure planning. Organizations should implement this policy only after establishing a PAW deployment strategy and provisioning secure devices for privileged users.
+
+### Evaluate the policy impact
+
+Use available tools to check the effect of your policies before and after you make changes. A simulated run gives you a good idea of how a Conditional Access policy affects sign-in, but it doesn't replace an actual test run in a properly configured development environment.
+
+Admins can confirm policy settings using [policy impact or report-only mode](concept-conditional-access-report-only#reviewing-results).
+
+### Test your policies
+
+**Ensure you test the exclusion criteria of a policy**. For example, you might exclude a user or group from a policy that requires MFA. Test whether the excluded users are prompted for MFA, because the combination of other policies can require MFA for those users.
+
+Run each test in your test plan with test users. The test plan helps you compare the expected and actual results.
+
+### Deploy in production
+
+After confirming your settings using [policy impact or report-only mode](concept-conditional-access-report-only#reviewing-results), move the **Enable policy** toggle from **Report-only** to **On**.
+
+#### Roll back policies
+
+If you need to roll back newly implemented policies, use one or more of these options:
+
+- **Disable the policy.** Disabling a policy makes sure it doesn't apply when a user tries to sign in. You can always come back and enable the policy when you want to use it.
+- **Exclude a user or group from a policy.** If a user can't access the app, exclude the user from the policy.
+
+Caution
+
+Use exclusions sparingly, only in situations where the user is trusted. Add users back to the policy or group as soon as possible.
+- If a policy is disabled and no longer needed, **delete it**.
+
+##### Restore deleted policies
+
+If a Conditional Access or location is deleted, it can be restored within the 30 day soft-delete period. For more information about restoring Conditional Access policies and named locations, see the article [Recover from deletions](../../architecture/recover-from-deletions#conditional-access-policies).
+
+## Troubleshoot Conditional Access policies
+
+If a user has an issue with a Conditional Access policy, collect this information to help with troubleshooting.
+
+- User principal name
+- User display name
+- Operating system name
+- Time stamp (an approximate time is fine)
+- Target application
+- Client application type (browser or client)
+- Correlation ID (this ID is unique to the sign-in)
+
+If the user gets a message with a **More details** link, they can collect most of this information for you.
+
+After you collect the information, see these resources:
+
+- [Sign-in problems with Conditional Access](troubleshoot-conditional-access) – Learn about unexpected sign-in outcomes related to Conditional Access using error messages and the Microsoft Entra sign-in log.
+- [The Conditional Access What If tool](what-if-tool) – Learn why a policy is or isn't applied to a user in a specific situation or if a policy applies in a known state.

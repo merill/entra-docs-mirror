@@ -1,0 +1,125 @@
+---
+layout: Conceptual
+title: MFA in external tenants - Microsoft Entra External ID | Microsoft Learn
+canonicalUrl: https://learn.microsoft.com/en-us/entra/external-id/customers/concept-multifactor-authentication-customers
+uhfHeaderId: MSDocsHeader-Entra
+breadcrumb_path: /entra/breadcrumb/toc.json
+feedback_system: Standard
+feedback_product_url: https://aka.ms/microsoftentraexternalid
+author: csmulligan
+ms.author: cmulligan
+ms.service: entra-external-id
+ms.subservice: external
+manager: dougeby
+description: Learn about using MFA to secure apps in your external tenant and enabling email one-time passcodes (EOTP), SMS, or passkeys (FIDO2) as a second verification method for sign-up and sign-in.
+ms.topic: concept-article
+ms.date: 2026-05-21T00:00:00.0000000Z
+ms.custom: it-pro, references_regions
+ai-usage: ai-assisted
+locale: en-us
+document_id: faa54a1f-266c-e38b-148d-6e5bfc2805bd
+document_version_independent_id: faa54a1f-266c-e38b-148d-6e5bfc2805bd
+original_content_git_url: https://github.com/MicrosoftDocs/entra-docs-pr/blob/live/docs/external-id/customers/concept-multifactor-authentication-customers.md
+site_name: Docs
+depot_name: MSDN.entra-docs
+page_type: conceptual
+toc_rel: ../toc.json
+feedback_help_link_type: ''
+feedback_help_link_url: ''
+asset_id: external-id/customers/concept-multifactor-authentication-customers
+moniker_range_name: 
+monikers: []
+item_type: Content
+source_path: docs/external-id/customers/concept-multifactor-authentication-customers.md
+cmProducts:
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/c77bc83e-f0b0-4b63-836e-6630e606bf7c
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/68e4b2d8-b70c-4019-b49a-d1f8881e2aea
+spProducts:
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/b98eda1f-6af8-444f-bbfb-7f2366948cbc
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/67b2ba1a-6f74-4044-a48a-f0f8ad076b8f
+platformId: fdef0068-a9a0-8dfb-c234-751298dad35f
+---
+
+# MFA in external tenants - Microsoft Entra External ID | Microsoft Learn
+
+**Applies to**: ![Green circle with a white check mark symbol that indicates the following content applies to external tenants.](../media/common/applies-to-yes.png) External tenants ([learn more](/en-us/entra/external-id/tenant-configurations))
+
+Multifactor authentication (MFA) adds a layer of security to your applications by requiring users to provide a second method for verifying their identity during sign-up or sign-in. External tenants support the following methods for authentication as a second factor:
+
+- Email one-time passcode
+- SMS-based authentication, available as an add-on (see details).
+- Passkey (FIDO2). Passkeys are a phishing-resistant authentication method that can satisfy MFA in a single gesture and also enable passwordless sign-in (see details).
+
+Enforcing MFA enhances your organization's security by adding an extra layer of verification, making it more difficult for unauthorized users to gain access.
+
+Note
+
+MFA is supported for both browser-delegated and native authentication. With browser-delegated authentication, the MFA challenge is handled on the Microsoft-hosted sign-in page. With native authentication, your app surfaces the MFA prompt inline using the MSAL SDK; if the app doesn't advertise the `mfa_required` capability, the native authentication API initiates a [web fallback](/en-us/entra/identity-platform/concept-native-authentication-web-fallback) to complete the challenge. For more information about choosing an approach, see [Choose an authentication approach](concept-choose-authentication-approach).
+
+## Creating an MFA policy
+
+In an external tenant, you can use Microsoft Entra Conditional Access to create a policy that prompts users for MFA when they sign up or sign in to your app. You create this policy in the Microsoft Entra admin center under Conditional Access in the Protection section. You can specify which users and groups the policy apply to, including all users and excluding any emergency access or break-glass accounts.
+
+In the policy, you define the applications that require MFA. You can apply the policy to all cloud apps or select specific apps, while excluding any applications that don't require MFA. Then you configure the policy to grant access only if users complete the MFA requirement.
+
+For details, see [how to create a Conditional Access policy in an external tenant](how-to-multifactor-authentication-customers#create-a-conditional-access-policy).
+
+### Step-up MFA with Conditional Access authentication context
+
+Multifactor authentication (MFA) with authentication context lets you apply stronger security only when users access sensitive data or perform critical actions. You don’t need to enforce MFA for the entire app. With Microsoft Entra [Conditional Access authentication context](/en-us/entra/identity-platform/developer-guide-conditional-access-authentication-context), developers can add step-up authentication, such as MFA, inside their apps. Use this for scenarios like high-value transactions or viewing personal information. This approach supports Zero Trust principles. It ensures least privilege access and reduces user friction. Users get a secure and seamless experience.
+
+## Enabling MFA methods
+
+When you select identity provider options in your user flows, you define the first-factor authentication methods for sign-up and sign-in. Second-factor verification methods for MFA are configured in the Microsoft Entra admin center under **Entra ID** &gt; **Authentication methods**.
+
+Depending on which option you choose as the first factor, different second-factor verification methods are available for [multifactor authentication (MFA)](how-to-multifactor-authentication-customers).
+
+- **Email with password or username with password**: For these first-factor methods, you can enable email one-time passcode, SMS, passkey (FIDO2), or a combination as second-factor verification methods for MFA.
+- **External identity providers**: You can enable email one-time passcode, SMS, or a combination as second-factor verification methods for MFA. Passkey (FIDO2) isn't currently available for users who sign in with an external identity provider.
+- **Email one-time passcode**: When email with one-time passcode is selected as the first-factor authentication method, it can't be used for second-factor verification. Therefore, only SMS-based verification can be enabled for MFA. Passkey (FIDO2) isn't currently available for email one-time passcode users.
+
+For details, see [how to enable MFA methods in an external tenant](how-to-multifactor-authentication-customers#enable-email-one-time-passcode-as-an-mfa-method).
+
+## Email one-time passcode
+
+Email one-time passcode authentication is available in an external tenant both as a first- and second-factor verification method. To allow the use of email one-time passcodes for MFA, your local account authentication method must be set to *Email with password*. If you choose *Email with one-time passcode*, customers who use this method for primary sign-in aren't able to use it for MFA secondary verification.
+
+When email one-time passcode is enabled for MFA, the user signs in with their primary sign-in method and is notified that a code will be sent to the user's email address. The user chooses to send the code, retrieves the passcode from their email inbox, and enters it in the sign-in window. The user must complete this verification process within 10 minutes.
+
+## SMS-based authentication
+
+SMS is available at an additional cost for second-factor verification and for self-service password reset in external tenants. It isn't currently supported for first-factor authentication.
+
+When SMS is enabled for MFA, users sign in with their primary method and are prompted to verify their identity with a code sent via text. They enter their phone number and receive an SMS with the verification code.
+
+![Screenshot of the SMS text for MFA.](media/concept-multifactor-authentication-customers/sms-text.png)
+
+External ID mitigates fraudulent sign-ups and sign-ins via SMS by enforcing the following measures:
+
+- Telephony throttling limits help prevent outages and slowdowns. See [Service limits and restrictions](reference-service-limits).
+- CAPTCHA for SMS MFA helps prevent automated attacks by distinguishing human users from automated bots. If a risky user is detected, we block the user from signing in or ask the user to complete a CAPTCHA before sending an SMS verification code.
+
+### SMS pricing tiers by country/region
+
+The following table provides details about the different pricing tiers for SMS based authentication services across various countries or regions. For pricing details, see [Microsoft Entra External ID pricing](https://aka.ms/ExternalIDPricing).
+
+SMS is an add-on feature and requires a [linked subscription](../external-identities-pricing#link-an-external-tenant-to-a-subscription). If your subscription expires or is canceled, end users will no longer be able to authenticate using SMS, which could block them from signing in depending on your MFA policy.
+
+| Tier | Countries/Regions |
+| --- | --- |
+| Phone Authentication Low Cost | Australia, Brazil, Brunei, Canada, Chile, China, Colombia, Cyprus, North Macedonia, Poland, Portugal, South Korea, Thailand, Türkiye, United States |
+| Phone Authentication Mid Low Cost | Greenland, Albania, American Samoa, Austria, Bahamas, Bahrain, Bosnia & Herzegovina, Botswana, Costa Rica, Czech Republic, Denmark, Estonia, Faroe Islands, Finland, France, Greece, Hong Kong SAR, Hungary, Iceland, Ireland, Italy, Japan, Latvia, Lithuania, Luxembourg, Macao SAR, Malta, Mexico, Micronesia, Moldova, Namibia, New Zealand, Nicaragua, Norway, Romania, São Tomé and Príncipe, Seychelles Republic, Singapore, Slovakia, Solomon Islands, Spain, Sweden, Switzerland, Taiwan, United Kingdom, United States Virgin Islands, Uruguay |
+| Phone Authentication Mid High Cost | Andorra, Angola, Anguilla, Antarctica, Antigua and Barbuda, Argentina, Armenia, Aruba, Barbados, Belgium, Benin, Bolivia, Bonaire, Curaçao, Saba, Sint Eustatius and Sint Maarten, British Virgin Islands, Bulgaria, Burkina Faso, Cameroon, Cayman Islands, Central African Republic, Cook Islands, Côte d’Ivoire, Croatia, Diego Garcia, Djibouti, Dominican Republic, Dominican Republic, Dominican Republic, Ecuador, El Salvador, Eritrea, Falkland Islands, Fiji, French Guiana, French Polynesia, Gambia, Georgia, Germany, Gibraltar, Grenada, Guadeloupe, Guam, Guinea, Guyana, Honduras, India, Kenya, Kiribati, Laos, Liberia, Malaysia, Marshall Islands, Martinique, Mauritius, Monaco, Montenegro, Montserrat, Netherlands, New Caledonia, Niue, Oman, Palau, Panama, Paraguay, Peru, Puerto Rico, Puerto Rico, Réunion, Rwanda, Saint Helena, Ascension and Tristan de Cunha, Saint Kitts & Nevis, Saint Lucia, Saint Pierre & Miquelon, Saint Vincent and the Grenadines, Saipan, Samoa, San Marino, Saudi Arabia, Sint Maarten, Slovenia, South Africa, South Sudan, Suriname, Swaziland (New Name is Kingdom of Eswatini), Timor-Leste, Tokelau, Tonga, Turks & Caicos, Tuvalu, United Arab Emirates, Vanuatu, Venezuela, Vietnam, Wallis and Futuna |
+| Phone Authentication High Cost | Liechtenstein, Bermuda, Cabo Verde, Cambodia, Democratic Republic of Congo, Dominica, Egypt, Equatorial Guinea, Ghana, Guatemala, Guinea-Bissau, Israel, Jamaica, Jamaica, Kosovo, Lesotho, Maldives, Mali, Mauritania, Morocco, Mozambique, Papua New Guinea, Philippines, Qatar, Sierra Leone, Trinidad & Tobago, Ukraine, Zimbabwe, Afghanistan, Algeria, Azerbaijan, Bangladesh, Belarus, Belize, Bhutan, Burundi, Chad, Comoros, Congo, Ethiopia, Gabonese Republic, Haiti, Indonesia, Iraq, Jordan, Kuwait, Kyrgyzstan, Lebanon, Libya, Madagascar, Malawi, Mongolia, Myanmar, Nauru, Nepal, Niger, Nigeria, Pakistan, Palestinian National Authority, Russia, Senegal, Serbia, Somalia, Sri Lanka, Sudan, Tajikistan, Tanzania, Togolese Republic, Tunisia, Turkmenistan, Uganda, Uzbekistan, Yemen, Zambia |
+
+### Opt-in regions for SMS
+
+Starting January 2025, certain country codes will be deactivated by default for SMS verification. If you want to allow traffic from deactivated regions, you need to activate them for your application using the Microsoft Graph `onPhoneMethodLoadStartevent` policy. See [Regions requiring opt-in for SMS verification](how-to-region-code-opt-in).
+
+## Passkey (FIDO2)
+
+Passkeys (FIDO2) provide phishing-resistant, passwordless authentication that uses public-key cryptography. A passkey can be used to satisfy MFA in a single gesture (face, fingerprint, PIN, or security key) or as a primary, passwordless sign-in method. Only email + password and username + password local account users can register a passkey. Passkey registration requires a [custom URL domain](how-to-custom-url-domain), and users must complete MFA before registering a passkey.
+
+For setup steps, see [Sign in with passkeys](how-to-sign-in-with-passkey).

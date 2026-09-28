@@ -1,0 +1,123 @@
+---
+layout: Conceptual
+title: Microsoft Entra Connect Health and user privacy - Microsoft Entra ID | Microsoft Learn
+canonicalUrl: https://learn.microsoft.com/en-us/entra/identity/hybrid/connect/reference-connect-health-user-privacy
+uhfHeaderId: MSDocsHeader-Entra
+breadcrumb_path: /entra/breadcrumb/toc.json
+feedback_system: Standard
+feedback_product_url: https://feedback.azure.com/d365community/forum/22920db1-ad25-ec11-b6e6-000d3a4f0789
+author: boscoMW
+ms.author: bmutunga
+ms.service: entra-id
+manager: pmwongera
+description: Learn about user privacy and data collection with Microsoft Entra Connect Health.
+ms.subservice: hybrid-connect
+ms.tgt_pltfrm: na
+ms.topic: reference
+ms.date: 2025-04-09T00:00:00.0000000Z
+locale: en-us
+document_id: 14d1fca6-149b-2a70-0a04-43594628b27b
+document_version_independent_id: c41de980-3195-1ec3-60dd-a4adb3eac08a
+original_content_git_url: https://github.com/MicrosoftDocs/entra-docs-pr/blob/live/docs/identity/hybrid/connect/reference-connect-health-user-privacy.md
+site_name: Docs
+depot_name: MSDN.entra-docs
+page_type: conceptual
+toc_rel: ../toc.json
+feedback_help_link_type: ''
+feedback_help_link_url: ''
+asset_id: identity/hybrid/connect/reference-connect-health-user-privacy
+moniker_range_name: 
+monikers: []
+item_type: Content
+source_path: docs/identity/hybrid/connect/reference-connect-health-user-privacy.md
+cmProducts:
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
+- https://authoring-docs-microsoft.poolparty.biz/devrel/07bb3e10-d135-43ff-bc8b-360497cb39fa
+spProducts:
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
+- https://authoring-docs-microsoft.poolparty.biz/devrel/12e559b9-eaf6-4aee-9af7-62334e15f863
+platformId: cc3eca3a-34d5-4a84-cbaa-11817de250ec
+---
+
+# Microsoft Entra Connect Health and user privacy - Microsoft Entra ID | Microsoft Learn
+
+This article describes Microsoft Entra Connect Health and user privacy. For information about Microsoft Entra Connect and user privacy, see [User privacy and Microsoft Entra Connect](reference-connect-user-privacy).
+
+Note
+
+This article provides steps about how to delete personal data from the device or service and can be used to support your obligations under the GDPR. For general information about GDPR, see the [GDPR section of the Microsoft Trust Center](https://www.microsoft.com/trust-center/privacy/gdpr-overview) and the [GDPR section of the Service Trust portal](https://servicetrust.microsoft.com/ViewPage/GDPRGetStarted).
+
+## User privacy classification
+
+Microsoft Entra Connect Health falls into the *data processor* category of GDPR classification. As a data processor pipeline, the service provides data processing services to key partners and end consumers. Microsoft Entra Connect Health doesn't generate user data, and it has no independent control over what personal data is collected and how it's used. Data retrieval, aggregation, analysis, and reporting in Microsoft Entra Connect Health are based on existing on-premises data.
+
+## Data retention policy
+
+Microsoft Entra Connect Health doesn't generate reports, perform analytics, or provide insights beyond 30 days. Therefore, Microsoft Entra Connect Health doesn't store, process, or retain any data beyond 30 days. This design is compliant with the GDPR regulations, Microsoft privacy compliance regulations, and Microsoft Entra data retention policies.
+
+Servers that have active **Health service data is not up to date** error alerts for more than 30 consecutive days suggest that no data has reached Connect Health during that time. These servers will be disabled and not shown in the Connect Health portal. To re-enable the servers, you must uninstall and [reinstall the health agent](how-to-connect-health-agent-install). This doesn't apply to *warnings* for the same alert type. Warnings indicate that partial data is missing from the server you're alerted for.
+
+## Disable data collection and monitoring
+
+You can use Microsoft Entra Connect Health to stop data collection for a specific monitored server or for an instance of a monitored service. For example, you can stop data collection for individual Active Directory Federation Services (AD FS) servers that are monitored by using Microsoft Entra Connect Health. You can also stop data collection for the entire AD FS instance that's being monitored by using Microsoft Entra Connect Health. If you choose to stop data collection for a specific monitored server, the server is deleted from the Microsoft Entra Connect Health portal after data collection is stopped.
+
+Important
+
+To delete monitored servers from Microsoft Entra Connect Health, you must have either Microsoft Entra Global Administrator account permissions or the Contributor role in Azure role-based access control.
+
+Removing a server or service instance from Microsoft Entra Connect Health is *not* a reversible action.
+
+### What to expect
+
+If you stop data collection and monitoring for an individual monitored server or an instance of a monitored service, you can expect the following results:
+
+- When you delete an instance of a monitored service, the instance is removed from the Microsoft Entra Connect Health monitoring service list in the portal.
+- When you delete a monitored server or an instance of a monitored service, the health agent *isn't* uninstalled or removed from your servers. Instead, the health agent is configured to not send data to Microsoft Entra Connect Health. You must manually uninstall the health agent on a server that previously was monitored.
+- If you don't uninstall the health agent before you delete a monitored server or an instance of a monitored service, you might see error events related to the health agent on the server.
+- All data that belongs to the instance of the monitored service is deleted per the Microsoft Azure Data Retention Policy.
+
+### Disable data collection and monitoring for a monitored server
+
+See [How to remove a server from Microsoft Entra Connect Health](how-to-connect-health-operations#delete-a-server-from-the-azure-ad-connect-health-service).
+
+### Disable data collection and monitoring for an instance of a monitored service
+
+See [How to remove a service instance from Microsoft Entra Connect Health](how-to-connect-health-operations#delete-a-service-instance-from-azure-ad-connect-health-service).
+
+### Disable data collection and monitoring for all monitored services
+
+Microsoft Entra Connect Health provides the option to stop data collection of *all* registered services in the tenant. We recommend careful consideration and full acknowledgment of all Hybrid Identity Administrators before you take this action. After the process begins, the Microsoft Entra Connect Health service stops receiving, processing, and reporting any data for all of your services. Existing data in Microsoft Entra Connect Health service is retained for no more than 30 days.
+
+If you want to stop data collection on a specific server, complete the steps to delete a specific server. To stop data collection for a tenant, complete the following steps to stop data collection and delete all services for the tenant:
+
+1. In the main menu under **Configuration**, select **General Settings**.
+2. In the command bar, select **Stop Data Collection**. Other options for configuring the tenant settings are disabled after the process starts.
+
+    ![Screenshot that shows the command to stop data collection in the portal.](media/reference-connect-health-user-privacy/gdpr4.png)
+3. Check the list of onboarded services that are affected by stopping data collections.
+4. Enter the exact tenant name to enable the **Delete** button.
+5. Select **Delete** to initiate the deletion of all services. Microsoft Entra Connect Health will stop receiving, processing, and reporting any data that's sent from your onboarded services. The entire process of might take up to 24 hours. *This step isn't reversible*.
+
+When the process is finished, you won't see any registered services in Microsoft Entra Connect Health.
+
+![Screenshot that shows the message that appears after data collection is stopped.](media/reference-connect-health-user-privacy/gdpr5.png)
+
+## Re-enable data collection and monitoring
+
+To re-enable monitoring in Microsoft Entra Connect Health for a previously deleted monitored service, you must uninstall and [reinstall the health agent](how-to-connect-health-agent-install) on all the servers.
+
+### Re-enable data collection and monitoring for all monitored services
+
+For tenants, data collection can be resumed in Microsoft Entra Connect Health. We recommend careful consideration and full acknowledgment of all Global Administrators before you take this action.
+
+Important
+
+The following steps are available beginning 24 hours after a disable action. After you enable data collection, the presented insight and monitoring data in Microsoft Entra Connect Health won't show any data that was collected before the disable action.
+
+1. In the main menu under **Configuration**, select **General Settings**.
+2. In the command bar, select **Enable Data Collection**.
+
+    ![Screenshot that shows the Enable Data Collection command in the portal.](media/reference-connect-health-user-privacy/gdpr6.png)
+3. Enter the exact tenant name to activate the **Enable** button.
+4. Select **Enable** to grant permissions for data collection in the Microsoft Entra Connect Health service. The change will be applied shortly.
+5. Follow the [installation process](how-to-connect-health-agent-install) to reinstall the agent in the servers to be monitored. The services will be present in the portal.

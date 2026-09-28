@@ -1,0 +1,249 @@
+---
+layout: Conceptual
+title: Preparing for Microsoft Entra provisioning to Active Directory Lightweight Directory Services - Microsoft Entra ID | Microsoft Learn
+canonicalUrl: https://learn.microsoft.com/en-us/entra/identity/app-provisioning/on-premises-ldap-connector-prepare-directory
+uhfHeaderId: MSDocsHeader-Entra
+breadcrumb_path: /entra/breadcrumb/toc.json
+feedback_system: Standard
+feedback_product_url: https://feedback.azure.com/d365community/forum/22920db1-ad25-ec11-b6e6-000d3a4f0789
+author: jenniferf-skc
+ms.author: jfields
+ms.service: entra-id
+ms.subservice: app-provisioning
+manager: dougeby
+description: This document describes how to configure Microsoft Entra ID to provision users into Active Directory Lightweight Directory Services as an example of an LDAP directory.
+ms.topic: how-to
+ms.date: 2025-04-09T00:00:00.0000000Z
+ms.reviewer: arvinh
+locale: en-us
+document_id: 9bed5a9b-552f-32c8-09e7-188bd24eef4c
+document_version_independent_id: 1eff6cde-23f8-719f-acea-2f014b4384ab
+original_content_git_url: https://github.com/MicrosoftDocs/entra-docs-pr/blob/live/docs/identity/app-provisioning/on-premises-ldap-connector-prepare-directory.md
+site_name: Docs
+depot_name: MSDN.entra-docs
+page_type: conceptual
+toc_rel: toc.json
+feedback_help_link_type: ''
+feedback_help_link_url: ''
+asset_id: identity/app-provisioning/on-premises-ldap-connector-prepare-directory
+moniker_range_name: 
+monikers: []
+item_type: Content
+source_path: docs/identity/app-provisioning/on-premises-ldap-connector-prepare-directory.md
+cmProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/b1cfdec6-b0c3-4209-818c-736879856e0e
+spProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/2d0723c1-cf38-4c30-ab3d-5df787b33270
+platformId: 7b008e5b-e1c2-73e7-93dd-1a2505bbb9e4
+---
+
+# Preparing for Microsoft Entra provisioning to Active Directory Lightweight Directory Services - Microsoft Entra ID | Microsoft Learn
+
+The following documentation provides tutorial information demonstrating how to prepare an Active Directory Lightweight Directory Services (AD LDS) installation. This can be used as an example LDAP directory for troubleshooting or to demonstrate [how to provision users from Microsoft Entra ID into an LDAP directory](on-premises-ldap-connector-configure).
+
+## Prepare the LDAP directory
+
+If you don't already have a directory server, the following information is provided to help create a test AD LDS environment. This setup uses PowerShell and the ADAMInstall.exe with an answers file. This document doesn't cover in-depth information on AD LDS. For more information, see [Active Directory Lightweight Directory Services](/en-us/previous-versions/windows/it-pro/windows-server-2012-r2-and-2012/hh831593%28v=ws.11%29).
+
+If you already have AD LDS or another directory server, you can skip this content, and continue at the [Tutorial: ECMA Connector Host generic LDAP connector](on-premises-ldap-connector-configure) for installing and configuring the ECMA connector host.
+
+### Create an SSL certificate, a test directory and install AD LDS.
+
+Use the PowerShell script from Appendix A. The script performs the following actions:
+
+1. Creates a self-signed certificate the LDAP connector uses.
+2. Creates a directory for the feature install log.
+3. Exports the certificate in the personal store to the directory.
+4. Imports the certificate to the trusted root of the local machine.
+5. Installs the AD LDS role on our virtual machine.
+
+On the Windows Server virtual machine where you're using to test the LDAP connector, edit the script to match your computer name, and then run the script using Windows PowerShell with administrative privileges.
+
+### Create an instance of AD LDS
+
+Now that the role is installed, you need to create an instance of AD LDS. To create an instance, you can use the following answer file provided. This file installs the instance quietly without using the UI.
+
+Copy the contents of Appendix B in to notepad and save it as **answer.txt** in **"C:\Windows\ADAM"**.
+
+Now open a cmd prompt with administrative privileges and run the following executable:
+
+```
+C:\Windows\ADAM> ADAMInstall.exe /answer:answer.txt
+```
+
+### Create containers and a service account for AD LDS
+
+The use the PowerShell script from Appendix C. The script performs the following actions:
+
+1. Creates a container for the service account that is used with the LDAP connector.
+2. Creates a container for the cloud users, where users are provisioned.
+3. Creates the service account in AD LDS.
+4. Enables the service account.
+5. Adds the service account to the AD LDS Administrators role.
+
+On the Windows Server virtual machine, you're using to test the LDAP connector run the script using Windows PowerShell with administrative privileges.
+
+### Grant the NETWORK SERVICE read permissions to the SSL certificate
+
+In order to enable SSL to work, you need to grant the NETWORK SERVICE read permissions to our newly created certificate. To grant permissions, use the following steps.
+
+1. Navigate to **C:\ProgramData\Microsoft\Crypto\Keys**.
+2. Right-select on the system file located here. It will be a guid. This container is storing our certificate.
+3. Select properties.
+4. At the top, select the **Security** tab.
+5. Select **Edit**.
+6. Select **Add**.
+7. In the box, enter **Network Service** and select **Check Names**.
+8. Select **NETWORK SERVICE** from the list and select **OK**.
+9. Select **Ok**.
+10. Ensure the Network service account has read and read & execute permissions and select **Apply** and **OK**.
+
+For more information, see [Configuring LDAP over SSL Requirements for AD LDS](/en-us/previous-versions/windows/it-pro/windows-server-2008-r2-and-2008/cc725767%28v=ws.10%29).
+
+### Verify SSL connectivity with AD LDS
+
+Now that we have configured the certificate and granted the network service account permissions, test the connectivity to verify that it's working.
+
+1. Open Server Manager and select AD LDS.
+2. Right-select your instance of AD LDS and select ldp.exe from the pop-up. [![Screenshot that shows the Ldp tool location.](../../includes/media/app-provisioning-ldap/ldp-1.png)](../../includes/media/app-provisioning-ldap/ldp-1.png#lightbox)
+3. At the top of ldp.exe, select **Connection** and **Connect**.
+4. Enter the following information and select **OK**.
+    - Server: APP3
+    - Port: 636
+    - Place a check in the SSL box [![Screenshot that shows the Ldp tool connection configuration.](../../includes/media/app-provisioning-ldap/ldp-2.png)](../../includes/media/app-provisioning-ldap/ldp-2.png#lightbox)
+5. At the top, under **Connection** select **Bind**.
+6. Leave the defaults and select **OK**.
+7. You should now successfully bind to the instance.
+
+### Disable the local password policy
+
+Currently, the LDAP connector provisions users with a blank password. This provisioning won't satisfy the local password policy on our server so we're going to disable it for testing purposes. To disable password complexity, on a non-domain-joined server, use the following steps.
+
+Important
+
+Because on-going password sync is not a feature of on-premises LDAP provisioning, Microsoft recommends that AD LDS is used specifically with federated applications, when used in conjunction with AD DS, or when updating existing users in an instance of AD LDS.
+
+1. On the server, select **Start**, **Run**, and then **gpedit.msc**
+2. On the **Local Group Policy editor**, navigate to Computer Configuration &gt; Windows Settings &gt; Security Settings &gt; Account Policies &gt; Password Policy
+3. On the right, double-select **Password must meet complexity requirements** and select **Disabled**. [![Screenshot of the complexity requirements setting.](../../includes/media/app-provisioning-ldap/local-1.png)](../../includes/media/app-provisioning-ldap/local-1.png#lightbox)
+4. Select **Apply** and **Ok**
+5. Close the Local Group Policy editor
+
+Next, continue in the guidance to [provision users from Microsoft Entra ID into an LDAP directory](on-premises-ldap-connector-configure) to download and configure the provisioning agent.
+
+## Appendix A - Install AD LDS PowerShell script
+
+The following PowerShell script can be used to automate the installation of Active Directory Lightweight Directory Services. You'll need to edit the script to match your environment; in particular, change `APP3` to the hostname of your computer.
+
+```powershell
+# Filename: 1_SetupADLDS.ps1
+# Description: Creates a certificate that will be used for SSL and installs Active Directory Lighetweight Directory Services.
+#
+# DISCLAIMER:
+# Copyright (c) Microsoft Corporation. All rights reserved. This 
+# script is made available to you without any express, implied or 
+# statutory warranty, not even the implied warranty of 
+# merchantability or fitness for a particular purpose, or the 
+# warranty of title or non-infringement. The entire risk of the 
+# use or the results from the use of this script remains with you.
+#
+#
+#
+#
+#Declare variables
+$DNSName = 'APP3'
+$CertLocation = 'cert:\LocalMachine\MY'
+$logpath = "c:\" 
+$dirname = "test"
+$dirtype = "directory"
+$featureLogPath = "c:\test\featurelog.txt" 
+
+#Create a new self-signed certificate
+New-SelfSignedCertificate -DnsName $DNSName -CertStoreLocation $CertLocation
+
+#Create directory
+New-Item -Path $logpath -Name $dirname -ItemType $dirtype
+
+#Export the certificate from the local machine personal store
+Get-ChildItem -Path cert:\LocalMachine\my | Export-Certificate -FilePath c:\test\allcerts.sst -Type SST
+
+#Import the certificate in to the trusted root
+Import-Certificate -FilePath "C:\test\allcerts.sst" -CertStoreLocation cert:\LocalMachine\Root
+
+#Install AD LDS
+start-job -Name addFeature -ScriptBlock { 
+Add-WindowsFeature -Name "ADLDS" -IncludeAllSubFeature -IncludeManagementTools 
+ } 
+Wait-Job -Name addFeature 
+Get-WindowsFeature | Where installed >>$featureLogPath
+
+```
+
+## Appendix B - Answer file
+
+This file is used to automate and create an instance of AD LDS. You'll edit this file to match your environment; in particular, change `APP3` to the hostname of your server.
+
+Important
+
+This script uses the local administrator for the AD LDS service account. You'll be prompted for the password during installation.
+
+If you're installing AD LDS on a domain controller and not a member or standalone server, you'll need to change the LocalLDAPPortToListenOn and LocalSSLPortToListonOn to something other than the well-known ports for LDAP and LDAP over SSL. For example, LocalLDAPPortToListenOn=51300 and LocalSSLPortToListenOn=51301.
+
+```
+ [ADAMInstall]
+ InstallType=Unique
+ InstanceName=AD-APP-LDAP
+ LocalLDAPPortToListenOn=389
+ LocalSSLPortToListenOn=636
+ NewApplicationPartitionToCreate=CN=App,DC=contoso,DC=lab
+ DataFilesPath=C:\Program Files\Microsoft ADAM\AD-APP-LDAP\data
+ LogFilesPath=C:\Program Files\Microsoft ADAM\AD-APP-LDAP\data
+ ServiceAccount=APP3\Administrator
+ ServicePassword=\*
+ AddPermissionsToServiceAccount=Yes
+ Administrator=APP3\Administrator
+ ImportLDIFFiles="MS-User.LDF"
+ SourceUserName=APP3\Administrator
+ SourcePassword=Pa$$Word1
+```
+
+## Appendix C - Populate AD LDS PowerShell script
+
+PowerShell script to populate AD LDS with containers and a service account.
+
+```powershell
+# Filename: 2_PopulateADLDS.ps1
+# Description: Populates our AD LDS environment with 2 containers and a service account
+
+# DISCLAIMER:
+# Copyright (c) Microsoft Corporation. All rights reserved. This 
+# script is made available to you without any express, implied or 
+# statutory warranty, not even the implied warranty of 
+# merchantability or fitness for a particular purpose, or the 
+# warranty of title or non-infringement. The entire risk of the 
+# use or the results from the use of this script remains with you.
+#
+#
+#
+#
+# Create service accounts container
+New-ADObject -Name "ServiceAccounts" -Type "container" -Path "CN=App,DC=contoso,DC=lab" -Server "APP3:389"
+Write-Output "Creating ServiceAccounts container"
+
+# Create cloud users container
+New-ADObject -Name "CloudUsers" -Type "container" -Path "CN=App,DC=contoso,DC=lab" -Server "APP3:389"
+Write-Output "Creating CloudUsers container"
+
+# Create a new service account
+New-ADUser -name "svcAccountLDAP" -accountpassword (ConvertTo-SecureString -AsPlainText 'Pa$$1Word' -Force) -Displayname "LDAP Service Account" -server 'APP3:389' -path "CN=ServiceAccounts,CN=App,DC=contoso,DC=lab"
+Write-Output "Creating service account"
+
+# Enable the new service account
+Enable-ADAccount -Identity "CN=svcAccountLDAP,CN=ServiceAccounts,CN=App,DC=contoso,DC=lab" -Server "APP3:389"
+Write-Output "Enabling service account"
+
+# Add the service account to the Administrators role
+Get-ADGroup -Server "APP3:389" -SearchBase "CN=Administrators,CN=Roles,CN=App,DC=contoso,DC=lab" -Filter "name -like 'Administrators'" | Add-ADGroupMember -Members "CN=svcAccountLDAP,CN=ServiceAccounts,CN=App,DC=contoso,DC=lab"
+Write-Output "Adding service account to Administrators role"
+
+```

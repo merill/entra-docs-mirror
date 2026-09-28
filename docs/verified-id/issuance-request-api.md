@@ -1,0 +1,269 @@
+---
+layout: Conceptual
+title: Specify the Request Service REST API issuance request - Microsoft Entra Verified ID | Microsoft Learn
+canonicalUrl: https://learn.microsoft.com/en-us/entra/verified-id/issuance-request-api
+uhfHeaderId: MSDocsHeader-Entra
+breadcrumb_path: /entra/breadcrumb/toc.json
+feedback_system: Standard
+feedback_product_url: https://feedback.azure.com/d365community/forum/79b1327d-d925-ec11-b6e6-000d3a4f06a4
+author: kenwith
+ms.author: kenwith
+ms.service: entra-verified-id
+manager: dougeby
+description: Learn how to issue a verifiable credential.
+documentationCenter: ''
+ms.topic: reference
+ms.date: 2025-01-30T00:00:00.0000000Z
+locale: en-us
+document_id: 98eb9fb9-46b5-36ea-ca7c-6b27a68e03f0
+document_version_independent_id: f1888ee1-0b13-f556-7b7e-3de434d87eff
+original_content_git_url: https://github.com/MicrosoftDocs/entra-docs-pr/blob/live/docs/verified-id/issuance-request-api.md
+site_name: Docs
+depot_name: MSDN.entra-docs
+page_type: conceptual
+toc_rel: toc.json
+feedback_help_link_type: ''
+feedback_help_link_url: ''
+asset_id: verified-id/issuance-request-api
+moniker_range_name: 
+monikers: []
+item_type: Content
+source_path: docs/verified-id/issuance-request-api.md
+cmProducts:
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/19011fa1-e010-495a-a1ea-74b88af5b9b1
+- https://authoring-docs-microsoft.poolparty.biz/devrel/1ae5c491-970a-4062-8301-6336e69f9026
+- https://authoring-docs-microsoft.poolparty.biz/devrel/5686b492-7c45-4088-8291-ecc0458747d3
+spProducts:
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/3dc5b4eb-8015-403d-9d1b-ae51b20067fe
+- https://authoring-docs-microsoft.poolparty.biz/devrel/f2c3e52e-3667-4e8a-bf11-20b9eaccdc8c
+- https://authoring-docs-microsoft.poolparty.biz/devrel/838f4f15-80c1-4d49-b873-501fe4ed2d28
+platformId: b84c2f51-1d09-7de5-ad1b-0ef563e01c90
+---
+
+# Specify the Request Service REST API issuance request - Microsoft Entra Verified ID | Microsoft Learn
+
+## Overview
+
+Microsoft Entra Verified ID includes the Request Service REST API. This API allows you to issue and verify a credential. This article specifies the Request Service REST API for an issuance request. Another article describes [how to call the Request Service REST API](get-started-request-api).
+
+## HTTP request
+
+The Request Service REST API issuance request supports the following HTTP method:
+
+| Method | Notes |
+| --- | --- |
+| POST | With JSON payload as specified in this article. |
+
+The Request Service REST API issuance request requires the following HTTP headers:
+
+| Name | Value |
+| --- | --- |
+| `Authorization` | Attach the access token as a bearer token to the authorization header in an HTTP request. For example, `Authorization: Bearer <token>`. |
+| `Content-Type` | `application/json` |
+
+Construct an HTTP POST request to the Request Service REST API.
+
+```http
+https://verifiedid.did.msidentity.com/v1.0/verifiableCredentials/createIssuanceRequest
+```
+
+The following HTTP request demonstrates a request to the Request Service REST API:
+
+```http
+POST https://verifiedid.did.msidentity.com/v1.0/verifiableCredentials/createIssuanceRequest
+Content-Type: application/json
+Authorization: Bearer <token>
+
+{
+    "callback": {
+        "url": "https://contoso.com/api/issuer/issuanceCallback",
+        "state": "Aaaabbbb11112222",
+        "headers": {
+            "api-key": "an-api-key-can-go-here"
+        }
+    },
+    ...
+}
+```
+
+The following permission is required to call the Request Service REST API. For more information, see [Grant permissions to get access tokens](verifiable-credentials-configure-tenant#grant-permissions-to-get-access-tokens).
+
+| Permission type | Permission |
+| --- | --- |
+| Application | 3db474b9-6a0c-4840-96ac-1fceb342124f/.default |
+
+## Issuance request payload
+
+The issuance request payload contains information about your verifiable credentials issuance request. The following example demonstrates an issuance request by using a PIN code flow with user claims, such as first name and last name. The result of this request returns a QR code with a link to start the issuance process.
+
+```json
+{
+  "authority": "did:web:verifiedid.contoso.com",
+  "callback": {
+    "url": "https://contoso.com/api/issuer/issuanceCallback",
+    "state": "de19cb6b-36c1-45fe-9409-909a51292a9c",
+    "headers": {
+      "api-key": "OPTIONAL API-KEY for CALLBACK EVENTS"
+    }
+  },
+  "registration": {
+    "clientName": "Verifiable Credential Expert Sample"
+  },
+  "type": "VerifiedCredentialExpert",
+  "manifest": "https://verifiedid.did.msidentity.com/v1.0/tenants/aaaabbbb-0000-cccc-1111-dddd2222eeee/verifiableCredentials/contracts/MTIzNDU2NzgtMDAwMC0wMDAwLTAwMDAtMDAwMDAwMDAwMDAwdmVyaWZpZWRjcmVkZW50aWFsZXhwZXJ0/manifest",
+  "pin": {
+    "value": "3539",
+    "length": 4
+  },
+  "claims": {
+    "given_name": "Megan",
+    "family_name": "Bowen"
+  },
+  "expirationDate": "2024-12-31T23:59:59.000Z"
+}
+```
+
+The payload contains the following properties:
+
+| Parameter | Type | Description |
+| --- | --- | --- |
+| `includeQRCode` | Boolean | Optional. Determines whether a QR code is included in the response of this request. Present the QR code and ask the user to scan it. Scanning the QR code launches the authenticator app with this issuance request. Possible values are `true` or `false` (default). When you set the value to `false`, use the return `url` property to render a deep link. |
+| `callback` | Callback | Mandatory. Allows you to asynchronously get information on the flow during the verifiable credential issuance process. For example, you might want a call when the user scans the QR code or if the issuance request succeeds or fails. |
+| `authority` | string | The issuer's decentralized identifier (DID). For more information, see [Gather credentials and environment details to set up your sample application](verifiable-credentials-configure-issuer). |
+| `registration` | RequestRegistration | Provides information about the issuer that can be displayed in the authenticator app. |
+| `type` | string | The verifiable credential type. Should match the type as defined in the verifiable credential manifest. For example: `VerifiedCredentialExpert`. For more information, see [Create the verified credential expert card in Azure](verifiable-credentials-configure-issuer). |
+| `manifest` | string | The URL of the verifiable credential manifest document. For more information, see [Gather credentials and environment details to set up your sample application](verifiable-credentials-configure-issuer). |
+| `claims` | string | Optional. Can only be used for the [ID token hint](rules-and-display-definitions-model#idtokenhintattestation-type) attestation flow to include a collection of assertions made about the subject in the verifiable credential. |
+| `pin` | PIN | Optional. PIN code can only be used with the [ID token hint](rules-and-display-definitions-model#idtokenhintattestation-type) attestation flow. A PIN code to provide extra security during issuance. You generate a PIN code, and present it to the user in your app. The user must provide the PIN code that you generated. |
+| `expirationDate` | string | Optional. The expirationDate can only be used with the [ID token hint](rules-and-display-definitions-model#idtokenhintattestation-type) attestation flow. If specified, the value needs to be a date expressed in the [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) format. The date overrides the [validityInterval](rules-and-display-definitions-model#rulesmodel-type) in the credentials rules definition for this issuance request. Use this setting to explicitly control when a credential expires, like end-of-day, end-of-month or end-of-year, regardless of issuance time. The date is expressed in UTC format. If you specify end-of-year, with time set to `23:59:59` (that is 1 second to midnight in UTC time), any user in a different time zone gets the expiration date presented in local time zone in the Microsoft Authenticator. This means that if you're in the CET time zone, it's presented as January 1 at 1:00 AM.The credential contract needs to have the flag [allowOverrideValidityOnIssuance](admin-api#contract-type) set to true. |
+
+There are currently four claims attestation types that you can send in the payload. Microsoft Entra Verified ID uses four ways to insert claims into a verifiable credential and attest to that information with the issuer's DID. The following are the four types:
+
+- ID token
+- ID token hint
+- Verifiable credentials via a verifiable presentation
+- Self-attested claims
+
+You can find detailed information about the input types in [Customizing your verifiable credential](credential-design).
+
+### RequestRegistration type
+
+The `RequestRegistration` type provides registration information for the issuer. The `RequestRegistration` type contains the following properties:
+
+| Property | Type | Description |
+| --- | --- | --- |
+| `clientName` | string | A display name of the issuer of the verifiable credential. |
+| `logoUrl` | string | Optional. The URL for the issuer logo. |
+| `termsOfServiceUrl` | string | Optional. The URL for the terms of use of the verifiable credential that you're issuing. |
+
+Note
+
+At this time, the `RequestRegistration` information isn't presented during the issuance in the Microsoft Authenticator app. This information can, however, be used in the payload.
+
+### Callback type
+
+The Request Service REST API generates several events to the callback endpoint. Those events allow you to update the UI and continue the process after the results are returned to the application. The `Callback` type contains the following properties:
+
+| Property | Type | Description |
+| --- | --- | --- |
+| `url` | string | URI to the callback endpoint of your application. The URI must point to a reachable endpoint on the internet otherwise the service throws a callback URL unreadable error. Accepted formats IPv4, IPv6, or DNS resolvable hostname. To harden your network, see [FAQ](verifiable-credentials-faq#network-hardening-for-callback-events). |
+| `state` | string | Correlates the callback event with the state passed in the original payload. |
+| `headers` | string | Optional. You can include a collection of HTTP headers required by the receiving end of the POST message. The current supported header values are the `api-key` or the `Authorization` headers. Any other header throws an invalid callback header error. |
+
+### PIN type
+
+The `pin` type defines a PIN code that can be displayed as part of the issuance. `pin` is optional, and, if used, should always be sent out-of-band. When you're using a hashed PIN code, you must define the `salt`, `alg`, and `iterations` properties. `pin` contains the following properties:
+
+| Property | Type | Description |
+| --- | --- | --- |
+| `value` | string | Contains the PIN value in plain text. When you're using a hashed PIN, the value property contains the salted hash, base64 encoded. |
+| `type` | string | The type of the PIN code. Possible value: `numeric` (default). |
+| `length` | integer | The length of the PIN code. The default length is 6, the minimum is 4, and the maximum is 16. |
+| `salt` | string | The salt of the hashed PIN code. The salt is prepended during hash computation. Encoding: UTF-8. |
+| `alg` | string | The hashing algorithm for the hashed PIN. Supported algorithm: `sha256`. |
+| `iterations` | integer | The number of hashing iterations. Possible value: `1`. |
+
+## Successful response
+
+If successful, this method returns a response code (*HTTP 201 Created*), and a collection of event objects in the response body. The following JSON demonstrates a successful response:
+
+```json
+{  
+    "requestId": "799f23ea-5241-45af-99ad-cf8e5018814e",  
+    "url": "openid://vc?request_uri=https://verifiedid.did.msidentity.com/v1.0/00001111-aaaa-2222-bbbb-3333cccc4444/verifiableCredentials/request/178319f7-20be-4945-80fb-7d52d47ae82e",  
+    "expiry": 1622227690,  
+    "qrCode": "data:image/png;base64,iVBORw0KggoA<SNIP>"  
+} 
+```
+
+The response contains the following properties:
+
+| Property | Type | Description |
+| --- | --- | --- |
+| `requestId` | string | An autogenerated request ID. The callback uses the same request, allowing you to keep track of the issuance request and its callbacks. |
+| `url` | string | A URL that launches the authenticator app and starts the issuance process. You can present this URL to the user if they can't scan the QR code. |
+| `expiry` | integer | Indicates when the response expires. |
+| `qrCode` | string | A QR code that the user can scan to start the issuance flow. |
+
+When your app receives the response, the app needs to present the QR code to the user. The user scans the QR code, which opens the authenticator app and starts the issuance process.
+
+## Error response
+
+If there's an error with the request, an [error response](error-codes) is returned. The app should handle the response appropriately.
+
+## Callback events
+
+The callback endpoint is called when a user scans the QR code, uses the deep link the authenticator app, or finishes the issuance process.
+
+| Property | Type | Description |
+| --- | --- | --- |
+| `requestId` | string | Mapped to the original request when the payload was posted to the Verifiable Credentials service. |
+| `requestStatus` | string | The status returned for the request. Possible values: <br>- `request_retrieved`: The user scanned the QR code or selected the link that starts the issuance flow.<br>- `issuance_successful`: The issuance of the verifiable credentials was successful.<br>- `issuance_error`: There was an error during issuance. For details, see the `error` property. |
+| `state` | string | Returns the state value that you passed in the original payload. |
+| `error` | error | When the `code` property value is `issuance_error`, this property contains information about the error. |
+| `error.code` | string | The return error code. |
+| `error.message` | string | The error message. |
+
+The following example demonstrates a callback payload when the authenticator app starts the issuance request:
+
+```json
+{  
+    "requestId": "799f23ea-5241-45af-99ad-cf8e5018814e",  
+    "requestStatus":"request_retrieved",  
+    "state": "de19cb6b-36c1-45fe-9409-909a51292a9c"
+} 
+```
+
+The following example demonstrates a callback payload after the user successfully completes the issuance process:
+
+```json
+{  
+    "requestId": "799f23ea-5241-45af-99ad-cf8e5018814e",  
+    "requestStatus":"issuance_successful",
+    "state": "de19cb6b-36c1-45fe-9409-909a51292a9c"
+} 
+```
+
+### Callback errors
+
+The callback endpoint might be called with an error message. The following table lists the error codes:
+
+| Message | Definition |
+| --- | --- |
+| `fetch_contract_error` | Unable to fetch the verifiable credential contract. This error usually happens when the API can't fetch the manifest you specify in the request payload RequestIssuance object. |
+| `issuance_service_error` | The Verifiable Credentials service isn't able to validate requirements, or something went wrong in Verifiable Credentials. |
+| `unspecified_error` | This error is uncommon, but worth investigating. |
+
+The following example demonstrates a callback payload when an error occurred:
+
+```json
+{  
+    "requestId": "799f23ea-5241-45af-99ad-cf8e5018814e",  
+    "requestStatus": "issuance_error",  
+    "state": "de19cb6b-36c1-45fe-9409-909a51292a9c",  
+    "error": { 
+      "code":"IssuanceFlowFailed", 
+      "message":"issuance_service_error”, 
+    } 
+} 
+```

@@ -1,0 +1,83 @@
+---
+layout: Conceptual
+title: Refresh tokens in the Microsoft identity platform - Microsoft identity platform | Microsoft Learn
+canonicalUrl: https://learn.microsoft.com/en-us/entra/identity-platform/refresh-tokens
+uhfHeaderId: MSDocsHeader-Entra
+breadcrumb_path: /entra/breadcrumb/toc.json
+feedback_system: Standard
+feedback_product_url: /entra/identity-platform/developer-support-help-options
+author: cilwerner
+ms.author: cwerner
+ms.service: identity-platform
+description: Learn about refresh tokens that are used in the Microsoft identity platform.
+manager: pmwongera
+ms.date: 2025-11-05T00:00:00.0000000Z
+ms.reviewer: ludwignick
+ms.topic: concept-article
+locale: en-us
+document_id: 4b38c5bb-b6fd-ed73-e415-837a69a0a8e1
+document_version_independent_id: 30bf75b4-a333-2def-a672-b45c83f06348
+original_content_git_url: https://github.com/MicrosoftDocs/entra-docs-pr/blob/live/docs/identity-platform/refresh-tokens.md
+site_name: Docs
+depot_name: MSDN.entra-docs
+page_type: conceptual
+toc_rel: toc.json
+feedback_help_link_type: ''
+feedback_help_link_url: ''
+asset_id: identity-platform/refresh-tokens
+moniker_range_name: 
+monikers: []
+item_type: Content
+source_path: docs/identity-platform/refresh-tokens.md
+cmProducts:
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
+- https://authoring-docs-microsoft.poolparty.biz/devrel/1ae5c491-970a-4062-8301-6336e69f9026
+spProducts:
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
+- https://authoring-docs-microsoft.poolparty.biz/devrel/f2c3e52e-3667-4e8a-bf11-20b9eaccdc8c
+platformId: d65b6a33-1d77-6a58-6ea3-d01f326588c7
+---
+
+# Refresh tokens in the Microsoft identity platform - Microsoft identity platform | Microsoft Learn
+
+A refresh token is used to obtain new access and refresh token pairs when the current access token expires. When a client acquires an access token to access a protected resource, the client also receives a refresh token.
+
+Refresh tokens are also used to acquire extra access tokens for other resources. Refresh tokens are bound to a combination of user and client, but aren't tied to a resource or tenant. A client can use a refresh token to acquire access tokens across any combination of resource and tenant where it has permission to do so. Refresh tokens are encrypted and only the Microsoft identity platform can read them.
+
+## Token lifetime
+
+Refresh tokens have a longer lifetime than access tokens. The default lifetime for the refresh tokens are as follows:
+
+- **24 hours** for single-page applications.
+- **24 hours** for apps that use email one-time passcode authentication flow.
+- **90 days for** all other scenarios.
+
+Refresh tokens replace themselves with a fresh token upon every use. The Microsoft identity platform doesn't revoke old refresh tokens when used to fetch new access tokens. Securely delete the old refresh token after acquiring a new one. Refresh tokens need to be stored safely like access tokens or application credentials.
+
+Note
+
+Refresh tokens sent to a redirect URI registered as `spa` expire after 24 hours. Additional refresh tokens acquired using the initial refresh token carry over that expiration time, so apps must be prepared to rerun the authorization code flow using an interactive authentication to get a new refresh token every 24 hours. Users don't have to enter their credentials and usually don't even see any related user experience, just a reload of your application. The browser must visit the sign-in page in a top-level frame to show the login session. This is due to [privacy features in browsers that block third party cookies](reference-third-party-cookies-spas).
+
+## Token expiration
+
+Refresh tokens will automatically expire once the lifetime period elapses. Additionally, they can be revoked by the sign-in service at any time before their expiration. Your app should handle such revocations gracefully by redirecting the user to an interactive sign-in prompt to reauthenticate and obtain a new token.
+
+### Token revocation
+
+The server can revoke refresh tokens because of a change in credentials, user action, or admin action. Refresh tokens fall into two classes: tokens issued to confidential clients (the rightmost column) and tokens issued to public clients (all other columns).
+
+| Change | Password-based cookie | Password-based token | Non-password-based cookie | Non-password-based token | Confidential client token |
+| --- | --- | --- | --- | --- | --- |
+| Password expires | Stays alive | Stays alive | Stays alive | Stays alive | Stays alive |
+| Password changed by user | Revoked | Revoked | Stays alive | Stays alive | Stays alive |
+| User does SSPR | Revoked | Revoked | Stays alive | Stays alive | Stays alive |
+| Admin resets password (Azure portal) | Revoked | Revoked | Stays alive | Stays alive | Stays alive |
+| Admin resets password (Microsoft Entra admin center) | Revoked | Revoked | Stays alive | Revoked | Revoked |
+| Admin resets password (M365 admin center) | Revoked | Revoked | Stays alive | Revoked | Revoked |
+| User revokes their refresh tokens | Revoked | Revoked | Revoked | Revoked | Revoked |
+| Admin revokes all refresh tokens for a user | Revoked | Revoked | Revoked | Revoked | Revoked |
+| Single sign-out | Revoked | Stays alive | Revoked | Stays alive | Stays alive |
+
+Note
+
+Refresh tokens are not revoked for B2B users in their resource tenant. The token needs to be revoked in the home tenant.

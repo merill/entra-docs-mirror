@@ -1,0 +1,567 @@
+---
+layout: Conceptual
+title: Microsoft Entra ID and Workday integration reference - Microsoft Entra ID | Microsoft Learn
+canonicalUrl: https://learn.microsoft.com/en-us/entra/identity/app-provisioning/workday-integration-reference
+uhfHeaderId: MSDocsHeader-Entra
+breadcrumb_path: /entra/breadcrumb/toc.json
+feedback_system: Standard
+feedback_product_url: https://feedback.azure.com/d365community/forum/22920db1-ad25-ec11-b6e6-000d3a4f0789
+author: jenniferf-skc
+ms.author: jfields
+ms.service: entra-id
+ms.subservice: app-provisioning
+manager: dougeby
+description: Technical deep dive into Workday-HR driven provisioning in Microsoft Entra ID
+ms.topic: reference
+ms.date: 2026-08-20T00:00:00.0000000Z
+ms.reviewer: chmutali
+ai-usage: ai-assisted
+locale: en-us
+document_id: bb096310-b136-dc61-f70d-b43a7040fcf6
+document_version_independent_id: 1040fe7c-9f7d-bf49-de4d-abe38142b3d9
+original_content_git_url: https://github.com/MicrosoftDocs/entra-docs-pr/blob/live/docs/identity/app-provisioning/workday-integration-reference.md
+site_name: Docs
+depot_name: MSDN.entra-docs
+page_type: conceptual
+toc_rel: toc.json
+feedback_help_link_type: ''
+feedback_help_link_url: ''
+asset_id: identity/app-provisioning/workday-integration-reference
+moniker_range_name: 
+monikers: []
+item_type: Content
+source_path: docs/identity/app-provisioning/workday-integration-reference.md
+cmProducts:
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
+- https://authoring-docs-microsoft.poolparty.biz/devrel/b1cfdec6-b0c3-4209-818c-736879856e0e
+spProducts:
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
+- https://authoring-docs-microsoft.poolparty.biz/devrel/2d0723c1-cf38-4c30-ab3d-5df787b33270
+platformId: a2bcebb4-0c1d-3811-b26d-1ebe4a8ab0b5
+---
+
+# Microsoft Entra ID and Workday integration reference - Microsoft Entra ID | Microsoft Learn
+
+[Microsoft Entra user provisioning service](user-provisioning) integrates with [Workday HCM](https://www.workday.com) to manage the identity life cycle of users. Microsoft Entra ID offers three prebuilt integrations:
+
+- [Workday to on-premises Active Directory user provisioning](../saas-apps/workday-inbound-tutorial)
+- [Workday to Microsoft Entra user provisioning](../saas-apps/workday-inbound-cloud-only-tutorial)
+- [Workday Writeback](../saas-apps/workday-writeback-tutorial)
+
+This article explains how the integration works and how you can customize the provisioning behavior for different HR scenarios.
+
+For Workday inbound provisioning, you can configure optional single-valued source attributes to clear their mapped target attributes when Workday returns a null or empty value. For configuration and verification guidance, see [Clear attribute values (Preview)](clear-attribute-values).
+
+## Establishing connectivity
+
+### Restricting Workday API access to Microsoft Entra endpoints
+
+Microsoft Entra provisioning service uses basic authentication to connect to Workday Web Services API endpoints.
+
+To further secure the connectivity between Microsoft Entra provisioning service and Workday, you can restrict access so that the designated integration system user only accesses the Workday APIs from allowed Microsoft Entra IP ranges. Engage your Workday administrator to complete the following configuration in your Workday tenant.
+
+1. Download the [latest IP Ranges](https://www.microsoft.com/download/details.aspx?id=56519) for the Azure Public Cloud.
+2. Open the file and search for tag `AzureActiveDirectory`.
+3. Copy all IP address ranges listed within the element *addressPrefixes* and use the range to build your IP address list.
+4. Sign in to Workday admin portal.
+5. Access the **Maintain IP Ranges** task to create a new IP range for Azure data centers. Specify the IP ranges (using CIDR notation) as a comma-separated list.
+6. Access the **Manage Authentication Policies** task to create a new authentication policy. In the authentication policy, use the authentication allowlist to specify the Microsoft Entra IP range and the security group that is allowed access from this IP range. Save the changes.
+7. Access the **Activate All Pending Authentication Policy Changes** task to confirm changes.
+
+### Limiting access to worker data in Workday using constrained security groups
+
+The default steps to [configure the Workday integration system user](../saas-apps/workday-inbound-tutorial#configure-integration-system-user-in-workday) grants access to retrieve all users in your Workday tenant. In certain integration scenarios, you may want to limit access. For example, only return users in certain supervisory organizations from the `Get_Workers` API call.
+
+You can limit access by working with your Workday admin and configuring constrained integration system security groups. For more information, review the section Get\_Workers contextual security in this Workday document Concept: [Get Workers SOAP Web Service Guidelines](https://resourcecenter.workday.com/en-us/signin.html?fromURI=https://signin.resourcecenter.workday.com/app/workdayciam_aembetadoc2_1/exkd1j067lBdQMGYl4x7/sso/saml) (*Workday Community access required for this article*).
+
+This strategy of limiting access using constrained ISSG (Integration System Security Groups) is useful in the following scenarios:
+
+- **Phased rollout scenario**: You have a large Workday tenant and plan to perform a phased rollout of Workday to Microsoft Entra ID automated provisioning. In this scenario, rather than excluding users who aren't in scope of the current phase with Microsoft Entra ID scoping filters, we recommend configuring constrained ISSG so that only in-scope workers are visible to Microsoft Entra ID.
+- **Multiple provisioning jobs scenario**: You have a large Workday tenant and multiple AD domains each supporting a different business unit/division/company. To support this topology, you would like to run multiple Workday to Microsoft Entra provisioning jobs with each job provisioning a specific set of workers. In this scenario, rather than using Microsoft Entra ID scoping filters to exclude worker data, we recommend configuring constrained ISSG so that only the relevant worker data is visible to Microsoft Entra ID.
+
+### Workday test connection query
+
+To test connectivity to Workday, Microsoft Entra ID sends the following *Get\_Workers* Workday Web Services request.
+
+```xml
+<!-- Test connection query tries to retrieve one record from the first page -->
+<!-- Replace version with Workday Web Services version present in your connection URL -->
+<!-- Replace timestamps with the UTC time corresponding to the test connection event -->
+<Get_Workers_Request p1:version="v21.1" xmlns:p1="urn:com.workday/bsvc" xmlns="urn:com.workday/bsvc">
+  <p1:Request_Criteria>
+    <p1:Transaction_Log_Criteria_Data>
+      <p1:Transaction_Date_Range_Data>
+        <p1:Updated_From>2021-01-19T02:28:50.1491022Z</p1:Updated_From>
+        <p1:Updated_Through>2021-01-19T02:28:50.1491022Z</p1:Updated_Through>
+      </p1:Transaction_Date_Range_Data>
+    </p1:Transaction_Log_Criteria_Data>
+    <p1:Exclude_Employees>true</p1:Exclude_Employees>
+    <p1:Exclude_Contingent_Workers>true</p1:Exclude_Contingent_Workers>
+    <p1:Exclude_Inactive_Workers>true</p1:Exclude_Inactive_Workers>
+  </p1:Request_Criteria>
+  <p1:Response_Filter>
+    <p1:As_Of_Effective_Date>2021-01-19T02:28:50.1491022Z</p1:As_Of_Effective_Date>
+    <p1:As_Of_Entry_DateTime>2021-01-19T02:28:50.1491022Z</p1:As_Of_Entry_DateTime>
+    <p1:Page>1</p1:Page>
+    <p1:Count>1</p1:Count>
+  </p1:Response_Filter>
+  <p1:Response_Group>
+    <p1:Include_Reference>1</p1:Include_Reference>
+    <p1:Include_Personal_Information>1</p1:Include_Personal_Information>
+  </p1:Response_Group>
+</Get_Workers_Request>
+```
+
+## How full sync works
+
+**Full sync** in the context of Workday-driven provisioning refers to the process of fetching all identities from Workday and determining what provisioning rules to apply to each worker object. Full sync happens when you turn on provisioning for the first time and also when you *restart provisioning* either from the Microsoft Entra admin center or using Graph APIs.
+
+Microsoft Entra ID sends the following *Get\_Workers* Workday Web Services request to retrieve worker data. The query looks up the Workday transaction log for all effective dated worker entries as of the time corresponding to the full sync run.
+
+```xml
+<!-- Workday full sync query -->
+<!-- Replace version with Workday Web Services version present in your connection URL -->
+<!-- Replace timestamps with the UTC time corresponding to full sync run -->
+<!-- Count specifies the number of records to return in each page -->
+<!-- Response_Group flags derived from provisioning attribute mapping -->
+
+<Get_Workers_Request p1:version="v21.1" xmlns:p1="urn:com.workday/bsvc" xmlns="urn:com.workday/bsvc">
+  <p1:Request_Criteria>
+    <p1:Transaction_Log_Criteria_Data>
+      <p1:Transaction_Type_References>
+        <p1:Transaction_Type_Reference>
+          <p1:ID p1:type="Business_Process_Type">Hire Employee</p1:ID>
+        </p1:Transaction_Type_Reference>
+        <p1:Transaction_Type_Reference>
+          <p1:ID p1:type="Business_Process_Type">Contract Contingent Worker</p1:ID>
+        </p1:Transaction_Type_Reference>
+      </p1:Transaction_Type_References>
+    </p1:Transaction_Log_Criteria_Data>
+  </p1:Request_Criteria>
+  <p1:Response_Filter>
+    <p1:As_Of_Effective_Date>2021-01-19T02:29:16.0094202Z</p1:As_Of_Effective_Date>
+    <p1:As_Of_Entry_DateTime>2021-01-19T02:29:16.0094202Z</p1:As_Of_Entry_DateTime>
+    <p1:Count>30</p1:Count>
+  </p1:Response_Filter>
+  <p1:Response_Group>
+    <p1:Include_Reference>1</p1:Include_Reference>
+    <p1:Include_Personal_Information>1</p1:Include_Personal_Information>
+    <p1:Include_Employment_Information>1</p1:Include_Employment_Information>
+    <p1:Include_Organizations>1</p1:Include_Organizations>
+    <p1:Exclude_Organization_Support_Role_Data>1</p1:Exclude_Organization_Support_Role_Data>
+    <p1:Exclude_Location_Hierarchies>1</p1:Exclude_Location_Hierarchies>
+    <p1:Exclude_Cost_Center_Hierarchies>1</p1:Exclude_Cost_Center_Hierarchies>
+    <p1:Exclude_Company_Hierarchies>1</p1:Exclude_Company_Hierarchies>
+    <p1:Exclude_Matrix_Organizations>1</p1:Exclude_Matrix_Organizations>
+    <p1:Exclude_Pay_Groups>1</p1:Exclude_Pay_Groups>
+    <p1:Exclude_Regions>1</p1:Exclude_Regions>
+    <p1:Exclude_Region_Hierarchies>1</p1:Exclude_Region_Hierarchies>
+    <p1:Exclude_Funds>1</p1:Exclude_Funds>
+    <p1:Exclude_Fund_Hierarchies>1</p1:Exclude_Fund_Hierarchies>
+    <p1:Exclude_Grants>1</p1:Exclude_Grants>
+    <p1:Exclude_Grant_Hierarchies>1</p1:Exclude_Grant_Hierarchies>
+    <p1:Exclude_Business_Units>1</p1:Exclude_Business_Units>
+    <p1:Exclude_Business_Unit_Hierarchies>1</p1:Exclude_Business_Unit_Hierarchies>
+    <p1:Exclude_Programs>1</p1:Exclude_Programs>
+    <p1:Exclude_Program_Hierarchies>1</p1:Exclude_Program_Hierarchies>
+    <p1:Exclude_Gifts>1</p1:Exclude_Gifts>
+    <p1:Exclude_Gift_Hierarchies>1</p1:Exclude_Gift_Hierarchies>
+    <p1:Include_Management_Chain_Data>1</p1:Include_Management_Chain_Data>
+    <p1:Include_Transaction_Log_Data>1</p1:Include_Transaction_Log_Data>
+    <p1:Include_Additional_Jobs>1</p1:Include_Additional_Jobs>
+  </p1:Response_Group>
+</Get_Workers_Request>
+```
+
+The *Response\_Group* node is used to specify which worker attributes to fetch from Workday. For a description of each flag in the *Response\_Group* node, refer to the Workday [Get_Workers API documentation](https://community.workday.com/sites/default/files/file-hosting/productionapi/Human_Resources/v35.2/Get_Workers.html#Worker_Response_GroupType).
+
+Certain flag values specified in the *Response\_Group* node are calculated based on the attributes configured in the Workday Microsoft Entra provisioning application. Refer to the section on *Supported entities* for the criteria used to set the flag values.
+
+The *Get\_Workers* response from Workday for the above query includes the number of worker records and page count.
+
+```xml
+  <wd:Response_Results>
+    <wd:Total_Results>509</wd:Total_Results>
+    <wd:Total_Pages>17</wd:Total_Pages>
+    <wd:Page_Results>30</wd:Page_Results>
+    <wd:Page>1</wd:Page>
+  </wd:Response_Results>
+```
+
+To retrieve the next page of the result set, the next *Get\_Workers* query specifies the page number as a parameter in the *Response\_Filter*.
+
+```xml
+  <p1:Response_Filter>
+    <p1:As_Of_Effective_Date>2021-01-19T02:29:16.0094202Z</p1:As_Of_Effective_Date>
+    <p1:As_Of_Entry_DateTime>2021-01-19T02:29:16.0094202Z</p1:As_Of_Entry_DateTime>
+    <p1:Page>2</p1:Page>
+    <p1:Count>30</p1:Count>
+  </p1:Response_Filter>
+```
+
+Microsoft Entra provisioning service processes each page and iterates through the all effective workers during full sync. For each worker entry imported from Workday:
+
+- The [XPATH expression](workday-attribute-reference) is applied to retrieve attribute values from Workday.
+- The attribute mapping and matching rules are applied and
+- The service determines what operation to perform in the target (Microsoft Entra ID / Active Directory).
+
+Once the processing is complete, it saves the timestamp associated with the start of full sync as a watermark. This watermark serves as the starting point for the incremental sync cycle.
+
+## How incremental sync works
+
+After full sync, Microsoft Entra provisioning service maintains `LastExecutionTimestamp` and uses it to create delta queries to retrieve incremental changes. During incremental sync, Microsoft Entra ID sends the following types of queries to Workday:
+
+- Query for manual updates
+- Query for effective-dated updates and terminations
+- Query for future-dated hires
+
+### Query for manual updates
+
+The following *Get\_Workers* request queries for manual updates that happened between last execution and current execution time.
+
+```xml
+<!-- Workday incremental sync query for manual updates -->
+<!-- Replace version with Workday Web Services version present in your connection URL -->
+<!-- Replace timestamps with the UTC time corresponding to last execution and current execution time -->
+<!-- Count specifies the number of records to return in each page -->
+<!-- Response_Group flags derived from provisioning attribute mapping -->
+
+<Get_Workers_Request p1:version="v21.1" xmlns:p1="urn:com.workday/bsvc" xmlns="urn:com.workday/bsvc">
+  <p1:Request_Criteria>
+    <p1:Transaction_Log_Criteria_Data>
+      <p1:Transaction_Date_Range_Data>
+        <p1:Updated_From>2021-01-19T02:29:16.0094202Z</p1:Updated_From>
+        <p1:Updated_Through>2021-01-19T02:49:06.290136Z</p1:Updated_Through>
+      </p1:Transaction_Date_Range_Data>
+    </p1:Transaction_Log_Criteria_Data>
+  </p1:Request_Criteria>
+  <p1:Response_Filter>
+    <p1:As_Of_Effective_Date>2021-01-19T02:49:06.290136Z</p1:As_Of_Effective_Date>
+    <p1:As_Of_Entry_DateTime>2021-01-19T02:49:06.290136Z</p1:As_Of_Entry_DateTime>
+    <p1:Count>30</p1:Count>
+  </p1:Response_Filter>
+  <p1:Response_Group>
+    <p1:Include_Reference>1</p1:Include_Reference>
+    <p1:Include_Personal_Information>1</p1:Include_Personal_Information>
+    <p1:Include_Employment_Information>1</p1:Include_Employment_Information>
+    <p1:Include_Organizations>1</p1:Include_Organizations>
+    <p1:Exclude_Organization_Support_Role_Data>1</p1:Exclude_Organization_Support_Role_Data>
+    <p1:Exclude_Location_Hierarchies>1</p1:Exclude_Location_Hierarchies>
+    <p1:Exclude_Cost_Center_Hierarchies>1</p1:Exclude_Cost_Center_Hierarchies>
+    <p1:Exclude_Company_Hierarchies>1</p1:Exclude_Company_Hierarchies>
+    <p1:Exclude_Matrix_Organizations>1</p1:Exclude_Matrix_Organizations>
+    <p1:Exclude_Pay_Groups>1</p1:Exclude_Pay_Groups>
+    <p1:Exclude_Regions>1</p1:Exclude_Regions>
+    <p1:Exclude_Region_Hierarchies>1</p1:Exclude_Region_Hierarchies>
+    <p1:Exclude_Funds>1</p1:Exclude_Funds>
+    <p1:Exclude_Fund_Hierarchies>1</p1:Exclude_Fund_Hierarchies>
+    <p1:Exclude_Grants>1</p1:Exclude_Grants>
+    <p1:Exclude_Grant_Hierarchies>1</p1:Exclude_Grant_Hierarchies>
+    <p1:Exclude_Business_Units>1</p1:Exclude_Business_Units>
+    <p1:Exclude_Business_Unit_Hierarchies>1</p1:Exclude_Business_Unit_Hierarchies>
+    <p1:Exclude_Programs>1</p1:Exclude_Programs>
+    <p1:Exclude_Program_Hierarchies>1</p1:Exclude_Program_Hierarchies>
+    <p1:Exclude_Gifts>1</p1:Exclude_Gifts>
+    <p1:Exclude_Gift_Hierarchies>1</p1:Exclude_Gift_Hierarchies>
+    <p1:Include_Management_Chain_Data>1</p1:Include_Management_Chain_Data>
+    <p1:Include_Additional_Jobs>1</p1:Include_Additional_Jobs>
+  </p1:Response_Group>
+</Get_Workers_Request>
+```
+
+### Query for effective-dated updates and terminations
+
+The following *Get\_Workers* request queries for effective-dated updates that happened between last execution and current execution time.
+
+```xml
+<!-- Workday incremental sync query for effective-dated updates -->
+<!-- Replace version with Workday Web Services version present in your connection URL -->
+<!-- Replace timestamps with the UTC time corresponding to last execution and current execution time -->
+<!-- Count specifies the number of records to return in each page -->
+<!-- Response_Group flags derived from provisioning attribute mapping -->
+
+<Get_Workers_Request p1:version="v21.1" xmlns:p1="urn:com.workday/bsvc" xmlns="urn:com.workday/bsvc">
+  <p1:Request_Criteria>
+    <p1:Transaction_Log_Criteria_Data>
+      <p1:Transaction_Date_Range_Data>
+        <p1:Effective_From>2021-01-19T02:29:16.0094202Z</p1:Effective_From>
+        <p1:Effective_Through>2021-01-19T02:49:06.290136Z</p1:Effective_Through>
+      </p1:Transaction_Date_Range_Data>
+    </p1:Transaction_Log_Criteria_Data>
+  </p1:Request_Criteria>
+  <p1:Response_Filter>
+    <p1:As_Of_Effective_Date>2021-01-19T02:49:06.290136Z</p1:As_Of_Effective_Date>
+    <p1:As_Of_Entry_DateTime>2021-01-19T02:49:06.290136Z</p1:As_Of_Entry_DateTime>
+    <p1:Page>1</p1:Page>
+    <p1:Count>30</p1:Count>
+  </p1:Response_Filter>
+  <p1:Response_Group>
+    <p1:Include_Reference>1</p1:Include_Reference>
+    <p1:Include_Personal_Information>1</p1:Include_Personal_Information>
+    <p1:Include_Employment_Information>1</p1:Include_Employment_Information>
+    <p1:Include_Organizations>1</p1:Include_Organizations>
+    <p1:Exclude_Organization_Support_Role_Data>1</p1:Exclude_Organization_Support_Role_Data>
+    <p1:Exclude_Location_Hierarchies>1</p1:Exclude_Location_Hierarchies>
+    <p1:Exclude_Cost_Center_Hierarchies>1</p1:Exclude_Cost_Center_Hierarchies>
+    <p1:Exclude_Company_Hierarchies>1</p1:Exclude_Company_Hierarchies>
+    <p1:Exclude_Matrix_Organizations>1</p1:Exclude_Matrix_Organizations>
+    <p1:Exclude_Pay_Groups>1</p1:Exclude_Pay_Groups>
+    <p1:Exclude_Regions>1</p1:Exclude_Regions>
+    <p1:Exclude_Region_Hierarchies>1</p1:Exclude_Region_Hierarchies>
+    <p1:Exclude_Funds>1</p1:Exclude_Funds>
+    <p1:Exclude_Fund_Hierarchies>1</p1:Exclude_Fund_Hierarchies>
+    <p1:Exclude_Grants>1</p1:Exclude_Grants>
+    <p1:Exclude_Grant_Hierarchies>1</p1:Exclude_Grant_Hierarchies>
+    <p1:Exclude_Business_Units>1</p1:Exclude_Business_Units>
+    <p1:Exclude_Business_Unit_Hierarchies>1</p1:Exclude_Business_Unit_Hierarchies>
+    <p1:Exclude_Programs>1</p1:Exclude_Programs>
+    <p1:Exclude_Program_Hierarchies>1</p1:Exclude_Program_Hierarchies>
+    <p1:Exclude_Gifts>1</p1:Exclude_Gifts>
+    <p1:Exclude_Gift_Hierarchies>1</p1:Exclude_Gift_Hierarchies>
+    <p1:Include_Management_Chain_Data>1</p1:Include_Management_Chain_Data>
+    <p1:Include_Additional_Jobs>1</p1:Include_Additional_Jobs>
+  </p1:Response_Group>
+</Get_Workers_Request>
+```
+
+### Query for future-dated hires
+
+If any of the above queries returns a future-dated hire, then the following *Get\_Workers* request is used to fetch information about a future-dated new hire. The *WID* attribute of the new hire is used to perform the lookup and the effective date is set to the date and time of hire.
+
+Note
+
+Future-dated hires in Workday have the Active field set to "0" and it changes to "1" on the hire date. The connector by design queries for future-hire information effective on the date of hire and that is why it always gets future hire Worker profile with Active field set to "1". This allows you to setup the Microsoft Entra profile for future hires in advance with the all the right information pre-populated. If you'd like to delay the enabling of the Microsoft Entra account for future hires, use the transformation function [DateDiff](functions-for-customizing-application-data#datediff).
+
+```xml
+<!-- Workday incremental sync query to get new hire data effective as on hire date/first day of work -->
+<!-- Replace version with Workday Web Services version present in your connection URL -->
+<!-- Replace timestamps hire date/first day of work -->
+<!-- Count specifies the number of records to return in each page -->
+<!-- Response_Group flags derived from provisioning attribute mapping -->
+
+<Get_Workers_Request p1:version="v21.1" xmlns:p1="urn:com.workday/bsvc" xmlns="urn:com.workday/bsvc">
+  <p1:Request_References>
+    <p1:Worker_Reference>
+      <p1:ID p1:type="WID">7bf6322f1ea101fd0b4433077f09cb04</p1:ID>
+    </p1:Worker_Reference>
+  </p1:Request_References>
+  <p1:Response_Filter>
+    <p1:As_Of_Effective_Date>2021-02-01T08:00:00+00:00</p1:As_Of_Effective_Date>
+    <p1:As_Of_Entry_DateTime>2021-02-01T08:00:00+00:00</p1:As_Of_Entry_DateTime>
+    <p1:Count>30</p1:Count>
+  </p1:Response_Filter>
+  <p1:Response_Group>
+    <p1:Include_Reference>1</p1:Include_Reference>
+    <p1:Include_Personal_Information>1</p1:Include_Personal_Information>
+    <p1:Include_Employment_Information>1</p1:Include_Employment_Information>
+    <p1:Include_Organizations>1</p1:Include_Organizations>
+    <p1:Exclude_Organization_Support_Role_Data>1</p1:Exclude_Organization_Support_Role_Data>
+    <p1:Exclude_Location_Hierarchies>1</p1:Exclude_Location_Hierarchies>
+    <p1:Exclude_Cost_Center_Hierarchies>1</p1:Exclude_Cost_Center_Hierarchies>
+    <p1:Exclude_Company_Hierarchies>1</p1:Exclude_Company_Hierarchies>
+    <p1:Exclude_Matrix_Organizations>1</p1:Exclude_Matrix_Organizations>
+    <p1:Exclude_Pay_Groups>1</p1:Exclude_Pay_Groups>
+    <p1:Exclude_Regions>1</p1:Exclude_Regions>
+    <p1:Exclude_Region_Hierarchies>1</p1:Exclude_Region_Hierarchies>
+    <p1:Exclude_Funds>1</p1:Exclude_Funds>
+    <p1:Exclude_Fund_Hierarchies>1</p1:Exclude_Fund_Hierarchies>
+    <p1:Exclude_Grants>1</p1:Exclude_Grants>
+    <p1:Exclude_Grant_Hierarchies>1</p1:Exclude_Grant_Hierarchies>
+    <p1:Exclude_Business_Units>1</p1:Exclude_Business_Units>
+    <p1:Exclude_Business_Unit_Hierarchies>1</p1:Exclude_Business_Unit_Hierarchies>
+    <p1:Exclude_Programs>1</p1:Exclude_Programs>
+    <p1:Exclude_Program_Hierarchies>1</p1:Exclude_Program_Hierarchies>
+    <p1:Exclude_Gifts>1</p1:Exclude_Gifts>
+    <p1:Exclude_Gift_Hierarchies>1</p1:Exclude_Gift_Hierarchies>
+    <p1:Include_Management_Chain_Data>1</p1:Include_Management_Chain_Data>
+    <p1:Include_Additional_Jobs>1</p1:Include_Additional_Jobs>
+  </p1:Response_Group>
+</Get_Workers_Request>
+```
+
+## Retrieving worker data attributes
+
+The *Get\_Workers* API can return different data sets associated with a worker. Depending on the [XPATH API expressions](workday-attribute-reference) configured in the provisioning schema, Microsoft Entra provisioning service determines which data sets to retrieve from Workday. Accordingly, the *Response\_Group* flags are set in the *Get\_Workers* request.
+
+The table provides guidance on mapping configuration to use to retrieve a specific data set.
+
+| # | Workday Entity | Included by default | XPATH pattern to specify in mapping to fetch nondefault entities |
+| --- | --- | --- | --- |
+| 1 | `Personal Data` | Yes | `wd:Worker_Data/wd:Personal_Data` |
+| 2 | `Employment Data` | Yes | `wd:Worker_Data/wd:Employment_Data` |
+| 3 | `Additional Job Data` | Yes | `wd:Worker_Data/wd:Employment_Data/wd:Worker_Job_Data[@wd:Primary_Job=0]` |
+| 4 | `Organization Data` | Yes | `wd:Worker_Data/wd:Organization_Data` |
+| 5 | `Management Chain Data` | Yes | `wd:Worker_Data/wd:Management_Chain_Data` |
+| 6 | `Supervisory Organization` | Yes | `SUPERVISORY` |
+| 7 | `Company` | Yes | `COMPANY` |
+| 8 | `Business Unit` | No | `BUSINESS_UNIT` |
+| 9 | `Business Unit Hierarchy` | No | `BUSINESS_UNIT_HIERARCHY` |
+| 10 | `Company Hierarchy` | No | `COMPANY_HIERARCHY` |
+| 11 | `Cost Center` | No | `COST_CENTER` |
+| 12 | `Cost Center Hierarchy` | No | `COST_CENTER_HIERARCHY` |
+| 13 | `Fund` | No | `FUND` |
+| 14 | `Fund Hierarchy` | No | `FUND_HIERARCHY` |
+| 15 | `Gift` | No | `GIFT` |
+| 16 | `Gift Hierarchy` | No | `GIFT_HIERARCHY` |
+| 17 | `Grant` | No | `GRANT` |
+| 18 | `Grant Hierarchy` | No | `GRANT_HIERARCHY` |
+| 19 | `Business Site Hierarchy` | No | `BUSINESS_SITE_HIERARCHY` |
+| 20 | `Matrix Organization` | No | `MATRIX` |
+| 21 | `Pay Group` | No | `PAY_GROUP` |
+| 22 | `Programs` | No | `PROGRAMS` |
+| 23 | `Program Hierarchy` | No | `PROGRAM_HIERARCHY` |
+| 24 | `Region` | No | `REGION_HIERARCHY` |
+| 25 | `Location Hierarchy` | No | `LOCATION_HIERARCHY` |
+| 26 | `Account Provisioning Data` | No | `wd:Worker_Data/wd:Account_Provisioning_Data` |
+| 27 | `Background Check Data` | No | `wd:Worker_Data/wd:Background_Check_Data` |
+| 28 | `Benefit Eligibility Data` | No | `wd:Worker_Data/wd:Benefit_Eligibility_Data` |
+| 29 | `Benefit Enrollment Data` | No | `wd:Worker_Data/wd:Benefit_Enrollment_Data` |
+| 30 | `Career Data` | No | `wd:Worker_Data/wd:Career_Data` |
+| 31 | `Compensation Data` | No | `wd:Worker_Data/wd:Compensation_Data` |
+| 32 | `Contingent Worker Tax Authority Data` | No | `wd:Worker_Data/wd:Contingent_Worker_Tax_Authority_Form_Type_Data` |
+| 33 | `Development Item Data` | No | `wd:Worker_Data/wd:Development_Item_Data` |
+| 34 | `Employee Contracts Data` | No | `wd:Worker_Data/wd:Employee_Contracts_Data` |
+| 35 | `Employee Review Data` | No | `wd:Worker_Data/wd:Employee_Review_Data` |
+| 36 | `Feedback Received Data` | No | `wd:Worker_Data/wd:Feedback_Received_Data` |
+| 37 | `Worker Goal Data` | No | `wd:Worker_Data/wd:Worker_Goal_Data` |
+| 38 | `Photo Data` | No | `wd:Worker_Data/wd:Photo_Data` |
+| 39 | `Qualification Data` | No | `wd:Worker_Data/wd:Qualification_Data` |
+| 40 | `Related Persons Data` | No | `wd:Worker_Data/wd:Related_Persons_Data` |
+| 41 | `Role Data` | No | `wd:Worker_Data/wd:Role_Data` |
+| 42 | `Skill Data` | No | `wd:Worker_Data/wd:Skill_Data` |
+| 43 | `Succession Profile Data` | No | `wd:Worker_Data/wd:Succession_Profile_Data` |
+| 44 | `Talent Assessment Data` | No | `wd:Worker_Data/wd:Talent_Assessment_Data` |
+| 45 | `User Account Data` | No | `wd:Worker_Data/wd:User_Account_Data` |
+| 46 | `Worker Document Data` | No | `wd:Worker_Data/wd:Worker_Document_Data` |
+
+Note
+
+Each Workday entity listed in the table is protected by a **Domain Security Policy** in Workday. If you are unable to retrieve any attribute associated with the entity after setting the right XPATH, check with your Workday admin to ensure that the appropriate domain security policy is configured for the integration system user associated with the provisioning app. For example, to retrieve *Skill data*, *Get* access is required on the Workday domain *Worker Data: Skills and Experience*.
+
+Here are some examples on how you can extend the Workday integration to meet specific requirements.
+
+### Example 1: Retrieving cost center and pay group information
+
+Let's say you want to retrieve the following data sets from Workday and use them in your provisioning rules:
+
+- Cost center
+- Cost center hierarchy
+- Pay group
+
+The above data sets aren't included by default. To retrieve these data sets:
+
+1. Sign in to the [Microsoft Entra admin center](https://entra.microsoft.com) as at least an [Application Administrator](../role-based-access-control/permissions-reference#application-administrator).
+2. Browse to **Entra ID** &gt; **Enterprise apps**.
+3. Select your Workday to Active Directory / Microsoft Entra user provisioning application.
+4. Select **Provisioning**.
+5. Edit the mappings and open the Workday attribute list from the advanced section.
+6. Add the following attributes definitions and mark them as "Required". These attributes aren't mapped to any attribute in Active Directory or Microsoft Entra ID. They serve as signals to the connector to retrieve the Cost Center, Cost Center Hierarchy and Pay Group information.
+
+    | Attribute Name | XPATH API expression |
+    | --- | --- |
+    | CostCenterHierarchyFlag | wd:Worker/wd:Worker\_Data/wd:Organization\_Data/wd:Worker\_Organization\_Data[wd:Organization\_Data/wd:Organization\_Type\_Reference/wd:ID[@wd:type='Organization\_Type\_ID']='COST\_CENTER\_HIERARCHY']/wd:Organization\_Reference/@wd:Descriptor |
+    | CostCenterFlag | wd:Worker/wd:Worker\_Data/wd:Organization\_Data/wd:Worker\_Organization\_Data[wd:Organization\_Data/wd:Organization\_Type\_Reference/wd:ID[@wd:type='Organization\_Type\_ID']='COST\_CENTER']/wd:Organization\_Data/wd:Organization\_Code/text() |
+    | PayGroupFlag | wd:Worker/wd:Worker\_Data/wd:Organization\_Data/wd:Worker\_Organization\_Data[wd:Organization\_Data/wd:Organization\_Type\_Reference/wd:ID[@wd:type='Organization\_Type\_ID']='PAY\_GROUP']/wd:Organization\_Data/wd:Organization\_Reference\_ID/text() |
+7. Once the Cost Center and Pay Group data set is available in the *Get\_Workers* response, you can use the XPATH values to retrieve the cost center name, cost center code and pay group.
+
+    | Attribute Name | XPATH API expression |
+    | --- | --- |
+    | CostCenterName | wd:Worker/wd:Worker\_Data/wd:Organization\_Data/wd:Worker\_Organization\_Data/wd:Organization\_Data[wd:Organization\_Type\_Reference/@wd:Descriptor='Cost Center']/wd:Organization\_Name/text() |
+    | CostCenterCode | wd:Worker/wd:Worker\_Data/wd:Organization\_Data/wd:Worker\_Organization\_Data/wd:Organization\_Data[wd:Organization\_Type\_Reference/@wd:Descriptor='Cost Center']/wd:Organization\_Code/text() |
+    | PayGroup | wd:Worker/wd:Worker\_Data/wd:Organization\_Data/wd:Worker\_Organization\_Data/wd:Organization\_Data[wd:Organization\_Type\_Reference/@wd:Descriptor='Pay Group']/wd:Organization\_Name/text() |
+
+### Example 2: Retrieving qualification and skills data
+
+Let's say you want to retrieve certifications associated with a user. This information is available as part of the *Qualification Data* set. To get this data set as part of the *Get\_Workers* response, use the following XPATH:
+
+`wd:Worker/wd:Worker_Data/wd:Qualification_Data/wd:Certification/wd:Certification_Data/wd:Issuer/text()`
+
+### Example 3: Retrieving provisioning group assignments
+
+Let's say you want to retrieve *Provisioning Groups* assigned to a worker. This information is available as part of the *Account Provisioning Data* set. To get this data, as part of the *Get\_Workers* response, use the following XPATH:
+
+`wd:Worker/wd:Worker_Data/wd:Account_Provisioning_Data/wd:Provisioning_Group_Assignment_Data[wd:Status='Assigned']/wd:Provisioning_Group/text()`
+
+## Handling different HR scenarios
+
+This section covers how you can customize the provisioning app for the following HR scenarios:
+
+- Support for worker conversions
+- Retrieving international job assignments and secondary job details
+
+### Support for worker conversions
+
+This section describes the Microsoft Entra provisioning service support for scenarios when a worker converts from full-time employee (FTE) to contingent worker (CW) or vice versa. Depending on how worker conversions are processed in Workday, there may be different implementation aspects to consider.
+
+- Scenario 1: Backdated conversion from FTE to CW or vice versa
+- Scenario 2: Worker employed as CW/FTE today, changes to FTE/CW today
+- Scenario 3: Worker employed as CW/FTE is terminated, rejoins as FTE/CW after a significant gap
+- Scenario 4: Future-dated conversion, when worker is an active CW/FTE
+
+#### Scenario 1: Backdated conversion from FTE to CW or vice versa
+
+Your HR team may backdate a worker conversion transaction in Workday for valid business reasons. Examples include payroll processing, budget compliance, legal requirements and benefits management. Here's an example to illustrate how provisioning is handled for the scenario.
+
+- It's January 15, 2023 and Jane Doe is employed as a contingent worker. HR offers Jane a full-time position.
+- The terms of Jane's contract change require backdating the transaction so it aligns with the start of the current month. HR initiates a backdated worker conversion transaction Workday on January 15, 2023 with effective date as January 1, 2023. Now there are two worker profiles in Workday for Jane. The CW profile is inactive, while the FTE profile is active.
+- The Microsoft Entra provisioning service detects this change in the Workday transaction log on January 15, 2023. The service automatically provision attributes of the new FTE profile in the next sync cycle.
+- No changes are required in the provisioning app configuration to handle this scenario.
+
+#### Scenario 2: Worker employed as CW/FTE today, changes to FTE/CW today
+
+This scenario is similar to the above scenario, except that instead of backdating the transaction, HR performs a worker conversion that is effective immediately. The Microsoft Entra provisioning service detects this change in the Workday transaction log. In the next sync cycle, the service automatically provisions any associated attributes with an active FTE profile. No changes are required in the provisioning app configuration to handle this scenario.
+
+#### Scenario 3: Worker employed as CW/FTE is terminated, rejoins as FTE/CW after a significant gap
+
+It's common for workers to start work at a company as a contingent worker, leave the company and then rejoin after several months as a full-time employee. Here's an example to illustrate how provisioning is handled for this scenario.
+
+- It's January 1, 2023 and John Smith starts work at as a contingent worker. As there's no AD account associated with John's *WorkerID* (matching attribute), the provisioning service creates a new AD account and links John's contingent worker *WID (WorkdayID)* to John's AD account.
+- John's contract ends on January 31, 2023. In the provisioning cycle that runs after end of day January 31, John's AD account is disabled.
+- John applies for another position and decides to rejoin the company as full-time employee effective May 1, 2023. HR enters John's information as a prehire employee on April 15, 2023. Now there are two worker profiles in Workday for John. The CW profile is inactive, while the FTE profile is active. The two records have the same *WorkerID* but different *WID*s.
+- On April 15, during incremental cycle, the Microsoft Entra provisioning service automatically transfers ownership of the AD account to the active worker profile. In this case, it unlinks the contingent worker profile from the AD account and establishes a new link between John's active employee worker profile and John's AD account.
+- No changes are required in the provisioning app configuration to handle this scenario.
+
+#### Scenario 4: Future-dated conversion, when worker is an active CW/FTE
+
+Sometimes, a worker may already be an active contingent worker, when HR initiates a future-dated worker conversion transaction. Here's an example to illustrate how provisioning is handled for this scenario and what configuration changes are required to support this scenario.
+
+- It's January 1, 2023 and John Smith starts work at as a contingent worker. As there's no AD account associated with John's *WorkerID* (matching attribute), the provisioning service creates a new AD account and links John's contingent worker *WID (WorkdayID)* to John's AD account.
+- On January 15, HR initiates a transaction to convert John from contingent worker to full-time employee effective February 1, 2023.
+- Since Microsoft Entra provisioning service automatically processes future-dated hires, it processes John's new full-time employee worker profile on January 15, and update John's profile in AD with full-time employment details even though he's still a contingent worker.
+- To avoid this behavior and ensure that John's FTE details get provisioned on February 1, 2023, perform the following configuration changes.
+
+    **Configuration changes**
+
+    1. Engage your Workday admin to create a provisioning group called "Future-dated conversions".
+    2. Implement logic in Workday to add employee/contingent worker records with future dated conversions to this provisioning group.
+    3. Update the Microsoft Entra provisioning app to read this provisioning group. Refer to instructions here on how to retrieve the provisioning group
+    4. Create a [scoping filter](define-conditional-rules-for-provisioning-user-accounts) in Microsoft Entra ID to exclude worker profiles that are part of this provisioning group.
+    5. In Workday, implement logic so that when the date of conversion is effective, Workday removes the relevant employee/contingent worker record from the provisioning group in Workday.
+    6. With this configuration, the existing employee/contingent worker record continues to be effective and the provisioning changes happen only on the day of conversion.
+
+Note
+
+During initial full sync, you may notice a behavior where the attribute values associated with the previous inactive worker profile flow to the AD account of converted workers. This is temporary and as full sync progresses, it is eventually be overwritten by attribute values from the active worker profile. Once the full sync is complete and the provisioning job reaches steady state, it always picks the active worker profile during incremental sync.
+
+### Retrieving international job assignments and secondary job details
+
+By default, the Workday connector retrieves attributes associated with the worker's primary job. The connector also supports retrieving `Additional Job Data` associated with international job assignments or secondary jobs.
+
+Use the steps to retrieve attributes associated with international job assignments:
+
+1. Set the Workday connection URL uses Workday Web Service API version 30.0 or above. Accordingly set the [correct XPATH values](workday-attribute-reference#xpath-values-for-workday-web-services-wws-api-v30) in your Workday provisioning app.
+2. Use the selector `@wd:Primary_Job=0` on the `Worker_Job_Data`node to retrieve the correct attribute.
+    - **Example 1:** To get `SecondaryBusinessTitle`, use the XPATH `wd:Worker/wd:Worker_Data/wd:Employment_Data/wd:Worker_Job_Data[@wd:Primary_Job=0]/wd:Position_Data/wd:Business_Title/text()`
+    - **Example 2:** To get `SecondaryBusinessLocation`, use the XPATH `wd:Worker/wd:Worker_Data/wd:Employment_Data/wd:Worker_Job_Data[@wd:Primary_Job=0]/wd:Position_Data/wd:Business_Site_Summary_Data/wd:Location_Reference/@wd:Descriptor`
+
+## Known limitations
+
+This section lists current, known limitations customers may experience in their Workday integration.
+
+1. The connector doesn't support the [retrieval of Workday calculated fields](hr-attribute-retrieval-issues#issue-fetching-workday-calculated-fields).
+2. The connector doesn't support synchronizing photos from Workday.
+3. The connector doesn't support [advanced retrieval of workers whose last day of work is due](hr-user-update-issues#provisioning-last-day-of-work-field-from-workday).
+4. The connector is not supported in Microsoft tenants operated by 21Vianet (China).
+5. During incremental sync, there might be a [delay in processing the termination event](hr-user-update-issues#workday-termination-processing-delay) for workers located in the Asia Pacific and Australia/New Zealand regions.

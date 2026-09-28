@@ -1,0 +1,224 @@
+---
+layout: Conceptual
+title: Microsoft Entra on-premises application provisioning architecture - Microsoft Entra ID | Microsoft Learn
+canonicalUrl: https://learn.microsoft.com/en-us/entra/identity/app-provisioning/on-premises-application-provisioning-architecture
+uhfHeaderId: MSDocsHeader-Entra
+breadcrumb_path: /entra/breadcrumb/toc.json
+feedback_system: Standard
+feedback_product_url: https://feedback.azure.com/d365community/forum/22920db1-ad25-ec11-b6e6-000d3a4f0789
+author: jenniferf-skc
+ms.author: jfields
+ms.service: entra-id
+ms.subservice: app-provisioning
+manager: dougeby
+description: Presents an overview of on-premises application provisioning architecture.
+ms.topic: overview
+ms.date: 2026-05-05T00:00:00.0000000Z
+ms.collection: M365-identity-device-management
+ai-usage: ai-assisted
+locale: en-us
+document_id: 96fab37f-5881-5403-8e9a-7668ec9e6b96
+document_version_independent_id: 0e0c99cd-afac-4f40-c3dd-ef1fc8e6f8e5
+original_content_git_url: https://github.com/MicrosoftDocs/entra-docs-pr/blob/live/docs/identity/app-provisioning/on-premises-application-provisioning-architecture.md
+site_name: Docs
+depot_name: MSDN.entra-docs
+page_type: conceptual
+toc_rel: toc.json
+feedback_help_link_type: ''
+feedback_help_link_url: ''
+asset_id: identity/app-provisioning/on-premises-application-provisioning-architecture
+moniker_range_name: 
+monikers: []
+item_type: Content
+source_path: docs/identity/app-provisioning/on-premises-application-provisioning-architecture.md
+cmProducts:
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
+- https://authoring-docs-microsoft.poolparty.biz/devrel/fecfc034-c4c2-43e6-be47-948bd4addcea
+spProducts:
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
+- https://authoring-docs-microsoft.poolparty.biz/devrel/16cf36da-59bd-4744-91e9-295292c63e5e
+platformId: 1ef959ae-39d3-30f3-3a0a-a4545ab11c5e
+---
+
+# Microsoft Entra on-premises application provisioning architecture - Microsoft Entra ID | Microsoft Learn
+
+## Overview
+
+The following diagram shows an overview of how on-premises application provisioning works.
+
+![Diagram that shows the architecture for on-premises application provisioning.](media/on-premises-application-provisioning-architecture/arch-3.png)
+
+There are three primary components to provisioning users into an on-premises application:
+
+- The provisioning agent provides connectivity between Microsoft Entra ID and your on-premises environment.
+- The Extensible Connectivity(ECMA) Connector host converts provisioning requests from Microsoft Entra ID to requests made to your target application. It serves as a gateway between Microsoft Entra ID and your application. You can use it to import existing ECMA2 connectors used with Microsoft Identity Manager. The ECMA host isn't required if you've built a SCIM application or SCIM gateway.
+- The Microsoft Entra provisioning service serves as the synchronization engine.
+
+Note
+
+Microsoft Identity Manager Synchronization isn't required. But you can use it to build and test your ECMA2 connector before you import it into the ECMA host. The ECMA2 connector is specific to MIM, where the ECMA host is specific for use with the provisioning agent.
+
+### Firewall requirements
+
+You don't need to open inbound connections to the corporate network. The provisioning agents only use outbound connections to the provisioning service, which means there's no need to open firewall ports for incoming connections. You also don't need a perimeter (DMZ) network because all connections are outbound and take place over a secure channel.
+
+The required outbound endpoints for the provisioning agents are detailed [here](../hybrid/cloud-sync/how-to-prerequisites#firewall-and-proxy-requirements).
+
+## ECMA Connector Host architecture
+
+The ECMA Connector Host has several areas it uses to achieve on-premises provisioning. The following diagram is a conceptual drawing that presents these individual areas. The table below describes the areas in more detail.
+
+[![ECMA connector host](media/on-premises-application-provisioning-architecture/ecma-2.png)](media/on-premises-application-provisioning-architecture/ecma-2.png#lightbox)
+
+| Area | Description |
+| --- | --- |
+| Endpoints | Responsible for communication and data-transfer with the Microsoft Entra provisioning service |
+| In-memory cache | Used to store the data imported from the on-premises data source |
+| Autosync | Provides asynchronous data synchronization between the ECMA Connector Host and the on-premises data source |
+| Business logic | Used to coordinate all of the ECMA Connector Host activities. The Autosync time is configurable in the ECMA host. This is in the properties page. |
+
+### About anchor attributes and distinguished names
+
+The following information is provided to better explain the anchor attributes and the distinguished names used by the genericSQL connector.
+
+The anchor attribute is a unique attribute of an object type that doesn't change and represents that object in the ECMA Connector Host in-memory cache.
+
+The distinguished name (DN) is a name that uniquely identifies an object by indicating its current location in the directory hierarchy. Or with SQL, in the partition. The name is formed by concatenating the anchor attribute at the root of the directory partition.
+
+When we think of traditional DNs in a traditional format, for say, Active Directory or LDAP, we think of something similar to:
+
+`CN=Lola Jacobson,CN=Users,DC=contoso,DC=com`
+
+However, for a data source such as SQL, which is flat, not hierarchical, the DN needs to be either already present in one of the tables or created from the information we provide to the ECMA Connector Host.
+
+This can be achieved by checking **Autogenerated** in the checkbox when configuring the genericSQL connector. When you choose DN to be autogenerated, the ECMA host generates a DN in an LDAP format: CN=&lt;anchorvalue&gt;,OBJECT=&lt;type&gt;. This also assumes that the DN is Anchor **unchecked** in the Connectivity page.
+
+[![DN is Anchor unchecked](media/on-premises-application-provisioning-architecture/user-2.png)](media/on-premises-application-provisioning-architecture/user-2.png#lightbox)
+
+The genericSQL connector expects the DN to be populated using an LDAP format. The Generic SQL connector is using the LDAP style with the component name "OBJECT=". This allows it to use partitions (each object type is a partition).
+
+Since ECMA Connector Host currently only supports the USER object type, the OBJECT=&lt;type&gt; will be OBJECT=USER. So the DN for a user with an anchor value of ljacobson would be:
+
+CN=ljacobson,OBJECT=USER
+
+### User creation workflow
+
+1. The Microsoft Entra provisioning service queries the ECMA Connector Host to see if the user exists. It uses the **matching attribute** as the filter. This attribute is defined in the Microsoft Entra admin center under Enterprise applications -&gt; On-premises provisioning -&gt; provisioning -&gt; attribute matching. It's denoted by the 1 for matching precedence. You can define one or more matching attributes and prioritize them based on the precedence. Should you want to change the matching attribute you can also do so. [![Matching attribute](media/on-premises-application-provisioning-architecture/match-1.png)](media/on-premises-application-provisioning-architecture/match-1.png#lightbox)
+2. ECMA Connector Host receives the GET request and queries its internal cache to see if the user exists and has based imported. This is done using the matching attribute(s) above. If you define multiple matching attributes, the Microsoft Entra provisioning service sends a GET request for each attribute and the ECMA host checks its cache for a match until it finds one.
+3. If the user doesn't exist, Microsoft Entra ID makes a POST request to create the user. The ECMA Connector Host responds back to Microsoft Entra ID with the HTTP 201 and provide an ID for the user. This ID is derived from the anchor value defined in the object types page. This anchor will be used by Microsoft Entra ID to query the ECMA Connector Host for future and subsequent requests.
+4. If a change happens to the user in Microsoft Entra ID, then Microsoft Entra ID makes a GET request to retrieve the user using the anchor from the previous step, rather than the matching attribute in step 1. This allows, for example, the UPN to change without breaking the link between the user in Microsoft Entra ID and in the app.
+
+## Agent best practices
+
+- - Avoid all forms of inline inspection on outbound TLS communications between agents and Azure. This type of inline inspection causes degradation to the communication flow.
+- The agent must communicate with both Azure and your application, so the placement of the agent affects the latency of those two connections. You can minimize the latency of the end-to-end traffic by optimizing each network connection. Ways you can optimize each connection include:
+- Reducing the distance between the two ends of the hop.
+- Choosing the right network to traverse. For example, traversing a private network rather than the public internet might be faster because of dedicated links.
+- The agent uses certificates for secure communication. For details on the two certificates the system uses, including expiration behavior and recommendations for production use, see Certificate management.
+
+## Certificate management
+
+On-premises application provisioning relies on two distinct certificates. Understanding both certificates helps you plan production deployments, monitor agent health, and prevent service disruptions.
+
+### ECMA Connector Host certificate
+
+The Microsoft Entra ECMA Connector Host exposes an HTTPS endpoint on port 8585 (`https://localhost:8585/ecma2host_<connectorName>/scim`) that the provisioning agent calls. The TLS certificate the ECMA Connector Host uses secures that endpoint. When you first run the **Microsoft ECMA2Host Configuration Wizard**, it prompts you to create a certificate by selecting **Generate certificate**. The autogenerated certificate is self-signed, and the certificate's subject alternative name (SAN) matches the host name.
+
+Key facts about the ECMA Connector Host certificate:
+
+- The self-signed certificate is for testing only. It expires in two years by default and can't be revoked. Microsoft recommends using a certificate issued by a trusted certificate authority (CA) for production use.
+- The certificate subject must match the host name of the Windows server where the ECMA Connector Host is installed. For more information, see [SSL certificates](known-issues#ssl-certificates).
+- Replace expired certificates manually. Go to the **Settings** tab of the ECMA host to view the certificate expiration date. If the certificate is expired, select **Generate certificate** to create a new one. For step-by-step guidance, see [Troubleshoot test connection issues](on-premises-ecma-troubleshoot#troubleshoot-test-connection-issues).
+
+### Provisioning agent registration certificate
+
+The provisioning agent uses a separate certificate to register itself with the Microsoft Hybrid Identity Service (HIS) during installation. The agent creates this certificate during setup and uses your Microsoft Entra token to register both the agent and the certificate with the HIS Registration Service. For more information about how the agent registers with HIS, see [Agent installation](../hybrid/cloud-sync/concept-how-it-works#agent-installation).
+
+Important
+
+Cloud sync documents a related cleanup scenario: when a cloud sync agent has been uninstalled or stopped and its certificate then expires, the agent is permanently removed and can no longer interact with Microsoft services. For more information, see [Agent removal from the portal after uninstall](../hybrid/cloud-sync/how-to-configure#agent-removal-from-the-portal-after-uninstall). For on-premises application provisioning, contact Microsoft support if you need guidance on registration certificate lifetime or recovery procedures.
+
+To minimize the risk of service disruption:
+
+- Monitor agent health regularly through the Microsoft Entra admin center.
+- Plan for ECMA Connector Host certificate replacement before the two-year self-signed expiration.
+- For production deployments, replace the self-signed ECMA Connector Host certificate with one issued by a trusted CA.
+
+## High availability
+
+The following information is provided for high availability / failover scenarios.
+
+For on-premises apps using the ECMA connector: The recommendation is having one active agent and one passive agent (configured, but stopped, not assigned to the enterprise app in Microsoft Entra) per data center.
+
+When doing a failover, it's recommended to do the following:
+
+1. Stop the active agent (A).
+2. Unassign agent A from the enterprise application.
+3. Restart the passive agent (B).
+4. Assign agent B to the enterprise application.
+
+[![Diagram of high availability with ECMA connector.](media/on-premises-application-provisioning-architecture/high-availability-1.png)](media/on-premises-application-provisioning-architecture/high-availability-1.png#lightbox)
+
+For on-premises apps using the SCIM connector: The recommendation is having two active agents per application.
+
+[![Diagram of high availability with SCIM connector.](media/on-premises-application-provisioning-architecture/high-availability-2.png)](media/on-premises-application-provisioning-architecture/high-availability-2.png#lightbox)
+
+## Provisioning agent questions
+
+Some common questions are answered here.
+
+### How do I know the version of my provisioning agent?
+
+1. Sign in to the Windows server where the provisioning agent is installed.
+2. Go to **Control Panel** &gt; **Uninstall or Change a Program**.
+3. Look for the version that corresponds to the entry for **Microsoft Entra Connect Provisioning Agent**.
+
+### Can I install the provisioning agent on the same server running Microsoft Entra Connect or Microsoft Identity Manager?
+
+Yes. You can install the provisioning agent on the same server that runs Microsoft Entra Connect or Microsoft Identity Manager, but they aren't required.
+
+### How do I configure the provisioning agent to use a proxy server for outbound HTTP communication?
+
+The provisioning agent supports use of outbound proxy. You can configure it by editing the agent config file **C:\Program Files\Microsoft Azure AD Connect Provisioning Agent\AADConnectProvisioningAgent.exe.config**. Add the following lines into it toward the end of the file just before the closing `</configuration>` tag. Replace the variables `[proxy-server]` and `[proxy-port]` with your proxy server name and port values.
+
+```
+ <system.net>
+  <defaultProxy enabled="true" useDefaultCredentials="true">
+    <proxy
+     usesystemdefault="true"
+     proxyaddress="http://[proxy-server]:[proxy-port]"
+     bypassonlocal="true"
+    />
+   </defaultProxy>
+ </system.net>
+```
+
+### How do I ensure the provisioning agent can communicate with the Microsoft Entra tenant and no firewalls are blocking ports required by the agent?
+
+You can also check whether all the required ports are open.
+
+### How do I uninstall the provisioning agent?
+
+1. Sign in to the Windows server where the provisioning agent is installed.
+2. Go to **Control Panel** &gt; **Uninstall or Change a Program**.
+3. Uninstall the following programs:
+
+- Microsoft Entra Connect Provisioning Agent
+- Microsoft Entra Connect Agent Updater
+- Microsoft Entra Connect Provisioning Agent Package
+
+## Agent updates
+
+Microsoft regularly releases new versions of the provisioning agent with features, fixes, and updates. For the current version history and release notes, see [Microsoft Entra Connect Provisioning Agent: Version release history](provisioning-agent-release-version-history).
+
+Important
+
+The provisioning agent doesn't currently support automatic updates for the on-premises application provisioning scenario. You need to update the agent manually when a new version is released. For more information, see [Provisioning agent](known-issues#provisioning-agent) in the known issues article.
+
+To keep your agent current:
+
+- Check for new versions periodically through the Microsoft Entra admin center or the [provisioning agent release history](provisioning-agent-release-version-history).
+- Plan agent updates during scheduled maintenance windows to minimize impact on provisioning.
+- Microsoft provides direct support for the latest agent version and one version before. Stay within these supported versions so you can get help when you need it.

@@ -1,0 +1,190 @@
+---
+layout: Conceptual
+title: Configure Workday inbound provisioning in Microsoft Entra ID - Microsoft Entra ID | Microsoft Learn
+canonicalUrl: https://learn.microsoft.com/en-us/entra/identity/saas-apps/workday-inbound-cloud-only-tutorial
+uhfHeaderId: MSDocsHeader-Entra
+breadcrumb_path: /entra/breadcrumb/toc.json
+feedback_system: Standard
+feedback_product_url: https://feedback.azure.com/d365community/forum/22920db1-ad25-ec11-b6e6-000d3a4f0789
+author: jeevansd
+ms.author: jeedes
+ms.reviewer: jomondi
+ms.service: entra-id
+ms.subservice: saas-apps
+manager: pmwongera
+description: Learn how to configure inbound provisioning from Workday to Microsoft Entra ID
+ms.topic: how-to
+ms.date: 2024-05-06T00:00:00.0000000Z
+locale: en-us
+document_id: 51ada37b-33e9-6eaf-7676-53e4f1904d82
+document_version_independent_id: dd720ef1-5c71-e843-1546-1c68c9411ee6
+original_content_git_url: https://github.com/MicrosoftDocs/entra-docs-pr/blob/live/docs/identity/saas-apps/workday-inbound-cloud-only-tutorial.md
+site_name: Docs
+depot_name: MSDN.entra-docs
+page_type: conceptual
+toc_rel: toc.json
+feedback_help_link_type: ''
+feedback_help_link_url: ''
+asset_id: identity/saas-apps/workday-inbound-cloud-only-tutorial
+moniker_range_name: 
+monikers: []
+item_type: Content
+source_path: docs/identity/saas-apps/workday-inbound-cloud-only-tutorial.md
+cmProducts:
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
+- https://authoring-docs-microsoft.poolparty.biz/devrel/b1cfdec6-b0c3-4209-818c-736879856e0e
+spProducts:
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
+- https://authoring-docs-microsoft.poolparty.biz/devrel/2d0723c1-cf38-4c30-ab3d-5df787b33270
+platformId: 5aa25dd9-0add-c2da-3fa5-d841b0a4fc43
+---
+
+# Configure Workday inbound provisioning in Microsoft Entra ID - Microsoft Entra ID | Microsoft Learn
+
+The objective of this article is to show the steps you need to perform to provision worker data from Workday into Microsoft Entra ID.
+
+Note
+
+Use this article if the users you want to provision from Workday are cloud-only users who don't need an on-premises AD account. If the users require only on-premises AD account or both AD and Microsoft Entra account, then please refer to the article on [configure Workday to Active Directory](workday-inbound-tutorial) user provisioning.
+
+The following video provides a quick overview of the steps involved when planning your provisioning integration with Workday.
+
+## Overview
+
+The [Microsoft Entra user provisioning service](../app-provisioning/user-provisioning) integrates with the [Workday Human Resources API](https://community.workday.com/sites/default/files/file-hosting/productionapi/Human_Resources/v21.1/Get_Workers.html) in order to provision user accounts. The Workday user provisioning workflows supported by the Microsoft Entra user provisioning service enable automation of the following human resources and identity lifecycle management scenarios:
+
+- **Hiring new employees** - When a new employee is added to Workday, a user account is automatically created in Microsoft Entra ID and optionally Microsoft 365 and [other SaaS applications supported by Microsoft Entra ID](../app-provisioning/user-provisioning), with write-back of the email address to Workday.
+- **Employee attribute and profile updates** - When an employee record is updated in Workday (such as their name, title, or manager), their user account is automatically updated Microsoft Entra ID and optionally Microsoft 365 and [other SaaS applications supported by Microsoft Entra ID](../app-provisioning/user-provisioning).
+- **Employee terminations** - When an employee is terminated in Workday, their user account is automatically disabled in Microsoft Entra ID and optionally Microsoft 365 and [other SaaS applications supported by Microsoft Entra ID](../app-provisioning/user-provisioning).
+- **Employee rehires** - When an employee is rehired in Workday, their old account can be automatically reactivated or re-provisioned (depending on your preference) to Microsoft Entra ID and optionally Microsoft 365 and [other SaaS applications supported by Microsoft Entra ID](../app-provisioning/user-provisioning).
+
+### Who is this user provisioning solution best suited for?
+
+This Workday to Microsoft Entra user provisioning solution is ideally suited for:
+
+- Organizations that desire a pre-built, cloud-based solution for Workday user provisioning
+- Organizations that require direct user provisioning from Workday to Microsoft Entra ID
+- Organizations that require users to be provisioned using data obtained from Workday
+- Organizations using Microsoft 365 for email
+
+## Solution architecture
+
+This section describes the end-to-end user provisioning solution architecture for cloud-only users. There are two related flows:
+
+- **Authoritative HR data flow – from Workday to Microsoft Entra ID:** In this flow worker events (such as New Hires, Transfers, Terminations) first occur in Workday and then the event data flows into Microsoft Entra ID. Depending on the event, it may lead to create/update/enable/disable operations in Microsoft Entra ID.
+- **Writeback flow – from on-premises Active Directory to Workday:** Once the account creation is complete in Active Directory, it's synced with Microsoft Entra ID through Microsoft Entra Connect and information such as email, username and phone number can be written back to Workday.
+
+    ![Conceptual diagram of workday provisioning](../../includes/governance/media/workday-inbound-tutorial/workday-cloud-only-provisioning.png)
+
+### End-to-end user data flow
+
+1. The HR team performs worker transactions (Joiners/Movers/Leavers or New Hires/Transfers/Terminations) in Workday Employee Central
+2. The Microsoft Entra provisioning service runs scheduled synchronizations of identities from Workday EC and identifies changes that need to be processed for sync with on-premises Active Directory.
+3. The Microsoft Entra provisioning service determines the change and invokes create/update/enable/disable operation for the user in Microsoft Entra ID.
+4. If the [Workday Writeback](workday-writeback-tutorial) app is configured, it retrieves attributes such as email, username and phone number from Microsoft Entra ID.
+5. Microsoft Entra provisioning service sets email, username and phone number in Workday.
+
+## Planning your deployment
+
+Configuring Cloud HR driven user provisioning from Workday to Microsoft Entra ID requires considerable planning covering different aspects such as:
+
+- Determining the Matching ID
+- Attribute mapping
+- Attribute transformation
+- Scoping filters
+
+Please refer to the [cloud HR deployment plan](../app-provisioning/plan-cloud-hr-provision) for comprehensive guidelines around these topics.
+
+## Configure integration system user in Workday
+
+Refer to the section [configure integration system user](workday-inbound-tutorial#configure-integration-system-user-in-workday) for creating a Workday integration system user account with permissions to retrieve worker data.
+
+## Configure user provisioning from Workday to Microsoft Entra ID
+
+The following sections describe steps for configuring user provisioning from Workday to Microsoft Entra ID for cloud-only deployments.
+
+- Adding the Microsoft Entra provisioning connector app and creating the connection to Workday
+- Configure Workday and Microsoft Entra attribute mappings
+- Enable and launch user provisioning
+
+### Part 1: Adding the Microsoft Entra provisioning connector app and creating the connection to Workday
+
+**To configure Workday to Microsoft Entra provisioning for cloud-only users:**
+
+1. Sign in to the [Microsoft Entra admin center](https://entra.microsoft.com) as at least a [Cloud Application Administrator](../role-based-access-control/permissions-reference#cloud-application-administrator).
+2. Browse to **Entra ID** &gt; **Enterprise apps** &gt; **New application**.
+3. Search for **Workday to Microsoft Entra user provisioning**, and add that app from the gallery.
+4. After the app is added and the app details screen is shown, select **Provisioning**.
+5. Change the **Provisioning** **Mode** to **Automatic**.
+6. Complete the **Admin Credentials** section as follows:
+
+    - **Workday Username** – Enter the username of the Workday integration system account, with the tenant domain name appended. Should look something like: username@contoso4
+    - **Workday password –** Enter the password of the Workday integration system account
+    - **Workday Web Services API URL –** Enter the URL to the Workday web services endpoint for your tenant. The URL determines the version of the Workday Web Services API used by the connector.
+
+        | URL format | WWS API version used | XPATH changes required |
+        | --- | --- | --- |
+        | https://####.workday.com/ccx/service/tenantName | v21.1 | No |
+        | https://####.workday.com/ccx/service/tenantName/Human\_Resources | v21.1 | No |
+        | https://####.workday.com/ccx/service/tenantName/Human\_Resources/v##.# | v##.# | Yes |
+
+        Note
+
+        If no version information is specified in the URL, the app uses Workday Web Services (WWS) v21.1 and no changes are required to the default XPATH API expressions shipped with the app. To use a specific WWS API version, specify version number in the URL  Example: `https://wd3-impl-services1.workday.com/ccx/service/contoso4/Human_Resources/v34.0` If you're using a WWS API v30.0+, before turning on the provisioning job, please update the **XPATH API expressions** under **Attribute Mapping -&gt; Advanced Options -&gt; Edit attribute list for Workday** referring to the section [Managing your configuration](workday-inbound-tutorial#managing-your-configuration) and [Workday attribute reference](../app-provisioning/workday-attribute-reference#xpath-values-for-workday-web-services-wws-api-v30).
+    - **Notification Email –** Enter your email address, and check the "send email if failure occurs" checkbox.
+    - Click the **Test Connection** button.
+    - If the connection test succeeds, click the **Save** button at the top. If it fails, double-check that the Workday URL and credentials are valid in Workday.
+
+### Part 2: Configure Workday and Microsoft Entra attribute mappings
+
+In this section, you'll configure how user data flows from Workday to Microsoft Entra ID for cloud-only users.
+
+1. On the Provisioning tab under **Mappings**, click **Synchronize Workers to Microsoft Entra ID**.
+2. In the **Source Object Scope** field, you can select which sets of users in Workday should be in scope for provisioning to Microsoft Entra ID, by defining a set of attribute-based filters. The default scope is "all users in Workday". Example filters:
+
+    - Example: Scope to users with Worker IDs between 1000000 and 2000000
+
+        - Attribute: WorkerID
+        - Operator: REGEX Match
+        - Value: (1[0-9][0-9][0-9][0-9][0-9][0-9])
+    - Example: Only contingent workers and not regular employees
+
+        - Attribute: ContingentID
+        - Operator: IS NOT NULL
+3. In the **Target Object Actions** field, you can globally filter what actions are performed on Microsoft Entra ID. **Create** and **Update** are most common.
+4. In the **Attribute mappings** section, you can define how individual Workday attributes map to Active Directory attributes.
+5. Click on an existing attribute mapping to update it, or click **Add new mapping** at the bottom of the screen to add new mappings. An individual attribute mapping supports these properties:
+
+    - **Mapping Type**
+
+        - **Direct** – Writes the value of the Workday attribute to the AD attribute, with no changes
+        - **Constant** - Write a static, constant string value to the AD attribute
+        - **Expression** – Allows you to write a custom value to the AD attribute, based on one or more Workday attributes. [For more info, see this article on expressions](../app-provisioning/functions-for-customizing-application-data).
+    - **Source attribute** - The user attribute from Workday. If the attribute you're looking for isn't present, see [Customizing the list of Workday user attributes](workday-inbound-tutorial#customizing-the-list-of-workday-user-attributes).
+    - **Default value** – Optional. If the source attribute has an empty value, the mapping will write this value instead. Most common configuration is to leave this blank.
+    - **Target attribute** – The user attribute in Microsoft Entra ID.
+    - **Match objects using this attribute** – Whether or not this attribute should be used to uniquely identify users between Workday and Microsoft Entra ID. This value is typically set on the Worker ID field for Workday, which is typically mapped to the Employee ID attribute (new) or an extension attribute in Microsoft Entra ID.
+    - **Matching precedence** – Multiple matching attributes can be set. When there are multiple, they're evaluated in the order defined by this field. As soon as a match is found, no further matching attributes are evaluated.
+    - **Apply this mapping**
+
+        - **Always** – Apply this mapping on both user creation and update actions
+        - **Only during creation** - Apply this mapping only on user creation actions
+6. To save your mappings, click **Save** at the top of the Attribute-Mapping section.
+
+## Enable and launch user provisioning
+
+Once the Workday provisioning app configurations have been completed, you can turn on the provisioning service.
+
+Tip
+
+By default when you turn on the provisioning service, it will initiate provisioning operations for all users in scope. If there are errors in the mapping or Workday data issues, then the provisioning job might fail and go into the quarantine state. To avoid this, as a best practice, we recommend configuring **Source Object Scope** filter and testing your attribute mappings with a few test users before launching the full sync for all users. Once you have verified that the mappings work and are giving you the desired results, then you can either remove the filter or gradually expand it to include more users.
+
+1. In the **Provisioning** tab, set the **Provisioning Status** to **On**.
+2. Click **Save**.
+3. This operation starts the initial sync, which can take a variable number of hours depending on how many users are in the Workday tenant. You can check the progress bar to the track the progress of the sync cycle.
+4. At any time, check the **Provisioning** tab in the Microsoft Entra admin center to see what actions the provisioning service has performed. The provisioning logs lists all individual sync events performed by the provisioning service, such as which users are being read out of Workday and then subsequently added or updated to Microsoft Entra ID.
+5. Once the initial sync is completed, it will write an audit summary report in the **Provisioning** tab, as shown below.
+
+![Screenshot of provisioning progress bar](media/sap-successfactors-inbound-provisioning/prov-progress-bar-stats.png)

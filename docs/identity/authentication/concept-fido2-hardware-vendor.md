@@ -1,0 +1,349 @@
+---
+layout: Conceptual
+title: Microsoft Entra ID attestation for FIDO2 security key vendors - Microsoft Entra ID | Microsoft Learn
+canonicalUrl: https://learn.microsoft.com/en-us/entra/identity/authentication/concept-fido2-hardware-vendor
+uhfHeaderId: MSDocsHeader-Entra
+breadcrumb_path: /entra/breadcrumb/toc.json
+feedback_system: Standard
+feedback_product_url: https://feedback.azure.com/d365community/forum/22920db1-ad25-ec11-b6e6-000d3a4f0789
+author: Justinha
+ms.author: justinha
+ms.service: entra-id
+ms.subservice: authentication
+manager: dougeby
+description: Learn about requirements to prepare FIDO2 hardware for attestation with Microsoft Entra ID.
+ms.date: 2026-09-17T00:00:00.0000000Z
+ms.reviewer: kimhana
+ms.topic: concept-article
+locale: en-us
+document_id: f2494bd0-3d61-f686-8a8e-fbbee3ca8b38
+document_version_independent_id: cdb3d225-2df6-5766-b45d-f9ba5c7e19e1
+original_content_git_url: https://github.com/MicrosoftDocs/entra-docs-pr/blob/live/docs/identity/authentication/concept-fido2-hardware-vendor.md
+site_name: Docs
+depot_name: MSDN.entra-docs
+page_type: conceptual
+toc_rel: toc.json
+feedback_help_link_type: ''
+feedback_help_link_url: ''
+asset_id: identity/authentication/concept-fido2-hardware-vendor
+moniker_range_name: 
+monikers: []
+item_type: Content
+source_path: docs/identity/authentication/concept-fido2-hardware-vendor.md
+cmProducts:
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
+- https://authoring-docs-microsoft.poolparty.biz/devrel/bcbcbad5-4208-4783-8035-8481272c98b8
+- https://authoring-docs-microsoft.poolparty.biz/devrel/54fcef21-b24a-4ef4-9c4a-a525c23ee9a3
+spProducts:
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
+- https://authoring-docs-microsoft.poolparty.biz/devrel/43b2e5aa-8a6d-4de2-a252-692232e5edc8
+- https://authoring-docs-microsoft.poolparty.biz/devrel/8ab60220-e56b-41ff-a8bf-45b8d7ab716f
+platformId: a40aa995-f665-c93b-d51f-235672c550b9
+---
+
+# Microsoft Entra ID attestation for FIDO2 security key vendors - Microsoft Entra ID | Microsoft Learn
+
+Passkeys (FIDO2) enable phishing-resistant authentication. They can replace weak credentials with strong phishing-resistant public/private-key credentials that can't be reused, replayed, or shared across services. They can be stored securely on a device or synced across trusted devices through an encrypted cloud service.
+
+In the Microsoft Entra ID authentication methods policy, an Authentication Policy Administrator can enforce attestation for FIDO2 security keys. If **Enforce attestation** is selected, Microsoft requires extra metadata from passkeys (FIDO2) that are registered with the tenant. As a vendor, your passkey (FIDO2) is usable when attestation is enforced if attestation requirements are met.
+
+Note
+
+Microsoft Entra ID supports device-bound and synced passkeys (FIDO2). For more information about how to enable passkeys (FIDO2), see [Enable passkeys (FIDO2) for your organization](how-to-authentication-passkeys-fido2).
+
+## Attestation requirements
+
+Microsoft relies on the [FIDO Alliance Metadata Service (MDS)](https://fidoalliance.org/metadata/) to determine passkey authenticator compatibility with Windows, Microsoft Edge browser, and online Microsoft accounts. Vendors report data to the FIDO MDS.
+
+FIDO2 standards (WebAuthn and CTAP) require providers to return a valid attestation statement.
+
+The specific requirements vary based on how an administrator configures attestation requirements in the **Passkeys (FIDO2)** policy.
+
+| Attestation | Description |
+| --- | --- |
+| Enforced | The vendor must provide a valid *packed* attestation statement and a complete certificate that chains back to the attestation roots extracted from the FIDO Alliance MDS, so that Microsoft can validate the key's metadata. |
+| Not enforced | The vendor must provide one of the following valid attestation statements:- "none"- "tpm"- "packed" (AttCA)- Custom attestation formats &lt;= 32 characters |
+
+Note
+
+Vendors are responsible for publishing all root attestation certificates to the FIDO Alliance MDS; otherwise, attestation verification can fail.
+
+Additionally, if attestation is enforced, the following requirements apply:
+
+- Your authenticator needs to have a FIDO2 certification. This can be at *any* level. To learn more about the certification, visit the [FIDO Alliance Certification Overview](https://fidoalliance.org/certification/) website.
+- Your product metadata needs to be uploaded to the FIDO Alliance MDS, and you need to verify your metadata is in the MDS. The metadata must indicate that your authenticator supports:
+    - FIDO 2.0 or higher.
+    - User verification or client PIN — Microsoft Entra ID requires user verification with biometrics or PIN for all FIDO2 authentication attempts.
+    - Resident keys (or discoverable credentials) — Resident keys are required to use a security key to sign in to Microsoft Entra ID without entering a username.
+    - Hash-Based Message Authentication Code (HMAC) secret extension or Pseudo-Random Function (PRF) extension — An HMAC secret extension or PRF extension is required to use a security key to unlock Windows in offline scenarios.
+
+## Timelines
+
+Microsoft ingests the latest version of the FIDO Alliance MDS every month. There might be a maximum four-week delay from the time that your FIDO2 security key appears in FIDO Alliance MDS to when Microsoft recognizes the key model. If your key meets the Microsoft attestation requirements, it automatically appears on the Microsoft FIDO2 partner page.
+
+## FIDO2 security keys eligible for attestation with Microsoft Entra ID
+
+The following table includes each FIDO2 security key model listed in MDS version 279 that's eligible for attestation with Microsoft Entra ID. For each model, the table shows its Authenticator Attestation Globally Unique Identifier (AAGUID) and feature capabilities.
+
+| Description | AAGUID | Bio | USB | NFC | BLE |
+| --- | --- | --- | --- | --- | --- |
+| ACS FIDO Authenticator | 50a45b0c-80e7-f944-bf29-f552bfa2e048 | ❌ | ✅ | ❌ | ❌ |
+| ACS FIDO Authenticator Card | 973446ca-e21c-9a9b-99f5-9b985a67af0f | ❌ | ❌ | ✅ | ❌ |
+| ACS FIDO Authenticator NFC | c89e6a38-6c00-5426-5aa5-c9cbf48f0382 | ❌ | ✅ | ✅ | ❌ |
+| ACS PocketKey+ Bio | cb4f796c-a20a-af9e-d639-213c1ec247f3 | ✅ | ✅ | ✅ | ❌ |
+| Allthenticator Android App: roaming BLE FIDO2 Allthenticator for Windows, Mac, Linux, and Allthenticate door readers | 5ca1ab1e-fa57-1337-f1d0-a117371ca702 | ✅ | ✅ | ❌ | ❌ |
+| Allthenticator iOS App: roaming BLE FIDO2 Allthenticator for Windows, Mac, Linux, and Allthenticate door readers | 5ca1ab1e-1337-fa57-f1d0-a117e71ca702 | ✅ | ✅ | ❌ | ❌ |
+| Arculus FIDO 2.1 Key Card [P71] | 3f59672f-20aa-4afe-b6f4-7e5e916b6d98 | ❌ | ❌ | ✅ | ❌ |
+| Arculus FIDO2/U2F Key Card | 9d3df6ba-282f-11ed-a261-0242ac120002 | ❌ | ❌ | ✅ | ❌ |
+| ATKey.Card CTAP2.0 | d41f5a69-b817-4144-a13c-9ebd6d9254d6 | ✅ | ❌ | ❌ | ❌ |
+| ATKey.Card NFC | da1fa263-8b25-42b6-a820-c0036f21ba7f | ✅ | ✅ | ✅ | ❌ |
+| ATKey.Pro CTAP2.0 | e1a96183-5016-4f24-b55b-e3ae23614cc6 | ✅ | ❌ | ❌ | ❌ |
+| ATKey.Pro CTAP2.1 | e416201b-afeb-41ca-a03d-2281c28322aa | ✅ | ✅ | ❌ | ❌ |
+| ATKey.ProS | ba76a271-6eb6-4171-874d-b6428dbe3437 | ✅ | ✅ | ❌ | ❌ |
+| ATLKey Authenticator | 019614a3-2703-7e35-a453-285fd06c5d24 | ❌ | ✅ | ❌ | ❌ |
+| Atos CardOS FIDO2 | 1c086528-58d5-f211-823c-356786e36140 | ❌ | ✅ | ✅ | ❌ |
+| authenton1 - CTAP2.1 | b267239b-954f-4041-a01b-ee4f33c145b6 | ❌ | ✅ | ✅ | ❌ |
+| CardOS FIDO2 Token | 8da0e4dc-164b-454e-972e-88f362b23d59 | ❌ | ✅ | ✅ | ❌ |
+| Chipwon Clife Key | 930b0c03-ef46-4ac4-935c-538dccd1fcdb | ❌ | ✅ | ❌ | ❌ |
+| Chunghwa Telecom FIDO2 Smart Card Authenticator | 175cd298-83d2-4a26-b637-313c07a6434e | ❌ | ❌ | ✅ | ❌ |
+| Clife Key 2 | fc5ca237-69a0-4f3c-afe4-1ebc66def6df | ❌ | ✅ | ❌ | ❌ |
+| Clife Key 2 NFC | 23315ad0-6aca-4ba1-952e-f044f1e36976 | ❌ | ✅ | ✅ | ❌ |
+| Crayonic KeyVault K1 (USB-NFC-BLE FIDO2 Authenticator) | be727034-574a-f799-5c76-0929e0430973 | ✅ | ✅ | ✅ | ✅ |
+| Cryptnox FIDO2 | 9c835346-796b-4c27-8898-d6032f515cc5 | ❌ | ❌ | ✅ | ❌ |
+| Cryptnox FIDO2.1 | 1d1b4e33-76a1-47fb-97a0-14b10d0933f1 | ❌ | ❌ | ✅ | ❌ |
+| Deepnet SafeKey/Classic (NFC) | b12eac35-586c-4809-a4b1-d81af6c305cf | ❌ | ❌ | ❌ | ❌ |
+| Egomet FIDO2 Authenticator for Android | 1105e4ed-af1d-02ff-ffff-ffffffffffff | ✅ | ❌ | ❌ | ❌ |
+| Ensurity AUTH BioPro | 454e5346-4944-4ffd-6c93-8e9267193e9b | ✅ | ✅ | ❌ | ❌ |
+| Ensurity ThinC | 454e5346-4944-4ffd-6c93-8e9267193e9a | ✅ | ✅ | ❌ | ❌ |
+| Enterprise Security Key Series with NFC (Consumer Profile) | 24083bcb-3034-4867-99de-a3b52e1d426a | ❌ | ✅ | ✅ | ❌ |
+| Enterprise Security Key Series with NFC (Enterprise Profile) | ab7d1767-3fa0-4388-b6c4-feef7a844809 | ❌ | ✅ | ✅ | ❌ |
+| eToken FIDO NFC | b113a455-cfb6-4c17-8cba-cd952feb7d48 | ❌ | ❌ | ✅ | ❌ |
+| eToken Fusion BIO | d716019a-9f4e-4041-9750-17c78f8ae81a | ✅ | ✅ | ❌ | ❌ |
+| eToken Fusion FIPS | 050dd0bc-ff20-4265-8d5d-305c4b215192 | ❌ | ✅ | ❌ | ❌ |
+| eToken Fusion NFC FIPS | 10c70715-2a9a-4de1-b0aa-3cff6d496d39 | ❌ | ❌ | ✅ | ❌ |
+| eToken Fusion NFC PIV | 146e77ef-11eb-4423-b847-ce77864e9411 | ❌ | ❌ | ✅ | ❌ |
+| eWBM eFA310 FIDO2 Authenticator | 95442b2e-f15e-4def-b270-efb106facb4e | ✅ | ❌ | ❌ | ❌ |
+| eWBM eFA320 FIDO2 Authenticator | 87dbc5a1-4c94-4dc8-8a47-97d800fd1f3c | ✅ | ❌ | ❌ | ❌ |
+| eWBM eFPA FIDO2 Authenticator | 61250591-b2bc-4456-b719-0b17be90bb30 | ✅ | ❌ | ❌ | ❌ |
+| Excelsecu eSecu FIDO2 Fingerprint Key | 6002f033-3c07-ce3e-d0f7-0ffe5ed42543 | ✅ | ✅ | ❌ | ❌ |
+| Excelsecu eSecu FIDO2 Fingerprint Security Key | 20f0be98-9af9-986a-4b42-8eca4acb28e4 | ✅ | ✅ | ❌ | ❌ |
+| Excelsecu eSecu FIDO2 Fingerprint Security Key | d384db22-4d50-ebde-2eac-5765cf1e2a44 | ✅ | ✅ | ❌ | ❌ |
+| Excelsecu eSecu FIDO2 NFC Security Key | a3975549-b191-fd67-b8fb-017e2917fdb3 | ❌ | ✅ | ✅ | ❌ |
+| Excelsecu eSecu FIDO2 NFC Security Key | fbefdf68-fe86-0106-213e-4d5fa24cbe2e | ❌ | ✅ | ✅ | ❌ |
+| Excelsecu eSecu FIDO2 Pro Security Key | 0d9b2e56-566b-c393-2940-f821b7f15d6d | ❌ | ✅ | ✅ | ✅ |
+| Excelsecu eSecu FIDO2 PRO Security Key | bbf4b6a7-679d-f6fc-c4f2-8ac0ddf9015a | ❌ | ✅ | ✅ | ✅ |
+| Excelsecu eSecu FIDO2 Security Key | cdbdaea2-c415-5073-50f7-c04e968640b6 | ❌ | ✅ | ❌ | ❌ |
+| Feitian AllinOne FIDO2 Authenticator | 12ded745-4bed-47d4-abaa-e713f51d6393 | ✅ | ✅ | ✅ | ✅ |
+| Feitian BioPass FIDO2 Authenticator | 77010bd7-212a-4fc9-b236-d2ca5e9d4084 | ✅ | ✅ | ❌ | ❌ |
+| Feitian BioPass FIDO2 Plus (Enterprise Profile) | a02140b7-0cbd-42e1-a9b5-a39da2545114 | ✅ | ✅ | ❌ | ❌ |
+| Feitian BioPass FIDO2 Plus Authenticator | 42df17de-06ba-4177-a2bb-6701be1380d6 | ✅ | ✅ | ❌ | ❌ |
+| Feitian BioPass FIDO2 Plus Authenticator | b6ede29c-3772-412c-8a78-539c1f4c62d2 | ✅ | ✅ | ❌ | ❌ |
+| Feitian BioPass FIDO2 Pro (Enterprise Profile) | 2bff89f2-323a-48fc-b7c8-9ff7fe87c07e | ✅ | ✅ | ❌ | ❌ |
+| Feitian BioPass FIDO2 Pro Authenticator | 4c0cf95d-2f40-43b5-ba42-4c83a11c04ba | ✅ | ✅ | ❌ | ❌ |
+| Feitian ePass FIDO Authenticator (CTAP2.1, CTAP2.0, U2F) | 12755c32-8ad1-46eb-881c-e0b38d848b09 | ❌ | ✅ | ❌ | ❌ |
+| Feitian ePass FIDO-NFC (Enterprise Profile) (CTAP2.1, CTAP2.0, U2F) | 39589099-9a75-49fc-afaa-801ca211c62a | ❌ | ✅ | ✅ | ❌ |
+| Feitian ePass FIDO-NFC(CTAP2.1, CTAP2.0, U2F) | 78ba3993-d784-4f44-8d6e-cc0a8ad5230e | ❌ | ✅ | ✅ | ❌ |
+| Feitian ePass FIDO2 Authenticator | 833b721a-ff5f-4d00-bb2e-bdda3ec01e29 | ❌ | ✅ | ❌ | ❌ |
+| Feitian ePass FIDO2-NFC Authenticator | ee041bce-25e5-4cdb-8f86-897fd6418464 | ❌ | ✅ | ✅ | ❌ |
+| Feitian ePass FIDO2-NFC Series (CTAP2.1, CTAP2.0, U2F) | 234cd403-35a2-4cc2-8015-77ea280c77f5 | ❌ | ✅ | ✅ | ❌ |
+| FEITIAN FT-JCOS BioCard | 238ab2f5-b57f-4917-b3c6-3d3c6c0c350f | ✅ | ✅ | ✅ | ❌ |
+| Feitian iePass FIDO Authenticator | 3e22415d-7fdf-4ea4-8a0c-dd60c4249b9d | ❌ | ✅ | ❌ | ❌ |
+| FIDO KeyPass S3 | f4c63eff-d26c-4248-801c-3736c7eaa93a | ❌ | ✅ | ❌ | ❌ |
+| Foongtone FIDO Authenticator | 46544d5d-8f5d-4db4-89ac-ea8977073fff | ❌ | ❌ | ✅ | ❌ |
+| FT-JCOS FIDO Fingerprint Card | 8c97a730-3f7b-41a6-87d6-1e9b62bda6f0 | ❌ | ❌ | ✅ | ❌ |
+| G+D StarKey FIDO2-NFC | 7a53c643-9dec-4219-b3a4-f9d24aca4e12 | ❌ | ✅ | ✅ | ❌ |
+| GoldKey Security Token | 0db01cd6-5618-455b-bb46-1ec203d3213e | ❌ | ✅ | ✅ | ❌ |
+| Google Titan Security Key v2 | 42b4fb4a-2866-43b2-9bf7-6c6669c2e5d3 | ❌ | ✅ | ✅ | ❌ |
+| GoTrust Cyber Key | 6d4aa745-dad5-40c4-b9b4-6a252fcee70f | ❌ | ✅ | ✅ | ❌ |
+| GoTrust Idem Card | 9f0d8150-baa5-4c00-9299-ad62c8bb4e87 | ❌ | ❌ | ❌ | ❌ |
+| GoTrust Idem Key | 3b1adb99-0dfe-46fd-90b8-7f7614a4de2a | ❌ | ✅ | ✅ | ❌ |
+| GoTrust Idem Key | c611b55c-77b2-4527-8082-590e931b2f08 | ❌ | ✅ | ✅ | ❌ |
+| GoTrust Idem Key mini | 72a2b5b1-95a5-4df9-a881-4192aff4f72e | ❌ | ✅ | ❌ | ❌ |
+| GSTAG OAK FIDO2 Authenticator | 773c30d9-5919-4e96-a4f5-db65e95cf890 | ❌ | ❌ | ✅ | ❌ |
+| HID Crescendo 4000 | 0b8b05a4-ebd4-4b0b-8f5f-33d7b6e606ab | ❌ | ❌ | ✅ | ❌ |
+| HID Crescendo 4000 | 2a55aee6-27cb-42c0-bc6e-04efe999e88a | ❌ | ❌ | ✅ | ❌ |
+| HID Crescendo 4000 FIDO | aa79f476-ea00-417e-9628-1e8365123922 | ❌ | ❌ | ✅ | ❌ |
+| HID Crescendo 4000 FIPS | 8eec9bf9-486c-46da-9a67-1fbb4f66b9ed | ❌ | ❌ | ✅ | ❌ |
+| HID Crescendo C2300 | aeb6569c-f8fb-4950-ac60-24ca2bbe2e52 | ❌ | ❌ | ✅ | ❌ |
+| HID Crescendo C3000 | c80dbd9a-533f-4a17-b941-1a2f1c7cedff | ❌ | ❌ | ✅ | ❌ |
+| HID Crescendo Enabled | 54d9fee8-e621-4291-8b18-7157b99c5bec | ❌ | ❌ | ✅ | ❌ |
+| HID Crescendo Fusion | c4ddaf11-3032-4e77-b3b9-3a340369b9ad | ❌ | ❌ | ✅ | ❌ |
+| HID Crescendo Key | 692db549-7ae5-44d5-a1e5-dd20a493b723 | ❌ | ✅ | ✅ | ❌ |
+| HID Crescendo Key V2 | 2d3bec26-15ee-4f5d-88b2-53622490270b | ❌ | ✅ | ✅ | ❌ |
+| HID Crescendo Key V3 | 7991798a-a7f3-487f-98c0-3faf7a458a04 | ❌ | ✅ | ✅ | ❌ |
+| HID Crescendo Key V3 | 87c13177-85d6-40ac-8c61-fe7ab3de9dfb | ❌ | ✅ | ✅ | ❌ |
+| HID Crescendo Key V3 - Enterprise Edition | 13ac47cf-1d78-4fd5-9060-aedaabacf826 | ❌ | ✅ | ✅ | ❌ |
+| Hideez Key 4 FIDO2 SDK | 4e768f2c-5fab-48b3-b300-220eb487752b | ❌ | ✅ | ✅ | ✅ |
+| Hyper FIDO Bio Security Key | d821a7d4-e97c-4cb6-bd82-4237731fd4be | ✅ | ✅ | ❌ | ❌ |
+| Hyper FIDO Pro | 9f77e279-a6e2-4d58-b700-31e5943c6a98 | ❌ | ✅ | ❌ | ❌ |
+| Hyper FIDO Pro (CTAP2.1, CTAP2.0, U2F) | 6999180d-630c-442d-b8f7-424b90a43fae | ❌ | ✅ | ❌ | ❌ |
+| Hyper FIDO Pro NFC | 23195a52-62d9-40fa-8ee5-23b173f4fb52 | ❌ | ✅ | ✅ | ❌ |
+| HYPR FIDO2 Authenticator | 0076631b-d4a0-427f-5773-0ec71c9e0279 | ✅ | ❌ | ❌ | ❌ |
+| ID-One Card | bb405265-40cf-4115-93e5-a332c1968d8c | ❌ | ❌ | ✅ | ❌ |
+| ID-One Key | 82b0a720-127a-4788-b56d-d1d4b2d82eac | ❌ | ✅ | ✅ | ❌ |
+| ID-One Key | f2145e86-211e-4931-b874-e22bba7d01cc | ❌ | ✅ | ✅ | ❌ |
+| IDCore 3121 Fido | e86addcd-7711-47e5-b42a-c18257b0bf61 | ❌ | ❌ | ✅ | ❌ |
+| IDEMIA ID-ONE Card | 8d1b1fcb-3c76-49a9-9129-5515b346aa02 | ❌ | ✅ | ✅ | ❌ |
+| IDEMIA SOLVO Fly 80 R3 FIDO Card c | dda9aa35-aaf1-4d3c-b6db-7902fd7dbbbf | ❌ | ❌ | ✅ | ❌ |
+| IDEMIA SOLVO Fly 80 R3 FIDO Card e | def8ab1a-9f91-44f1-a103-088d8dc7d681 | ❌ | ❌ | ✅ | ❌ |
+| IDEX CTAP2.1 Biometrics | 49a15c1c-3f63-3f51-23a7-b9e00096edd1 | ✅ | ✅ | ✅ | ❌ |
+| IDmelon Authenticator | 820d89ed-d65a-409e-85cb-f73f0578f82a | ✅ | ✅ | ❌ | ✅ |
+| IDmelon Key | 39a5647e-1853-446c-a1f6-a79bae9f5bc7 | ✅ | ✅ | ✅ | ❌ |
+| IDPrime 3930 FIDO | ca4cff1b-5a81-4404-8194-59aabcf1660b | ❌ | ❌ | ✅ | ❌ |
+| IDPrime 3940 FIDO | b50d5e0a-7f81-4959-9b12-f45407407503 | ❌ | ❌ | ✅ | ❌ |
+| IDPrime 931 Fido | 2194b428-9397-4046-8f39-007a1605a482 | ❌ | ❌ | ✅ | ❌ |
+| IDPrime 941 Fido | 2ffd6452-01da-471f-821b-ea4bf6c8676a | ❌ | ❌ | ✅ | ❌ |
+| IIST FIDO2 Authenticator | 4b89f401-464e-4745-a520-486ddfc5d80e | ❌ | ✅ | ❌ | ❌ |
+| ImproveID Authenticator | 4c50ff10-1057-4fc6-b8ed-43a529530c3c | ❌ | ✅ | ✅ | ❌ |
+| KEY-ID FIDO2 Authenticator | d91c5288-0ef0-49b7-b8ae-21ca0aa6b3f3 | ❌ | ✅ | ❌ | ❌ |
+| KeyXentic FIDO2 Secp256R1 FIDO2 CTAP2 Authenticator | 4b3f8944-d4f2-4d21-bb19-764a986ec160 | ✅ | ✅ | ❌ | ❌ |
+| KeyXentic FIDO2 Secp256R1 FIDO2 CTAP2 Authenticator | ec31b4cc-2acc-4b8e-9c01-bade00ccbe26 | ✅ | ✅ | ❌ | ❌ |
+| KONAI Secp256R1 FIDO2 Conformance Testing CTAP2 Authenticator | f7c558a0-f465-11e8-b568-0800200c9a66 | ✅ | ✅ | ✅ | ❌ |
+| KX701 SmartToken FIDO | fec067a1-f1d0-4c5e-b4c0-cc3237475461 | ❌ | ✅ | ✅ | ❌ |
+| Mettlesemi Vishwaas Eagle Authenticator using FIDO2 | 489ff376-b48d-6640-bb69-782a860ca795 | ❌ | ✅ | ❌ | ❌ |
+| Mettlesemi Vishwaas Hawk Authenticator using FIDO2 | bb66c294-de08-47e4-b7aa-d12c2cd3fb20 | ❌ | ✅ | ❌ | ❌ |
+| NEOWAVE Badgeo FIDO2 | c5703116-972b-4851-a3e7-ae1259843399 | ❌ | ✅ | ✅ | ❌ |
+| NEOWAVE Badgeo FIDO2 (CTAP 2.1) | a7fc3f84-86a3-4da4-a3d7-eb6485a066d8 | ❌ | ✅ | ✅ | ❌ |
+| NEOWAVE Winkeo FIDO2 | 3789da91-f943-46bc-95c3-50ea2012f03a | ❌ | ✅ | ❌ | ❌ |
+| NEOWAVE WINKEO V2.0 | 2c2aeed8-8174-4159-814b-486e92a261d0 | ❌ | ✅ | ❌ | ❌ |
+| Nitrokey 3 AM | 2cd2f727-f6ca-44da-8f48-5c2e5da000a2 | ❌ | ✅ | ❌ | ❌ |
+| NXP Semiconductros FIDO2 Conformance Testing CTAP2 Authenticator | 07a9f89c-6407-4594-9d56-621d5f1e358b | ❌ | ❌ | ❌ | ❌ |
+| Nymi FIDO2 Authenticator | 0acf3011-bc60-f375-fb53-6f05f43154e0 | ✅ | ❌ | ✅ | ❌ |
+| OCTATCO EzFinger2 FIDO2 AUTHENTICATOR | a1f52be5-dfab-4364-b51c-2bd496b14a56 | ✅ | ❌ | ❌ | ❌ |
+| OneKey FIDO2 Bluetooth Authenticator | 70e7c36f-f2f6-9e0d-07a6-bcc243262e6b | ❌ | ✅ | ❌ | ✅ |
+| OneSpan DIGIPASS FX1 BIO | 30b5035e-d297-4ff1-b00b-addc96ba6a98 | ✅ | ✅ | ❌ | ✅ |
+| OneSpan DIGIPASS FX1-C | 30b5035e-d297-4ff1-020b-addc96ba6a98 | ❌ | ✅ | ✅ | ❌ |
+| OneSpan DIGIPASS FX1a | 30b5035e-d297-4ff1-010b-addc96ba6a98 | ✅ | ✅ | ✅ | ❌ |
+| OneSpan DIGIPASS FX2-A | 30b5035e-d297-4ff2-010b-addc96ba6a98 | ✅ | ✅ | ✅ | ✅ |
+| OneSpan DIGIPASS FX7 | 30b5035e-d297-4ff7-020b-addc96ba6a98 | ❌ | ✅ | ❌ | ❌ |
+| OneSpan DIGIPASS FX7 | 30b5035e-d297-4ff7-b00b-addc96ba6a98 | ❌ | ✅ | ❌ | ❌ |
+| OneSpan DIGIPASS FX7-B | 30b5035e-d297-4ff7-010b-addc96ba6a98 | ❌ | ✅ | ❌ | ❌ |
+| OneSpan DIGIPASS FX7-C | 30b5035e-d297-4ff7-030b-addc96ba6a98 | ❌ | ✅ | ✅ | ❌ |
+| OneSpan FIDO Touch | 30b5035e-d297-4fc1-b00b-addc96ba6a97 | ❌ | ✅ | ❌ | ✅ |
+| OnlyKey Secp256R1 FIDO2 CTAP2 Authenticator | 998f358b-2dd2-4cbe-a43a-e8107438dfb3 | ❌ | ❌ | ❌ | ❌ |
+| OpenSK authenticator | 664d9f67-84a2-412a-9ff7-b4f7d8ee6d05 | ❌ | ✅ | ❌ | ❌ |
+| Pone Biometrics OFFPAD Authenticator | 69700f79-d1fb-472e-bd9b-a3a3b9a9eda0 | ✅ | ❌ | ❌ | ✅ |
+| Precision InnaIT Key FIDO 2 Level 2 certified | 88bbd2f0-342a-42e7-9729-dd158be5407a | ✅ | ✅ | ❌ | ❌ |
+| RSA Authenticator 4 for Android | 59f85fe7-faa5-4c92-9f52-697b9d4d5473 | ✅ | ❌ | ❌ | ❌ |
+| RSA Authenticator 4 for iOS | 8681a073-5f50-4d52-bce4-e21658d207b3 | ✅ | ❌ | ❌ | ❌ |
+| RSA DS100 | 7e3f3d30-3557-4442-bdae-139312178b39 | ❌ | ✅ | ❌ | ❌ |
+| Safenet eToken FIDO | efb96b10-a9ee-4b6c-a4a9-d32125ccd4a4 | ❌ | ✅ | ❌ | ❌ |
+| SafeNet eToken Fusion | 74820b05-a6c9-40f9-8fb0-9f86aca93998 | ❌ | ✅ | ❌ | ❌ |
+| SafeNet eToken Fusion CC | 23786452-f02d-4344-87ed-aaf703726881 | ❌ | ✅ | ❌ | ❌ |
+| SECORA ID Key S USB by Infineon Consumer Edition | 9a272558-5cfa-4424-be37-65509677b77d | ❌ | ❌ | ✅ | ❌ |
+| SECORA ID V2 by Infineon Pay Edition | 3e9db280-256a-4e17-b08e-19d79e9be166 | ❌ | ❌ | ✅ | ❌ |
+| SECORA ID V2 by Infineon Pay Edition M | 005b20e1-f146-4b87-8f3a-36848ff60ea6 | ❌ | ❌ | ✅ | ❌ |
+| SECORA ID V2 FIDO2.1 L1 | 4e2ddbc2-2687-4709-8551-cb66c9776bfe | ❌ | ❌ | ✅ | ❌ |
+| Securitag Assembly Group FIDO Authenticator NFC | 5df66f62-5b47-43d3-aa1d-a6e31c8dbeb5 | ❌ | ✅ | ✅ | ❌ |
+| Security Key by Yubico | b92c3f9a-c014-4056-887f-140a2501163b | ❌ | ✅ | ❌ | ❌ |
+| Security Key by Yubico | f8a011f3-8c0a-4d15-8006-17111f9edc7d | ❌ | ✅ | ❌ | ❌ |
+| Security Key by Yubico with NFC | 149a2021-8ef6-4133-96b8-81f8d5b7f1f5 | ❌ | ✅ | ✅ | ❌ |
+| Security Key by Yubico with NFC | 6d44ba9b-f6ec-2e49-b930-0c8fe920cb73 | ❌ | ✅ | ✅ | ❌ |
+| Security Key NFC by Yubico | a4e9fc6d-4cbe-4758-b8ba-37598bb5bbaa | ❌ | ✅ | ✅ | ❌ |
+| Security Key NFC by Yubico | b7d3f68e-88a6-471e-9ecf-2df26d041ede | ❌ | ✅ | ✅ | ❌ |
+| Security Key NFC by Yubico | e77e3c64-05e3-428b-8824-0cbeb04b829d | ❌ | ✅ | ✅ | ❌ |
+| Security Key NFC by Yubico - Enterprise Edition | 0bb43545-fd2c-4185-87dd-feb0b2916ace | ❌ | ✅ | ✅ | ❌ |
+| Security Key NFC by Yubico - Enterprise Edition | 47ab2fb4-66ac-4184-9ae1-86be814012d5 | ❌ | ✅ | ✅ | ❌ |
+| Security Key NFC by Yubico - Enterprise Edition | ed042a3a-4b22-4455-bb69-a267b652ae7e | ❌ | ✅ | ✅ | ❌ |
+| Security Key NFC by Yubico - Enterprise Edition (Enterprise Profile) | 72c6b72d-8512-4c66-8359-9d3d10d9222f | ❌ | ✅ | ✅ | ❌ |
+| Security Key NFC by Yubico - Enterprise Edition (Enterprise Profile) | 9ff4cc65-6154-4fff-ba09-9e2af7882ad2 | ❌ | ✅ | ✅ | ❌ |
+| Security Key Series with NFC (Consumer Profile) | 0f083f18-4105-43a8-ad69-24e812e38141 | ❌ | ✅ | ✅ | ❌ |
+| Sentry Enterprises CTAP2 Authenticator | 89b19028-256b-4025-8872-255358d950e4 | ✅ | ✅ | ❌ | ✅ |
+| SHALO AUTH | 57235694-51a5-4a4d-a81a-f42185df6502 | ❌ | ✅ | ❌ | ❌ |
+| SI0X FIDO CL WRIST v1.0 | 912435d9-4a88-42f3-972d-1244b0d51420 | ❌ | ❌ | ✅ | ❌ |
+| SmartDisplayer BobeePass FIDO2 Authenticator | 516d3969-5a57-5651-5958-4e7a49434167 | ❌ | ✅ | ✅ | ✅ |
+| Solo Secp256R1 FIDO2 CTAP2 Authenticator | 8876631b-d4a0-427f-5773-0ec71c9e0279 | ❌ | ❌ | ❌ | ❌ |
+| Solo Tap Secp256R1 FIDO2 CTAP2 Authenticator | 8976631b-d4a0-427f-5773-0ec71c9e0279 | ❌ | ❌ | ✅ | ❌ |
+| Somu Secp256R1 FIDO2 CTAP2 Authenticator | 9876631b-d4a0-427f-5773-0ec71c9e0279 | ❌ | ❌ | ❌ | ❌ |
+| StarSign FIDO Card | c89674e3-a765-4b07-888a-7c086fbdf04b | ❌ | ❌ | ✅ | ❌ |
+| StarSign Key Fob | f8d5c4e9-e539-4c06-8662-ec2a4155a555 | ✅ | ✅ | ✅ | ✅ |
+| Swissbit iShield Key 2 | 7787a482-13e8-4784-8a06-c7ed49a7aaf4 | ❌ | ✅ | ✅ | ❌ |
+| Swissbit iShield Key 2 Enterprise | e400ef8c-711d-4692-af46-7f2cf7da23ad | ❌ | ✅ | ✅ | ❌ |
+| Swissbit iShield Key 2 FIPS | 817cdab8-0d51-4de1-a821-e25b88519cf3 | ❌ | ✅ | ✅ | ❌ |
+| Swissbit iShield Key 2 FIPS Enterprise | 5eaff75a-dd43-451f-af9f-87c9eeae293e | ❌ | ✅ | ✅ | ❌ |
+| Swissbit iShield Key FIDO2 | 931327dd-c89b-406c-a81e-ed7058ef36c6 | ❌ | ✅ | ❌ | ❌ |
+| Swissbit iShield Key Pro | 5d629218-d3a5-11ed-afa1-0242ac120002 | ❌ | ✅ | ✅ | ❌ |
+| T-Shield TrustSec FIDO2 Bio and client PIN version | 882adaf5-3aa9-4708-8e7d-3957103775b4 | ✅ | ✅ | ✅ | ❌ |
+| Taglio CTAP2.1 BIO | 0f00cc22-4640-41e7-9585-384ec73ffe9b | ✅ | ✅ | ✅ | ❌ |
+| Taglio CTAP2.1 CS | 092277e5-8437-46b5-b911-ea64b294acb7 | ❌ | ❌ | ✅ | ❌ |
+| Taglio CTAP2.1 EP | 7d2afadd-bf6b-44a2-a66b-e831fceb8eff | ❌ | ❌ | ✅ | ❌ |
+| Thales IDPrime FIDO Bio | 4d41190c-7beb-4a84-8018-adf265a6352d | ✅ | ❌ | ✅ | ❌ |
+| Thales PAY GFCX13 authenticator | 04a8fcf2-19c1-457b-911e-69219f17583f | ❌ | ❌ | ✅ | ❌ |
+| Thetis Pro FIDO2 Key | 1f8e43df-71ff-e11d-bea3-c4ee7003b232 | ❌ | ✅ | ✅ | ❌ |
+| Token Ring 3 FIDO2 Authenticator | c62100de-759b-4bf8-b22b-63b3e3a80401 | ✅ | ❌ | ✅ | ❌ |
+| Token Ring FIDO2 Authenticator | 91ad6b93-264b-4987-8737-3a690cad6917 | ✅ | ❌ | ✅ | ❌ |
+| TOKEN2 FIDO2 Security Key | ab32f0c6-2239-afbb-c470-d2ef4e254db7 | ❌ | ❌ | ❌ | ❌ |
+| TOKEN2 PIN Plus Security Key Series | eabb46cc-e241-80bf-ae9e-96fa6d2975cf | ❌ | ✅ | ✅ | ❌ |
+| TruU FIDO2 Authenticator | bb878d7b-cf54-4784-b390-357030497043 | ❌ | ❌ | ❌ | ❌ |
+| uTrust FIDO2 Security Key | 73402251-f2a8-4f03-873e-3cb6db604b03 | ❌ | ✅ | ✅ | ❌ |
+| VALMIDO PRO FIDO | 5626bed4-e756-430b-a7ff-ca78c8b12738 | ✅ | ❌ | ❌ | ✅ |
+| VeridiumID Passkey Android SDK | 8d4378b0-725d-4432-b3c2-01fcdaf46286 | ✅ | ❌ | ❌ | ✅ |
+| VeridiumID Passkey iOS SDK | 1e906e14-77af-46bc-ae9f-fe6ef18257e4 | ✅ | ❌ | ❌ | ✅ |
+| VeriMark Guard Fingerprint Key | d94a29d9-52dd-4247-9c2d-8b818b610389 | ✅ | ❌ | ❌ | ❌ |
+| VeriMark NFC+ USB-A Security Key | 76692dc1-c56a-48d9-8e7d-31b5ced430ac | ❌ | ✅ | ✅ | ❌ |
+| VeriMark NFC+ USB-C Security Key | ee7fa1e0-9539-432f-bd43-9c2fc6d4f311 | ❌ | ✅ | ✅ | ❌ |
+| VeriMark(TM) Guard 2.1 Fingerprint Security Key | 09619fbf-d75e-4a62-be1d-fe4d240864ae | ✅ | ✅ | ❌ | ❌ |
+| VeroCard FIDO2 Authenticator | 99ed6c29-4573-4847-816d-78ad8f1c75ef | ❌ | ❌ | ❌ | ✅ |
+| VinCSS FIDO2 Authenticator | 5fdb81b8-53f0-4967-a881-f5ec26fe4d18 | ❌ | ❌ | ❌ | ❌ |
+| VinCSS FIDO2 Fingerprint | 9012593f-43e4-4461-a97a-d92777b55d74 | ✅ | ✅ | ✅ | ✅ |
+| WiSECURE AuthTron USB FIDO2 Authenticator | 504d7149-4e4c-3841-4555-55445a677357 | ✅ | ✅ | ❌ | ❌ |
+| YubiKey 5 CCN Series with NFC | 3aa78eb1-ddd8-46a8-a821-8f8ec57a7bd5 | ❌ | ✅ | ✅ | ❌ |
+| YubiKey 5 CCN Series with NFC (Consumer Profile) | eb7ef748-cbe0-4b40-b8f6-07bd2d592d35 | ❌ | ✅ | ✅ | ❌ |
+| YubiKey 5 CCN Series with NFC (Enterprise Profile) | 3ec9c8d3-a5a7-415b-a7b5-f1d606368d3f | ❌ | ✅ | ✅ | ❌ |
+| YubiKey 5 CCN Series with NFC (Enterprise Profile) | 4fc84f16-2545-4e53-b8fc-7bf4d7282a10 | ❌ | ✅ | ✅ | ❌ |
+| YubiKey 5 FIPS Series | 57f7de54-c807-4eab-b1c6-1c9be7984e92 | ❌ | ✅ | ❌ | ❌ |
+| YubiKey 5 FIPS Series | 73bb0cd4-e502-49b8-9c6f-b59445bf720b | ❌ | ✅ | ❌ | ❌ |
+| YubiKey 5 FIPS Series (Enterprise Profile) | 905b4cb4-ed6f-4da9-92fc-45e0d4e9b5c7 | ❌ | ✅ | ❌ | ❌ |
+| YubiKey 5 FIPS Series with Lightning | 7b96457d-e3cd-432b-9ceb-c9fdd7ef7432 | ❌ | ✅ | ❌ | ❌ |
+| YubiKey 5 FIPS Series with Lightning | 85203421-48f9-4355-9bc8-8a53846e5083 | ❌ | ✅ | ❌ | ❌ |
+| YubiKey 5 FIPS Series with Lightning (Enterprise Profile) | 3a662962-c6d4-4023-bebb-98ae92e78e20 | ❌ | ✅ | ❌ | ❌ |
+| YubiKey 5 FIPS Series with NFC | c1f9a0bc-1dd2-404a-b27f-8e29047a43fd | ❌ | ✅ | ✅ | ❌ |
+| YubiKey 5 FIPS Series with NFC | fcc0118f-cd45-435b-8da1-9782b2da0715 | ❌ | ✅ | ✅ | ❌ |
+| YubiKey 5 FIPS Series with NFC (Enterprise Profile) | 79f3c8ba-9e35-484b-8f47-53a5a0f5c630 | ❌ | ✅ | ✅ | ❌ |
+| YubiKey 5 Series | 19083c3d-8383-4b18-bc03-8f1c9ab2fd1b | ❌ | ✅ | ❌ | ❌ |
+| YubiKey 5 Series | cb69481e-8ff7-4039-93ec-0a2729a154a8 | ❌ | ✅ | ❌ | ❌ |
+| YubiKey 5 Series | ee882879-721c-4913-9775-3dfcce97072a | ❌ | ✅ | ❌ | ❌ |
+| YubiKey 5 Series | ff4dac45-ede8-4ec2-aced-cf66103f4335 | ❌ | ✅ | ❌ | ❌ |
+| YubiKey 5 Series (Consumer Profile) | 0a357157-9b18-4c8a-920e-d156e972b2f8 | ❌ | ✅ | ❌ | ❌ |
+| YubiKey 5 Series (Enterprise Profile) | 20ac7a17-c814-4833-93fe-539f0d5e3389 | ❌ | ✅ | ❌ | ❌ |
+| YubiKey 5 Series (Enterprise Profile) | 4599062e-6926-4fe7-9566-9e8fb1aedaa0 | ❌ | ✅ | ❌ | ❌ |
+| YubiKey 5 Series (Enterprise Profile) | 524de2de-982f-49b4-a769-2b5e3b73ad79 | ❌ | ✅ | ❌ | ❌ |
+| YubiKey 5 Series with Lightning | 24673149-6c86-42e7-98d9-433fb5b73296 | ❌ | ✅ | ❌ | ❌ |
+| YubiKey 5 Series with Lightning | a02167b9-ae71-4ac7-9a07-06432ebb6f1c | ❌ | ✅ | ❌ | ❌ |
+| YubiKey 5 Series with Lightning | c5ef55ff-ad9a-4b9f-b580-adebafe026d0 | ❌ | ✅ | ❌ | ❌ |
+| YubiKey 5 Series with Lightning (Consumer Profile) | 03012cb7-4fb2-42e7-9e8d-a81f10e2a5e9 | ❌ | ✅ | ❌ | ❌ |
+| YubiKey 5 Series with Lightning (Enterprise Profile) | 3b24bf49-1d45-4484-a917-13175df0867b | ❌ | ✅ | ❌ | ❌ |
+| YubiKey 5 Series with Lightning (Enterprise Profile) | b90e7dc1-316e-4fee-a25a-56a666a670fe | ❌ | ✅ | ❌ | ❌ |
+| YubiKey 5 Series with Lightning (Enterprise Profile) | c3479970-e58a-4f70-836f-853bf42fb063 | ❌ | ✅ | ❌ | ❌ |
+| YubiKey 5 Series with NFC | 2fc0579f-8113-47ea-b116-bb5a8db9202a | ❌ | ✅ | ✅ | ❌ |
+| YubiKey 5 Series with NFC | a25342c0-3cdc-4414-8e46-f4807fca511c | ❌ | ✅ | ✅ | ❌ |
+| YubiKey 5 Series with NFC | d7781e5d-e353-46aa-afe2-3ca49f13332a | ❌ | ✅ | ✅ | ❌ |
+| YubiKey 5 Series with NFC | fa2b99dc-9e39-4257-8f92-4a30d23c4118 | ❌ | ✅ | ✅ | ❌ |
+| YubiKey 5 Series with NFC - Enhanced PIN | 662ef48a-95e2-4aaa-a6c1-5b9c40375824 | ❌ | ✅ | ✅ | ❌ |
+| YubiKey 5 Series with NFC - Enhanced PIN (Enterprise Profile) | b2c1a50b-dad8-4dc7-ba4d-0ce9597904bc | ❌ | ✅ | ✅ | ❌ |
+| YubiKey 5 Series with NFC (Consumer Profile) | f4ce5fc0-57d3-46f5-a736-efb7d5bc63b5 | ❌ | ✅ | ✅ | ❌ |
+| YubiKey 5 Series with NFC (Consumer Profile) KVZR57-2 | 7dab85a5-d16d-4eaf-a7ef-4c1385b151c5 | ❌ | ✅ | ✅ | ❌ |
+| YubiKey 5 Series with NFC (Enterprise Profile) | 1ac71f64-468d-4fe0-bef1-0e5f2f551f18 | ❌ | ✅ | ✅ | ❌ |
+| YubiKey 5 Series with NFC (Enterprise Profile) | 41e39911-c669-4811-b860-c6ad0b411b96 | ❌ | ✅ | ✅ | ❌ |
+| YubiKey 5 Series with NFC (Enterprise Profile) | 6ab56fad-881f-4a43-acb2-0be065924522 | ❌ | ✅ | ✅ | ❌ |
+| YubiKey 5 Series with NFC Enhanced PIN (Consumer Profile) | 0ebd9f2c-f685-441c-8c3e-a02a234a840a | ❌ | ✅ | ✅ | ❌ |
+| YubiKey 5 Series with NFC Enhanced PIN (Enterprise Profile) | 9a3f2abd-a73d-439c-9ee7-1b53a857eaa7 | ❌ | ✅ | ✅ | ❌ |
+| YubiKey 5 Series with NFC KVZR57 | 9eb7eabc-9db5-49a1-b6c3-555a802093f4 | ❌ | ✅ | ✅ | ❌ |
+| YubiKey Bio Fido Edition (Consumer Profile) | 9dd8d593-2213-438a-97f8-d6b813d51c27 | ✅ | ✅ | ❌ | ❌ |
+| YubiKey Bio Fido Edition (Enterprise Profile) | add92433-0d69-4026-8166-29b25bce64e9 | ✅ | ✅ | ❌ | ❌ |
+| YubiKey Bio Multi-protocol Edition (Consumer Profile) | ba0a9266-40d8-4048-9786-d710b5474752 | ✅ | ✅ | ❌ | ❌ |
+| YubiKey Bio Multi-protocol Edition (Consumer Profile) 1VDJSN-2 | 9806a2c8-c0da-478e-b4ca-620005d34182 | ✅ | ✅ | ❌ | ❌ |
+| YubiKey Bio Multi-protocol Edition (Enterprise Profile) | dc5e949d-f939-43b3-9877-a85c7186b753 | ✅ | ✅ | ❌ | ❌ |
+| YubiKey Bio Series - FIDO Edition | 7409272d-1ff9-4e10-9fc9-ac0019c124fd | ✅ | ✅ | ❌ | ❌ |
+| YubiKey Bio Series - FIDO Edition | d8522d9f-575b-4866-88a9-ba99fa02f35b | ✅ | ✅ | ❌ | ❌ |
+| YubiKey Bio Series - FIDO Edition | dd86a2da-86a0-4cbe-b462-4bd31f57bc6f | ✅ | ✅ | ❌ | ❌ |
+| YubiKey Bio Series - FIDO Edition (Enterprise Profile) | 83c47309-aabb-4108-8470-8be838b573cb | ✅ | ✅ | ❌ | ❌ |
+| YubiKey Bio Series - FIDO Edition (Enterprise Profile) | 8c39ee86-7f9a-4a95-9ba3-f6b097e5c2ee | ✅ | ✅ | ❌ | ❌ |
+| YubiKey Bio Series - FIDO Edition (Enterprise Profile) | ad08c78a-4e41-49b9-86a2-ac15b06899e2 | ✅ | ✅ | ❌ | ❌ |
+| YubiKey Bio Series - Multi-protocol Edition | 34744913-4f57-4e6e-a527-e9ec3c4b94e6 | ✅ | ✅ | ❌ | ❌ |
+| YubiKey Bio Series - Multi-protocol Edition | 7d1351a6-e097-4852-b8bf-c9ac5c9ce4a3 | ✅ | ✅ | ❌ | ❌ |
+| YubiKey Bio Series - Multi-protocol Edition | 90636e1f-ef82-43bf-bdcf-5255f139d12f | ✅ | ✅ | ❌ | ❌ |
+| YubiKey Bio Series - Multi-protocol Edition (Enterprise Profile) | 6ec5cff2-a0f9-4169-945b-f33b563f7b99 | ✅ | ✅ | ❌ | ❌ |
+| YubiKey Bio Series - Multi-protocol Edition (Enterprise Profile) | 97e6a830-c952-4740-95fc-7c78dc97ce47 | ✅ | ✅ | ❌ | ❌ |
+| YubiKey Bio Series - Multi-protocol Edition 1VDJSN | 58276709-bb4b-4bb3-baf1-60eea99282a7 | ✅ | ✅ | ❌ | ❌ |
+| ZTPass SmartAuth | b415094c-49d3-4c8b-b3fe-7d0ad28a6bc4 | ❌ | ✅ | ✅ | ❌ |

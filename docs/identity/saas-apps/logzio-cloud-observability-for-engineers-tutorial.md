@@ -1,0 +1,262 @@
+---
+layout: Conceptual
+title: Configure Logz.io for Single sign-on with Microsoft Entra ID - Microsoft Entra ID | Microsoft Learn
+canonicalUrl: https://learn.microsoft.com/en-us/entra/identity/saas-apps/logzio-cloud-observability-for-engineers-tutorial
+uhfHeaderId: MSDocsHeader-Entra
+breadcrumb_path: /entra/breadcrumb/toc.json
+feedback_system: Standard
+feedback_product_url: https://feedback.azure.com/d365community/forum/22920db1-ad25-ec11-b6e6-000d3a4f0789
+author: jeevansd
+ms.author: jeedes
+ms.reviewer: jomondi
+ms.service: entra-id
+ms.subservice: saas-apps
+manager: pmwongera
+description: Learn how to configure single sign-on between Microsoft Entra ID and Logz.io - Microsoft Entra Integration.
+ms.topic: how-to
+ms.date: 2025-03-25T00:00:00.0000000Z
+ms.custom: sfi-image-nochange
+locale: en-us
+document_id: 79f7ca61-d0f7-ecdb-ca0a-cdce521942cd
+document_version_independent_id: 40c1f090-86f3-ae96-7011-cd3d9be66589
+original_content_git_url: https://github.com/MicrosoftDocs/entra-docs-pr/blob/live/docs/identity/saas-apps/logzio-cloud-observability-for-engineers-tutorial.md
+site_name: Docs
+depot_name: MSDN.entra-docs
+page_type: conceptual
+toc_rel: toc.json
+feedback_help_link_type: ''
+feedback_help_link_url: ''
+asset_id: identity/saas-apps/logzio-cloud-observability-for-engineers-tutorial
+moniker_range_name: 
+monikers: []
+item_type: Content
+source_path: docs/identity/saas-apps/logzio-cloud-observability-for-engineers-tutorial.md
+cmProducts:
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
+- https://authoring-docs-microsoft.poolparty.biz/devrel/68ec7f3a-2bc6-459f-b959-19beb729907d
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
+spProducts:
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
+- https://authoring-docs-microsoft.poolparty.biz/devrel/90370425-aca4-4a39-9533-d52e5e002a5d
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
+platformId: ae80fa7b-6ae5-d7b8-b70e-609fb913a95e
+---
+
+# Configure Logz.io for Single sign-on with Microsoft Entra ID - Microsoft Entra ID | Microsoft Learn
+
+## Single sign-on (SSO) for the Logz.io - Azure portal integration
+
+Logz.io offers an integration with Azure Marketplace. This topic provides guidance for admins to set up SSO for the Logz.io-Azure portal integration, which enables an SSO link for users who access Logz.io resources via Microsoft Azure Marketplace.
+
+### Benefits
+
+The advantages of providing your users access to the Logz.io Azure resource via SSO:
+
+- No need to predefine a unique username and password for each user: Any user who has the SSO link can sign in to the application.
+- Better user control: A user must be defined in the Azure account to be able to use the SSO link.
+
+Prepare SSO connectivity before setting up the Azure resource for Logz.io. You'll need the credentials you create in this process to set up the resource.
+
+### Creating SSO connectivity for your Logz.io resource in Microsoft Entra ID
+
+You'll create a Microsoft Entra Enterprise application to allow you to use SSO to connect to your Logz.io account from your Azure resource.
+
+### Prerequisites:
+
+To get started, you need the following privileges:
+
+- Access to Microsoft Entra ID
+- Permissions to create a new Enterprise Application
+- Owner role permissions for the Azure subscription for which you're creating the Logz.io resource
+
+To be able to access and use the SSO link that's created for a Logz.io-Azure integration resource, users must be defined in the associated Azure account.
+
+#### Setting up an SSO link for the Logz.io - Azure portal resource
+
+##### Add the Logz.io-Microsoft Entra Integration from the gallery
+
+To configure SSO for the Logz.io resource in the Azure portal, you need to add the Logz.io - Microsoft Entra Integration from the gallery to your list of managed SaaS apps.
+
+1. Sign in to the [Microsoft Entra admin center](https://entra.microsoft.com) as at least a [Cloud Application Administrator](../role-based-access-control/permissions-reference#cloud-application-administrator).
+2. Browse to **Entra ID** &gt; **Enterprise apps** &gt; **New application**.
+3. In the **Add from the gallery** section, type **Logz.io - Microsoft Entra Integration** in the search box.
+4. Select **Logz.io - Microsoft Entra Integration** from results panel and then add the app. Wait a few seconds while the app is added to your tenant.
+5. Rename the integration with a relevant name and select **Create**. (In the steps that follow, we used the name **App for a logz.io resource**)
+
+    ![Rename the integration](media/logzio-cloud-observability-for-engineers-tutorial/liftr-rename-logzio-ad-integration.png)
+
+##### Copy the Application ID
+
+In **App for a logz.io resource | Overview** &gt; **Properties**, copy the **Application ID** property.
+
+![Copy Application ID](media/logzio-cloud-observability-for-engineers-tutorial/liftr-copy-application-id-2.png)
+
+##### Configure Microsoft Entra SSO
+
+1. In **App for a logz.io resource | Overview &gt; Getting Started**, in **2. Set up single sign on**, select **Get started** to open **Single sign-on**.
+
+    ![Set up SSO](media/logzio-cloud-observability-for-engineers-tutorial/liftr-set-up-sso.png)
+2. In **App for a logz.io resource | Single sign-on**, select the **SAML** method.
+
+    ![Select SAML SSO method](media/logzio-cloud-observability-for-engineers-tutorial/liftr-select-saml.png)
+
+##### Basic SAML configuration
+
+1. In **App for a logz.io resource | SAML-based Sign-on**, select **Edit** to open the **Basic SAML Configuration** panel.
+
+    ![Edit basic SAML](media/logzio-cloud-observability-for-engineers-tutorial/liftr-edit-basic-saml.png)
+2. In the **Identifier (Entity ID)** text box, type a value using the pattern `urn:auth0:logzio:*`: Replace the `*` with the **Application ID** you copied in procedure 2, and select the **Default** option.
+3. In the **Reply URL (Assertion Consumer Service URL)**, text box, type a URL using the pattern `https://logzio.auth0.com/login/callback?connection=`: Replace `CONNECTION_NAME` with the **Application ID** you copied in procedure 2.
+4. Select **Save** at the top of the panel.
+
+    ![Set SML](media/logzio-cloud-observability-for-engineers-tutorial/liftr-basic-saml-config.png)
+
+##### Configure the user assignment option
+
+In **App for a logz.io resource|Properties (Manage &gt; Properties)**, set **User assignment required?** to **No** and select **Save**. This step enables users with access to the SSO link to sign in to Logz.io via Microsoft Azure portal, without requiring that you predefine each user in Active Directory.
+
+This option allows any user who is defined under Active Directory to use the SSO link, instead of requiring that you define specific access rights for each user through the AD app that was just created.
+
+If you don't want to configure this option, your organization will have to assign specific access rights to Logz.io for each user.
+
+![User assignment not required](media/logzio-cloud-observability-for-engineers-tutorial/liftr-user-assignment-required-no.png)
+
+### Enable SSO for your Logz.io resource via Microsoft Entra ID
+
+When you create a Logz.io account, use the app you created for the Logz.io resource to enable single sign-on with Microsoft Entra ID.
+
+In the Azure portal, in your Logz.io account, select the **Sigle sign-on** tab. Under **Selected**, the Logz.io Microsoft Entra app resource name is automatically populated as you type.
+
+The SSO link is displayed when you sign into your Logz.io resource.  Select the link to access your account in Logz.io.
+
+If you don't configure SSO while you're creating the Logz.io resource, you can configure it later via the Single sign-on blade.
+
+You'll have to configure your logs in Azure to ensure they're sent to Logz.io.
+
+![One select SSO to Logz.io](media/logzio-cloud-observability-for-engineers-tutorial/liftr-logzio-sso-link.png)
+
+## Microsoft Entra single sign-on for an existing Logz.io account
+
+In this section, you learn how to integrate Logz.io - Microsoft Entra Integration with Microsoft Entra ID. When you integrate Logz.io - Microsoft Entra Integration with Microsoft Entra ID, you can:
+
+- Control in Microsoft Entra ID who has access to Logz.io - Microsoft Entra Integration.
+- Enable your users to be automatically signed-in to Logz.io - Microsoft Entra Integration with their Microsoft Entra accounts.
+- Manage your accounts in one central location.
+
+### Prerequisites
+
+To get started, you need the following items:
+
+- A Microsoft Entra subscription. If you don't have a subscription, you can get a [free account](https://azure.microsoft.com/pricing/purchase-options/azure-account?cid=msft_learn).
+- Logz.io - Microsoft Entra Integration single sign-on (SSO) enabled subscription.
+
+### Scenario description
+
+In this article, you configure and test Microsoft Entra SSO in a test environment.
+
+- Logz.io - Microsoft Entra Integration supports **IDP** initiated SSO.
+
+### Add Logz.io - Microsoft Entra Integration from the gallery
+
+To configure the integration of Logz.io - Microsoft Entra Integration into Microsoft Entra ID, you need to add Logz.io - Microsoft Entra Integration from the gallery to your list of managed SaaS apps.
+
+1. Sign in to the [Microsoft Entra admin center](https://entra.microsoft.com) as at least a [Cloud Application Administrator](../role-based-access-control/permissions-reference#cloud-application-administrator).
+2. Browse to **Entra ID** &gt; **Enterprise apps** &gt; **New application**.
+3. In the **Add from the gallery** section, type **Logz.io - Microsoft Entra Integration** in the search box.
+4. Select **Logz.io - Microsoft Entra Integration** from results panel and then add the app. Wait a few seconds while the app is added to your tenant.
+
+Alternatively, you can also use the [Enterprise App Configuration Wizard](https://portal.office.com/AdminPortal/home?Q=Docs#/azureadappintegration). In this wizard, you can add an application to your tenant, add users/groups to the app, assign roles, and walk through the SSO configuration as well. [Learn more about Microsoft 365 wizards.](/en-us/microsoft-365/admin/misc/azure-ad-setup-guides)
+
+### Configure and test Microsoft Entra SSO for Logz.io - Microsoft Entra Integration
+
+Configure and test Microsoft Entra SSO with Logz.io - Microsoft Entra Integration using a test user called **B.Simon**. For SSO to work, you need to establish a link relationship between a Microsoft Entra user and the related user in Logz.io - Microsoft Entra Integration.
+
+To configure and test Microsoft Entra SSO with Logz.io - Microsoft Entra Integration, perform the following steps:
+
+1. **Configure Microsoft Entra SSO**- to enable your users to use this feature.
+    1. **Create a Microsoft Entra test user** - to test Microsoft Entra single sign-on with B.Simon.
+    2. **Assign the Microsoft Entra test user** - to enable B.Simon to use Microsoft Entra single sign-on.
+2. **Configure Logz.io - Microsoft Entra Integration SSO**- to configure the single sign-on settings on application side.
+    1. **Create Logz.io - Microsoft Entra Integration test user** - to have a counterpart of B.Simon in Logz.io - Microsoft Entra Integration that's linked to the Microsoft Entra representation of user.
+3. **Test SSO** - to verify whether the configuration works.
+
+### Configure Microsoft Entra SSO
+
+Follow these steps to enable Microsoft Entra SSO.
+
+1. Sign in to the [Microsoft Entra admin center](https://entra.microsoft.com) as at least a [Cloud Application Administrator](../role-based-access-control/permissions-reference#cloud-application-administrator).
+2. Browse to **Entra ID** &gt; **Enterprise apps** &gt; **Logz.io - Microsoft Entra Integration** &gt; **Single sign-on**.
+3. On the **Select a single sign-on method** page, select **SAML**.
+4. On the **Set up single sign-on with SAML** page, select the pencil icon for **Basic SAML Configuration** to edit the settings.
+
+    ![Edit Basic SAML Configuration](common/edit-urls.png)
+5. On the **Set up single sign-on with SAML** page, perform the following steps:
+
+    a. In the **Identifier** text box, type a value using the following pattern: `urn:auth0:logzio:CONNECTION-NAME`
+
+    b. In the **Reply URL** text box, type a URL using the following pattern: `https://logzio.auth0.com/login/callback?connection=CONNECTION-NAME`
+
+    Note
+
+    These values aren't real. Update these values with the actual Identifier and Reply URL. Contact [Logz.io - Microsoft Entra Integration Client support team](mailto:help@logz.io) to get these values. You can also refer to the patterns shown in the **Basic SAML Configuration** section.
+6. Logz.io - Microsoft Entra Integration application expects the SAML assertions in a specific format, which requires you to add custom attribute mappings to your SAML token attributes configuration. The following screenshot shows the list of default attributes.
+
+    ![image](common/default-attributes.png)
+7. In addition to above, Logz.io - Microsoft Entra Integration application expects few more attributes to be passed back in SAML response which are shown below. These attributes are also pre populated but you can review them as per your requirements.
+
+    | Name | Source Attribute |
+    | --- | --- |
+    | session-expiration | user.session-expiration |
+    | email | user.mail |
+    | Group | user.groups |
+8. On the **Set up single sign-on with SAML** page, in the **SAML Signing Certificate** section, find **Certificate (Base64)** and select **Download** to download the certificate and save it on your computer.
+
+    ![The Certificate download link](common/certificatebase64.png)
+9. On the **Set up Logz.io - Microsoft Entra Integration** section, copy the appropriate URL(s) based on your requirement.
+
+    ![Copy configuration URLs](common/copy-configuration-urls.png)
+
+#### Create a Microsoft Entra test user
+
+In this section, you create a test user called B.Simon.
+
+1. Sign in to the [Microsoft Entra admin center](https://entra.microsoft.com) as at least a [User Administrator](../role-based-access-control/permissions-reference#user-administrator).
+2. Browse to **Entra ID** &gt; **Users**.
+3. Select **New user** &gt; **Create new user**, at the top of the screen.
+4. In the **User**properties, follow these steps:
+    1. In the **Display name** field, enter `B.Simon`.
+    2. In the **User principal name** field, enter the username@companydomain.extension. For example, `B.Simon@contoso.com`.
+    3. Select the **Show password** check box, and then write down the value that's displayed in the **Password** box.
+    4. Select **Review + create**.
+5. Select **Create**.
+
+#### Assign the Microsoft Entra test user
+
+In this section, you enable B.Simon to use single sign-on by granting access to Logz.io - Microsoft Entra Integration.
+
+1. Sign in to the [Microsoft Entra admin center](https://entra.microsoft.com) as at least a [Cloud Application Administrator](../role-based-access-control/permissions-reference#cloud-application-administrator).
+2. Browse to **Entra ID** &gt; **Enterprise apps** &gt; **Logz.io - Microsoft Entra Integration**.
+3. In the app's overview page, find the **Manage** section and select **Users and groups**.
+4. Select **Add user**, then select **Users and groups** in the **Add Assignment** dialog.
+5. In the **Users and groups** dialog, select **B.Simon** from the Users list, then select the **Select** button at the bottom of the screen.
+6. If you're expecting any role value in the SAML assertion, in the **Select Role** dialog, select the appropriate role for the user from the list and then select the **Select** button at the bottom of the screen.
+7. In the **Add Assignment** dialog, select the **Assign** button.
+
+### Configure Logz.io Microsoft Entra Integration SSO
+
+To configure single sign-on on **Logz.io - Microsoft Entra Integration** side, you need to send the downloaded **Certificate (Base64)** and appropriate copied URLs from the application configuration to [Logz.io - Microsoft Entra Integration support team](mailto:help@logz.io). They set this setting to have the SAML SSO connection set properly on both sides.
+
+#### Create Logz.io Microsoft Entra Integration test user
+
+In this section, you create a user called Britta Simon in Logz.io - Microsoft Entra Integration. Work with [Logz.io - Microsoft Entra Integration support team](mailto:help@logz.io) to add the users in the Logz.io - Microsoft Entra Integration platform. Users must be created and activated before you use single sign-on.
+
+### Test SSO
+
+In this section, you test your Microsoft Entra single sign-on configuration with following options.
+
+- Select **Test this application**, and you should be automatically signed in to the Logz.io Microsoft Entra Integration for which you set up the SSO.
+- You can use Microsoft My Apps. When you select the Logz.io Microsoft Entra Integration tile in the My Apps, you should be automatically signed in to the Logz.io Microsoft Entra Integration for which you set up the SSO. For more information about the My Apps, see [Introduction to the My Apps](https://support.microsoft.com/account-billing/sign-in-and-start-apps-from-the-my-apps-portal-2f3b1bae-0e5a-4a86-a33e-876fbd2a4510).
+
+### Related content
+
+Once you configure Logz.io Microsoft Entra Integration you can enforce session control, which protects exfiltration and infiltration of your organization’s sensitive data in real time. Session control extends from Conditional Access. [Learn how to enforce session control with Microsoft Defender for Cloud Apps](/en-us/cloud-app-security/proxy-deployment-aad).
