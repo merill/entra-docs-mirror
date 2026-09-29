@@ -13,7 +13,7 @@ ms.subservice: privileged-identity-management
 manager: dougeby
 description: Learn how to assign Azure resource roles in Privileged Identity Management (PIM).
 ms.topic: how-to
-ms.date: 2026-04-23T00:00:00.0000000Z
+ms.date: 2026-08-06T00:00:00.0000000Z
 ms.custom: sfi-ga-nochange, sfi-image-nochange
 locale: en-us
 document_id: e87c5c36-7f4f-cb86-8835-85df5ae91269
@@ -152,6 +152,10 @@ PUT https://management.azure.com/providers/Microsoft.Subscription/subscriptions/
   }
 }
 ```
+
+Note
+
+The `duration` field (value `P365D` in this example) sets the eligible assignment to expire after 365 days. To create permanent eligibility, configure the role management policy at the target scope to allow it.
 
 ### Response
 

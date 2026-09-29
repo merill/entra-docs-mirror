@@ -14,8 +14,9 @@ ms.subservice: saas-apps
 manager: pmwongera
 description: Learn how to configure single sign-on between Microsoft Entra ID and Samsung Knox and Business Services.
 ms.topic: how-to
-ms.date: 2025-05-20T00:00:00.0000000Z
-ms.custom: sfi-image-nochange
+ms.date: 2026-09-29T00:00:00.0000000Z
+ai-usage: ai-assisted
+ms.custom: sfi-image-nochange, msecd-doc-authoring-1023
 locale: en-us
 document_id: fa774889-aee4-4fe0-f85d-3b44655bc12e
 document_version_independent_id: 875888df-756b-c602-e7d6-6079cc944656
@@ -110,7 +111,7 @@ Follow these steps to enable Microsoft Entra SSO.
 
     b. In the **Reply URL** text box, type the URL: `https://central.samsungknox.com/ams/ad/saml/acs`
 
-    c. In the **Sign on URL** text box, type the URL: `https://accounts.samsung.com/`
+    c. In the **Sign on URL** text box, type the URL: `https://account.samsung.com/`
 6. On the **Set up single sign-on with SAML** page, In the **SAML Signing Certificate** section, select copy button to copy **App Federation Metadata Url** and save it on your computer.
 
     ![Screenshot shows the Certificate download link.](common/copy-metadataurl.png)
