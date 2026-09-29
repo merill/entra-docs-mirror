@@ -32,11 +32,11 @@ source_path: docs/architecture/governance-deployment-employee-lifecycle.md
 cmProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ac4b7417-d4c2-43d4-94bf-f22fa1416b34
-- https://authoring-docs-microsoft.poolparty.biz/devrel/43093068-2dda-408b-b3fe-dfd705c84f78
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
 spProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/68876bab-7da4-4e70-b295-395b3a255a1f
-- https://authoring-docs-microsoft.poolparty.biz/devrel/e453d60d-ba7e-43bc-8028-ec38e6b62512
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
 platformId: 191e4bd9-ff25-44cb-4490-a944695afaed
 ---
 
@@ -193,7 +193,6 @@ The [Microsoft Entra ID application gallery](../identity/saas-apps/tutorial-list
 - [Salesforce](/en-us/azure/active-directory/saas-apps/salesforce-provisioning-tutorial)
 - [Box](/en-us/azure/active-directory/saas-apps/box-userprovisioning-tutorial)
 - [Cisco Webex](/en-us/azure/active-directory/saas-apps/cisco-webex-provisioning-tutorial)
-- [Workplace by Facebook](/en-us/azure/active-directory/saas-apps/workplace-by-facebook-provisioning-tutorial)
 - [Zoom](/en-us/azure/active-directory/saas-apps/zoom-provisioning-tutorial)
 
 ### (Optional) Provision to on-premises apps

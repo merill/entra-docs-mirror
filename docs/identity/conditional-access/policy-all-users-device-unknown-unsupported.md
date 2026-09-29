@@ -45,7 +45,10 @@ platformId: 789ae682-d4f9-2708-0c53-b8959ea5ee26
 
 Users are blocked from accessing company resources when the device type is unknown or unsupported.
 
-The [device platform condition](concept-conditional-access-conditions#device-platforms) is based on user agent strings. Conditional Access policies using this condition should be used with another policy, like one requiring device compliance or app protection policies, to mitigate the risk of user agent spoofing.
+[!WARNING]
+
+> 
+> The [device platform condition](concept-conditional-access-conditions#device-platforms) is based on user agent strings. Conditional Access policies using this condition should be used with another policy, like one requiring device compliance or app protection policies, to mitigate the risk of user agent spoofing.
 
 ## User exclusions
 

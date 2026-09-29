@@ -906,7 +906,6 @@ Microsoft Entra ID Governance can be integrated with many other applications, us
 | [Workday](../identity/saas-apps/workday-tutorial) |  | ● |
 | [Workgrid](../identity/saas-apps/workgrid-provisioning-tutorial) | ● | ● |
 | [Workpath](../identity/saas-apps/workpath-tutorial) |  | ● |
-| [Workplace from Meta](../identity/saas-apps/workplace-by-facebook-provisioning-tutorial) | ● | ● |
 | [Workshop](../identity/saas-apps/workshop-tutorial) |  | ● |
 | [Workteam](../identity/saas-apps/workteam-provisioning-tutorial) | ● | ● |
 | [Worthix App](../identity/saas-apps/worthix-app-tutorial) |  | ● |

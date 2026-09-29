@@ -43,7 +43,7 @@ platformId: 20508ca0-9c35-018d-6529-4603ae1a8b8b
 
 The Microsoft Entra provisioning service allows you to provision users and groups into both [SaaS](user-provisioning) and [on-premises](on-premises-scim-provisioning) applications. There are four integration paths:
 
-**Option 1 - Microsoft Entra Application Gallery:** Popular third party applications, such as Dropbox, Snowflake, and Workplace by Facebook, are made available for customers through the Microsoft Entra application gallery. New applications can easily be onboarded to the gallery using the [application network portal](../enterprise-apps/v2-howto-app-gallery-listing).
+**Option 1 - Microsoft Entra Application Gallery:** Popular third party applications, such as Dropbox and Snowflake, are made available for customers through the Microsoft Entra application gallery. New applications can easily be onboarded to the gallery using the [application network portal](../enterprise-apps/v2-howto-app-gallery-listing).
 
 **Option 2 - Implement a SCIM compliant API for your application:** If your line-of-business application supports the [SCIM](https://aka.ms/scimoverview) standard, it can easily be integrated with the [Microsoft Entra SCIM client](use-scim-to-provision-users-and-groups).
 
