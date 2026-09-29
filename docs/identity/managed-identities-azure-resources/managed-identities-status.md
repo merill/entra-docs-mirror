@@ -65,7 +65,7 @@ The following Azure services support managed identities for Azure resources:
 | Azure Batch | [Configure customer-managed keys for your Azure Batch account with Azure Key Vault and Managed Identity](/en-us/azure/batch/batch-customer-managed-key)[Configure managed identities in Batch pools](/en-us/azure/batch/managed-identity-pools) |
 | Azure Blueprints | [Stages of a blueprint deployment](/en-us/azure/governance/blueprints/concepts/deployment-stages) |
 | Azure Cache for Redis | [Managed identity for storage accounts with Azure Cache for Redis](/en-us/azure/azure-cache-for-redis/cache-managed-identity) |
-| Azure Chaos Studio | [Permissions and security in Azure Chaos Studio](/en-us/azure/chaos-studio/chaos-studio-permissions-security#user-assigned-managed-identity) |
+| Azure Chaos Studio | [Permissions and identity in Chaos Studio Workspaces](/en-us/azure/chaos-studio/chaos-studio-workspace-permissions)[Permissions and security in Azure Chaos Studio (classic)](/en-us/azure/chaos-studio/chaos-studio-permissions-security#user-assigned-managed-identity) |
 | Azure Communications Gateway | [Deploy Azure Communications Gateway](/en-us/azure/communications-gateway/deploy) |
 | Azure Communication Services | [How to use Managed Identity with Azure Communication Services](/en-us/azure/communication-services/how-tos/managed-identity) |
 | Azure Container Apps | [Managed identities in Azure Container Apps](/en-us/azure/container-apps/managed-identity) |
