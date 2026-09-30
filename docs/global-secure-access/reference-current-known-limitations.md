@@ -13,8 +13,9 @@ manager: dougeby
 ms.reviewer: teresayao
 description: Discover the known limitations of Global Secure Access, including platform-specific issues and mitigations, to ensure seamless deployment and management.
 ms.topic: reference
-ms.date: 2026-05-29T00:00:00.0000000Z
-ms.custom: agent-id-ignite
+ms.date: 2026-09-29T00:00:00.0000000Z
+ms.custom: agent-id-ignite, msecd-doc-authoring-1026
+ai-usage: ai-assisted
 locale: en-us
 document_id: e758a748-e50a-4dfa-fe24-1df98b45181e
 document_version_independent_id: e758a748-e50a-4dfa-fe24-1df98b45181e
@@ -224,7 +225,7 @@ Known limitations for the Global Secure Access client for macOS include:
 
 #### Secure Domain Name System (DNS)
 
-If Secure DNS is enabled on the browser or in macOS and the DNS server supports Secure DNS, then the client doesn't tunnel traffic set to be acquired by FQDN. (Network traffic that's acquired by IP isn't affected and is tunneled according to the forwarding profile.) To mitigate the Secure DNS issue, disable Secure DNS, set a DNS server that doesn't support Secure DNS, or create rules based on IP.
+The Global Secure Access client doesn't currently support secure DNS in its different versions, such as DNS over HTTPS (DoH), DNS over TLS (DoT), or DNS Security Extensions (DNSSEC). The client for macOS bypasses Secure DNS to enforce fully qualified domain name (FQDN)-based tunneling through the traffic forwarding policy. You don't need to disable Secure DNS in the browser or macOS.
 
 #### Connection fallback
 

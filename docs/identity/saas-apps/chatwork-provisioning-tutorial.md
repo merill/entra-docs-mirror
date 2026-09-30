@@ -46,7 +46,7 @@ This article describes the steps you need to perform in both Chatwork and Micros
 
 Warning
 
-ChatWork will discontinue support for SCIM-based provisioning effective October 1, 2026. As a result, the ChatWork provisioning integration in the Microsoft Entra Enterprise App Gallery will be retired. Existing customers using the integration will no longer be able to provision users to ChatWork after this date. SSO functionality for ChatWork will remain available.
+Chatwork will discontinue support for SCIM-based provisioning effective October 1, 2026. As a result, the Chatwork provisioning integration in the Microsoft Entra Enterprise App Gallery will be retired. Existing customers using the integration will no longer be able to provision users to Chatwork after this date. SSO functionality for Chatwork will remain available.
 
 ## Capabilities Supported
 
