@@ -32,12 +32,12 @@ monikers: []
 item_type: Content
 source_path: docs/identity/authentication/concept-sspr-howitworks.md
 cmProducts:
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/c6f99e62-1cf6-4b71-af9b-649b05f80cce
 spProducts:
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/3f56b378-07a9-4fa1-afe8-9889fdc77628
 platformId: 8e8b4894-15a2-7268-d0bc-320fbc97170f
 ---
@@ -76,7 +76,7 @@ After the SSPR portal is displayed in the required language, the user is prompte
         - If the authentication methods aren't configured, the user is advised to contact their administrator to reset their password.
     - If the policy requires two methods, check that the user has the appropriate data defined for at least two of the authentication methods enabled by the administrator policy.
         - If the authentication methods aren't configured, the user is advised to contact their administrator to reset their password.
-    - If an Azure administrator role is assigned to the user, then the strong two-gate password policy is enforced. For more information, see [Administrator reset policy differences](concept-sspr-policy#administrator-reset-policy-differences).
+    - If a Microsoft Entra administrator role is assigned to the user, then the strong two-gate password policy is enforced. For more information, see [Administrator reset policy differences](concept-sspr-policy#administrator-reset-policy-differences).
 - Checks to see if the user's password is managed on-premises, such as if the Microsoft Entra tenant is using federated, pass-through authentication, or password hash synchronization:
     - If SSPR writeback is configured and the user's password is managed on-premises, the user is allowed to proceed to authenticate and reset their password.
     - If SSPR writeback isn't deployed and the user's password is managed on-premises, the user is asked to contact their administrator to reset their password.

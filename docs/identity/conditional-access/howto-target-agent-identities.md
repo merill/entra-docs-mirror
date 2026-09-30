@@ -1,21 +1,21 @@
 ---
 layout: Conceptual
-title: Target agent identities in Conditional Access policies - Microsoft Entra ID | Microsoft Learn
+title: Target agents in Microsoft Entra Conditional Access policies - Microsoft Entra ID | Microsoft Learn
 canonicalUrl: https://learn.microsoft.com/en-us/entra/identity/conditional-access/howto-target-agent-identities
 uhfHeaderId: MSDocsHeader-Entra
 breadcrumb_path: /entra/breadcrumb/toc.json
 feedback_system: Standard
 feedback_product_url: https://feedback.azure.com/d365community/forum/22920db1-ad25-ec11-b6e6-000d3a4f0789
-author: kenwith
-ms.author: kenwith
+author: gracenagy
+ms.author: gracenagy
 ms.service: entra-id
 ms.subservice: conditional-access
 manager: dougeby
 description: Learn how to select and target agent identities in Microsoft Entra Conditional Access policies using the object picker, blueprints, and custom security attributes.
 ms.topic: how-to
-ms.date: 2026-06-02T00:00:00.0000000Z
+ms.date: 2026-07-31T00:00:00.0000000Z
 ms.reviewer: kvenkit
-ms.custom: msecd-doc-authoring-1012
+ms.custom: msecd-doc-authoring-1017
 ai-usage: ai-assisted
 locale: en-us
 document_id: 6f382dd5-9e58-0f16-1eaa-916443774baf
@@ -43,18 +43,11 @@ spProducts:
 platformId: 5436b733-663d-2651-1584-817a140eb67c
 ---
 
-# Target agent identities in Conditional Access policies - Microsoft Entra ID | Microsoft Learn
+# Target agents in Microsoft Entra Conditional Access policies - Microsoft Entra ID | Microsoft Learn
 
-Conditional Access policies for agent identities let you control how AI agents access corporate resources. As your organization deploys more agents, you need policies that target the right agents, evaluate the right signals, and enforce the right controls. To learn more about how Conditional Access policies for agents work for different scenarios, see [Conditional Access policies for agents](agent-id).
+Use this article to select agent identities or agent user accounts in a Conditional Access policy, choose target resources, configure supported conditions, and select access controls.
 
-This article walks through each section of the Conditional Access policy builder for agents:
-
-- Selecting which agents the policy applies to
-- Choosing target resources
-- Configuring conditions
-- Setting access controls.
-
-Each section builds on the previous one to form a complete policy.
+The available conditions and controls depend on the token subject. To choose the right subject before you build the policy, see [Conditional Access for agents overview](agent-id).
 
 ## Prerequisites
 
@@ -66,10 +59,10 @@ Each section builds on the previous one to form a complete policy.
 
 ## Create a Conditional Access policy for agent identities
 
-Policies that target agent identities introduce unique assignment options, conditions, and control limitations that differ from user-targeted policies.
+Policies that target agent identities or agent user accounts have assignment options, conditions, and controls that differ from user-targeted policies.
 
-- [Configure policy for autonomous agent access](policy-autonomous-agents)
-- [Configure policy for on-behalf-of agent access](policy-on-behalf-of-agents)
+- For policies that target agent identities, see [Secure autonomous agents with Conditional Access](policy-autonomous-agents).
+- For policies that target agent user accounts, see [Secure agents that act as users with Conditional Access](policy-agent-user).
 
 To create a new Conditional Access policy for agent identities:
 
@@ -97,7 +90,7 @@ Keep in mind the following important details when selecting agent assignments:
 - Policies targeting all users don't include agent's user accounts.
 - The **agent users** option targets agents' user accounts. This option is currently in Preview.
 - Agent-based policies apply when agents access resources using their own identity, not on behalf of a user.
-- Targeting a blueprint automatically covers all agent identities derived from it, including ones added in the future. For more information about targeting agent identity blueprints, see [Conditional Access for agent identities: Agent identity blueprints](agent-id#conditional-access-policies-and-agent-identity-blueprints).
+- Targeting a blueprint automatically covers all agent identities derived from it, including ones added in the future. For more information, see [Agent identity blueprints](agent-id#conditional-access-policies-and-agent-identity-blueprints).
 
 ## Target resources
 
@@ -193,7 +186,7 @@ Access controls determine what happens when conditions are met. For more informa
 
 - **Block access**: Deny the agent user account access to resources.
 - **Grant access**with:
-    - **Require device to be marked as compliant**: Requires agents to run on Intune-managed compliant devices, such as Windows 365 Cloud PCs for Agents. For more information, see[What is Windows 365 for Agents?](/en-us/windows-365/agents/introduction-windows-365-for-agents). [![Screenshot of the Conditional Access policy builder showing the grant option for device compliance.](media/howto-target-agent-identities/agent-policy-grant-device-compliant.png)](media/howto-target-agent-identities/agent-policy-grant-device-compliant.png#lightbox)
+    - **Require device to be marked as compliant**: Requires agents to run on Intune-managed compliant devices, such as Windows 365 Cloud PCs for Agents. For more information, see [What is Windows 365 for Agents?](/en-us/windows-365/agents/introduction-windows-365-for-agents). [![Screenshot of the Conditional Access policy builder showing the grant option for device compliance.](media/howto-target-agent-identities/agent-policy-grant-device-compliant.png)](media/howto-target-agent-identities/agent-policy-grant-device-compliant.png#lightbox)
 
 Important
 

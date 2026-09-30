@@ -32,12 +32,12 @@ monikers: []
 item_type: Content
 source_path: docs/workload-id/workload-identities-flexible-federated-identity-credentials.md
 cmProducts:
-- https://authoring-docs-microsoft.poolparty.biz/devrel/8b896464-3b7d-4e1f-84b0-9bb45aeb5f64
 - https://authoring-docs-microsoft.poolparty.biz/devrel/9bdc1705-9b40-49d6-8377-caa0b71fda66
+- https://authoring-docs-microsoft.poolparty.biz/devrel/8b896464-3b7d-4e1f-84b0-9bb45aeb5f64
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
 spProducts:
-- https://authoring-docs-microsoft.poolparty.biz/devrel/b1d2d671-9549-46e8-918c-24349120dbf5
 - https://authoring-docs-microsoft.poolparty.biz/devrel/686ed158-d915-41e9-9760-efa46ba88f6d
+- https://authoring-docs-microsoft.poolparty.biz/devrel/b1d2d671-9549-46e8-918c-24349120dbf5
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
 platformId: 4d277e7e-0073-0efc-d775-11067759f081
 ---
@@ -114,10 +114,14 @@ These claims are required regardless of whether `sub` uses a name-based, customi
 
 Supported claims and operators per claim:
 
-- Claim `sub` supports operators `eq` and `matches`.
-- Claim `job_workflow_ref` supports operators `eq` and `matches`.
-- Claim `repository_id` supports operator `eq`.
-- Claim `repository_owner_id` supports operator `eq`.
+- Claim `sub` supports operators `eq` and `matches`
+- Claim `job_workflow_ref` supports operators `eq` and `matches`
+- Claim `repository_id` supports operators `eq`
+- Claim `repository_owner_id` supports operators `eq`
+
+Note
+
+Starting July 15, 2026, GitHub applies the immutable format automatically to repositories that are created, renamed, or transferred. Existing repositories keep the name-based format until you opt in. For details, see [Immutable subject claims for GitHub Actions OIDC tokens](https://github.blog/changelog/2026-04-23-immutable-subject-claims-for-github-actions-oidc-tokens/) in the GitHub Changelog.
 
 # [GitLab](#tab/gitlab)
 Supported issuer URLs: `https://gitlab.com`, `https://gitlab.example.com`, and `https://gitlab.example.ca` where `example` can be any string.
