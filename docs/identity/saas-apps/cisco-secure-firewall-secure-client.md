@@ -14,7 +14,8 @@ ms.subservice: saas-apps
 manager: pmwongera
 description: Learn how to configure single sign-on between Microsoft Entra ID and Cisco Secure Firewall - Secure Client.
 ms.topic: how-to
-ms.date: 2024-05-20T00:00:00.0000000Z
+ms.date: 2026-10-01T00:00:00.0000000Z
+ai-usage: ai-assisted
 locale: en-us
 document_id: adaeb481-1bdc-7862-97ea-f6694e8113a9
 document_version_independent_id: adaeb481-1bdc-7862-97ea-f6694e8113a9
@@ -101,8 +102,12 @@ Follow these steps to enable Microsoft Entra SSO.
     ![Screenshot shows to edit Basic SAML Configuration.](common/edit-urls.png)
 5. On the **Set up single sign-on with SAML** page, enter the values for the following fields:
 
-    1. In the **Identifier** text box, type a URL using the following pattern:`https://<SUBDOMAIN>.YourCiscoServer.com/saml/sp/metadata/<Tunnel_Group_Name>`
+    1. In the **Identifier** text box, type a URL using the following pattern:`https://<YOUR_CISCO_FQDN>/saml/sp/metadata/<Tunnel_Group_Name>`
     2. In the **Reply URL** text box, type a URL using the following pattern:`https://<YOUR_CISCO_ANYCONNECT_FQDN>/+CSCOE+/saml/sp/acs?tgname=<Tunnel_Group_Name>`
+
+    Important
+
+    The **Identifier** and **Reply URL** values shown in this article are examples only. Before you configure SSO, verify that these values reference the correct endpoints for your Cisco Secure Firewall environment. Don't use example or placeholder domains in production. Contact Cisco TAC or the [Cisco Secure Firewall - Secure Client support team](https://www.cisco.com/c/en/us/support/index.html) for the appropriate values.
 
     Note
 
@@ -111,6 +116,10 @@ Follow these steps to enable Microsoft Entra SSO.
     Note
 
     For clarification about these values, contact Cisco TAC support. Update these values with the actual Identifier and Reply URL provided by Cisco TAC. Contact the [Cisco Secure Firewall - Secure Client support team](https://www.cisco.com/c/en/us/support/index.html) to get these values. You can also refer to the patterns shown in the **Basic SAML Configuration** section.
+
+    Important
+
+    **Security best practice:** For new and existing deployments, verify that all configured **Identifier** and **Reply URL** values reference the intended endpoints and trusted domains before you enable SAML SSO. Example or placeholder domains are for documentation purposes only and must not be used in production.
 6. On the **Set up single sign-on with SAML** page, in the **SAML Signing Certificate** section, find **Certificate (Base64)** and select **Download** to download the certificate file and save it on your computer.
 
     ![Screenshot shows the Certificate download link.](common/certificatebase64.png)

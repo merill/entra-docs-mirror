@@ -93,10 +93,6 @@ No. Permanent deletion of an agent identity blueprint principal is blocked. To f
 
 ## Roles, permissions, and groups
 
-### Can I use custom roles to manage agent identities?
-
-Custom role definitions don't support actions for managing agent identities. Use the built-in *Agent ID Administrator* and *Agent ID Developer* roles for all agent identity management.
-
 ### Can I add agent identities to administrative units?
 
 Agent identities, agent identity blueprints, and agent identity blueprint principals can't be added to administrative units. Use the `owners` property of agent identities to limit which users can manage specific objects.
@@ -111,7 +107,7 @@ An agent's user account can be added to Microsoft Entra groups, including dynami
 
 ### Which Microsoft Entra roles and groups can't be assigned to an agent identity?
 
-Highly privileged directory roles are blocked for agent identities, including Global Administrator, Privileged Role Administrator, and User Administrator. Only lower-privileged roles, such as reader roles, can be assigned. You also can't assign custom roles to an agent identity, and agent identities can't be members of role-assignable groups.
+Highly privileged directory roles are blocked for agent identities, including Global Administrator, Privileged Role Administrator, and User Administrator. Only lower-privileged roles, such as reader roles, can be assigned. Agent identities can't be members of role-assignable groups.
 
 ## Authentication and consent
 

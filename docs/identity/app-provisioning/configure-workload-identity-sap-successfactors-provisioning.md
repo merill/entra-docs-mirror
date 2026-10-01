@@ -13,7 +13,7 @@ ms.subservice: app-provisioning
 manager: pmwongera
 description: Learn how to replace basic authentication with short-lived, federated OpenID Connect tokens for Microsoft Entra provisioning to SAP SuccessFactors.
 ms.topic: how-to
-ms.date: 2026-09-10T00:00:00.0000000Z
+ms.date: 2026-10-01T00:00:00.0000000Z
 ms.reviewer: cmmdesai
 ms.custom: sap-successfactors, workload-identity, provisioning, msecd-doc-authoring-1026
 ai-usage: ai-assisted
@@ -42,10 +42,6 @@ platformId: 0cb4df6e-f499-4274-107d-a1cafa421267
 # Configure workload identity for SAP SuccessFactors provisioning - Microsoft Entra ID | Microsoft Learn
 
 This article is for administrators who configure Microsoft Entra provisioning integrations with SAP SuccessFactors. It explains how to replace the provisioning service's long-lived basic authentication credential with short-lived OpenID Connect (OIDC) tokens issued by your Microsoft Entra tenant. SAP Cloud Identity Services (SAP IAS) validates these tokens and exchanges them for access tokens used to call SAP SuccessFactors APIs. Before you begin, make sure you have a configured SAP SuccessFactors provisioning app and access to Microsoft Entra, SAP IAS, and SAP SuccessFactors administration.
-
-Note
-
-We make public previews available to our customers under the terms applicable to previews. These terms are outlined in the overall Microsoft product terms for [online services](https://www.microsoft.com/licensing/terms/product/ForOnlineServices/all).
 
 Workload identity-based authentication provides a more secure authentication model in preparation for SAP's plan to [deprecate basic authentication for SuccessFactors APIs](https://help.sap.com/docs/successfactors-release-information/8e0d540f96474717bbf18df51e54e522/fcc05a902b4140e585d968c2fe4a96bc.html).
 
@@ -162,9 +158,15 @@ The guided experience prompts you to register or select a workload identity appl
 
     - **Register** to let the guided experience create a fresh workload identity app registration. You can optionally rename the default **App registration name**.
     - **Select existing** if you already configured a workload identity application that talks to SAP Cloud Identity Services (for example, if you have multiple SAP SuccessFactors provisioning apps and you want to reuse an existing workload identity app). [![Screenshot showing the register and select options.](media/configure-workload-identity-sap-successfactors-provisioning/select-or-register-workload-identity-app.png)](media/configure-workload-identity-sap-successfactors-provisioning/select-or-register-workload-identity-app.png#lightbox)
+
+    Important
+
+    You can reuse a workload identity only when its Application API host matches the SAP SuccessFactors API host configured for the provisioning app. Workload identities are forward compatible across the September 15, 2026 implementation update. Provisioning enterprise apps created after the update can select workload identities created before the update, but enterprise apps created before the update can't select workload identities created after it.
 2. When you select **Register**, the guided experience creates the workload identity app registration in your tenant.
 
     Note
+
+    In the workload identity app registration, under **Expose an API**, the guided experience sets the **Application ID URI** to `api://<app-client-id>/<successfactors-api-endpoint-url>`.
 
     The first time you configure workload identity-based authentication, the integration automatically creates the Microsoft first-party service principal **SyncFabric Workload Identity ISV Integration Client** in your tenant. Its object ID, which is unique to your tenant, is used as the `sub` claim in the Microsoft Entra-issued JWT sent to SAP IAS. The workload identity application's client ID is used separately as the JWT `aud` claim.
 3. After you select the workload identity application, Microsoft Entra displays the values that SAP Cloud Identity Services needs to trust tokens issued by your tenant. Keep this panel open and switch to the SAP Cloud Identity Services admin console.
@@ -253,6 +255,7 @@ If you need to roll back while SAP supports basic authentication, you can re-ena
 
 | Symptom | Likely cause | Action |
 | --- | --- | --- |
+| An existing workload identity is unavailable or displays `This app is configured for a different Application API host and cannot be selected` | The workload identity uses a different SAP SuccessFactors Application API host. If the hosts match, the provisioning enterprise app might have been created before September 15, 2026, and the workload identity after that date. Workload identities are forward compatible, not backward compatible, across this implementation update. | Compare the **Application API URL** configured for both apps. If the hosts match, use a workload identity that's available to the provisioning app. If no compatible workload identity is available, register a new workload identity for the app. |
 | `invalid_client_assertion` from SAP IAS | AT1 subject or audience doesn't match the SAP IAS Trust-by-Issuer rule. | Compare the **Subject** and **Audience** values provided by Microsoft Entra with the corresponding values in the SAP IAS trust rule. |
 | `unauthorized_client` from SAP IAS | JWKS URI is unreachable or signature validation failed. | Confirm the Microsoft Entra OIDC discovery endpoint is reachable from SAP IAS and that the tenant ID in the issuer claim matches. |
 | OData call returns 403 | SAP IAS client ID is not mapped to the right API User ID, or the API user lacks appropriate role-based permissions. | Re-verify the OIDC OAuth client mapping in SAP SuccessFactors and the permission group on the API user. |

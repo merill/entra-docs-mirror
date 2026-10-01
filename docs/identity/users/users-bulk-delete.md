@@ -6,16 +6,16 @@ uhfHeaderId: MSDocsHeader-Entra
 breadcrumb_path: /entra/breadcrumb/toc.json
 feedback_system: Standard
 feedback_product_url: https://feedback.azure.com/d365community/forum/22920db1-ad25-ec11-b6e6-000d3a4f0789
-author: kenwith
-ms.author: kenwith
+author: tafra00
+ms.author: tazkiaafra
 ms.service: entra-id
 ms.subservice: users
 manager: dougeby
 description: Delete users in bulk in Microsoft Entra ID
-ms.date: 2026-03-05T00:00:00.0000000Z
+ms.date: 2026-09-25T00:00:00.0000000Z
 ms.topic: how-to
-ms.custom: it-pro, sfi-image-nochange
-ms.reviewer: jeffsta
+ai-usage: ai-assisted
+ms.custom: it-pro, sfi-image-nochange, msecd-doc-authoring-1026
 locale: en-us
 document_id: 1ec44f25-325a-beec-79c6-2f4991088fa0
 document_version_independent_id: af186ee8-d08e-0bbb-3b32-9cc2845bbe01
@@ -44,15 +44,13 @@ platformId: 496d8e7b-e9a3-622f-a74d-fc113560dead
 
 # Bulk delete users in Microsoft Entra ID - Microsoft Entra ID | Microsoft Learn
 
-## Overview
-
 Using the admin center in Microsoft Entra ID, part of Microsoft Entra, you can remove a large number of users by using a comma-separated values (CSV) file to bulk delete users.
 
-## To bulk delete users
+## Prerequisites
 
-Important
+To bulk delete users in the Microsoft Entra admin center, sign in as at least a User Administrator.
 
-Updates are being made to bulk operations. While this issue is being addressed, you might experience problems deleting users assigned to privileged roles. This problem is temporary and is being resolved as soon as possible.
+## Bulk delete users
 
 1. Sign in to the [Microsoft Entra admin center](https://entra.microsoft.com) as at least a [User Administrator](../role-based-access-control/permissions-reference#user-administrator).
 2. Select **Microsoft Entra ID**.
@@ -60,7 +58,7 @@ Updates are being made to bulk operations. While this issue is being addressed, 
 
     ![Screenshot of the Users page with the Bulk delete option selected.](media/users-bulk-delete/users-bulk-delete.png)
 4. On the **Bulk delete user** page, select **Download** to download the latest version of the CSV template.
-5. Open the CSV file and add a line for each user you want to delete. The only required value is **User principal name**. Save the file.
+5. Open the CSV file, preserve the column header exactly as downloaded, and add a line for each user you want to delete. For each user, enter either the **User principal name** or **Object ID**. Save the file.
 6. On the **Bulk delete user** page, under **Upload your csv file**, browse to the file. When you select the file and select **Submit**, validation of the CSV file starts.
 7. When the file contents are validated, you’ll see **File uploaded successfully**. If there are errors, you must fix them before you can submit the job.
 8. When your file passes validation, select **Submit** to start the bulk operation that deletes the users.
@@ -74,32 +72,25 @@ For more information about bulk operations limitations, see Bulk delete service 
 
 The rows in the example downloaded CSV template below are as follows:
 
-- **Version number**: The first row containing the version number (for example, `version:v1.0`) must be included in the upload CSV. If your downloaded template includes this row, don't remove or modify it.
-- **Column headings**: `User name [userPrincipalName] Required`. Older versions of the template might vary.
-- **Examples row**: The template might include a row of example values. `Example: chris@contoso.com` You must remove the example row and replace it with your own entries.
+- **Column headings**: Preserve `UserPrincipalName or Object ID [UPN or objectId] Required` exactly as downloaded.
+- **Examples row**: You can keep the examples row in the CSV file. Add the users that you want to delete on the following rows. For each user, enter a user principal name (UPN) or object ID.
 
-![Screenshot of the CSV file contains names and IDs of the users to delete.](media/users-bulk-delete/delete-csv-file.png)
-
-Note
-
-CSV template formats vary by operation. Some templates, such as bulk create or delete users, include `version:v1.0` as the first row. Other templates, such as group member operations, start with column headers. Download the template for your specific operation from the portal. Don't add a version row or any other row that isn't in the downloaded template. Keep any version row and column header row unchanged.
+![Screenshot of a bulk delete CSV template with the required UserPrincipalName or Object ID column.](media/users-bulk-delete/delete-csv-file.png)
 
 ### Example CSV file
 
 Here's an example of a completed CSV file ready for upload:
 
 ```csv
-version:v1.0
-User name [userPrincipalName] Required
+UserPrincipalName or Object ID [UPN or objectId] Required
+chris@contoso.com
 alain@contoso.com
-isabella@contoso.com
-joseph@contoso.com
-chaya@contoso.com
+00aa00aa-bb11-cc22-dd33-44ee44ee44ee
 ```
 
 ### Additional guidance for the CSV template
 
-- Keep any version row and column header row in the upload template exactly as downloaded, or the upload can't be processed.
+- Preserve the column headers exactly as downloaded. If the template includes a version row, preserve it.
 - The required columns are listed first.
 - We don't recommend adding new columns to the template. Any additional columns you add are ignored and not processed.
 - We recommend that you download the latest version of the CSV template as often as possible.

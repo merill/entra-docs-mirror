@@ -6,16 +6,16 @@ uhfHeaderId: MSDocsHeader-Entra
 breadcrumb_path: /entra/breadcrumb/toc.json
 feedback_system: Standard
 feedback_product_url: https://feedback.azure.com/d365community/forum/22920db1-ad25-ec11-b6e6-000d3a4f0789
-author: kenwith
-ms.author: kenwith
+author: tafra00
+ms.author: tazkiaafra
 ms.service: entra-id
 ms.subservice: users
 manager: dougeby
 description: Restore deleted users in bulk in the Azure portal in Microsoft Entra ID
-ms.date: 2026-02-24T00:00:00.0000000Z
+ms.date: 2026-09-25T00:00:00.0000000Z
 ms.topic: how-to
-ms.custom: it-pro, has-azure-ad-ps-ref, sfi-image-nochange
-ms.reviewer: jeffsta
+ai-usage: ai-assisted
+ms.custom: it-pro, has-azure-ad-ps-ref, sfi-image-nochange, msecd-doc-authoring-1026
 locale: en-us
 document_id: 407352cd-3d5a-5ac9-7f46-2d3db03fbc3c
 document_version_independent_id: 007f8920-ea1c-ee79-8679-36cfce3bb040
@@ -34,45 +34,42 @@ source_path: docs/identity/users/users-bulk-restore.md
 cmProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
-- https://authoring-docs-microsoft.poolparty.biz/devrel/68ec7f3a-2bc6-459f-b959-19beb729907d
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/68e4b2d8-b70c-4019-b49a-d1f8881e2aea
 spProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
-- https://authoring-docs-microsoft.poolparty.biz/devrel/90370425-aca4-4a39-9533-d52e5e002a5d
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/67b2ba1a-6f74-4044-a48a-f0f8ad076b8f
 platformId: 79de5d22-4135-00d8-86f7-0dbc8c03d38e
 ---
 
 # Bulk restore deleted users in the Azure portal - Microsoft Entra ID | Microsoft Learn
 
-## Overview
-
 Microsoft Entra ID supports bulk user restore operations and downloading lists of users, groups, and group members.
+
+## Prerequisites
+
+To bulk restore users in the Microsoft Entra admin center, sign in as at least a User Administrator.
 
 ## Understand the CSV template
 
 Download and fill in the CSV template to help you successfully restore Microsoft Entra users in bulk. The CSV template you download might look like this example:
 
-![Screenshot of spreadsheet for uploading and call-outs explaining the purpose and values for each row and column.](media/users-bulk-restore/understand-template.png)
+![Screenshot of a bulk restore CSV template with the required Object ID column.](media/users-bulk-restore/understand-template.png)
 
 ### CSV template structure
 
 The rows in a downloaded CSV template are as follows:
 
-- **Version number**: The first row containing the version number (for example, `version:v1.0`) must be included in the upload CSV. If your downloaded template includes this row, don't remove or modify it.
-- **Column headings**: The format of the column headings is &lt;*Item name*&gt; [PropertyName] &lt;*Required or blank*&gt;. For example, `Object ID [objectId] Required`. Some older versions of the template might have slight variations.
-- **Examples row**: The template might include a row of example values for each column. You must remove the examples row and replace it with your own entries.
-
-Note
-
-CSV template formats vary by operation. Some templates, such as bulk create or delete users, include `version:v1.0` as the first row. Other templates, such as group member operations, start with column headers. Download the template for your specific operation from the portal. Don't add a version row or any other row that isn't in the downloaded template. Keep any version row and column header row unchanged.
+- **Column headings**: Preserve `Object ID [objectId] Required` exactly as downloaded.
+- **Examples row**: You can keep the examples row in the CSV file. Add the object IDs for the users that you want to restore on the following rows.
 
 ### Example CSV file
 
 Here's an example of a completed CSV file ready for upload:
 
 ```csv
-version:v1.0
 Object ID [objectId] Required
+aaaaaaaa-0000-1111-2222-bbbbbbbbbbbb
 00aa00aa-bb11-cc22-dd33-44ee44ee44ee
 11bb11bb-cc22-dd33-ee44-55ff55ff55ff
 22cc22cc-dd33-ee44-ff55-66aa66aa66aa
@@ -80,12 +77,12 @@ Object ID [objectId] Required
 
 ### Additional guidance
 
-- Keep any version row and column header row in the upload template exactly as downloaded, or the upload can't be processed.
+- Preserve the column headers exactly as downloaded. If the template includes a version row, preserve it.
 - The required columns are listed first.
 - We don't recommend adding new columns to the template. Any additional columns you add are ignored and not processed.
 - We recommend that you download the latest version of the CSV template as often as possible.
 
-## To bulk restore users
+## Bulk restore users
 
 1. Sign in to the [Microsoft Entra admin center](https://entra.microsoft.com) as at least a [User Administrator](../role-based-access-control/permissions-reference#user-administrator).
 2. Select Microsoft Entra ID.
@@ -93,9 +90,7 @@ Object ID [objectId] Required
 4. On the **Deleted users** page, select **Bulk restore** to upload a valid CSV file of properties of the users to restore.
 
     ![Screenshot of selecting the bulk restore command on the Deleted users page.](media/users-bulk-restore/bulk-restore.png)
-5. Open the CSV template and add a line for each user you want to restore. The only required value is **ObjectID**. Then save the file.
-
-    ![Screenshot of selecting a local CSV file in which you list the users you want to add](media/users-bulk-restore/upload-button.png)
+5. Open the CSV template, preserve the column header exactly as downloaded, and add a line for each user you want to restore. The only required value is **Object ID**. Then save the file.
 6. On the **Bulk restore** page, under **Upload your csv file**, browse to the file. When you select the file and select **Submit**, validation of the CSV file starts.
 7. When the file contents are validated, you see **File uploaded successfully**. If there are errors, you must fix them before you can submit the job.
 8. When your file passes validation, select **Submit** to start the bulk operation that restores the users.
