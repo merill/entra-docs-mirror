@@ -34,8 +34,10 @@ item_type: Content
 source_path: docs/identity/hybrid/connect/how-to-connect-health-operations.md
 cmProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
+- https://authoring-docs-microsoft.poolparty.biz/devrel/07bb3e10-d135-43ff-bc8b-360497cb39fa
 spProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
+- https://authoring-docs-microsoft.poolparty.biz/devrel/12e559b9-eaf6-4aee-9af7-62334e15f863
 platformId: 78401489-f244-2bcc-50a5-610bb4e2843a
 ---
 
@@ -130,7 +132,7 @@ When you're deleting a service instance, be aware of the following:
 
 ## Manage access with Azure RBAC
 
-[Azure role-based access control (Azure RBAC)](../../role-based-access-control/permissions-reference) for Microsoft Entra Connect Health provides access to users and groups other than Hybrid Identity Administrators. Azure RBAC assigns roles to the intended users and groups, and provides a mechanism to limit the Hybrid Identity Administrators within your directory.
+[Azure role-based access control (Azure RBAC)](../../role-based-access-control/permissions-reference) for Microsoft Entra Connect Health provides access to users and groups other than Global Administrators. Azure RBAC assigns roles to the intended users and groups, and provides a mechanism to limit the Global Administrators within your directory.
 
 ### Roles
 
@@ -138,7 +140,7 @@ Microsoft Entra Connect Health supports the following built-in roles:
 
 | Role | Permissions |
 | --- | --- |
-| Owner | Owners can *manage access* (for example, assign a role to a user or group), *view all information* (for example, view alerts) from the portal, and *change settings* (for example, email notifications) within Microsoft Entra Connect Health. By default, Microsoft Entra Hybrid Identity Administrators are assigned this role, and this can't be changed. |
+| Owner | Owners can *manage access* (for example, assign a role to a user or group), *view all information* (for example, view alerts) from the portal, and *change settings* (for example, email notifications) within Microsoft Entra Connect Health. By default, Microsoft Entra Global Administrators are assigned this role, and this can't be changed. |
 | Contributor | Contributors can *view all information* (for example, view alerts) from the portal, and *change settings* (for example, email notifications) within Microsoft Entra Connect Health. |
 | Reader | Readers can *view all information* (for example, view alerts) from the portal within Microsoft Entra Connect Health. |
 

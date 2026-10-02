@@ -11,7 +11,7 @@ ms.author: cwerner
 ms.service: identity-platform
 description: Learn about the best practices and general guidance for security related application properties in Microsoft Entra ID.
 manager: pmwongera
-ms.date: 2023-01-06T00:00:00.0000000Z
+ms.date: 2026-10-01T00:00:00.0000000Z
 ms.reviewer: 
 ms.topic: concept-article
 ms.custom: sfi-ropc-nochange, sfi-image-nochange
@@ -180,7 +180,7 @@ After the application configuration has been updated to use v2.0 tokens, ensure 
 
 When an application has a service principal provisioned into a tenant, that service principal can be customized by a tenant admin. This is true regardless of whether that tenant is the application's home tenant or a foreign tenant. Those customization abilities can allow for modifications that the app owner didn't expect, leading to security risks. For example, credentials can be added to the service principal, even though credentials should typically be owned and controlled by the app developer and owner.
 
-To reduce this risk, applications should [configure app instance lock](howto-configure-app-instance-property-locks). When configuring app instance lock, always lock every sensitive property available. Configuring this property is especially critical for multitenant applications - meaning applications used in multiple tenants or organizations - but can and should be set by all applications.
+To reduce this risk, applications should [configure app instance lock](howto-configure-app-instance-property-locks). When configuring app instance lock, always lock every sensitive property available. This is especially critical for multitenant applications, but single-tenant applications should also use app instance lock to protect their sensitive properties.
 
 ## Permissions
 

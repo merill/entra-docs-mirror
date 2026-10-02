@@ -13,7 +13,7 @@ ms.subservice: fundamentals
 manager: pmwongera
 description: Improve your security posture with the Microsoft Entra Zero Trust assessment to protect tenants and isolate production systems.
 ms.topic: concept-article
-ms.date: 2025-09-11T00:00:00.0000000Z
+ms.date: 2026-10-01T00:00:00.0000000Z
 ms.reviewer: ramical
 locale: en-us
 document_id: 46b60345-f79e-9619-309d-5a400467d24e
@@ -121,11 +121,11 @@ External accounts with permissions to read directory object permissions provide 
 
 - [Restrict guest access to their own directory objects](/en-us/entra/external-id/external-collaboration-settings-configure#to-configure-guest-user-access)
 
-### App instance property lock is configured for all multitenant applications
+### App instance property lock is configured for all applications
 
-App instance property lock prevents changes to sensitive properties of a multitenant application after the application is provisioned in another tenant. Without a lock, critical properties such as application credentials can be maliciously or unintentionally modified, causing disruptions, increased risk, unauthorized access, or privilege escalations.
+App instance property lock prevents changes to sensitive properties of an application's service principal. The lock applies to both single-tenant and multitenant applications. Without a lock, critical properties such as application credentials can be maliciously or unintentionally modified, causing disruptions, increased risk, unauthorized access, or privilege escalations.
 
-**Remediation action** Enable the app instance property lock for all multitenant applications and specify the properties to lock.
+**Remediation action** Enable the app instance property lock for all applications, including single-tenant and multitenant applications, and specify the properties to lock.
 
 - [Configure an app instance lock](/en-us/entra/identity-platform/howto-configure-app-instance-property-locks#configure-an-app-instance-lock)
 

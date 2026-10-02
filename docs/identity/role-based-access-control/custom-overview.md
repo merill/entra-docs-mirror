@@ -13,7 +13,7 @@ ms.subservice: role-based-access-control
 manager: pmwongera
 description: Learn how to understand the parts of a role assignment and restricted scope in Microsoft Entra ID.
 ms.topic: overview
-ms.date: 2026-06-01T00:00:00.0000000Z
+ms.date: 2026-10-01T00:00:00.0000000Z
 ms.reviewer: abhijeetsinha
 ms.custom: it-pro, has-azure-ad-ps-ref, azure-ad-ref-level-one-done, sfi-image-nochange
 ai-usage: ai-assisted
@@ -157,7 +157,7 @@ Govern these identities at scale with the same layered controls you apply to use
 - Apply [Conditional Access for workload identities](../conditional-access/workload-identity) to restrict where and when a service principal can authenticate. This capability requires Workload Identities Premium licenses and applies only to single-tenant service principals registered in your tenant — managed identities and multitenant or third-party SaaS apps aren't in scope.
 - Run [access reviews of groups and applications](../../id-governance/create-access-review) to confirm that users assigned to those resources still need their access, and use [PIM access reviews](../../id-governance/privileged-identity-management/pim-create-roles-and-resource-roles-review) to review service principals assigned to Microsoft Entra and Azure resource roles. Reviews of groups and applications require Microsoft Entra ID Governance or Microsoft Entra Suite (some capabilities are available with Microsoft Entra ID P2); for details, see [License requirements](../../id-governance/access-reviews-overview#license-requirements). Reviews of service principals additionally require Microsoft Entra Workload ID Premium.
 - Tag service principals for your registered applications with [custom security attributes](../../fundamentals/custom-security-attributes-overview) so you can build a filterable inventory and drive [Azure ABAC](/en-us/azure/role-based-access-control/conditions-custom-security-attributes) decisions from business attributes.
-- Enable [app instance property lock](../../identity-platform/howto-configure-app-instance-property-locks) on multitenant apps to prevent unauthorized modification of sensitive properties on the service principal after the app is provisioned in another tenant.
+- Enable [app instance property lock](../../identity-platform/howto-configure-app-instance-property-locks) on single-tenant and multitenant apps to prevent unauthorized modification of sensitive properties on the service principal.
 
 ## License requirements
 
