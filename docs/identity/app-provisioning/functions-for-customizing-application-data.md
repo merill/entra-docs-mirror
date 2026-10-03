@@ -13,8 +13,9 @@ ms.subservice: app-provisioning
 manager: dougeby
 description: Learn how to use expression mappings to transform attribute values into an acceptable format during automated provisioning of SaaS app objects in Microsoft Entra ID. Includes a reference list of functions.
 ms.topic: reference
-ms.date: 2026-04-10T00:00:00.0000000Z
+ms.date: 2026-10-02T00:00:00.0000000Z
 ms.reviewer: arvinh
+ms.custom: msecd-doc-authoring-1030
 ai-usage: ai-assisted
 locale: en-us
 document_id: c8685339-06af-5bb1-64da-80c16878b0bf
@@ -64,7 +65,7 @@ The maximum supported length for a single attribute mapping expression is **10,0
 
 ## List of Functions
 
-AppendAppRoleAssignmentsComplexBitAndCBoolCDateCoalesceConvertToBase64ConvertToUTF8HexCountCStrDateAddDateDiffDateFromNumDefaultDomainFormatDateTimeGuidIgnoreFlowIfNullOrEmptyIIFInStrIsNullIsNullOrEmptyIsPresentIsStringItemJoinLeftLenMidNormalizeDiacriticsNotNowNumFromDatePCaseRandomStringRedactRemoveDuplicatesReplaceSelectUniqueValueSingleAppRoleAssignmentSplitStripSpacesSwitchToLowerToUpperWord
+AppendAppRoleAssignmentsComplexBitAndCBoolCDateCoalesceConvertToBase64ConvertToUTF8HexCountCStrDateAddDateDiffDateFromNumDefaultDomainFormatDateTimeGuidIgnoreFlowIfNullOrEmptyIIFInStrIsNullIsNullOrEmptyIsPresentIsStringItemJoinLeftLenMidNormalizeDiacriticsNormalizeDiacriticsByCultureNotNowNumFromDatePCaseRandomStringRedactRemoveDuplicatesReplaceSelectUniqueValueSingleAppRoleAssignmentSplitStripSpacesSwitchToLowerToUpperWord
 
 ### Append
 
@@ -709,6 +710,40 @@ Example: Replace characters containing accent marks with equivalent characters t
 
 - **INPUT** (givenName): "Zoë"
 - **OUTPUT**: "Zoe"
+
+### NormalizeDiacriticsByCulture
+
+**Function:** NormalizeDiacriticsByCulture(source, culture)
+
+**Description:** Requires two string arguments. When **culture** is `"de"`, returns the source string with German diacritical characters transliterated according to the following table. `"de"` is the only supported culture value. For any other culture value, the function uses the same normalization behavior as NormalizeDiacritics.
+
+**Parameters:**
+
+| Name | Required/ Repeating | Type | Notes |
+| --- | --- | --- | --- |
+| **source** | Required | String | The string to normalize. |
+| **culture** | Required | String | The culture to use for normalization. The only supported value is `"de"`. |
+
+| Character | Transliterated value |
+| --- | --- |
+| ä | ae |
+| Ä | Ae |
+| ö | oe |
+| Ö | Oe |
+| ü | ue |
+| Ü | Ue |
+| ß | ss |
+
+#### Normalize German diacritics in a string
+
+Example: Transliterate German diacritical characters by using the `"de"` culture.
+
+**Expression:**`NormalizeDiacriticsByCulture("Müller", "de")`
+
+**Sample input/output:**
+
+- **INPUT**: "Müller", "de"
+- **OUTPUT**: "Mueller"
 
 ### Not
 
