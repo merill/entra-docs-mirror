@@ -10,11 +10,12 @@ author: omondiatieno
 ms.author: jomondi
 ms.service: entra-id
 manager: pmwongera
-description: This article introduces the various tools that can be used to synchronize the cloud with on-premises environments.
+description: Compare Microsoft identity synchronization tools for users, groups, contacts, and devices to choose an approach for hybrid identity with Active Directory.
 ms.topic: concept-article
 ms.tgt_pltfrm: na
-ms.date: 2025-04-09T00:00:00.0000000Z
-ms.subservice: hybrid
+ms.date: 2026-10-06T00:00:00.0000000Z
+ms.custom: msecd-doc-authoring-1023
+ai-usage: ai-assisted
 locale: en-us
 document_id: 52771d2d-eda3-6a3b-ef5d-286d544d4992
 document_version_independent_id: 4dc7d457-c42b-0792-8ca9-1e5308e82d37
@@ -32,26 +33,26 @@ item_type: Content
 source_path: docs/identity/hybrid/sync-tools.md
 cmProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
 - https://authoring-docs-microsoft.poolparty.biz/devrel/fecfc034-c4c2-43e6-be47-948bd4addcea
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
 spProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
 - https://authoring-docs-microsoft.poolparty.biz/devrel/16cf36da-59bd-4744-91e9-295292c63e5e
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
 platformId: a1daade6-acf1-933c-4bc7-7af0dda957b9
 ---
 
 # Tools used for synchronization - Microsoft Entra ID | Microsoft Learn
 
-The following article briefly describes the Microsoft tools that current exist today for synchronization.
+This article compares Microsoft Entra Cloud Sync, Connect Sync, Microsoft Identity Manager (MIM), and the ECMA host connector. Use the comparison to choose a tool for synchronizing identities or provisioning users to on-premises applications.
 
 ## List of tools
 
-- **Cloud sync and the provisioning agent** - Microsoft Entra Cloud Sync is the newest offering from Microsoft designed to meet and accomplish your hybrid identity goals for synchronization of users, groups, and contacts to Microsoft Entra ID. It uses the light-weight provisioning agent and is fully configurable via the portal. For more information, see [What is cloud sync?](cloud-sync/what-is-cloud-sync) and [What is the provisioning agent?](cloud-sync/what-is-provisioning-agent)
-- **Connect sync** - Microsoft Entra Connect is an on-premises Microsoft application designed to meet and accomplish your hybrid identity goals. For more information, see [What is Microsoft Entra Connect?](connect/whatis-azure-ad-connect-v2).
+- **Cloud Sync and the provisioning agent** - Microsoft Entra Cloud Sync synchronizes users, groups, and contacts from Active Directory to Microsoft Entra ID. When device sync is enabled, it can also synchronize computer objects for Microsoft Entra hybrid join. Cloud Sync uses the lightweight provisioning agent and is configurable through the Microsoft Entra admin center. For more information, see [What is Microsoft Entra Cloud Sync?](cloud-sync/what-is-cloud-sync), [What is the provisioning agent?](cloud-sync/what-is-provisioning-agent), and [Configure device sync with Microsoft Entra Cloud Sync](cloud-sync/device-sync).
+- **Connect Sync** - Microsoft Entra Connect is an on-premises application for synchronizing identities with Microsoft Entra ID. For more information, see [What is Microsoft Entra Connect?](connect/whatis-azure-ad-connect-v2).
 - **Microsoft Identity Manager with the Graph connector** - Microsoft's on-premises identity and access management solution that provides advanced inter-directory provisioning to achieve hybrid identity environments for Active Directory, Microsoft Entra ID, and other directories. For more information, see [Microsoft Identity Manager](/en-us/microsoft-identity-manager/microsoft-identity-manager-2016). MIM is slowly being deprecated and should only be used in advanced scenarios. For more information, see [Deprecated Features and planning for the future](/en-us/microsoft-identity-manager/microsoft-identity-manager-2016-deprecated-features)
 - **ECMA Host connector** - The ECMA host works with the provisioning agent to provision and synchronize users from the cloud into on-premises applications such as SQL and LDAP. For more information, see [Microsoft Entra on-premises application identity provisioning architecture](../app-provisioning/on-premises-application-provisioning-architecture) and [What is the provisioning agent?](cloud-sync/what-is-provisioning-agent)
 
 ## Selecting the right tool
 
-Each of these tools can accomplish similar results. So selecting the right tool is essential. For most scenarios, cloud sync is going to be the recommended tool. Then connect sync and for advanced/complex scenarios, MIM. For on-premises applications, the ECMA Host would be the preferred tool. For more information, [see the supported sync scenarios table](common-scenarios#supported-sync-scenarios). To determine which tool is right for you, you should use the wizard at the [Choosing the right sync tool](common-scenarios) site.
+These tools support different hybrid identity scenarios. Compare their capabilities in the [supported sync scenarios table](common-scenarios#supported-sync-scenarios), then use the [sync tool selection wizard](common-scenarios) to choose a tool.

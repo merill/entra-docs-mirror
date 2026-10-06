@@ -1,6 +1,6 @@
 ---
 layout: Conceptual
-title: Migrate Microsoft Entra Connect to Microsoft Entra Cloud Sync - Microsoft Entra ID | Microsoft Learn
+title: Migrate to Microsoft Entra Cloud Sync - Microsoft Entra ID | Microsoft Learn
 canonicalUrl: https://learn.microsoft.com/en-us/entra/identity/hybrid/cloud-sync/migrate-azure-ad-connect-to-cloud-sync
 uhfHeaderId: MSDocsHeader-Entra
 breadcrumb_path: /entra/breadcrumb/toc.json
@@ -10,11 +10,12 @@ author: omondiatieno
 ms.author: jomondi
 ms.service: entra-id
 manager: pmwongera
-description: Describes steps to migrate Microsoft Entra Connect to Microsoft Entra Cloud Sync.
-ms.custom: no-azure-ad-ps-ref
+description: Learn how to plan a phased migration from Microsoft Entra Connect to Microsoft Entra Cloud Sync, including device synchronization and prerequisite checks.
+ms.custom: no-azure-ad-ps-ref, msecd-doc-authoring-1023
 ms.topic: how-to
-ms.date: 2025-04-09T00:00:00.0000000Z
+ms.date: 2026-10-06T00:00:00.0000000Z
 ms.subservice: hybrid-cloud-sync
+ai-usage: ai-assisted
 locale: en-us
 document_id: fab65962-15ad-f425-ed08-ffe652bea4da
 document_version_independent_id: c8292ca0-1831-e004-3741-b2a535dbe520
@@ -37,11 +38,11 @@ spProducts:
 platformId: d786cb27-ffea-851e-2d27-7f4cfca8b112
 ---
 
-# Migrate Microsoft Entra Connect to Microsoft Entra Cloud Sync - Microsoft Entra ID | Microsoft Learn
+# Migrate to Microsoft Entra Cloud Sync - Microsoft Entra ID | Microsoft Learn
 
-Microsoft Entra Cloud Sync is the future for accomplishing your hybrid identity goals for synchronization of users, groups, and contacts to Microsoft Entra ID. It uses the Microsoft Entra cloud provisioning agent instead of the Microsoft Entra Connect application. If you're currently using Microsoft Entra Connect and wish to move to cloud sync, the following document provides guidance.
+Microsoft Entra Cloud Sync synchronizes users, groups, and contacts from Active Directory to Microsoft Entra ID by using the Microsoft Entra provisioning agent. When device sync is enabled, Cloud Sync can also synchronize computer objects for Microsoft Entra hybrid join. Use this guide to plan a phased migration from Microsoft Entra Connect to Cloud Sync.
 
-## Steps for migrating from Microsoft Entra Connect to cloud sync
+## Steps for migrating from Microsoft Entra Connect to Cloud Sync
 
 Important
 
@@ -54,7 +55,7 @@ You can still migrate in phases, such as by OU or another defined batch. Each ba
 | Step | Description |
 | --- | --- |
 | Choose the best sync tool | Before moving to cloud sync, you should verify that cloud sync is currently the best synchronization tool for you. You can do this task by reviewing the [supported sync scenarios comparison](../common-scenarios). |
-| Verify the pre-requisites for migrating | The following guidance is only for users who have installed Microsoft Entra Connect using the Express settings and aren't synchronizing devices. Also you should verify the cloud sync [pre-requisites](how-to-prerequisites). |
+| Verify the prerequisites for migrating | This guidance is for users who installed Microsoft Entra Connect by using Express settings. If you synchronize devices for Microsoft Entra hybrid join, include [device sync](device-sync) in your Cloud Sync migration plan. Also verify the [Cloud Sync prerequisites](how-to-prerequisites). |
 | Back up your Microsoft Entra Connect configuration | Before making any changes, you should back up your Microsoft Entra Connect configuration. This way, you can rollback. For more information, see [Import and export Microsoft Entra Connect configuration settings](../connect/how-to-connect-import-export-config). |
 | Review the migration tutorial | To become familiar with the migration process, review the [Migrate to Microsoft Entra Cloud Sync for an existing synced AD forest](tutorial-pilot-aadc-aadccp) tutorial. This tutorial guides you through the migration process in a sandbox environment. |
 | Create or identify an OU for the migration | Create a new OU or identify an existing OU that contains the users you'll test migration on. Keep this OU in Microsoft Entra Connect Sync scope during migration. |

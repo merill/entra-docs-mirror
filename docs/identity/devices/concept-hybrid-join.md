@@ -11,9 +11,11 @@ ms.author: owinfrey
 ms.service: entra-id
 ms.subservice: devices
 manager: dougeby
-description: Learn how device identity management can help you to manage devices that are accessing resources in your environment.
+description: Learn how Microsoft Entra hybrid joined devices connect Active Directory and Microsoft Entra ID, and how Cloud Sync synchronizes their computer objects.
 ms.topic: concept-article
-ms.date: 2025-06-27T00:00:00.0000000Z
+ms.date: 2026-10-06T00:00:00.0000000Z
+ms.custom: msecd-doc-authoring-1023
+ai-usage: ai-assisted
 ms.reviewer: sandeo
 locale: en-us
 document_id: 7003ad77-d8b2-ad14-abb6-902a3d8745be
@@ -67,7 +69,9 @@ Microsoft Entra hybrid joined devices require network line of sight to your on-p
 |  | Conditional Access through Domain join or through Intune if co-managed |
 |  | [Self-service Password Reset and Windows Hello PIN reset on lock screen](../authentication/howto-sspr-windows) |
 
-![Diagram showing how a hybrid joined device works.](media/concept-hybrid-join/azure-ad-hybrid-joined-device.png)
+When enabled, Microsoft Entra Cloud Sync can synchronize Active Directory computer objects to Microsoft Entra ID for Microsoft Entra hybrid join. It doesn't configure AD FS or other federation settings. For configuration steps, see [Configure device sync with Microsoft Entra Cloud Sync](../hybrid/cloud-sync/device-sync).
+
+![Diagram showing Active Directory Domain Services sending device information to Microsoft Entra ID for hybrid join.](media/concept-hybrid-join/azure-ad-hybrid-joined-device.png)
 
 ## Scenarios
 

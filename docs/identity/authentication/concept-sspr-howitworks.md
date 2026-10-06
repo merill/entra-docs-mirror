@@ -13,8 +13,8 @@ ms.subservice: authentication
 manager: dougeby
 description: How does self-service password reset work
 ms.topic: concept-article
-ms.date: 2025-03-04T00:00:00.0000000Z
-ms.reviewer: tilarso
+ms.date: 2026-10-05T00:00:00.0000000Z
+ms.reviewer: tilarso, marisanchez
 ms.custom: sfi-ga-nochange, sfi-image-nochange
 locale: en-us
 document_id: 18640c6c-b52c-84e3-59d8-90f2a663cc6b
@@ -152,7 +152,9 @@ If a user doesn't register the minimum number of required methods, they see an e
 
 #### Mobile app and SSPR
 
-When using a mobile app as a method for password reset, like Microsoft Authenticator, the following considerations apply if an organization hasn't [migrated to the centralized Authentication methods policy](how-to-authentication-methods-manage):
+For SSPR, Microsoft Authenticator, software OATH tokens, and hardware OATH tokens count as a single authentication method. This behavior applies whether or not an organization has [migrated to the centralized Authentication methods policy](how-to-authentication-methods-manage). A user can't use a combination of these methods to satisfy a requirement for two authentication methods.
+
+If an organization hasn't migrated to the centralized Authentication methods policy, the following considerations also apply when users reset their passwords with a mobile app such as Microsoft Authenticator:
 
 - When administrators require one method be used to reset a password, verification code is the only option available.
 - When administrators require two methods be used to reset a password, users are able to use notification **OR** verification code in addition to any other enabled methods.
