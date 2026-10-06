@@ -13,8 +13,9 @@ ms.subservice: external
 manager: dougeby
 description: Learn how to build and integrate apps with external tenants with scenarios such as sign-up, sign in, and getting an access token to call an API.
 ms.topic: sample
-ms.date: 2025-03-11T00:00:00.0000000Z
-ms.custom: it-pro, seo-july-2024
+ms.date: 2026-10-05T00:00:00.0000000Z
+ms.custom: it-pro, seo-july-2024, msecd-doc-authoring-1030
+ai-usage: ai-assisted
 locale: en-us
 document_id: f90ca42e-b36c-1d67-b635-1bb4750968b1
 document_version_independent_id: 01bcb6b2-cc5a-ef80-4550-822d22b34250
@@ -51,6 +52,10 @@ Microsoft Entra External ID supports two authentication approaches: **browser-de
 
 Use the tabs to sort samples either by app type or your preferred language or platform.
 
+Important
+
+The passkey credential management sample uses delegated permissions for listing and registration. Its deletion flow still uses Microsoft Graph with high-privilege application permissions and a client secret in browser code. Run this sample only in a test tenant, not in production.
+
 # [By app type](#tab/apptype)
 ### Single-page application (SPA)
 
@@ -58,9 +63,9 @@ These samples and how-to guides demonstrate how to integrate a single-page appli
 
 | Language/Platform | Code sample guide | Build and integrate guide |
 | --- | --- | --- |
-| JavaScript | • [Sign in users](/en-us/entra/identity-platform/quickstart-single-page-app-sign-in?toc=/entra/external-id/toc.json&amp;bc=/entra/external-id/breadcrumb/toc.json&amp;pivots=external&amp;tabs=javascript-external) • [Sign in users and manage passkeys (GitHub sample)](https://github.com/Azure-Samples/ms-identity-ciam-native-javascript-samples/tree/main/passkey-sample) | • [Sign in users](/en-us/entra/identity-platform/tutorial-single-page-app-javascript-prepare-app?toc=/entra/external-id/toc.json&amp;bc=/entra/external-id/breadcrumb/toc.json&amp;tabs=external-tenant) • [Sign in with passkeys](how-to-sign-in-with-passkey) |
+| JavaScript | • [Sign in users](/en-us/entra/identity-platform/quickstart-single-page-app-sign-in?toc=/entra/external-id/toc.json&amp;bc=/entra/external-id/breadcrumb/toc.json&amp;pivots=external&amp;tabs=javascript-external) • [List and register passkeys (GitHub sample)](https://github.com/Azure-Samples/ms-identity-ciam-native-javascript-samples/tree/main/passkey-sample) | • [Sign in users](/en-us/entra/identity-platform/tutorial-single-page-app-javascript-prepare-app?toc=/entra/external-id/toc.json&amp;bc=/entra/external-id/breadcrumb/toc.json&amp;tabs=external-tenant) • [Sign in with passkeys](how-to-sign-in-with-passkey) |
 | Angular | • [Sign in users](/en-us/entra/identity-platform/quickstart-single-page-app-sign-in?toc=/entra/external-id/toc.json&amp;bc=/entra/external-id/breadcrumb/toc.json&amp;pivots=external&amp;tabs=angular-external) | • [Sign in users](/en-us/entra/identity-platform/tutorial-single-page-apps-angular-prepare-app?toc=/entra/external-id/toc.json&amp;bc=/entra/external-id/breadcrumb/toc.json&amp;tabs=external-tenant) |
-| React | • [Sign in users](/en-us/entra/identity-platform/quickstart-single-page-app-sign-in?toc=/entra/external-id/toc.json&amp;bc=/entra/external-id/breadcrumb/toc.json&amp;pivots=external&amp;tabs=react-external) • [Sign in users and manage passkeys (GitHub sample)](https://github.com/Azure-Samples/ms-eeid-passkey-sample-app) | • [Sign in users](/en-us/entra/identity-platform/tutorial-single-page-app-react-prepare-app?toc=/entra/external-id/toc.json&amp;bc=/entra/external-id/breadcrumb/toc.json&amp;tabs=external-tenant) • [Sign in with passkeys](how-to-sign-in-with-passkey) |
+| React | • [Sign in users](/en-us/entra/identity-platform/quickstart-single-page-app-sign-in?toc=/entra/external-id/toc.json&amp;bc=/entra/external-id/breadcrumb/toc.json&amp;pivots=external&amp;tabs=react-external) • [List and register passkeys (GitHub sample)](https://github.com/Azure-Samples/ms-identity-ciam-native-javascript-samples/tree/main/passkey-sample) | • [Sign in users](/en-us/entra/identity-platform/tutorial-single-page-app-react-prepare-app?toc=/entra/external-id/toc.json&amp;bc=/entra/external-id/breadcrumb/toc.json&amp;tabs=external-tenant) • [Sign in with passkeys](how-to-sign-in-with-passkey) |
 
 ### Web app
 
@@ -179,7 +184,7 @@ These samples and how-to guides demonstrate how to write a daemon application th
 
 | App type | Code sample guide | Build and integrate guide |
 | --- | --- | --- |
-| Single-page application | • [Sign in users](/en-us/entra/identity-platform/quickstart-single-page-app-sign-in?toc=/entra/external-id/toc.json&amp;bc=/entra/external-id/breadcrumb/toc.json&amp;pivots=external&amp;tabs=javascript-external) | • [Sign in users](/en-us/entra/identity-platform/tutorial-single-page-app-javascript-prepare-app?toc=/entra/external-id/toc.json&amp;bc=/entra/external-id/breadcrumb/toc.json&amp;tabs=external-tenant) |
+| Single-page application | • [Sign in users](/en-us/entra/identity-platform/quickstart-single-page-app-sign-in?toc=/entra/external-id/toc.json&amp;bc=/entra/external-id/breadcrumb/toc.json&amp;pivots=external&amp;tabs=javascript-external) • [List and register passkeys (GitHub sample)](https://github.com/Azure-Samples/ms-identity-ciam-native-javascript-samples/tree/main/passkey-sample) | • [Sign in users](/en-us/entra/identity-platform/tutorial-single-page-app-javascript-prepare-app?toc=/entra/external-id/toc.json&amp;bc=/entra/external-id/breadcrumb/toc.json&amp;tabs=external-tenant) • [Sign in with passkeys](how-to-sign-in-with-passkey) |
 
 ### JavaScript, Angular
 
@@ -191,7 +196,7 @@ These samples and how-to guides demonstrate how to write a daemon application th
 
 | App type | Code sample guide | Build and integrate guide |
 | --- | --- | --- |
-| Single-page application | • [Sign in users](/en-us/entra/identity-platform/quickstart-single-page-app-sign-in?toc=/entra/external-id/toc.json&amp;bc=/entra/external-id/breadcrumb/toc.json&amp;pivots=external&amp;tabs=react-external) • [Sign in users and manage passkeys (GitHub sample)](https://github.com/Azure-Samples/ms-eeid-passkey-sample-app) | • [Sign in users](/en-us/entra/identity-platform/tutorial-single-page-app-react-prepare-app?toc=/entra/external-id/toc.json&amp;bc=/entra/external-id/breadcrumb/toc.json&amp;tabs=external-tenant) • [Sign in with passkeys](how-to-sign-in-with-passkey) |
+| Single-page application | • [Sign in users](/en-us/entra/identity-platform/quickstart-single-page-app-sign-in?toc=/entra/external-id/toc.json&amp;bc=/entra/external-id/breadcrumb/toc.json&amp;pivots=external&amp;tabs=react-external) • [List and register passkeys (GitHub sample)](https://github.com/Azure-Samples/ms-identity-ciam-native-javascript-samples/tree/main/passkey-sample) | • [Sign in users](/en-us/entra/identity-platform/tutorial-single-page-app-react-prepare-app?toc=/entra/external-id/toc.json&amp;bc=/entra/external-id/breadcrumb/toc.json&amp;tabs=external-tenant) • [Sign in with passkeys](how-to-sign-in-with-passkey) |
 
 ### JavaScript, Node
 

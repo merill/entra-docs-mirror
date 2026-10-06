@@ -32,12 +32,12 @@ monikers: []
 item_type: Content
 source_path: docs/global-secure-access/reference-private-access-sensor-release-history.md
 cmProducts:
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/d5321f31-a36c-484d-a808-69f9088f4f84
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/d5321f31-a36c-484d-a808-69f9088f4f84
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/68e4b2d8-b70c-4019-b49a-d1f8881e2aea
 spProducts:
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/6032d191-3b2e-4df1-9108-c955546973aa
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/6032d191-3b2e-4df1-9108-c955546973aa
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/67b2ba1a-6f74-4044-a48a-f0f8ad076b8f
 platformId: a7a49f3b-d92b-41de-0e99-17cb47c6098a
 ---
@@ -53,6 +53,41 @@ You can download the current version of the Private Access Sensor from the Micro
 1. Sign in to the [Microsoft Entra admin center](https://entra.microsoft.com) as a [Global Secure Access Administrator](/en-us/azure/active-directory/roles/permissions-reference#global-secure-access-administrator).
 2. Browse to **Global Secure Access** &gt; **Connect** &gt; **Connectors and sensors** &gt; **Private access sensors**.
 3. Select **Download private access sensor**.
+
+## Version 2.2.79
+
+Released for download on September 29, 2026.
+
+### Over-the-air automatic updates
+
+- Adds automatic downloads and installation of future sensor updates.
+
+Note
+
+Upgrading from version 2.2.42 requires a one-time installation of the full sensor installer from the Microsoft Entra admin center to enable OTA updates.
+
+### Security enhancements
+
+- Extends Kerberos policy enforcement to UDP alongside TCP.
+- Hardens network packet validation and removes the local registry break-glass override in favor of cloud policy.
+
+### Access enforcement
+
+- Matches non-wildcard SPNs and requested Kerberos service names (`sname`) by their owning Active Directory account SID, rather than relying only on exact service-name strings. This extends protection to aliases of the same account. Existing name-based matching is retained when account resolution is unavailable.
+- Corrects wildcard SPN matching. Wildcard rules remain name-based.
+
+### Diagnostics and telemetry
+
+- Improves Kerberos transport, service-name resolution, and firewall diagnostics.
+
+### Bug fixes
+
+- Includes bug fixes and minor improvements.
+
+### Upgrade considerations
+
+- Allow inbound TCP and UDP on port 1337.
+- IPv6 Kerberos traffic is unsupported and blocked; use IPv4.
 
 ## Version 2.2.42
 
