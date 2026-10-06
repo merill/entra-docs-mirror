@@ -78,4 +78,4 @@ Note
 
 - Multi-Geo connectors aren't available through Quick Access. Multi-Geo supports only private enterprise apps.
 - Multi-Geo doesn't support the Domain Name System (DNS) experience.
-- Mulit-Geo doesn't support Japan region selection through Microsoft Entra admin center.
+- Multi-Geo doesn't support Japan region selection through Microsoft Entra admin center.

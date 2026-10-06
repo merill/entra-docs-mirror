@@ -7,10 +7,9 @@ breadcrumb_path: /entra/breadcrumb/toc.json
 feedback_system: Standard
 feedback_product_url: /entra/identity-platform/developer-support-help-options
 author: cilwerner
-ms.author: dmwendia
+ms.author: cwerner
 ms.service: identity-platform
 description: Learn how to build a desktop app that calls web APIs to acquire a token for the app interactively.
-manager: dougeby
 ms.date: 2026-06-15T00:00:00.0000000Z
 ms.subservice: workforce
 ms.topic: how-to

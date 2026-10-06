@@ -10,7 +10,7 @@ author: omondiatieno
 ms.author: jomondi
 ms.service: entra-id
 ms.subservice: enterprise-apps
-manager: mwongerapk
+manager: dougeby
 description: Learn about single sign-on for enterprise applications in Microsoft Entra ID, including SAML and OpenID Connect protocols.
 ms.topic: overview
 ms.date: 2026-06-04T00:00:00.0000000Z

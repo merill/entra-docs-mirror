@@ -6,8 +6,8 @@ uhfHeaderId: MSDocsHeader-Entra
 breadcrumb_path: /entra/breadcrumb/toc.json
 feedback_system: Standard
 feedback_product_url: https://feedback.azure.com/d365community/forum/79b1327d-d925-ec11-b6e6-000d3a4f06a4
-author: jenniferf-skc
-ms.author: jfields
+author: HULKsmashGithub
+ms.author: jayrusso
 ms.service: global-secure-access
 manager: dougeby
 description: Learn how to view, filter, and export Generative AI Insights logs in Microsoft Entra Global Secure Access to monitor GenAI prompts and Model Context Protocol traffic.

@@ -122,7 +122,7 @@ POST https://{tenant_subdomain}.ciamlogin.com/{tenant_subdomain}.onmicrosoft.com
 Content-Type: application/x-www-form-urlencoded
 client_id=00001111-aaaa-2222-bbbb-3333cccc4444
 &challenge_type=oob password redirect
-&username=contoso-consumer@contoso.com 
+&username=contoso-consumer@contoso.com
 ```
 
 Example 2 (include user attributes and password in the request):
@@ -134,7 +134,7 @@ client_id=00001111-aaaa-2222-bbbb-3333cccc4444
 &challenge_type=oob password redirect
 &password={secure_password}
 &attributes={"displayName": "{given_name}", "extension_2588abcdwhtfeehjjeeqwertc_age": "{user_age}", "postalCode": "{user_postal_code}"}
-&username=contoso-consumer@contoso.com 
+&username=contoso-consumer@contoso.com
 ```
 
 | Parameter | Required | Description |
@@ -159,7 +159,7 @@ Content-Type: application/json
 ```json
 {
     "continuation_token": "AQABAAEAAA…",
-} 
+}
 ```
 
 | Property | Description |
@@ -176,9 +176,9 @@ Content-Type: application/json
 ```
 
 ```json
-{     
-   "challenge_type": "redirect" 
-} 
+{
+   "challenge_type": "redirect"
+}
 ```
 
 | Property | Description |
@@ -198,15 +198,15 @@ Content-Type: application/json
 
 ```json
 {
-    "error": "user_already_exists", 
-    "error_description": "AADSTS1003037: It looks like you may already have an account.... .\r\nTrace ID: 0000aaaa-11bb-cccc-dd22-eeeeee333333\r\nCorrelation ID: aaaa0000-bb11-2222-33cc-444444dddddd\r\nTimestamp: yyyy-...", 
-    "error_codes": [ 
-        1003037 
+    "error": "user_already_exists",
+    "error_description": "AADSTS1003037: It looks like you may already have an account.... .\r\nTrace ID: 0000aaaa-11bb-cccc-dd22-eeeeee333333\r\nCorrelation ID: aaaa0000-bb11-2222-33cc-444444dddddd\r\nTimestamp: yyyy-...",
+    "error_codes": [
+        1003037
     ],
     "timestamp": "yyyy-mm-dd 10:15:00Z",
-    "trace_id": "0000aaaa-11bb-cccc-dd22-eeeeee333333", 
+    "trace_id": "0000aaaa-11bb-cccc-dd22-eeeeee333333",
     "correlation_id": "aaaa0000-bb11-2222-33cc-444444dddddd"
-} 
+}
 ```
 
 | Property | Description |
@@ -291,7 +291,7 @@ Content-Type: application/json
     "challenge_channel": "email",
     "challenge_target_label": "c***r@co**o**o.com",
     "code_length": 8
-} 
+}
 ```
 
 | Property | Description |
@@ -335,16 +335,16 @@ Content-Type: application/json
 ```
 
 ```json
-{ 
-    "error": "invalid_request", 
+{
+    "error": "invalid_request",
     "error_description": "AADSTS901007: The challenge_type list parameter does not include the 'redirect' type.\r\nTrace ID: 0000aaaa-11bb-cccc-dd22-eeeeee333333\r\nCorrelation ID: aaaa0000-bb11-2222-33cc-444444dddddd\r\nTimestamp: yyyy-...",
-    "error_codes": [ 
-        901007 
-    ], 
+    "error_codes": [
+        901007
+    ],
     "timestamp": "yyyy-mm-dd 10:15:00Z",
-    "trace_id": "0000aaaa-11bb-cccc-dd22-eeeeee333333", 
+    "trace_id": "0000aaaa-11bb-cccc-dd22-eeeeee333333",
     "correlation_id": "aaaa0000-bb11-2222-33cc-444444dddddd"
-} 
+}
 ```
 
 | Property | Description |
@@ -375,8 +375,8 @@ Here's an example of the request (we present the example request in multiple lin
 POST https://{tenant_subdomain}.ciamlogin.com/{tenant_subdomain}.onmicrosoft.com/signup/v1.0/continue
 Content-Type: application/x-www-form-urlencoded
 continuation_token=uY29tL2F1dGhlbnRpY...
-&client_id=00001111-aaaa-2222-bbbb-3333cccc4444 
-&grant_type=oob 
+&client_id=00001111-aaaa-2222-bbbb-3333cccc4444
+&grant_type=oob
 &oob={otp_code}
 ```
 
@@ -414,7 +414,7 @@ Content-Type: application/json
     "trace_id": "d6966055-...-80500",
     "correlation_id": "3944-...-60d6",
     "continuation_token": "AQABEQEAAAA..."
-} 
+}
 ```
 
 | Property | Description |
@@ -493,9 +493,9 @@ Content-Type: application/json
 ```
 
 ```json
-{     
-    "challenge_type": "redirect" 
-} 
+{
+    "challenge_type": "redirect"
+}
 ```
 
 | Property | Description |
@@ -514,8 +514,8 @@ Here's an example of the request (we present the example request in multiple lin
 POST https://{tenant_subdomain}.ciamlogin.com/{tenant_subdomain}.onmicrosoft.com/signup/v1.0/continue
 Content-Type: application/x-www-form-urlencoded
 continuation_token=uY29tL2F1dGhlbnRpY...
-&client_id=00001111-aaaa-2222-bbbb-3333cccc4444 
-&grant_type=password 
+&client_id=00001111-aaaa-2222-bbbb-3333cccc4444
+&grant_type=password
 &password={secure_password}
 ```
 
@@ -611,9 +611,9 @@ Content-Type: application/json
 ```
 
 ```json
-{     
-   "challenge_type": "redirect" 
-} 
+{
+   "challenge_type": "redirect"
+}
 ```
 
 | Property | Description |
@@ -637,9 +637,9 @@ Content-Type: application/json
     "error_description": "New password is too weak",
     "error_codes": [
         399246
-    ], 
+    ],
     "timestamp": "yyyy-mm-dd 10:15:00Z",
-    "trace_id": "0000aaaa-11bb-cccc-dd22-eeeeee333333", 
+    "trace_id": "0000aaaa-11bb-cccc-dd22-eeeeee333333",
     "correlation_id": "aaaa0000-bb11-2222-33cc-444444dddddd",
     "suberror": "password_too_weak"
 }
@@ -684,8 +684,8 @@ Here's an example of the request (we present the example request in multiple lin
 ```http
 POST https://{tenant_subdomain}.ciamlogin.com/{tenant_subdomain}.onmicrosoft.com/signup/v1.0/continue
 Content-Type: application/x-www-form-urlencoded
-&client_id=00001111-aaaa-2222-bbbb-3333cccc4444 
-&grant_type=attributes 
+&client_id=00001111-aaaa-2222-bbbb-3333cccc4444
+&grant_type=attributes
 &attributes={"displayName": "{given_name}", "extension_2588abcdwhtfeehjjeeqwertc_age": "{user_age}", "postalCode": "{postal_code}"}
 &continuation_token=AQABAAEAAAAtn...
 ```
@@ -708,9 +708,9 @@ Content-Type: application/json
 ```
 
 ```json
-{  
+{
     "continuation_token": "AQABAAEAAAYn..."
-} 
+}
 ```
 
 | Property | Description |
@@ -727,9 +727,9 @@ Content-Type: application/json
 ```
 
 ```json
-{     
-   "challenge_type": "redirect" 
-} 
+{
+   "challenge_type": "redirect"
+}
 ```
 
 | Property | Description |
@@ -750,13 +750,13 @@ Content-Type: application/json
 ```json
 {
     "error": "expired_token",
-    "error_description": "AADSTS901007: The continuation_token is expired.  .\r\nTrace ID: 0000aaaa-11bb-cccc-dd22-eeeeee333333\r\nCorrelation ID: aaaa0000-bb11-2222-33cc-444444dddddd\r\nTimestamp: yyyy-...", 
+    "error_description": "AADSTS901007: The continuation_token is expired.  .\r\nTrace ID: 0000aaaa-11bb-cccc-dd22-eeeeee333333\r\nCorrelation ID: aaaa0000-bb11-2222-33cc-444444dddddd\r\nTimestamp: yyyy-...",
     "error_codes": [
         552003
-    ], 
+    ],
     "timestamp": "yyyy-mm-dd 10:15:00Z",
-    "trace_id": "0000aaaa-11bb-cccc-dd22-eeeeee333333", 
-    "correlation_id": "aaaa0000-bb11-2222-33cc-444444dddddd" 
+    "trace_id": "0000aaaa-11bb-cccc-dd22-eeeeee333333",
+    "correlation_id": "aaaa0000-bb11-2222-33cc-444444dddddd"
 }
 ```
 
@@ -945,9 +945,9 @@ Content-Type: application/json
 ```
 
 ```json
-{     
-   "challenge_type": "redirect" 
-} 
+{
+   "challenge_type": "redirect"
+}
 ```
 
 | Property | Description |
@@ -966,16 +966,16 @@ Content-Type: application/json
 ```
 
 ```json
-{ 
-    "error": "invalid_request", 
+{
+    "error": "invalid_request",
     "error_description": "AADSTS901007: The challenge_type list parameter does not include the 'redirect' type.\r\nTrace ID: 0000aaaa-11bb-cccc-dd22-eeeeee333333\r\nCorrelation ID: aaaa0000-bb11-2222-33cc-444444dddddd\r\nTimestamp: yyyy-...",
-    "error_codes": [ 
-        901007 
-    ], 
+    "error_codes": [
+        901007
+    ],
     "timestamp": "yyyy-mm-dd 10:15:00Z",
-    "trace_id": "0000aaaa-11bb-cccc-dd22-eeeeee333333", 
+    "trace_id": "0000aaaa-11bb-cccc-dd22-eeeeee333333",
     "correlation_id": "aaaa0000-bb11-2222-33cc-444444dddddd"
-} 
+}
 ```
 
 | Property | Description |
@@ -1013,8 +1013,8 @@ Here's an example of the request (we present the example request in multiple lin
 POST https://{tenant_subdomain}.ciamlogin.com/{tenant_subdomain}.onmicrosoft.com/oauth2/v2.0/challenge
 Content-Type: application/x-www-form-urlencoded
 client_id=00001111-aaaa-2222-bbbb-3333cccc4444
-&challenge_type=password redirect 
-&continuation_token=uY29tL2F1dGhlbnRpY... 
+&challenge_type=password redirect
+&continuation_token=uY29tL2F1dGhlbnRpY...
 ```
 
 | Parameter | Required | Description |
@@ -1041,11 +1041,11 @@ Content-Type: application/json
 {
     "continuation_token": "uY29tL2F1dGhlbnRpY...",
     "challenge_type": "oob",
-    "binding_method": "prompt ", 
+    "binding_method": "prompt ",
     "challenge_channel": "email",
     "challenge_target_label ": "c***r@co**o**o.com ",
     "code_length": 8
-} 
+}
 ```
 
 | Property | Description |
@@ -1072,10 +1072,10 @@ Content-Type: application/json
 ```
 
 ```json
-{   
-   "continuation_token": "uY29tL2F1dGhlbnRpY",   
-   "challenge_type": "password" 
-} 
+{
+   "continuation_token": "uY29tL2F1dGhlbnRpY",
+   "challenge_type": "password"
+}
 ```
 
 | Property | Description |
@@ -1096,11 +1096,11 @@ Content-Type: application/json
 {
     "continuation_token": "uY29tL2F1dGhlbnRpY...",
     "challenge_type": "oob",
-    "binding_method": "prompt ", 
+    "binding_method": "prompt ",
     "challenge_channel": "email",
     "challenge_target_label ": "c***r@co**o**o.com ",
     "code_length": 8
-} 
+}
 ```
 
 | Property | Description |
@@ -1129,9 +1129,9 @@ Content-Type: application/json
 ```
 
 ```json
-{     
-   "challenge_type": "redirect" 
-} 
+{
+   "challenge_type": "redirect"
+}
 ```
 
 | Property | Description |
@@ -1150,16 +1150,16 @@ Content-Type: application/json
 ```
 
 ```json
-{ 
-    "error": "invalid_request", 
+{
+    "error": "invalid_request",
     "error_description": "AADSTS901007: The challenge_type list parameter does not include the 'redirect' type.\r\nTrace ID: 0000aaaa-11bb-cccc-dd22-eeeeee333333\r\nCorrelation ID: aaaa0000-bb11-2222-33cc-444444dddddd\r\nTimestamp: yyyy-...",
-    "error_codes": [ 
-        901007 
-    ], 
+    "error_codes": [
+        901007
+    ],
     "timestamp": "yyyy-mm-dd 10:15:00Z",
-    "trace_id": "0000aaaa-11bb-cccc-dd22-eeeeee333333", 
+    "trace_id": "0000aaaa-11bb-cccc-dd22-eeeeee333333",
     "correlation_id": "aaaa0000-bb11-2222-33cc-444444dddddd"
-} 
+}
 ```
 
 | Property | Description |
@@ -1349,10 +1349,10 @@ Content-Type: application/json
             "challenge_channel":"email",
             "login_hint":"c***r@co**o**o.com"
         },
-        {   
-          "id": "1b1b1b1b-2222-cccc-3333-4d4d4d4d4d4d",   
-          "challenge_type": "oob",   
-          "challenge_channel": "sms",   
+        {  
+          "id": "1b1b1b1b-2222-cccc-3333-4d4d4d4d4d4d",  
+          "challenge_type": "oob",  
+          "challenge_channel": "sms",  
           "login_hint": "+1********6"
         }
     ]
@@ -1383,9 +1383,9 @@ Content-Type: application/json
 ```
 
 ```json
-{     
-   "challenge_type": "redirect" 
-} 
+{
+   "challenge_type": "redirect"
+}
 ```
 
 #### Error response
@@ -1398,16 +1398,16 @@ Content-Type: application/json
 ```
 
 ```json
-{ 
-    "error": "invalid_request", 
+{
+    "error": "invalid_request",
     "error_description": "AADSTS901007: The continuation_token provided is not valid for this endpoint.\r\nTrace ID: 0000aaaa-11bb-cccc-dd22-eeeeee333333\r\nCorrelation ID: aaaa0000-bb11-2222-33cc-444444dddddd\r\nTimestamp: yyyy-...",
-    "error_codes": [ 
-        50126 
-    ], 
+    "error_codes": [
+        50126
+    ],
     "timestamp": "yyyy-mm-dd 10:15:00Z",
-    "trace_id": "0000aaaa-11bb-cccc-dd22-eeeeee333333", 
+    "trace_id": "0000aaaa-11bb-cccc-dd22-eeeeee333333",
     "correlation_id": "aaaa0000-bb11-2222-33cc-444444dddddd"
-} 
+}
 ```
 
 | Property | Description |
@@ -1434,10 +1434,10 @@ After the client app successfully retrieves a list of strong authentication meth
 
     ```http
     POST https://{tenant_subdomain}.ciamlogin.com/{tenant_subdomain}.onmicrosoft.com/oauth2/v2.0/challenge
-    Content-Type: application/x-www-form-urlencoded    
+    Content-Type: application/x-www-form-urlencoded
     client_id=00001111-aaaa-2222-bbbb-3333cccc4444
-    &id=0a0a0a0a-1111-bbbb-2222-3c3c3c3c3c3c 
-    &continuation_token=uY29tL2F1dGhlbnRpY... 
+    &id=0a0a0a0a-1111-bbbb-2222-3c3c3c3c3c3c
+    &continuation_token=uY29tL2F1dGhlbnRpY...
     ```
 2. Microsoft Entra sends a challenge code to the user's challenge channel, such as email, and then responds back to the client app with a continuation token and the MFA challenge details:
 
@@ -1450,27 +1450,27 @@ After the client app successfully retrieves a list of strong authentication meth
     {
         "continuation_token": "uY29tL2F1dGhlbnRpY...",
         "challenge_type": "oob",
-        "binding_method": "prompt ", 
+        "binding_method": "prompt ",
         "challenge_channel": "email",
         "challenge_target_label ": "c***r@co**o**o.com ",
         "code_length": 8
-    } 
+    }
     ```
 3. The app can now make a POST request to the `/oauth2/v2.0/token` endpoint and includes a continuation token, correct grant type, and corresponding grant type values to get security tokens. See expected response in Request for security tokens:
 
     ```http
     POST https://{tenant_subdomain}.ciamlogin.com/{tenant_subdomain}.onmicrosoft.com/oauth2/v2.0/token
-    Content-Type: application/x-www-form-urlencoded    
-    client_id=00001111-aaaa-2222-bbbb-3333cccc4444 
-    &continuation_token=uY29tL2F1dGhlbnRpY...   
-    &grant_type=mfa_oob  
+    Content-Type: application/x-www-form-urlencoded
+    client_id=00001111-aaaa-2222-bbbb-3333cccc4444
+    &continuation_token=uY29tL2F1dGhlbnRpY...
+    &grant_type=mfa_oob
     &oob={otp_code}
     &scope=openid offline_access
     ```
 
 ## Register a strong authentication method API reference
 
-Native authentication supports registration of strong authentication method. When the app calls the /oauth2/v2.0/token endpoint and MFA is required but the user has no registered strong method, the response, *registeration\_required*, tells the app to have the user register one before tokens can be issued.
+Native authentication supports registration of strong authentication method. When the app calls the /oauth2/v2.0/token endpoint and MFA is required but the user has no registered strong method, the response, *registration\_required*, tells the app to have the user register one before tokens can be issued.
 
 After the client app completes the flow to register a strong authentication method, it calls the `/oauth2/v2.0/token` endpoint to request for security tokens.
 
@@ -1493,8 +1493,8 @@ Here's an example of the request (we present the example request in multiple lin
 ```http
 POST https://{tenant_subdomain}.ciamlogin.com/{tenant_subdomain}.onmicrosoft.com/register/v1.0/introspect
 Content-Type: application/x-www-form-urlencoded
-?continuation_token=uY29tL2F1dGhlbnRpY... 
-&client_id=00001111-aaaa-2222-bbbb-3333cccc4444  
+?continuation_token=uY29tL2F1dGhlbnRpY...
+&client_id=00001111-aaaa-2222-bbbb-3333cccc4444
 ```
 
 | Parameter | Required | Description |
@@ -1521,9 +1521,9 @@ Content-Type: application/json
             "challenge_channel":"email",
             "login_hint":"caseyjensen@contoso.com"
         },
-        {   
-          "id": "sms",   
-          "challenge_type": "oob",   
+        {  
+          "id": "sms",  
+          "challenge_type": "oob",  
           "challenge_channel": "sms"
         }
     ]
@@ -1554,16 +1554,16 @@ Content-Type: application/json
 ```
 
 ```json
-{ 
-    "error": "invalid_request", 
+{
+    "error": "invalid_request",
     "error_description": "AADSTS901007: The continuation_token provided is not valid for this endpoint.\r\nTrace ID: 0000aaaa-11bb-cccc-dd22-eeeeee333333\r\nCorrelation ID: aaaa0000-bb11-2222-33cc-444444dddddd\r\nTimestamp: yyyy-...",
-    "error_codes": [ 
-        50126 
-    ], 
+    "error_codes": [
+        50126
+    ],
     "timestamp": "yyyy-mm-dd 10:15:00Z",
-    "trace_id": "0000aaaa-11bb-cccc-dd22-eeeeee333333", 
+    "trace_id": "0000aaaa-11bb-cccc-dd22-eeeeee333333",
     "correlation_id": "aaaa0000-bb11-2222-33cc-444444dddddd"
-} 
+}
 ```
 
 | Property | Description |
@@ -1589,13 +1589,13 @@ In this step, submit the strong authentication method that the user wishes to re
 Here's an example of the request (we present the example request in multiple lines for readability):
 
 ```http
-POST https://{tenant_subdomain}.ciamlogin.com/{tenant_subdomain}.onmicrosoft.com/register/v1.0/challenge 
+POST https://{tenant_subdomain}.ciamlogin.com/{tenant_subdomain}.onmicrosoft.com/register/v1.0/challenge
 
-?continuation_token=uY29tL2F1dGhlbnRpY... 
-&client_id=00001111-aaaa-2222-bbbb-3333cccc4444  
-&challenge_type=oob  
-&challenge_channel=email 
-&challenge_target=contoso-consumer@contoso.com 
+?continuation_token=uY29tL2F1dGhlbnRpY...
+&client_id=00001111-aaaa-2222-bbbb-3333cccc4444
+&challenge_type=oob
+&challenge_channel=email
+&challenge_target=contoso-consumer@contoso.com
 ```
 
 | Parameter | Required | Description |
@@ -1619,14 +1619,14 @@ Content-Type: application/json
 ```
 
 ```json
-{ 
-  "continuation_token": "uY29tL2F1dGhlbnRpY...", 
-  "challenge_type": "oob", 
-  "binding_method": "prompt", 
-  "challenge_target": "contoso-consumer@contoso.com", 
-  "challenge_channel": "email", 
-  "code_length": 8 
-} 
+{
+  "continuation_token": "uY29tL2F1dGhlbnRpY...",
+  "challenge_type": "oob",
+  "binding_method": "prompt",
+  "challenge_target": "contoso-consumer@contoso.com",
+  "challenge_channel": "email",
+  "code_length": 8
+}
 ```
 
 Example 2:
@@ -1639,9 +1639,9 @@ Content-Type: application/json
 ```
 
 ```json
-{ 
+{
   "continuation_token": "uY29tL2F1dGhlbnRpY...",
-  "challenge_type": "preverified" 
+  "challenge_type": "preverified"
 }
 ```
 
@@ -1679,11 +1679,11 @@ In this step, make a call to the `/register/v1.0/continue` endpoint to complete 
 Here's an example of the request (we present the example request in multiple lines for readability):
 
 ```http
-POST https://{tenant_subdomain}.ciamlogin.com/{tenant_subdomain}.onmicrosoft.com/register/v1.0/continue 
+POST https://{tenant_subdomain}.ciamlogin.com/{tenant_subdomain}.onmicrosoft.com/register/v1.0/continue
 
-?continuation_token=uY29tL2F1dGhlbnRpY... 
-&client_id=00001111-aaaa-2222-bbbb-3333cccc4444  
-&grant_type=oob  
+?continuation_token=uY29tL2F1dGhlbnRpY...
+&client_id=00001111-aaaa-2222-bbbb-3333cccc4444
+&grant_type=oob
 &oob={otp_code}
 ```
 
@@ -1705,9 +1705,9 @@ Content-Type: application/json
 ```
 
 ```json
-{ 
+{
   "continuation_token": "uY29tL2F1dGhlbnRpY..."
-} 
+}
 ```
 
 | Property | Description |
@@ -1724,14 +1724,14 @@ Content-Type: application/json
 ```
 
 ```json
-{ 
-    "error": "invalid_request", 
+{
+    "error": "invalid_request",
     "error_description": "AADSTS55200: The continuation_token is invalid.\r\nTrace ID: 0000aaaa-11bb-cccc-dd22-eeeeee333333\r\nCorrelation ID: aaaa0000-bb11-2222-33cc-444444dddddd\r\nTimestamp: yyyy-...",
-    "error_codes": [ 
-        55200 
-    ], 
+    "error_codes": [
+        55200
+    ],
     "timestamp": "yyyy-mm-dd 10:15:00Z",
-    "trace_id": "0000aaaa-11bb-cccc-dd22-eeeeee333333", 
+    "trace_id": "0000aaaa-11bb-cccc-dd22-eeeeee333333",
     "correlation_id": "aaaa0000-bb11-2222-33cc-444444dddddd"
 }
 ```
@@ -1801,9 +1801,9 @@ Here's an example of the request (we present the example request in multiple lin
 ```http
 POST https://{tenant_subdomain}.ciamlogin.com/{tenant_subdomain}.onmicrosoft.com/resetpassword/v1.0/start
 Content-Type: application/x-www-form-urlencoded
-client_id=00001111-aaaa-2222-bbbb-3333cccc4444 
-&challenge_type=oob redirect 
-&username=contoso-consumer@contoso.com 
+client_id=00001111-aaaa-2222-bbbb-3333cccc4444
+&challenge_type=oob redirect
+&username=contoso-consumer@contoso.com
 ```
 
 | Parameter | Required | Description |
@@ -1843,9 +1843,9 @@ Content-Type: application/json
 ```
 
 ```json
-{     
-   "challenge_type": "redirect" 
-} 
+{
+   "challenge_type": "redirect"
+}
 ```
 
 | Property | Description |
@@ -1864,16 +1864,16 @@ Content-Type: application/json
 ```
 
 ```json
-{ 
-    "error": "invalid_request", 
+{
+    "error": "invalid_request",
     "error_description": "AADSTS901007: The challenge_type list parameter does not include the 'redirect' type.\r\nTrace ID: 0000aaaa-11bb-cccc-dd22-eeeeee333333\r\nCorrelation ID: aaaa0000-bb11-2222-33cc-444444dddddd\r\nTimestamp: yyyy-...",
-    "error_codes": [ 
-        901007 
-    ], 
+    "error_codes": [
+        901007
+    ],
     "timestamp": "yyyy-mm-dd 10:15:00Z",
-    "trace_id": "0000aaaa-11bb-cccc-dd22-eeeeee333333", 
+    "trace_id": "0000aaaa-11bb-cccc-dd22-eeeeee333333",
     "correlation_id": "aaaa0000-bb11-2222-33cc-444444dddddd"
-} 
+}
 ```
 
 | Property | Description |
@@ -1912,7 +1912,7 @@ POST https://{tenant_subdomain}.ciamlogin.com/{tenant_subdomain}.onmicrosoft.com
 Content-Type: application/x-www-form-urlencoded
 client_id=00001111-aaaa-2222-bbbb-3333cccc4444
 &challenge_type=oob redirect
-&continuation_token=uY29tL2F1dGhlbnRpY... 
+&continuation_token=uY29tL2F1dGhlbnRpY...
 ```
 
 | Parameter | Required | Description |
@@ -1935,11 +1935,11 @@ Content-Type: application/json
 {
     "continuation_token": "uY29tL2F1dGhlbnRpY...",
     "challenge_type": "oob",
-    "binding_method": "prompt ", 
+    "binding_method": "prompt ",
     "challenge_channel": "email",
     "challenge_target_label ": "c***r@co**o**o.com ",
     "code_length": 8
-} 
+}
 ```
 
 | Property | Description |
@@ -1961,9 +1961,9 @@ Content-Type: application/json
 ```
 
 ```json
-{     
-   "challenge_type": "redirect" 
-} 
+{
+   "challenge_type": "redirect"
+}
 ```
 
 | Property | Description |
@@ -1982,16 +1982,16 @@ Content-Type: application/json
 ```
 
 ```json
-{ 
-    "error": "invalid_request", 
+{
+    "error": "invalid_request",
     "error_description": "AADSTS901007: The challenge_type list parameter does not include the 'redirect' type.\r\nTrace ID: 0000aaaa-11bb-cccc-dd22-eeeeee333333\r\nCorrelation ID: aaaa0000-bb11-2222-33cc-444444dddddd\r\nTimestamp: yyyy-...",
-    "error_codes": [ 
-        901007 
-    ], 
+    "error_codes": [
+        901007
+    ],
     "timestamp": "yyyy-mm-dd 10:15:00Z",
-    "trace_id": "0000aaaa-11bb-cccc-dd22-eeeeee333333", 
+    "trace_id": "0000aaaa-11bb-cccc-dd22-eeeeee333333",
     "correlation_id": "aaaa0000-bb11-2222-33cc-444444dddddd"
-} 
+}
 ```
 
 | Property | Description |
@@ -2020,9 +2020,9 @@ Here's an example of the request (we present the example request in multiple lin
 ```http
 POST https://{tenant_subdomain}.ciamlogin.com/{tenant_subdomain}.onmicrosoft.com/resetpassword/v1.0/continue
 Content-Type: application/x-www-form-urlencoded
-continuation_token=uY29tL2F1dGhlbnRpY... 
-&client_id=00001111-aaaa-2222-bbbb-3333cccc4444 
-&grant_type=oob 
+continuation_token=uY29tL2F1dGhlbnRpY...
+&client_id=00001111-aaaa-2222-bbbb-3333cccc4444
+&grant_type=oob
 &oob={otp_code}
 ```
 
@@ -2044,10 +2044,10 @@ Content-Type: application/json
 ```
 
 ```json
-{ 
+{
     "expires_in": 600,
     "continuation_token": "czZCaGRSa3F0MzpnW...",
-} 
+}
 ```
 
 | Property | Description |
@@ -2065,16 +2065,16 @@ Content-Type: application/json
 ```
 
 ```json
-{ 
-    "error": "invalid_request", 
+{
+    "error": "invalid_request",
     "error_description": "AADSTS55200: The continuation_token is invalid.\r\nTrace ID: 0000aaaa-11bb-cccc-dd22-eeeeee333333\r\nCorrelation ID: aaaa0000-bb11-2222-33cc-444444dddddd\r\nTimestamp: yyyy-...",
-    "error_codes": [ 
-        55200 
-    ], 
+    "error_codes": [
+        55200
+    ],
     "timestamp": "yyyy-mm-dd 10:15:00Z",
-    "trace_id": "0000aaaa-11bb-cccc-dd22-eeeeee333333", 
+    "trace_id": "0000aaaa-11bb-cccc-dd22-eeeeee333333",
     "correlation_id": "aaaa0000-bb11-2222-33cc-444444dddddd"
-} 
+}
 ```
 
 | Property | Description |
@@ -2153,16 +2153,16 @@ Content-Type: application/json
 ```
 
 ```json
-{ 
-    "error": "invalid_request", 
+{
+    "error": "invalid_request",
     "error_description": "AADSTS901007: The challenge_type list parameter does not include the 'redirect' type.\r\nTrace ID: 0000aaaa-11bb-cccc-dd22-eeeeee333333\r\nCorrelation ID: aaaa0000-bb11-2222-33cc-444444dddddd\r\nTimestamp: yyyy-...",
-    "error_codes": [ 
-        901007 
-    ], 
+    "error_codes": [
+        901007
+    ],
     "timestamp": "yyyy-mm-dd 10:15:00Z",
-    "trace_id": "0000aaaa-11bb-cccc-dd22-eeeeee333333", 
+    "trace_id": "0000aaaa-11bb-cccc-dd22-eeeeee333333",
     "correlation_id": "aaaa0000-bb11-2222-33cc-444444dddddd"
-} 
+}
 ```
 
 | Property | Description |
@@ -2204,7 +2204,7 @@ Here's an example (we present the example request in multiple lines for readabil
 POST https://{tenant_subdomain}.ciamlogin.com/{tenant_subdomain}.onmicrosoft.com/resetpassword/v1.0/poll_completion
 Content-Type: application/x-www-form-urlencoded
 client_id=00001111-aaaa-2222-bbbb-3333cccc4444
-&continuation_token=czZCaGRSa3F0... 
+&continuation_token=czZCaGRSa3F0...
 ```
 
 | Parameter | Required | Description |
@@ -2226,7 +2226,7 @@ Content-Type: application/json
 {
     "status": "succeeded",
     "continuation_token":"czZCaGRSa3F0..."
-} 
+}
 ```
 
 | Property | Description |
@@ -2253,16 +2253,16 @@ Content-Type: application/json
 ```
 
 ```json
-{ 
-    "error": "expired_token", 
+{
+    "error": "expired_token",
     "error_description": "AADSTS901007: The continuation_token is expired.\r\nTrace ID: 0000aaaa-11bb-cccc-dd22-eeeeee333333\r\nCorrelation ID: aaaa0000-bb11-2222-33cc-444444dddddd\r\nTimestamp: yyyy-...",
-    "error_codes": [ 
-        552003 
-    ], 
+    "error_codes": [
+        552003
+    ],
     "timestamp": "yyyy-mm-dd 10:15:00Z",
-    "trace_id": "0000aaaa-11bb-cccc-dd22-eeeeee333333", 
+    "trace_id": "0000aaaa-11bb-cccc-dd22-eeeeee333333",
     "correlation_id": "aaaa0000-bb11-2222-33cc-444444dddddd"
-} 
+}
 ```
 
 | Property | Description |

@@ -78,7 +78,7 @@ After enabling network controls, you can enforce Global Secure Access security p
 3. Select **Create policy**.
 4. Enter a descriptive name and a description for the policy, then select **Next**.
 5. Select **Add rule**.
-6. Configure rules based on your security to Copilot Studio agent requirements. For example, block access to `Web respositories`, `Illegal software`, not safe for work (NSFW) sites, and more.
+6. Configure rules based on your security to Copilot Studio agent requirements. For example, block access to `Web repositories`, `Illegal software`, not safe for work (NSFW) sites, and more.
 7. Select **Next** to review the policy.
 8. Select **Create policy**.
 

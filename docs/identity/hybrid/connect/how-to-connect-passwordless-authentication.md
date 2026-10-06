@@ -6,8 +6,8 @@ uhfHeaderId: MSDocsHeader-Entra
 breadcrumb_path: /entra/breadcrumb/toc.json
 feedback_system: Standard
 feedback_product_url: https://feedback.azure.com/d365community/forum/22920db1-ad25-ec11-b6e6-000d3a4f0789
-author: omondiatieno
-ms.author: jomondi
+author: boscoMW
+ms.author: bmutunga
 ms.service: entra-id
 manager: pmwongera
 description: Learn how to sign in to Microsoft Entra Connect Sync by using passwordless authentication methods such as FIDO2 security keys and passkeys.

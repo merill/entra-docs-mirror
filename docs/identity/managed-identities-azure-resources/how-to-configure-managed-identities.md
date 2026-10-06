@@ -188,7 +188,7 @@ To disable system-assigned managed identity on a VM, your account needs the [Vir
 If you have a Virtual Machine that no longer needs the system-assigned identity, but still needs user-assigned identities, use the following command:
 
 ```azurecli
-az vm update -n myVM -g myResourceGroup --set identity.type='UserAssigned' 
+az vm update -n myVM -g myResourceGroup --set identity.type='UserAssigned'
 ```
 
 If you have a virtual machine that no longer needs system-assigned identity and it has no user-assigned identities, use the following command:
@@ -205,7 +205,7 @@ az vm update -n myVM -g myResourceGroup --set identity.type="none"
 
 In this section, you will learn how to add and remove a user-assigned managed identity from an Azure VM using Azure CLI. If you create your user-assigned managed identity in a different RG than your VM. You'll have to use the URL of your managed identity to assign it to your VM. For example:
 
-`--identities "/subscriptions/<SUBID>/resourcegroups/<RESROURCEGROUP>/providers/Microsoft.ManagedIdentity/userAssignedIdentities/<USER_ASSIGNED_ID_NAME>"`
+`--identities "/subscriptions/<SUBID>/resourcegroups/<RESOURCEGROUP>/providers/Microsoft.ManagedIdentity/userAssignedIdentities/<USER_ASSIGNED_ID_NAME>"`
 
 ### Assign a user-assigned managed identity during the creation of an Azure VM
 
@@ -239,13 +239,13 @@ To assign a user-assigned identity to a VM during its creation, your account nee
         "resourceGroup": "<RESOURCE GROUP>",
         "tags": {},
         "tenantId": "aaaabbbb-0000-cccc-1111-dddd2222eeee",
-        "type": "Microsoft.ManagedIdentity/userAssignedIdentities"    
+        "type": "Microsoft.ManagedIdentity/userAssignedIdentities"
     }
     ```
 3. Create a VM using [az vm create](/en-us/cli/azure/vm#az-vm-create). The following example creates a VM associated with the new user-assigned identity, as specified by the `--assign-identity` parameter, with the specified `--role` and `--scope`. Be sure to replace the `<RESOURCE GROUP>`, `<VM NAME>`, `<USER NAME>`, `<PASSWORD>`, `<USER ASSIGNED IDENTITY NAME>`, `<ROLE>`, and `<SUBSCRIPTION>` parameter values with your own values.
 
     ```azurecli
-    az vm create --resource-group <RESOURCE GROUP> --name <VM NAME> --image <SKU linux image>  --admin-username <USER NAME> --admin-password <PASSWORD> --assign-identity <USER ASSIGNED IDENTITY NAME> --role <ROLE> --scope <SUBSCRIPTION> 
+    az vm create --resource-group <RESOURCE GROUP> --name <VM NAME> --image <SKU linux image>  --admin-username <USER NAME> --admin-password <PASSWORD> --assign-identity <USER ASSIGNED IDENTITY NAME> --role <ROLE> --scope <SUBSCRIPTION>
     ```
 
 ### Assign a user-assigned managed identity to an existing Azure VM
@@ -275,7 +275,7 @@ To assign a user-assigned identity to a VM, your account needs the [Virtual Mach
       "resourceGroup": "<RESOURCE GROUP>",
       "tags": {},
       "tenantId": "aaaabbbb-0000-cccc-1111-dddd2222eeee",
-      "type": "Microsoft.ManagedIdentity/userAssignedIdentities"    
+      "type": "Microsoft.ManagedIdentity/userAssignedIdentities"
     }
     ```
 2. Assign the user-assigned identity to your VM using [az vm identity assign](/en-us/cli/azure/vm). Be sure to replace the `<RESOURCE GROUP>` and `<VM NAME>` parameter values with your own values. The `<USER ASSIGNED IDENTITY NAME>` is the user-assigned managed identity's resource `name` property, as created in the previous step. If you created your user-assigned managed identity in a different RG than your VM. You'll have to use the URL of your managed identity.
@@ -307,7 +307,7 @@ az vm update -n myVM -g myResourceGroup --set identity.type="none" identity.user
 If your VM has both system-assigned and user-assigned identities, you can remove all the user-assigned identities by switching to use only system-assigned. Use the following command:
 
 ```azurecli
-az vm update -n myVM -g myResourceGroup --set identity.type='SystemAssigned' identity.userAssignedIdentities=null 
+az vm update -n myVM -g myResourceGroup --set identity.type='SystemAssigned' identity.userAssignedIdentities=null
 ```
 
 ::: zone-end

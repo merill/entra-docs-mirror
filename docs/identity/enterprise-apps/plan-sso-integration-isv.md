@@ -10,7 +10,7 @@ author: omondiatieno
 ms.author: jomondi
 ms.service: entra-id
 ms.subservice: enterprise-apps
-manager: mwongerapk
+manager: dougeby
 description: High-level planning and decision guide for Independent Software Vendors (ISVs) preparing to integrate single sign-on (SSO) with Microsoft Entra ID.
 ms.topic: concept-article
 ms.date: 2026-06-04T00:00:00.0000000Z
@@ -33,12 +33,12 @@ monikers: []
 item_type: Content
 source_path: docs/identity/enterprise-apps/plan-sso-integration-isv.md
 cmProducts:
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
 - https://authoring-docs-microsoft.poolparty.biz/devrel/1ae5c491-970a-4062-8301-6336e69f9026
 spProducts:
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
 - https://authoring-docs-microsoft.poolparty.biz/devrel/f2c3e52e-3667-4e8a-bf11-20b9eaccdc8c
 platformId: 1d53cc90-e2a3-d291-8e62-073299998a8c
 ---

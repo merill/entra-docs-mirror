@@ -6,11 +6,10 @@ uhfHeaderId: MSDocsHeader-Entra
 breadcrumb_path: /entra/breadcrumb/toc.json
 feedback_system: Standard
 feedback_product_url: /entra/identity-platform/developer-support-help-options
-author: Dickson-Mwendia
-ms.author: dmwendia
+author: cilwerner
+ms.author: cwerner
 ms.service: identity-platform
 description: Understand how the username and password (ROPC) flow works in desktop apps, why it is deprecated, and how to migrate to more secure authentication flows.
-manager: dougeby
 ms.date: 2026-06-15T00:00:00.0000000Z
 ms.subservice: workforce
 ms.topic: how-to

@@ -102,7 +102,7 @@ Recovery actions apply directly to your tenant and can't be undone automatically
 
 ## Cancel a recovery
 
-Cancel a recovery job while it's running. Any recovery actions completed before cancelation remain in effect.
+Cancel a recovery job while it's running. Any recovery actions completed before cancellation remain in effect.
 
 1. Go to **Backup and recovery** &gt; **Recovery History**.
 2. Select the in-progress recovery job, and then select **Cancel**.

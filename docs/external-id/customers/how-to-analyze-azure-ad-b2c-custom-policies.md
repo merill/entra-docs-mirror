@@ -6,8 +6,8 @@ uhfHeaderId: MSDocsHeader-Entra
 breadcrumb_path: /entra/breadcrumb/toc.json
 feedback_system: Standard
 feedback_product_url: https://aka.ms/microsoftentraexternalid
-author: garrodonnell
-ms.author: godonnell
+author: csmulligan
+ms.author: cmulligan
 ms.service: entra-external-id
 ms.subservice: external
 manager: dougeby

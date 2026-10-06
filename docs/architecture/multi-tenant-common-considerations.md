@@ -216,7 +216,7 @@ AuditLogs
 
 - Define [access control policies](../external-id/authentication-conditional-access) to control access to resources.
 - Design Conditional Access policies with external users in mind.
-- Check if a sign in frequency Conditional Accesspolicy is applied to all guest sign ins. The sign in frequency should be limited to a maximum of 24 hours. Tokens of guests signing in from unmanaged devices are at a higher risk of token exfiltration and token replay attacks. Limiting the token lifetime reduces the exposure from this risk. This will ensure that even if a token is exfiltrated the threat actor has a limited window of usage.
+- Check if a sign in frequency Conditional Access policy is applied to all guest sign ins. The sign in frequency should be limited to a maximum of 24 hours. Tokens of guests signing in from unmanaged devices are at a higher risk of token exfiltration and token replay attacks. Limiting the token lifetime reduces the exposure from this risk. This will ensure that even if a token is exfiltrated the threat actor has a limited window of usage.
 - Create dedicated Conditional Access policies for external accounts. If your organization is using the [**all users** dynamic membership group](../external-id/use-dynamic-groups) condition in your existing Conditional Access policy, this policy affects external users because they are in scope of **all users**.
 
 **Govern cross-tenant access**

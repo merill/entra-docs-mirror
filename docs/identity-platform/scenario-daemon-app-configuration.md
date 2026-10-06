@@ -6,11 +6,10 @@ uhfHeaderId: MSDocsHeader-Entra
 breadcrumb_path: /entra/breadcrumb/toc.json
 feedback_system: Standard
 feedback_product_url: /entra/identity-platform/developer-support-help-options
-author: Dickson-Mwendia
-ms.author: dmwendia
+author: cilwerner
+ms.author: cwerner
 ms.service: identity-platform
 description: Learn how to configure daemon apps that call web APIs using secrets, certificates, or client assertions.
-manager: dougeby
 ms.date: 2026-06-15T00:00:00.0000000Z
 ms.reviewer: jmprieur
 ms.subservice: workforce

@@ -34,9 +34,11 @@ item_type: Content
 source_path: docs/identity/enterprise-apps/assign-user-or-group-access-portal.md
 cmProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/5cf46315-b33f-4e99-8224-a1592697eff9
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
 spProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/715d24c3-3683-4219-82c5-1e3c813fb7fc
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
 platformId: c5cc1ba9-4b50-60c6-b2f0-5008adddafbc
 ---
@@ -51,7 +53,7 @@ Group-based assignment requires Microsoft Entra ID P1 or P2 edition. Nested grou
 
 For greater control, certain types of enterprise applications can be configured to require user assignment. For more information on requiring user assignment for an app, see [Manage access to an application](what-is-access-management#requiring-user-assignment-for-an-app). Applications that require users to be assigned to the application must have their permissions consented by an administrator, even if the user consent policies for your directory would otherwise allow a user to consent on behalf of themselves.
 
-Prior to integration with Microsoft Entra, your application may already have one or more users. Using the account discovery functionality, you can generate a report of all the users in your application, identify which users have matching accounts in Entra, and which users are local to your application with one click. Learn more about the account discovery functionality [here](../app-provisioning/how-to-account-discovery). This enables you to simplify onboarding to Entra, while also pereodically monitoring for unauthorized access.
+Prior to integration with Microsoft Entra, your application may already have one or more users. Using the account discovery functionality, you can generate a report of all the users in your application, identify which users have matching accounts in Entra, and which users are local to your application with one click. Learn more about the account discovery functionality [here](../app-provisioning/how-to-account-discovery). This enables you to simplify onboarding to Entra, while also periodically monitoring for unauthorized access.
 
 Note
 
@@ -174,7 +176,7 @@ To assign a group to an enterprise app, replace `Get-EntraUser` with `Get-EntraG
     $user = Get-Entrauser -ObjectId "<objectId>"
     $spo = Get-EntraServicePrincipal -ObjectId "<objectId>"
     
-    #Get the ID of role assignment 
+    #Get the ID of role assignment
     $assignments = Get-EntraServicePrincipalAppRoleAssignedTo -ObjectId $spo.ObjectId | Where {$_.PrincipalDisplayName -eq $user.DisplayName}
     
     #if you run the following, it will show you what is assigned what
@@ -245,25 +247,25 @@ This example assigns the user Britta Simon to the Microsoft Workplace Analytics 
 1. In PowerShell, assign the corresponding values to the variables `$userId`, `$app_name`, and `$app_role_name`.
 
     ```powershell
-    # Assign the values to the variables  
-    $userId = "<Britta Simon's user ID>"  
-    $app_name = "Workplace Analytics"  
+    # Assign the values to the variables
+    $userId = "<Britta Simon's user ID>"
+    $app_name = "Workplace Analytics"
     ```
 2. In this example, we don't know the exact name of the application role we want to assign to Britta Simon. Run the following command to get the service principal ($sp) using the service principal display name.
 
     ```powershell
-    # Get the service principal for the app  
-    $sp = Get-MgServicePrincipal -Filter "displayName eq '$app_name'"  
+    # Get the service principal for the app
+    $sp = Get-MgServicePrincipal -Filter "displayName eq '$app_name'"
     ```
 3. Run the following command to find the app roles exposed by the service principal.
 
     ```powershell
-    # Get the app roles exposed by the service principal  
-    $appRoles = $sp.AppRoles  
-    # Display the app roles  
-    $appRoles | ForEach-Object {  
-        Write-Output "AppRole: $($_.DisplayName) - ID: $($_.Id)"  
-    }  
+    # Get the app roles exposed by the service principal
+    $appRoles = $sp.AppRoles
+    # Display the app roles
+    $appRoles | ForEach-Object {
+        Write-Output "AppRole: $($_.DisplayName) - ID: $($_.Id)"
+    }
     ```
 
     Note
@@ -272,24 +274,24 @@ This example assigns the user Britta Simon to the Microsoft Workplace Analytics 
 4. Assign the role name to the `$app_role_name` variable. In this example, we want to assign Britta Simon the Analyst (Limited access) Role.
 
     ```powershell
-    # Assign the values to the variables  
-    $app_role_name = "Analyst (Limited access)"  
-    $appRoleId = ($sp.AppRoles | Where-Object { $_.DisplayName -eq $app_role_name }).Id  
+    # Assign the values to the variables
+    $app_role_name = "Analyst (Limited access)"
+    $appRoleId = ($sp.AppRoles | Where-Object { $_.DisplayName -eq $app_role_name }).Id
     ```
 5. Prepare the parameters and run the following command to assign the user to the app role.
 
     ```powershell
-    # Prepare parameters for the role assignment  
-    $params = @{  
-        "PrincipalId" = $userId  
-        "ResourceId" = $sp.Id  
-        "AppRoleId" = $appRoleId  
-    }  
+    # Prepare parameters for the role assignment
+    $params = @{
+        "PrincipalId" = $userId
+        "ResourceId" = $sp.Id
+        "AppRoleId" = $appRoleId
+    }
     
-    # Assign the user to the app role  
-    New-MgUserAppRoleAssignment -UserId $userId -BodyParameter $params |   
-        Format-List Id, AppRoleId, CreationTime, PrincipalDisplayName,   
-        PrincipalId, PrincipalType, ResourceDisplayName, ResourceId  
+    # Assign the user to the app role
+    New-MgUserAppRoleAssignment -UserId $userId -BodyParameter $params |
+        Format-List Id, AppRoleId, CreationTime, PrincipalDisplayName,
+        PrincipalId, PrincipalType, ResourceDisplayName, ResourceId
     ```
 
 To assign a group to an enterprise app, replace `Get-MgUser` with `Get-MgGroup` and replace `New-MgUserAppRoleAssignment` with `New-MgGroupAppRoleAssignment`.

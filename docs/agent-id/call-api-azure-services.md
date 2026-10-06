@@ -102,13 +102,13 @@ To call an API from an agent, you need to obtain an access token that the agent 
         "TenantId": "<your-tenant-id>",
         "ClientId": "<agent-blueprint-id>",
     
-       // Other client creedentials available. See <https://aka.ms/ms-id-web/client-credentials>
+       // Other client credentials available. See <https://aka.ms/ms-id-web/client-credentials>
         "ClientCredentials": [
           {
             "SourceType": "ClientSecret",
             "ClientSecret": "your-client-secret"
           }
-        ]   
+        ]
       }
     }
     ```

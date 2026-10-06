@@ -6,11 +6,10 @@ uhfHeaderId: MSDocsHeader-Entra
 breadcrumb_path: /entra/breadcrumb/toc.json
 feedback_system: Standard
 feedback_product_url: /entra/identity-platform/developer-support-help-options
-author: jenniferf-skc
-ms.author: jfields
+author: cilwerner
+ms.author: cwerner
 ms.service: identity-platform
 description: Map each Microsoft identity platform OpenID Connect (OIDC) extensibility surface to the configuration article and the Microsoft Graph API resource that programs it.
-manager: pmwongera
 ms.topic: reference
 ms.date: 2026-06-23T00:00:00.0000000Z
 ms.reviewer: jmprieur, ludwignick

@@ -126,7 +126,7 @@ Sept 22, 2025: released for download only
 
 ### Known issues
 
-- If you are an AzueUSGovernment customer and have enabled writing back passwords with Microsoft Entra provisioning agent, the operation may fail. Please upgrade the agent to version 1.1.2108.0 to address this issue.
+- If you are an AzureUSGovernment customer and have enabled writing back passwords with Microsoft Entra provisioning agent, the operation may fail. Please upgrade the agent to version 1.1.2108.0 to address this issue.
 
 ## 1.1.1586.0
 

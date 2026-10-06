@@ -112,7 +112,7 @@ Search SharePoint Site by site name or an exact URL as the search box is case se
 
 - [Catalog access reviews (preview)](catalog-access-reviews) also allow [custom data provided resources](custom-data-resource-access-reviews) to be included in a catalog.
 
-\*\*Prerequisite roles:\*\*See [Required roles to add resources to a catalog](entitlement-management-delegate#required-roles-to-add-resources-to-a-catalog).
+**Prerequisite roles:** See [Required roles to add resources to a catalog](entitlement-management-delegate#required-roles-to-add-resources-to-a-catalog).
 
 To add resources to a catalog:
 

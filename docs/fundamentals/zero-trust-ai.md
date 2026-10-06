@@ -6,11 +6,11 @@ uhfHeaderId: MSDocsHeader-Entra
 breadcrumb_path: /entra/breadcrumb/toc.json
 feedback_system: Standard
 feedback_product_url: https://feedback.azure.com/d365community/forum/79b1327d-d925-ec11-b6e6-000d3a4f06a4
-author: shlipsey3
-ms.author: sarahlipsey
+author: kenwith
+ms.author: kenwith
 ms.service: entra
 ms.subservice: fundamentals
-manager: pmwongera
+manager: dougeby
 description: Improve your security posture with the Microsoft Entra Zero Trust assessment to secure AI agents and workloads.
 ms.topic: concept-article
 ms.date: 2026-05-18T00:00:00.0000000Z

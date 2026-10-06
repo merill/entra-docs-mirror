@@ -131,7 +131,7 @@ If these users are brought in with a userType of **guest** they accrue to the me
 
 - Contoso has 10,000 guest accounts in their tenant and they want to perform an access review on those guests who are inactive.
 - Contoso creates an Access Review scoped to Guests only and to Inactive Users only. The Access Review scans all 10,000 guest users and identifies 240 that are considered inactive. The campaign includes those 240 guest users only.
-- There are no other governance-releated events that take place on any of the 10,000 guest users.
+- There are no other governance-related events that take place on any of the 10,000 guest users.
 - Billing: For June, Contoso is billed for 240 users – only those inactive guests who had an Access Review performed on them.
 
 ### Link your tenant to a subscription

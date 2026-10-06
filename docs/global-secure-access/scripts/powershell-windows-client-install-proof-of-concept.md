@@ -31,8 +31,10 @@ item_type: Content
 source_path: docs/global-secure-access/scripts/powershell-windows-client-install-proof-of-concept.md
 cmProducts:
 - https://authoring-docs-microsoft.poolparty.biz/devrel/bcbcbad5-4208-4783-8035-8481272c98b8
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/5cf46315-b33f-4e99-8224-a1592697eff9
 spProducts:
 - https://authoring-docs-microsoft.poolparty.biz/devrel/43b2e5aa-8a6d-4de2-a252-692232e5edc8
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/715d24c3-3683-4219-82c5-1e3c813fb7fc
 platformId: 4eaed2c2-c351-9a5f-9d23-d4abdefe9372
 ---
 
@@ -204,7 +206,7 @@ $nonBrowserSettings = $RegistrySettings | Where-Object {
 foreach ($rk in $nonBrowserSettings) {
     Ensure-RegistryValue -Key $rk.Key -Name $rk.Name -Type $rk.Type -Value $rk.Value
 }
-# 2) Detect browsers via registry only 
+# 2) Detect browsers via registry only
 $edgeFound    = Get-InstalledApp -Name 'Microsoft Edge'
 $chromeFound  = Get-InstalledApp -Name 'Google Chrome'
 $firefoxFound = Get-InstalledApp -Name 'Firefox'  # also catches "Mozilla Firefox"
@@ -329,7 +331,7 @@ try {
 $PromptForReboot = (-not $WasIpv4PreferredAlreadyCorrect) -and $NowIpv4PreferredCorrect
 if ($PromptForReboot) {
     # Prompt for reboot at the end ONLY if the DisabledComponents value was changed by this script
-    $choice = Read-Host "Change of the IPv4Preffered registry key won't take effect until device reboot. Do you want to reboot now? (Y/N)"
+    $choice = Read-Host "Change of the IPv4Preferred registry key won't take effect until device reboot. Do you want to reboot now? (Y/N)"
     if ($choice -match '^[Yy]$') {
         Write-Host "Rebooting system..."
         Restart-Computer -Force

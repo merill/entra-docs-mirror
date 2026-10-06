@@ -6,11 +6,10 @@ uhfHeaderId: MSDocsHeader-Entra
 breadcrumb_path: /entra/breadcrumb/toc.json
 feedback_system: Standard
 feedback_product_url: /entra/identity-platform/developer-support-help-options
-author: henrymbuguakiarie
-ms.author: henrymbugua
+author: cilwerner
+ms.author: cwerner
 ms.service: identity-platform
 description: Learn how to attach custom x-* headers to native authentication network requests in an Android (Kotlin) app to integrate fraud-detection SDKs with Microsoft Entra External ID.
-manager: pmwongera
 ms.subservice: external
 ms.topic: tutorial
 ms.custom: msecd-doc-authoring-105

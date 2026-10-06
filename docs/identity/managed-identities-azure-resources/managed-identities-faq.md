@@ -216,7 +216,7 @@ When managed identity creation is blocked, you receive an error similar to the f
 
 Important
 
-Soft-deleted objects count torwards the overall quota usage.
+Soft-deleted objects count towards the overall quota usage.
 
 ### Resolve a blocked managed identity operation
 

@@ -36,11 +36,11 @@ source_path: docs/identity/managed-identities-azure-resources/tutorial-windows-m
 cmProducts:
 - https://authoring-docs-microsoft.poolparty.biz/devrel/68ec7f3a-2bc6-459f-b959-19beb729907d
 - https://authoring-docs-microsoft.poolparty.biz/devrel/3876df09-7a38-488f-a709-a37472f2b598
-- https://authoring-docs-microsoft.poolparty.biz/devrel/bcbcbad5-4208-4783-8035-8481272c98b8
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/5cf46315-b33f-4e99-8224-a1592697eff9
 spProducts:
 - https://authoring-docs-microsoft.poolparty.biz/devrel/90370425-aca4-4a39-9533-d52e5e002a5d
 - https://authoring-docs-microsoft.poolparty.biz/devrel/9903f988-6d7c-450a-a74a-984d8652a27f
-- https://authoring-docs-microsoft.poolparty.biz/devrel/43b2e5aa-8a6d-4de2-a252-692232e5edc8
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/715d24c3-3683-4219-82c5-1e3c813fb7fc
 platformId: 1a40ae5e-05e3-41b8-d548-9a4a4d54a8af
 ---
 
@@ -627,7 +627,7 @@ SQL databases require unique Microsoft Entra ID display names. With this, Micros
 
     Note
 
-    `VMName` in the following command is the name of the VM that you enabled system assigned identity on in the prerequsites section.
+    `VMName` in the following command is the name of the VM that you enabled system assigned identity on in the prerequisites section.
 
     ```sql
     CREATE USER [VMName] FROM EXTERNAL PROVIDER

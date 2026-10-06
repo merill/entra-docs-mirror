@@ -6,8 +6,8 @@ uhfHeaderId: MSDocsHeader-Entra
 breadcrumb_path: /entra/breadcrumb/toc.json
 feedback_system: Standard
 feedback_product_url: https://feedback.azure.com/d365community/forum/79b1327d-d925-ec11-b6e6-000d3a4f06a4
-author: OWinfreyATL
-ms.author: owinfrey
+author: kenwith
+ms.author: kenwith
 ms.service: entra-id-governance
 ms.subservice: privileged-identity-management
 manager: dougeby

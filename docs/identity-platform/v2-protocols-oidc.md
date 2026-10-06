@@ -7,10 +7,9 @@ breadcrumb_path: /entra/breadcrumb/toc.json
 feedback_system: Standard
 feedback_product_url: /entra/identity-platform/developer-support-help-options
 author: cilwerner
-ms.author: dmwendia
+ms.author: cwerner
 ms.service: identity-platform
 description: Sign in Microsoft Entra users by using the Microsoft identity platform's implementation of the OpenID Connect extension to OAuth 2.0.
-manager: dougeby
 ms.date: 2026-06-30T00:00:00.0000000Z
 ms.reviewer: jmprieur, ludwignick
 ms.topic: reference

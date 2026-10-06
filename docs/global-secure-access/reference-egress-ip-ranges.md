@@ -6,8 +6,8 @@ uhfHeaderId: MSDocsHeader-Entra
 breadcrumb_path: /entra/breadcrumb/toc.json
 feedback_system: Standard
 feedback_product_url: https://feedback.azure.com/d365community/forum/79b1327d-d925-ec11-b6e6-000d3a4f06a4
-author: kenwith
-ms.author: kenwith
+author: HULKsmashGithub
+ms.author: jayrusso
 ms.service: global-secure-access
 manager: dougeby
 description: Reference list of the egress IP ranges that Global Secure Access uses for outbound internet traffic, so you can allowlist them on target services.

@@ -10,7 +10,7 @@ author: omondiatieno
 ms.author: jomondi
 ms.service: entra-id
 ms.subservice: enterprise-apps
-manager: mwongerapk
+manager: dougeby
 description: Learn how Microsoft Entra ID implements single sign-on (SSO) as a centralized identity platform for both SAML and OpenID Connect protocols.
 ms.topic: concept-article
 ms.date: 2026-06-04T00:00:00.0000000Z

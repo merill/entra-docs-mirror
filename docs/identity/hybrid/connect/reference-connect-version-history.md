@@ -72,7 +72,7 @@ During upgrade, Microsoft Entra Connect detects that `miiserver.exe.config` has 
 
 1. Go to: %programfiles%\Microsoft Azure AD Sync\Bin
 2. Back up `miiserver.exe.config`.
-3. Open `miiserver.exe.config` and add the following entry inside the assemblyBinding section: `<dependentAssembly> <assemblyIdentity name="System.Diagnostics.DiagnosticSource" publicKeyToken="cc7b13ffcd2ddd51" culture="neutral" /> <bindingRedirect oldVersion="0.0.0.0-8.0.0.0" newVersion="8.0.0.0" />  </dependentAssembly>`
+3. Open `miiserver.exe.config` and add the following entry inside the assemblyBinding section: `<dependentAssembly> <assemblyIdentity name="System.Diagnostics.DiagnosticSource" publicKeyToken="cc7b13ffcd2ddd51" culture="neutral" /> <bindingRedirect oldVersion="0.0.0.0-8.0.0.0" newVersion="8.0.0.0" /> </dependentAssembly>`
 4. Save the file.
 5. Restart the ADSync service.
 
@@ -439,7 +439,7 @@ Auto upgrade runs from the release date until 15 April 2025. If your environment
 - Updated Default Rule: "onPremisesObjectIdentifier" attribute added to the **In from AD - User Account Enabled** sync rule. Adding this rule allows the sync engine to pick the **onPremisesObjectIdentifier** attribute from the user who is enabled, in a scenario where:
 - the same user is represented across different forests, and
 - the user is disabled in one of the forests
-- Introduced a registry key that allows you to set the precedence number for custom rules to be more than 100, if needed. The precedence of the first standard rule can be set using the key **HLKM:\SOFTWARE\Microsoft\Azure AD Connect\FirstStandardRulePrecedence,** allowing for more custom rules. If no value is set, 100 is the default.
+- Introduced a registry key that allows you to set the precedence number for custom rules to be more than 100, if needed. The precedence of the first standard rule can be set using the key **HKLM:\SOFTWARE\Microsoft\Azure AD Connect\FirstStandardRulePrecedence,** allowing for more custom rules. If no value is set, 100 is the default.
 - Cmdlets in ADSync PowerShell module that communicate with Microsoft Entra ID now require Microsoft Entra ID login, for example, `Add-ADSyncAADServiceAccount` or `Get-ADSyncExportDeletionThreshold`
 
 ### Decommissioned features
