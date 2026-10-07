@@ -32,17 +32,19 @@ source_path: docs/identity/hybrid/cloud-sync/reference-version-history.md
 cmProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/5cf46315-b33f-4e99-8224-a1592697eff9
-- https://authoring-docs-microsoft.poolparty.biz/devrel/b1cfdec6-b0c3-4209-818c-736879856e0e
 spProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/715d24c3-3683-4219-82c5-1e3c813fb7fc
-- https://authoring-docs-microsoft.poolparty.biz/devrel/2d0723c1-cf38-4c30-ab3d-5df787b33270
 platformId: e84d9cc9-afba-47a9-8a15-da22e531ede2
 ---
 
 # Microsoft Entra provisioning agent: Version release history - Microsoft Entra ID | Microsoft Learn
 
 This article lists the versions and features of Microsoft Entra provisioning agent releases. The Microsoft Entra team regularly updates the Provisioning Agent with new features and functionality.
+
+Warning
+
+Microsoft Entra Provisioning Agent version 1.1.2505.0 may fail to install on localized Windows Server installations, including Polish, German, and Dutch versions. For more information, see Known issues.
 
 Note
 
@@ -82,6 +84,10 @@ Get notified about when to revisit this page for updates by copying and pasting 
 ### Security hardening
 
 - Implemented additional security hardening improvements to further strengthen the reliability and protection of hybrid identity synchronization deployments.
+
+### Known issues
+
+- If you are installing the agent on a localized Windows Server installation, including but not limited to Polish, German and Dutch languages, the operation may fail with error `0x80070643` and rollback.
 
 ## 1.1.2334.0
 

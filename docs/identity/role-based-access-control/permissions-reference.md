@@ -3494,12 +3494,25 @@ The tenant creators will be assigned the Global Administrator role on the new te
 
 [![Privileged label icon.](media/permissions-reference/privileged-label.png)](privileged-roles-permissions)
 
-Assign the Tenant Governance Administrator role to users who need to do the following tasks:
+Assign the Tenant Governance Administrator role to users who manage capabilities in the Microsoft Entra Tenant Governance service.
 
-- Manage all capabilities in the Microsoft Entra Tenant Governance service
+The table below lists the role's existing actions and additional application-management operations.
 
-| Actions | Description |
+Operations marked **application-scoped** are available only through the approved Tenant Governance application. Assigning this role does not grant equivalent unrestricted application-management permissions through other applications. This restriction does not change the scope of the role's other permissions.
+
+Important
+
+This is a privileged role. Its application-management capabilities can grant access to tenant resources. Assign it only to trusted administrators.
+
+| Actions and operations | Description |
 | --- | --- |
+| Create service principals (application-scoped) | Create service principals for first-party and third-party applications. |
+| Update service principal endpoints (application-scoped) | Update endpoints on service principals. |
+| Delete service principals (application-scoped) | Delete service principals. |
+| Permanently delete service principals (application-scoped) | Permanently delete service principals, including those for social identity providers. |
+| Restore service principals (application-scoped) | Restore deleted service principals, including those for social identity providers. |
+| Manage delegated permission grants (application-scoped) | List, create, update, and delete delegated permission grants. |
+| Manage application role assignments (application-scoped) | Manage application role assignments, including assignments for Microsoft Graph and Azure AD Graph. |
 | microsoft.directory/crossTenantAccessPolicy/basic/update | Update basic settings of cross-tenant access policy |
 | microsoft.directory/crossTenantAccessPolicy/default/standard/read | Read basic properties of the default cross-tenant access policy |
 | microsoft.directory/crossTenantAccessPolicy/partners/create | Create cross-tenant access policy for partners |
