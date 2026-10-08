@@ -10,9 +10,11 @@ author: kenwith
 ms.author: kenwith
 ms.service: entra-verified-id
 manager: dougeby
-description: Explore identity verification (IDV) partners for Microsoft Entra Verified ID. Learn how to integrate partner solutions for remote onboarding, secure access, and account recovery.
+description: Explore Microsoft Entra Verified ID identity verification partners and integrations for remote onboarding, secure access, and account recovery.
 ms.topic: overview
-ms.date: 2026-04-22T00:00:00.0000000Z
+ms.date: 2026-10-08T00:00:00.0000000Z
+ai-usage: ai-assisted
+ms.custom: msecd-doc-authoring-1026
 locale: en-us
 document_id: 115bf371-2c37-c26a-3c73-10722745b971
 document_version_independent_id: 115bf371-2c37-c26a-3c73-10722745b971
@@ -71,6 +73,7 @@ The following table showcases the list of Verified ID IDV partners. If you're an
 | AU10TIX | [AU10TIX documentation](https://info.au10tix.com/hubfs/PDFs/AU10TIX-Verified-ID-Deployment-Guide.pdf) | AU10TIX improves verifiability while protecting privacy for businesses, employees, contractors, vendors, and customers. |
 | CLEAR | [CLEAR documentation](https://ir.clearme.com/news-events/press-releases/detail/25/clear-collaborates-with-microsoft-to-create-more-secure) | CLEAR collaborates with Microsoft to create more secure digital experiences through verification credentials. |
 | Entrust (formerly Onfido) | [Entrust documentation](https://www.entrust.com/blog/2025/11/verify-every-user-and-empower-your-workforce-with-entrust-and-microsoft-entra-verified-id) | Entrust integrates high-assurance, phishing-resistant identity verification with Microsoft Entra Verified ID to unlock trusted user-owned credentials, enabling advanced security and a seamless, frictionless user experience. |
+| HYPR | [HYPR documentation](https://www.hypr.com/integrations/microsoft-verified-id) | HYPR combines multifactor identity verification with decentralized credential verification through Microsoft Entra Verified ID. This integration helps enterprises securely issue and verify trusted workforce identities with minimal friction. |
 | ID Dataweb | [ID Dataweb deployment guide](https://docs.iddataweb.com/docs/microsoft) | ID Dataweb offers secure and low friction identity verification processes to ensure the validity of your Microsoft Entra Verified ID credential. Easy to integrate, easy for your users, secure for your enterprise. |
 | IDEMIA | [IDEMIA documentation](https://na.idemia.com/identity/verifiable-credentials/) | IDEMIA Integration with Microsoft Entra Verified ID enables "Verify once, use everywhere" functionality. |
 | Jumio | [Jumio deployment guide](https://www.jumio.com/microsoft-verifiable-credentials/) | Jumio is helping to support a new form of digital identity by Microsoft based on verifiable credentials and decentralized identifiers standards to let consumers verify once and use everywhere. |

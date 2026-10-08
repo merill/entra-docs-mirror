@@ -10,10 +10,10 @@ author: kenwith
 ms.author: kenwith
 ms.service: entra-verified-id
 manager: dougeby
-description: Recent updates for Microsoft Entra Verified ID
+description: Explore recent Microsoft Entra Verified ID features, improvements, and service changes so you can plan updates and use new capabilities.
 ms.topic: whats-new
-ms.date: 2026-04-22T00:00:00.0000000Z
-ms.custom: references_regions
+ms.date: 2026-10-08T00:00:00.0000000Z
+ms.custom: references_regions, msecd-doc-authoring-1026
 locale: en-us
 document_id: 1311adbe-3bf0-c64a-1610-3fe2efb68a2c
 document_version_independent_id: 18d221fb-22cc-fad2-8a8d-f5c8dbae04c5
@@ -42,7 +42,11 @@ platformId: 6559ce41-bc1e-b645-e8ce-2572b2f4fcad
 
 ## Overview
 
-This article lists the latest features, improvements, and changes in the Microsoft Entra Verified ID service.
+This article summarizes the latest features, improvements, and service changes for Microsoft Entra Verified ID. Use it to understand new capabilities and plan updates to issuer or verifier implementations.
+
+## October 2026
+
+- **IDV partner gallery update**: Added [HYPR](https://www.hypr.com/integrations/microsoft-verified-id) as a new partner in the [Verified ID API-based integration partners](idv-partners#verified-id-api-based-integration-partners) section.
 
 ## May 2026
 
