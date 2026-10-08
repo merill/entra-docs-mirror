@@ -35,11 +35,11 @@ source_path: docs/identity/conditional-access/policy-autonomous-agents.md
 cmProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/68e4b2d8-b70c-4019-b49a-d1f8881e2aea
+- https://authoring-docs-microsoft.poolparty.biz/devrel/1dd701e0-441f-4b0a-9806-aa47decc4e35
 spProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/67b2ba1a-6f74-4044-a48a-f0f8ad076b8f
+- https://authoring-docs-microsoft.poolparty.biz/devrel/0a2fc935-5977-4aa6-9f55-0be03bd2acb8
 platformId: 73af9332-56a4-c076-915e-b8a4803abc21
 ---
 
@@ -53,8 +53,11 @@ Before you start, review the licensing, role, and agent setup requirements.
 
 ## Prerequisites
 
-- A Microsoft Entra ID P1 or P2 license.
-- Agent 365 license will soon be required
+- One of the following license plans:
+    - Microsoft 365 E7, which includes Agent 365 and Microsoft Entra Suite, to protect access for both users and agents.
+    - Microsoft Agent 365, paired with:
+        - Microsoft Entra ID P1 or Microsoft 365 E3 for Conditional Access.
+        - Microsoft Entra ID P2 or Microsoft 365 E5 when using agent risk-based Conditional Access.
 - At least the [Conditional Access Administrator](../role-based-access-control/permissions-reference#conditional-access-administrator) role.
 - At least one agent identity registered in your tenant.
 - The agent uses the [autonomous app OAuth flow](../../agent-id/agent-autonomous-app-oauth-flow).

@@ -45,10 +45,6 @@ platformId: d9ca3ff7-f2f2-98d6-7b68-70ccc13a4e85
 
 # Run a Registration Campaign to Set Up a Passkey or Microsoft Authenticator - Microsoft Entra ID | Microsoft Learn
 
-Note
-
-We're rolling out this version of the registration campaign. The rollout is expected to finish by the end of September 2026. Until then, the registration campaign experience in your tenant might differ from what's described in this article.
-
 The registration campaign allows you to nudge users to set up a passkey or Microsoft Authenticator during sign-in. When a user performs an interactive sign-in with multifactor authentication (MFA), they can be prompted to set up the targeted authentication method. You can include or exclude users or groups to control who gets nudged and create targeted campaigns that move users from less secure authentication methods to passkeys or Authenticator.
 
 The registration campaign supports two authentication methods:
