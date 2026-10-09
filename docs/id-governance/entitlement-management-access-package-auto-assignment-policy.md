@@ -48,7 +48,7 @@ You can use rules to determine access package assignment based on identity prope
 
 Note
 
-It is suggested to only use one automatic assignment policy per access package. Configuring more than one auto-assignment policy is supported ONLY if you ensure there is no overlap with users in scope for each policy. If a user matches more than one automatic assignment policy, this is not supported and there may be subsequent problems losing access should a user fall out of scope of one policy but not the other.
+It is suggested to only use one automatic assignment policy per access package. Configuring more than one automatic assignment policy is supported ONLY if you ensure there is no overlap with users in scope for each policy. This includes ensuring that users do not match multiple policies at the same time and do not transition from the scope of one policy to another. If a user matches more than one automatic assignment policy, or transitions from one policy to another, this is not supported and there may be subsequent problems losing access.
 
 Important
 
