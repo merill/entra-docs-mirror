@@ -78,6 +78,10 @@ If your license expires, application proxy is automatically disabled. Your appli
 
 Make sure you have at least a Microsoft Entra ID P1 or P2 license and a Microsoft Entra private network connector installed. After you successfully install your first connector, the Microsoft Entra application proxy service is enabled automatically.
 
+### Why is Assignment required set to Yes when application proxy app is created or enabled?
+
+Microsoft Entra application proxy recommends limiting app access to only assigned users and groups and uses a default setting of Assignment required = Yes to enforce this behavior when the application proxy app is created or enabled.
+
 ## Connector configuration
 
 ### Does application proxy use the same connector as Microsoft Entra Private Access?

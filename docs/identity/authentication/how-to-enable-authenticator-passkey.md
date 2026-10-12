@@ -34,12 +34,12 @@ monikers: []
 item_type: Content
 source_path: docs/identity/authentication/how-to-enable-authenticator-passkey.md
 cmProducts:
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
 - https://authoring-docs-microsoft.poolparty.biz/devrel/5686b492-7c45-4088-8291-ecc0458747d3
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
 spProducts:
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
 - https://authoring-docs-microsoft.poolparty.biz/devrel/838f4f15-80c1-4d49-b873-501fe4ed2d28
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
 platformId: f75c3195-7aa0-d709-9c87-771fd5225741
 ---
@@ -66,7 +66,7 @@ Before you follow the steps in this article, enable passkeys and create a passke
 
     Note
 
-    Users can't use cross-device registration if you enable attestation.
+    On iOS, users can only register attested passkeys directly in the Authenticator app. On Android, users can register attested passkeys directly in the Authenticator app and by using a cross-device registration flow.
 
 To learn more about FIDO2 support, see [Support for FIDO2 authentication with Microsoft Entra ID](concept-fido2-compatibility).
 
@@ -123,7 +123,7 @@ Note
 
 For both iOS and Android, Authenticator attestation relies upon Apple and Google services to verify the authenticity of the Authenticator app. Heavy service usage can make passkey registration fail, and users might need to try again. If Apple and Google services are down, Authenticator attestation blocks registration that requires attestation until services are restored. To monitor the status of Google Play Integrity service, see [Google Play Status Dashboard](https://status.play.google.com/). To monitor the status of the iOS App Attest service, see [System Status](https://developer.apple.com/system-status/).
 
-Users can only register attested passkeys directly in the Authenticator app. Cross-device registration flows don't support registration of attested passkeys.
+On iOS, users can only register attested passkeys directly in the Authenticator app. On Android, users can register attested passkeys directly in the Authenticator app and by using a cross-device registration flow.
 
 ## Authenticator AAGUIDs
 
