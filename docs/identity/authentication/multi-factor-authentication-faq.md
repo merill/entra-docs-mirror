@@ -15,7 +15,7 @@ ms.subservice: authentication
 manager: dougeby
 description: Frequently asked questions and answers related to Microsoft Entra multifactor authentication.
 ms.topic: faq
-ms.date: 2026-02-09T00:00:00.0000000Z
+ms.date: 2026-10-12T00:00:00.0000000Z
 ms.reviewer: jpettere
 locale: en-us
 document_id: d577f70e-9632-48ee-8e00-cead8e3cbd5b
@@ -34,9 +34,11 @@ item_type: Content
 source_path: docs/identity/authentication/multi-factor-authentication-faq.yml
 cmProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
 - https://authoring-docs-microsoft.poolparty.biz/devrel/5686b492-7c45-4088-8291-ecc0458747d3
 spProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
 - https://authoring-docs-microsoft.poolparty.biz/devrel/838f4f15-80c1-4d49-b873-501fe4ed2d28
 platformId: 7c556e10-ff01-024d-fe74-b644c14851af
 ---
@@ -84,6 +86,22 @@ Third-party security apps may also block the verification code text message or p
 If the prior steps don't work, check if users are configured for more than one verification method. Try signing in again, but select a different verification method on the sign-in page.
 
 For more information, see the [end-user troubleshooting guide](https://support.microsoft.com/account-billing/common-problems-with-two-step-verification-for-a-work-or-school-account-63acbb9b-16a1-47b9-8619-6a865e8071a5).
+
+### Why might SMS or voice options not appear in the initial list of authentication options?
+
+When a user has at least one non-telephony verification method available in addition to SMS or voice, Microsoft Entra ID might show the non-telephony methods first. In this case, **SMS and voice verification options remain available** and will appear by selecting **Show more verification methods**.
+
+If SMS or voice is the only available method for the flow, the method display experience remains unchanged.
+
+Help desk teams can reassure users that SMS and voice haven't been removed. Encourage users to register and use stronger methods, such as Microsoft Authenticator or passkeys, when available.
+
+### Why might selecting the SMS or voice option again not immediately send another code?
+
+After a valid SMS or voice code has been sent, **there might be a waiting period of a few minutes before another code can be sent. If a user selects the same method again during this waiting period, another code might not be sent.** Users should wait for the code already requested to arrive. Previously sent codes remain valid during the waiting period.
+
+If a code does not arrive by the time the waiting period has passed, users can request another code using the same experience they use today. If another verification method is available, they can also use that method instead.
+
+SMS and voice delivery can be affected by factors outside Microsoft Entra ID, including carrier or provider routing, region, and signal availability. If users frequently have difficulty receiving SMS or voice codes, encourage them to register and use another authentication method.
 
 ### What should I do if one of my users can't get in to their account?
 
