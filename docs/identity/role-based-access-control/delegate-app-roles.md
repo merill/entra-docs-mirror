@@ -1,6 +1,6 @@
 ---
 layout: Conceptual
-title: Delegate application management administrator permissions - Microsoft Entra ID | Microsoft Learn
+title: Delegate application and agent management administrator permissions - Microsoft Entra ID | Microsoft Learn
 canonicalUrl: https://learn.microsoft.com/en-us/entra/identity/role-based-access-control/delegate-app-roles
 uhfHeaderId: MSDocsHeader-Entra
 breadcrumb_path: /entra/breadcrumb/toc.json
@@ -11,9 +11,9 @@ ms.author: rolyon
 ms.service: entra-id
 ms.subservice: role-based-access-control
 manager: pmwongera
-description: Grant permissions for application access management in Microsoft Entra ID
+description: Grant permissions for application and agent access management in Microsoft Entra ID
 ms.topic: how-to
-ms.date: 2024-11-17T00:00:00.0000000Z
+ms.date: 2026-10-12T00:00:00.0000000Z
 ms.reviewer: vincesm
 ms.custom: it-pro, sfi-image-nochange
 locale: en-us
@@ -32,17 +32,19 @@ monikers: []
 item_type: Content
 source_path: docs/identity/role-based-access-control/delegate-app-roles.md
 cmProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
 spProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
 platformId: 44af96b3-d751-2500-cfa2-82be70b7a122
 ---
 
-# Delegate application management administrator permissions - Microsoft Entra ID | Microsoft Learn
+# Delegate application and agent management administrator permissions - Microsoft Entra ID | Microsoft Learn
 
-This article describes how to use permissions granted by custom roles in Microsoft Entra ID to address your application management needs. In Microsoft Entra ID, you can delegate Application creation and management permissions in the following ways:
+This article describes how to use permissions granted by custom roles in Microsoft Entra ID to address your application and agent management needs. In Microsoft Entra ID, you can delegate Application and agent creation and management permissions in the following ways:
 
 - Restricting who can create applications and manage the applications they create. By default in Microsoft Entra ID, all users can register applications and manage all aspects of applications they create. This can be restricted to only allow selected people that permission.
 - Assigning one or more owners to an application. This is a simple way to grant someone the ability to manage all aspects of Microsoft Entra configuration for a specific application.
@@ -51,9 +53,9 @@ This article describes how to use permissions granted by custom roles in Microso
 
 It's important to consider granting access using one of the above methods for two reasons. First, delegating the ability to perform administrative tasks reduces highly-privileged administrator overhead. Second, using limited permissions improves your security posture and reduces the potential for unauthorized access. For guidelines about role security planning, see [Securing privileged access for hybrid and cloud deployments in Microsoft Entra ID](security-planning).
 
-## Restrict who can create applications
+## Restrict who can create applications and agents
 
-By default in Microsoft Entra ID, all users can register applications and manage all aspects of applications they create. Everyone also has the ability to consent to apps accessing company data on their behalf. You can choose to selectively grant those permissions by setting the global switches to 'No' and adding the selected users to the Application Developer role.
+By default in Microsoft Entra ID, all users can register applications and manage all aspects of applications they create. They are also able to create an agent identity blueprint, create agent identities of those agents, and manage all aspects of the agents they create. Everyone also has the ability to consent to apps and agents accessing company data on their behalf. You can choose to selectively grant those permissions by setting the global switches to 'No' and adding the selected users to the Application Developer role.
 
 ### To disable the default ability to create application registrations or consent to applications
 
@@ -68,6 +70,16 @@ To disable the default ability to create application registrations or consent to
 5. Select the **Do not allow user consent** option.
 
     This will disable the default ability for users to consent to applications accessing company data on their behalf.
+
+### To disable the default ability to create new agents (agent identity blueprints)
+
+By default, users in your organization can create agent identity blueprints. To restrict creation to administrators and users assigned the Agent ID Developer role, turn off **Users can create agent blueprints**.
+
+1. Sign in to the [Microsoft Entra admin center](https://entra.microsoft.com) as at least a [Cloud Application Administrator](permissions-reference#cloud-application-administrator).
+2. Browse to **Entra ID** &gt; **Users** &gt; **User settings**.
+3. Set the **Users can create agent blueprints** setting to **No**.
+
+    This will disable the default ability for users to create new agents within Entra.
 
 ### Grant individual permissions to create and consent to applications when the default ability is disabled
 
