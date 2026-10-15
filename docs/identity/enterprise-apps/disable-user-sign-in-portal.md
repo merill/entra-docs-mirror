@@ -13,7 +13,8 @@ ms.subservice: enterprise-apps
 manager: dougeby
 description: Learn how to prevent users from signing in to an application in Microsoft Entra ID and prevent tokens from being issued.
 ms.topic: how-to
-ms.date: 2025-03-03T00:00:00.0000000Z
+ai-usage: ai-assisted
+ms.date: 2026-10-15T00:00:00.0000000Z
 ms.reviewer: ergreenl
 ms.custom: it-pro, enterprise-apps, no-azure-ad-ps-ref
 ms.collection: M365-identity-device-management
@@ -36,11 +37,11 @@ source_path: docs/identity/enterprise-apps/disable-user-sign-in-portal.md
 cmProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/68e4b2d8-b70c-4019-b49a-d1f8881e2aea
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/5cf46315-b33f-4e99-8224-a1592697eff9
 spProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/67b2ba1a-6f74-4044-a48a-f0f8ad076b8f
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/715d24c3-3683-4219-82c5-1e3c813fb7fc
 platformId: 702d5b77-b026-1c6a-91ee-040b4470747a
 ---
 
@@ -52,7 +53,7 @@ In this article, you learn how to prevent users from signing in to an applicatio
 
 Note
 
-The steps in this article disable user sign-in for a single tenant. If you need to globally disable an application across all tenants (for multitenant apps), consider [deactivating the application](deactivate-application-portal) instead, which prevents all token issuance globally.
+The steps in this article disable user sign-in for a single tenant by setting the service principal's `accountEnabled` property to `false`. This also makes the enterprise application's **Activation status** show **Deactivated**. The label doesn't necessarily mean that the app registration is deactivated. If you need to disable an application across all tenants, see [Deactivate an app registration](deactivate-app-registration).
 
 ## Prerequisites
 
@@ -144,3 +145,9 @@ Content-type: application/json
 ```
 
 ::: zone-end
+
+## Restore tenant-local sign-in
+
+Before restoring sign-in, review why it was disabled and confirm that restoring access is appropriate. With the permissions listed in Prerequisites in the affected tenant, set **Enabled for users to sign-in?** to **Yes** and select **Save**. For programmatic updates, set the service principal's `accountEnabled` property to `true` instead of `false`.
+
+Enabling tenant-local sign-in doesn't override app registration deactivation or Microsoft disablement. If **Activation status** still shows **Deactivated**, check the other conditions described in [Activation status](application-properties#activation-status).
