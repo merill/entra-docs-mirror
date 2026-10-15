@@ -31,10 +31,10 @@ item_type: Content
 source_path: docs/global-secure-access/concept-connector-groups.md
 cmProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/d5321f31-a36c-484d-a808-69f9088f4f84
+- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
 spProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/6032d191-3b2e-4df1-9108-c955546973aa
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
 platformId: dbcb680b-ae05-92a7-c427-e78cfbe20576
 ---
 
@@ -119,9 +119,17 @@ Random is the default traffic routing method. New requests for a Global Secure A
 
 Session persistence, also called session affinity, consistently routes every request from a given user and device to the same connector within a group for the duration of a session. This approach is useful for applications that rely on connector egress IP for authentication and access control lists (ACLs). It ensures continuity and reduces the need for repeated authentication or data retrieval.
 
+### Performance (preview)
+
+Performance ensures user traffic is automatically routed to the connector with the lowest network latency, measured by Round-Trip Time (RTT). This ensures that users are served by the connector that can deliver the fastest response, which is particularly beneficial in deployments with geographically distributed connectors and end users.
+
+Note
+
+Performance mode is currently in preview. For more information, see the [Microsoft Entra preview terms](https://azure.microsoft.com/support/legal/preview-supplemental-terms/).
+
 Tip
 
-Session persistence only works with Microsoft Entra Private Access applications, not Microsoft Entra application proxy applications.
+Connector load balancing only works with Microsoft Entra Private Access applications, not Microsoft Entra application proxy applications.
 
 ## Sample configurations
 
