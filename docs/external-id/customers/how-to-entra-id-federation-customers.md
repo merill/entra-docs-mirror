@@ -14,7 +14,7 @@ manager: dougeby
 description: Learn how to configure a Microsoft Entra ID tenant as an OpenID Connect identity provider in Microsoft Entra External ID, enabling users to sign in using their existing organizational accounts.
 ms.topic: how-to
 ms.date: 2026-10-13T00:00:00.0000000Z
-ms.custom: it-pro, msecd-doc-authoring-1012
+ms.custom: it-pro, msecd-doc-authoring-1026
 ai-usage: ai-assisted
 locale: en-us
 document_id: 87105139-a874-add3-b68c-f88225dffd5c
@@ -188,6 +188,8 @@ Error `40015` means that authentication at the external identity provider succee
 - Required attributes (such as subject or email) aren't returned by the identity provider.
 
 **How is adding Microsoft Entra ID as a custom OIDC federation different from inviting Microsoft Entra ID users as B2B guests?**
+
+Invited users from another Microsoft Entra tenant use the [default invitation redemption flow](../redemption-experience#invitation-redemption-flow) unless your application explicitly routes them to the custom OIDC identity provider.
 
 With Microsoft Entra ID federation:
 

@@ -11,11 +11,11 @@ ms.author: cmulligan
 ms.service: entra-external-id
 ms.subservice: external
 manager: dougeby
-description: Learn how to set up OpenID Connect as an external identity provider in Microsoft Entra External ID, enabling users to sign in using their existing accounts.
+description: Learn how to set up OpenID Connect as an external identity provider in Microsoft Entra External ID, enabling users to sign in using their existing identities.
 ms.topic: how-to
-ms.date: 2026-07-29T00:00:00.0000000Z
+ms.date: 2026-10-12T00:00:00.0000000Z
 ms.reviewer: brozbab
-ms.custom: it-pro, msecd-doc-authoring-1012
+ms.custom: it-pro, msecd-doc-authoring-1026
 ai-usage: ai-assisted
 locale: en-us
 document_id: e3106d07-fe50-3fd6-fe45-4f0d84a7362a
@@ -33,12 +33,12 @@ monikers: []
 item_type: Content
 source_path: docs/external-id/customers/how-to-custom-oidc-federation-customers.md
 cmProducts:
-- https://authoring-docs-microsoft.poolparty.biz/devrel/1ae5c491-970a-4062-8301-6336e69f9026
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/c77bc83e-f0b0-4b63-836e-6630e606bf7c
+- https://authoring-docs-microsoft.poolparty.biz/devrel/1ae5c491-970a-4062-8301-6336e69f9026
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
 spProducts:
-- https://authoring-docs-microsoft.poolparty.biz/devrel/f2c3e52e-3667-4e8a-bf11-20b9eaccdc8c
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/b98eda1f-6af8-444f-bbfb-7f2366948cbc
+- https://authoring-docs-microsoft.poolparty.biz/devrel/f2c3e52e-3667-4e8a-bf11-20b9eaccdc8c
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
 platformId: bf942373-7346-26a6-944b-c737caeaa5ec
 ---
@@ -47,13 +47,20 @@ platformId: bf942373-7346-26a6-944b-c737caeaa5ec
 
 **Applies to**: ![Green circle with a white check mark symbol that indicates the following content applies to external tenants.](../media/common/applies-to-yes.png) External tenants ([learn more](/en-us/entra/external-id/tenant-configurations))
 
-By setting up federation with a custom-configured OpenID Connect (OIDC) identity provider, you enable users to sign in to your applications using their existing accounts from the federated external provider. This OIDC federation allows authentication with various providers that adhere to the OpenID Connect protocol. (Learn more about [authentication methods and identity providers for customers](concept-authentication-methods-customers).)
+By setting up federation with a custom-configured OpenID Connect (OIDC) identity provider, you enable users to sign up and sign in to your applications using their existing accounts from the federated external provider. This OIDC federation allows authentication with various providers that adhere to the OpenID Connect protocol.
+
+After you configure an OIDC identity provider, there are two ways to enable users to authenticate with it:
+
+- **Add the identity provider to a user flow**: Adding the identity provider to a user flow displays a sign-in button on the sign-in page, allowing users to self-register and sign in. See [Add an identity provider to a user flow](how-to-add-identity-provider-to-user-flow-customers).
+- **Invite users**: Have your application pass `domain_hint` in the authorization request to route invitation redemption to the configured OIDC provider. See [Route invited users to an external identity provider](how-to-invite-external-identity-provider-users-customers).
+
+For an overview of supported options, see [Authentication methods and identity providers for customers](concept-authentication-methods-customers).
 
 ## Prerequisites
 
 - An [external tenant](how-to-create-external-tenant-portal).
 - A [registered application](/en-us/entra/identity-platform/quickstart-register-app) in the external tenant.
-- A [sign-up and sign-in user flow](how-to-user-flow-sign-up-sign-in-customers).
+- A [sign-up and sign-in user flow](how-to-user-flow-sign-up-sign-in-customers) associated with your application.
 
 ## Set up your OpenID Connect identity provider
 
@@ -112,7 +119,7 @@ After you configure your identity provider, complete this step to configure a ne
 
     Note
 
-    To federate with a Microsoft Entra ID tenant, see [Add a Microsoft Entra ID tenant as an OpenID Connect identity provider](how-to-entra-id-federation-customers). OIDC federation also isn't compatible with the [Invite external user (preview)](/en-us/entra/external-id/customers/concept-supported-features-customers#identity-providers-and-authentication-methods) feature.
+    For Microsoft Entra ID configuration details, see [Add a Microsoft Entra ID tenant as an OpenID Connect identity provider](how-to-entra-id-federation-customers). Users who select this provider during self-service sign-up authenticate through custom OIDC. Invited users from another Microsoft Entra tenant use [native Microsoft Entra federation by default](../redemption-experience#invitation-redemption-flow), unless your application [routes them to the custom OIDC provider with `domain_hint`](how-to-invite-external-identity-provider-users-customers).
 
     - **Client ID** and **Client Secret** are the identifiers your identity provider uses to identify the registered application service. Provide a client secret when you select a `client_secret`-based authentication method.
     - **Client Authentication** is the type of client authentication method to be used to authenticate with your identity provider using the token endpoint. `client_secret_post` and `client_secret_jwt` authentication methods are supported. Although the admin center UI might display `private_key_jwt` as an option, this method isn't currently supported and shouldn't be selected.
@@ -131,7 +138,10 @@ Microsoft recommends you do *not* use the [implicit grant flow](/en-us/entra/ide
 
 ## Enable users to sign in and sign up with the identity provider
 
-After you configure the OIDC identity provider, add it to a user flow to allow sign-in and sign-up with the identity provider. See [Add an identity provider to a user flow](how-to-add-identity-provider-to-user-flow-customers).
+Choose how users authenticate with the configured OIDC identity provider:
+
+- **Self-service sign-up**: [Add the identity provider to the user flow](how-to-add-identity-provider-to-user-flow-customers).
+- **Invitations**: [Invite users](how-to-invite-external-identity-provider-users-customers) and route invitation redemption with `domain_hint`. You don't need to add the identity provider to the user flow.
 
 ## Make email optional for external identity provider sign-up
 

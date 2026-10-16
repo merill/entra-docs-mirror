@@ -14,7 +14,7 @@ description: Learn how to view the identity assignments report and audit logs in
 editor: jocastel-MSFT
 ms.subservice: entitlement-management
 ms.topic: how-to
-ms.date: 2026-09-03T00:00:00.0000000Z
+ms.date: 2026-10-15T00:00:00.0000000Z
 ms.reviewer: jocastel
 ai-usage: ai-assisted
 ms.custom: sfi-ga-nochange, sfi-image-nochange, msecd-doc-authoring-1026
@@ -34,13 +34,9 @@ monikers: []
 item_type: Content
 source_path: docs/id-governance/entitlement-management-reports.md
 cmProducts:
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/68e4b2d8-b70c-4019-b49a-d1f8881e2aea
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
+- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
 spProducts:
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/67b2ba1a-6f74-4044-a48a-f0f8ad076b8f
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
 platformId: dfdeea3e-4f2b-3e93-55c3-b447235c5fc0
 ---
 
@@ -170,7 +166,7 @@ The workbook *Application role assignment activity* shows if there have been cha
 
 ## View access package drift
 
-Access package drift reports show where access to governed groups and enterprise applications no longer matches entitlement management policies. You can use this report to find users who have direct resource access without an access package assignment, and users who have an active access package assignment without the expected group membership or application assignment.
+Access package drift reports show where access to governed groups and enterprise applications no longer matches entitlement management policies. You can use this report to find users / agent IDs who have direct resource access without an access package assignment, and users / agent IDs who have an active access package assignment without the expected group membership or application assignment.
 
 Access package drift reports are in preview.
 

@@ -13,8 +13,9 @@ ms.subservice: external
 manager: dougeby
 description: Disable sign-up in your user flow with Microsoft Graph API. Prevent new registrations and allow only sign-in for your external users.
 ms.topic: how-to
-ms.date: 2025-06-30T00:00:00.0000000Z
-ms.custom: it-pro, seo-july-2024, sfi-image-nochange
+ms.date: 2026-10-12T00:00:00.0000000Z
+ms.custom: it-pro, seo-july-2024, sfi-image-nochange, msecd-doc-authoring-1026
+ai-usage: ai-assisted
 locale: en-us
 document_id: 269ae9dc-4f96-ddab-8181-f120a2235d08
 document_version_independent_id: 269ae9dc-4f96-ddab-8181-f120a2235d08
