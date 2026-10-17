@@ -32,13 +32,13 @@ monikers: []
 item_type: Content
 source_path: docs/id-governance/identity-governance-applications-prepare.md
 cmProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ac4b7417-d4c2-43d4-94bf-f22fa1416b34
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
 spProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/68876bab-7da4-4e70-b295-395b3a255a1f
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
 platformId: 5b985797-8491-d774-64b5-f4991c0e9ebe
 ---
 
@@ -82,7 +82,7 @@ Before you begin the process of governing application access from Microsoft Entr
     - **Microsoft Entra ID Governance Step Up for Microsoft Entra ID P2** and its prerequisite, either Microsoft Entra ID P2 or Enterprise Mobility + Security (EMS) E5
     - **Microsoft Entra Suite**
 
-    Your tenant needs to have at least as many licenses as the number of member (non-guest) users who are governed, including those users that have or can request access to the applications, approve, or review access to the applications. With an appropriate license for those users, you can then govern access to up to 1500 applications per user. For more information, see [example license scenarios](licensing-fundamentals#example-license-scenarios).
+    Your tenant needs to have at least as many licenses as the number of member (non-guest) users who are governed, including those users that have or can request access to the applications, approve, or review access to the applications. With an appropriate license for those users, you can then govern access to up to 1500 applications per user. For more information, see [license scenarios](licensing-fundamentals).
 - **If you will be governing guest's access to the application, link your Microsoft Entra tenant to a subscription for MAU billing**. This step is necessary prior to having a guest request or review their access. For more information, see [billing model for Microsoft Entra External ID](../external-id/external-identities-pricing).
 - **Check that Microsoft Entra ID is already sending its audit log, and optionally other logs, to Azure Monitor.** Azure Monitor is optional, but useful for governing access to apps, as Microsoft Entra only stores audit events for up to 30 days in its audit log. You can keep the audit data for longer than the default retention period, outlined in [How long does Microsoft Entra ID store reporting data?](../identity/monitoring-health/reference-reports-data-retention), and use Azure Monitor workbooks and custom queries and reports on historical audit data. You can check the Microsoft Entra configuration to see if it's using Azure Monitor, in **Microsoft Entra ID** in the Microsoft Entra admin center, by clicking on **Workbooks**. If this integration isn't configured, and you have an Azure subscription and are in the `Global Administrator` or `Security Administrator` roles, you can [configure Microsoft Entra ID to use Azure Monitor](entitlement-management-logs-and-reporting).
 - **Select an object retention approach.** If your organization requires being able to report on historical Microsoft Entra objects, such as reports that list users and agent IDs who had access to an application in a past year including those who were subsequently deleted from Microsoft Entra, then you should plan to archive objects from Microsoft Entra to a separate repository for retention and reporting purposes. For more information, see [Customized reports in Azure Data Explorer (ADX) using data from Microsoft Entra ID](custom-entitlement-report-with-adx-and-entra-id).
