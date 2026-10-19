@@ -80,7 +80,7 @@ Make sure you have at least a Microsoft Entra ID P1 or P2 license and a Microsof
 
 ### Why is Assignment required set to Yes when application proxy app is created or enabled?
 
-Microsoft Entra application proxy recommends limiting app access to only assigned users and groups and uses a default setting of Assignment required = Yes to enforce this behavior when the application proxy app is created or enabled.
+Microsoft Entra application proxy recommends limiting app access to only assigned users and groups and uses a default setting of Assignment required = Yes to enforce this behavior when the application proxy app is created or enabled on an existing Enterprise application.
 
 ## Connector configuration
 
