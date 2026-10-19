@@ -12,7 +12,7 @@ ms.service: global-secure-access
 manager: dougeby
 description: Review Global Secure Access client for Windows release notes, including new features, fixes, minimum versions, and Windows Update upgrade behavior.
 ms.topic: reference
-ms.date: 2026-08-26T00:00:00.0000000Z
+ms.date: 2026-10-19T00:00:00.0000000Z
 ms.reviewer: lirazbarak
 ms.custom: msecd-doc-authoring-1023
 ai-usage: ai-assisted
@@ -32,9 +32,11 @@ monikers: []
 item_type: Content
 source_path: docs/global-secure-access/reference-windows-client-release-history.md
 cmProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
 - https://authoring-docs-microsoft.poolparty.biz/devrel/bcbcbad5-4208-4783-8035-8481272c98b8
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
 spProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
 - https://authoring-docs-microsoft.poolparty.biz/devrel/43b2e5aa-8a6d-4de2-a252-692232e5edc8
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
 platformId: 7c91a969-aafa-c424-57d6-0aa03b708746
@@ -78,6 +80,29 @@ To opt out of automatic upgrades, use the following parameter when you install o
 Important
 
 If you opt out of automatic upgrades, you're responsible for keeping the Global Secure Access client up to date on those devices. Devices that run older client versions don't receive the latest features, fixes, and security updates.
+
+## Version 2.34.222
+
+### Functional changes
+
+- Adds support for [Web sign-in for Windows](/en-us/windows/security/identity-protection/web-sign-in).
+- When Private Access is enabled and the device isn't directly connected to the corporate network, Windows Firewall doesn't activate the domain profile.
+- The **Forwarding profile** tab in the **Advanced diagnostics** tool displays the name of each traffic forwarding profile as it appears in the Microsoft Entra admin center.
+- Adds support for Conditional Access sign-in frequency for Private Access applications.
+
+Note
+
+Support for Conditional Access sign-in frequency for Private Access applications gradually rolls out to customers.
+
+- The **Prefer local network** option bypasses only connections to IP addresses in common private network ranges.
+
+### Other changes
+
+- Improvements to User Datagram Protocol (UDP) tunneling.
+- Memory improvements.
+- New telemetries are available.
+- Accessibility improvements.
+- Miscellaneous bug fixes and improvements.
 
 ## Version 2.32.294
 
