@@ -14,7 +14,7 @@ description: Learn how to view the identity assignments report and audit logs in
 editor: jocastel-MSFT
 ms.subservice: entitlement-management
 ms.topic: how-to
-ms.date: 2026-10-15T00:00:00.0000000Z
+ms.date: 2026-10-20T00:00:00.0000000Z
 ms.reviewer: jocastel
 ai-usage: ai-assisted
 ms.custom: sfi-ga-nochange, sfi-image-nochange, msecd-doc-authoring-1026
@@ -194,7 +194,9 @@ Access package drift reports include:
 - Enterprise applications that have application role assignments without corresponding access package assignments.
 - Active access package assignments where the expected group membership or application assignment is missing.
 
-To review access package drift:
+To review access package drift with Microsoft Graph, use the [List accessDriftSummary API](/en-us/graph/api/accessdriftsummary-list?view=graph-rest-beta).
+
+To review access package drift through the Microsoft Entra admin center:
 
 1. Sign in to the [Microsoft Entra admin center](https://entra.microsoft.com).
 2. Browse to **ID Governance** &gt; **Access Guardian** &gt; **Reports** &gt; **Access Drift**.
