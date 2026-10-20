@@ -1,19 +1,19 @@
 ---
 layout: Conceptual
-title: Validate an OIDC multitenant app for Microsoft Entra App Gallery onboarding - Microsoft Entra ID | Microsoft Learn
+title: Validate an OIDC app for Microsoft Entra App Gallery onboarding - Microsoft Entra ID | Microsoft Learn
 canonicalUrl: https://learn.microsoft.com/en-us/entra/identity/enterprise-apps/validate-oidc-multitenant-app-gallery
 uhfHeaderId: MSDocsHeader-Entra
 breadcrumb_path: /entra/breadcrumb/toc.json
 feedback_system: Standard
 feedback_product_url: https://feedback.azure.com/d365community/forum/22920db1-ad25-ec11-b6e6-000d3a4f0789
-author: omondiatieno
+author: HildaK-pm
 ms.author: hkinyunyu
 ms.service: entra-id
 ms.subservice: enterprise-apps
-manager: mwongerapk
-description: Use the Microsoft Entra App Validator browser extension to validate your OpenID Connect multitenant app and generate a Test ID for app gallery publishing.
+manager: msteele
+description: Use the Microsoft Entra App Validator browser extension to validate your single-tenant or multitenant OpenID Connect app and generate a Test ID for app gallery publishing.
 ms.topic: how-to
-ms.date: 2026-06-04T00:00:00.0000000Z
+ms.date: 2026-10-19T00:00:00.0000000Z
 ms.reviewer: hkinyunyu
 ms.custom: enterprise-apps-article, msecd-doc-authoring-1013
 ai-usage: ai-assisted
@@ -39,22 +39,24 @@ spProducts:
 platformId: 3bc5a9f0-de4b-cc81-f279-8b3637e5f057
 ---
 
-# Validate an OIDC multitenant app for Microsoft Entra App Gallery onboarding - Microsoft Entra ID | Microsoft Learn
+# Validate an OIDC app for Microsoft Entra App Gallery onboarding - Microsoft Entra ID | Microsoft Learn
 
-Before publishing your OpenID Connect (OIDC) multitenant application to the Microsoft Entra app gallery, you must validate that your sign-in implementation meets gallery requirements. Validation is a self-service step that confirms your app is ready to publish and generates a Test ID required for submission.
+Before publishing your OpenID Connect (OIDC) application to the Microsoft Entra app gallery, you must validate that your sign-in implementation meets gallery requirements. Validation is a self-service step that produces a validation report and generates a Test ID required for submission.
 
-The Microsoft Entra App Validator evaluates your OIDC multitenant sign-in flow against Microsoft Entra app gallery requirements while you sign in to your application.
+The Microsoft Entra App Validator supports both single-tenant and multitenant OIDC applications. It evaluates your sign-in flow against Microsoft Entra app gallery requirements while you sign in to your application.
 
 After validation, you'll have:
 
 - A validation report highlighting required and recommended fixes
 - A Test ID required to publish your app to the Microsoft Entra app gallery
 
+The [Microsoft Entra App Gallery SSO requirements](app-gallery-sso-requirements) define publication eligibility. Cloud SaaS applications must use a multitenant application. Single-tenant applications are acceptable when you deploy a separate application instance for each customer by using an infrastructure as a service (IaaS) or platform as a service (PaaS) architecture. Passing single-tenant validation doesn't automatically establish eligibility for App Gallery publication.
+
 ## Prerequisites
 
 Before starting validation, ensure the following are already true:
 
-- Your app is registered as a [multitenant application](../../identity-platform/single-and-multi-tenant-apps) in Microsoft Entra ID.
+- Your app has a [single-tenant or multitenant application registration](../../identity-platform/single-and-multi-tenant-apps) in Microsoft Entra ID that matches its architecture and the [App Gallery eligibility requirements](app-gallery-sso-requirements).
 - [OIDC sign-in](../../identity-platform/v2-protocols-oidc) is implemented and working correctly.
 - Your app is deployed and accessible via a public URL.
 - Redirect URIs, scopes, and permissions are configured.
@@ -130,6 +132,9 @@ Start a validation session by signing in to the extension and confirming your ap
 4. Sign in to the extension using your Microsoft account.
 5. Select **Start test**.
 6. When prompted, confirm the starting page and select **Yes, Start test**.
+7. When the validator prompts you to select the OIDC tenant configuration, choose the configuration that matches the application architecture you intend to publish in the App Gallery:
+    - **Multitenant**: For a cloud SaaS application that uses a shared application registration to serve customers across multiple Microsoft Entra tenants.
+    - **Single-tenant**: For an application deployed as a separate instance for each customer using an IaaS or PaaS architecture.
 
 The extension initializes the validation session and lists the checks it performs.
 
@@ -146,14 +151,14 @@ Sign in with a Microsoft account so the validator can capture and evaluate your 
 During authentication, the validator evaluates:
 
 - Microsoft sign-in entry point configuration
-- Tenant endpoint usage (`/common` or `/organizations` for multitenant apps)
+- Tenant endpoint usage for the selected configuration: `/common` or `/organizations` for multitenant validation, or the tenant-specific OIDC configuration for single-tenant validation.
 - OIDC v2.0 endpoint compliance
 - Required scopes, including `openid` and `profile`
 - Authorization request structure and parameters
 
 Tip
 
-The most common validation failures are single-tenant endpoints, missing required scopes, and mismatched redirect URIs. These issues must be fixed before publishing.
+Common validation failures include endpoints that don't match the selected tenant configuration, missing required scopes, and mismatched redirect URIs. A tenant-specific endpoint isn't a validation failure when you select **Single-tenant**. Both configurations must use Microsoft identity platform v2.0 endpoints. Resolve validation failures before publishing.
 
 ## Review the validation report
 
