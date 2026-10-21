@@ -13,7 +13,8 @@ ms.subservice: enterprise-apps
 manager: dougeby
 description: Learn ways of mitigating against application-based consent phishing attacks using Microsoft Entra ID.
 ms.topic: concept-article
-ms.date: 2023-12-11T00:00:00.0000000Z
+ms.date: 2026-10-20T00:00:00.0000000Z
+ai-usage: ai-assisted
 ms.custom: template-concept, enterprise-apps-article
 ms.reviewer: tilarso
 locale: en-us
@@ -32,12 +33,12 @@ monikers: []
 item_type: Content
 source_path: docs/identity/enterprise-apps/protect-against-consent-phishing.md
 cmProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
-- https://authoring-docs-microsoft.poolparty.biz/devrel/486161dc-fa28-4625-9b1c-1a21d690bc8d
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
 spProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
-- https://authoring-docs-microsoft.poolparty.biz/devrel/5dd28c86-729c-4723-ab5a-57e26fcec2a8
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
 platformId: e3473643-c73b-5aee-9b07-ea33b3ec2193
 ---
@@ -73,6 +74,14 @@ If a Microsoft disabled application impacts the organization, the organization s
     - The Microsoft Entra audit logs for activity by the application and sign-in activity for users authorized to use the application.
 2. Review and use the [guidance for defending against illicit consent grants](/en-us/microsoft-365/security/office-365-security/detect-and-remediate-illicit-consent-grants). The guidance includes auditing permissions and consent for disabled and suspicious applications found during review.
 3. Implement best practices for hardening against consent phishing, described in the following section.
+
+### If you believe Microsoft disabled an application in error
+
+Tenant administrators can't reverse Microsoft disablement by setting the service principal's `accountEnabled` property to `true` or by reactivating the app registration (`isDisabled=false`). This restriction also applies to administrators in the application's home tenant.
+
+If your organization publishes the application, work with an administrator in its home tenant to contact Microsoft Support through the [general Microsoft Entra support options](../../fundamentals/how-to-get-support#open-a-support-request). Explain why you believe the disablement is an error, and include the application (client) ID, home tenant ID, `disabledByMicrosoftStatus` value, and relevant investigation findings. Opening a support request doesn't guarantee reactivation.
+
+If your organization uses an application published by another organization, contact the publisher about the disablement and continue investigating the application's activity in your tenant. You can also use the general support options to get help with the impact on your tenant. Changing your tenant's sign-in setting doesn't remove the Microsoft disablement.
 
 ## Best practices for hardening against consent phishing attacks
 
