@@ -12,8 +12,10 @@ ms.service: entra-id
 manager: pmwongera
 description: Learn about various on-premises and Microsoft Entra topologies that use Microsoft Entra Cloud Sync.
 ms.topic: concept-article
-ms.date: 2025-04-09T00:00:00.0000000Z
+ms.date: 2026-10-21T00:00:00.0000000Z
 ms.subservice: hybrid-cloud-sync
+ms.custom: msecd-doc-authoring-1028
+ai-usage: ai-assisted
 locale: en-us
 document_id: 793df638-faa2-8d6b-1b94-f6ac79b84368
 document_version_independent_id: 40a3d7d6-8aa5-d2db-9409-c7f5fb11724d
@@ -31,11 +33,9 @@ item_type: Content
 source_path: docs/identity/hybrid/cloud-sync/plan-cloud-sync-topologies.md
 cmProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
-- https://authoring-docs-microsoft.poolparty.biz/devrel/b1cfdec6-b0c3-4209-818c-736879856e0e
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
 spProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
-- https://authoring-docs-microsoft.poolparty.biz/devrel/2d0723c1-cf38-4c30-ab3d-5df787b33270
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
 platformId: 6c94eab0-fd11-7176-46ea-e4045770c5b5
 ---
@@ -83,9 +83,13 @@ This scenario topology is similar to the multi-forest scenario. However, this on
 
 ![Diagram that shows a single-forest topology with a single Microsoft Entra tenant.](media/tutorial-migrate-aadc-aadccp/diagram-2.png)
 
-The piloting scenario involves the existence of both Microsoft Entra Connect and Microsoft Entra Cloud Sync in the same forest and scoping the users and groups accordingly. NOTE: An object should be in scope in only one of the tools.
+The piloting scenario involves Microsoft Entra Connect Sync and Cloud Sync in the same forest. Connect Sync and Cloud Sync must not simultaneously export normal changes for the same object and attribute set. During the documented manual phased-migration process, objects can remain in Connect Sync scope while `cloudNoFlow` and `JoinNoFlow` rules prevent normal Connect Sync exports and preserve required references.
 
-For an example of this scenario see [Tutorial: Pilot Microsoft Entra Cloud Sync in an existing synced AD forest](tutorial-pilot-aadc-aadccp)
+For the documented process, see [Create a custom user inbound rule](tutorial-pilot-aadc-aadccp#create-a-custom-user-inbound-rule) in the manual migration tutorial.
+
+Important
+
+Don't remove objects from Connect Sync scope before migration and reference validation are complete. Early scope removal can result in unintended reference removals. Follow [Plan scope removal from Microsoft Entra Connect Sync](tutorial-pilot-aadc-aadccp#plan-scope-removal-from-microsoft-entra-connect-sync).
 
 ### Merging objects from disconnected sources
 

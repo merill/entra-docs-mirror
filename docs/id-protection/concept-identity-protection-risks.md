@@ -12,8 +12,10 @@ ms.service: entra-id-protection
 manager: dougeby
 description: Explore the full list of risk detections and their corresponding risk event types, along with a description of each risk event type.
 ms.topic: reference
-ms.date: 2026-04-22T00:00:00.0000000Z
+ms.date: 2026-10-21T00:00:00.0000000Z
 ms.reviewer: lvandenende
+ai-usage: ai-assisted
+ms.custom: msecd-doc-authoring-1030
 locale: en-us
 document_id: 81a1385f-b90a-e7b4-8cbd-f25aeb8b3c49
 document_version_independent_id: d468eb75-88a9-b1aa-7fb3-19ebb4faa179
@@ -91,6 +93,7 @@ Select a risk detection from the list to view the description of the risk detect
 | Microsoft Entra threat intelligence (user) | Real-time or Offline | Nonpremium | investigationsThreatIntelligence |
 | Possible attempt to access Primary Refresh Token (PRT) | Offline | Premium | attemptedPrtAccess |
 | Suspicious API Traffic | Offline | Premium | suspiciousAPITraffic |
+| Suspicious credential addition | Real-time | Premium | suspiciousCredentialAddition |
 | Suspicious sending patterns | Offline | Premium | suspiciousSendingPatterns |
 | User reported suspicious activity | Offline | Premium | userReportedSuspiciousActivity |
 
@@ -325,6 +328,13 @@ This risk detection type is discovered using information provided by Microsoft D
 This risk detection is reported when abnormal GraphAPI traffic or directory enumeration is observed. Suspicious API traffic might suggest that a user is compromised and conducting reconnaissance in the environment.
 
 - Calculated offline
+- License requirement: Microsoft Entra ID P2
+
+### Suspicious credential addition
+
+This detection identifies when a new authentication method is added to an account under suspicious circumstances. This activity might indicate that an attacker has accessed the account and registered a new credential.
+
+- Calculated in real-time
 - License requirement: Microsoft Entra ID P2
 
 ### Suspicious sending patterns

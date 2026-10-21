@@ -13,7 +13,7 @@ ms.subservice: authentication
 manager: pmwongera
 description: Learn how to configure and manage Microsoft Entra Kerberos trust between Microsoft Entra ID and Active Directory Domain Services.
 ms.topic: how-to
-ms.date: 2026-10-07T00:00:00.0000000Z
+ms.date: 2026-10-19T00:00:00.0000000Z
 ms.reviewer: Vimala, vimrang, barclayn
 ms.custom: msecd-doc-authoring-1012
 ai-usage: ai-assisted
@@ -35,19 +35,23 @@ source_path: docs/identity/authentication/configure-microsoft-entra-kerberos-tru
 cmProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/37da4cc9-0cfc-42a9-ba5e-805706b01ef8
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/5cf46315-b33f-4e99-8224-a1592697eff9
 spProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/3661fb96-d414-4a4e-b7ad-9370637790dd
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/715d24c3-3683-4219-82c5-1e3c813fb7fc
 platformId: 9782c02b-8781-40b2-e75c-94b522ba568f
 ---
 
 # Configure Microsoft Entra Kerberos trust - Microsoft Entra ID | Microsoft Learn
 
-Microsoft Entra Kerberos trust establishes an inbound trust relationship in which on-premises Active Directory Domain Services (AD DS) trusts Microsoft Entra ID as a Kerberos Key Distribution Center (KDC). This trust enables hybrid identity organizations to use modern credentials for applications and allows Microsoft Entra ID to become the trusted source for cloud and on-premises authentication.
+Microsoft Entra Kerberos trust configures the incoming trust-based flow by creating a Trusted Domain Object (TDO) in on-premises Active Directory Domain Services (AD DS) for the Microsoft Entra Kerberos realm, `KERBEROS.MICROSOFTONLINE.COM`. The trust is inbound from the AD DS domain's perspective: Microsoft Entra ID trusts AD-issued cross-realm referral tickets for this realm. AD-authenticated clients can use these referral tickets to obtain Kerberos service tickets from Microsoft Entra ID for resources such as Azure Files and Azure SQL Managed Instance.
 
 This article explains how to create the Trusted Domain Object, configure clients to retrieve Kerberos tickets, rotate the Kerberos key, and remove the trust configuration.
+
+Note
+
+The Trusted Domain Object isn't required for Windows Hello for Business cloud Kerberos trust or for passwordless security key (FIDO2) sign-in to on-premises resources. Those scenarios need only the Microsoft Entra Kerberos server object, which you create with `Set-AzureADKerberosServer` without the `-SetupCloudTrust` parameter. For more information, see [Enable passwordless security key sign-in to on-premises resources](howto-authentication-passwordless-security-key-on-premises).
 
 ## Prerequisites
 
@@ -64,7 +68,7 @@ To create and configure the Microsoft Entra Kerberos Trusted Domain Object, use 
 
 ### Register the Trusted Domain Object with Microsoft Entra ID
 
-Use the Azure AD Hybrid Authentication Management PowerShell module to set up a Trusted Domain Object in the Active Directory domain and register trust information with Microsoft Entra ID. This action creates an inbound trust relationship, which enables on-premises Active Directory to trust Microsoft Entra ID.
+Use the Azure AD Hybrid Authentication Management PowerShell module to create a Trusted Domain Object in the AD DS domain and register trust information with Microsoft Entra ID. This creates an inbound trust from the AD DS domain's perspective, enabling Microsoft Entra ID to trust on-premises AD DS.
 
 You only need to set up the Trusted Domain Object once per domain. If you already set up this object for your domain, skip this section and proceed to Configure clients to retrieve Kerberos tickets.
 

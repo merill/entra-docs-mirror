@@ -14,7 +14,7 @@ description: Learn how to migrate from Microsoft Entra Connect Sync to Microsoft
 ms.subservice: hybrid-cloud-sync
 ms.topic: how-to
 ms.custom: msecd-doc-authoring-1028
-ms.date: 2026-09-16T00:00:00.0000000Z
+ms.date: 2026-10-21T00:00:00.0000000Z
 ai-usage: ai-generated
 locale: en-us
 document_id: c87834d1-af5c-2ce2-d1f6-6fb6179708a3
@@ -31,12 +31,22 @@ moniker_range_name:
 monikers: []
 item_type: Content
 source_path: docs/identity/hybrid/cloud-sync/migrate-connect-sync-cloud-sync-tool.md
+cmProducts:
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
+- https://authoring-docs-microsoft.poolparty.biz/devrel/a3955c7b-f5ee-420d-aff5-d7119738f38b
+spProducts:
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
+- https://authoring-docs-microsoft.poolparty.biz/devrel/b31948f4-2f38-404b-ac93-c3c8c5b3ae33
 platformId: dacb2989-8912-adc8-6036-37627cdefa9a
 ---
 
 # Migrate to Microsoft Entra Cloud Sync with the Migration Tool - Microsoft Entra ID | Microsoft Learn
 
 Use the guided migration tool to move supported synchronization settings from Microsoft Entra Connect Sync to Microsoft Entra Cloud Sync. The tool assesses your environment, creates the required Cloud Sync configurations, and performs a preactivation Provision on Demand check. It then places Connect Sync in staging mode, activates Cloud Sync, and guides you through postactivation validation. Before you begin, review the prerequisites and supported migration scenarios.
+
+Important
+
+Start the migration from the active Connect Sync server. The migration tool can't be started from a Connect Sync server in staging mode.
 
 ## Prerequisites
 
@@ -50,6 +60,12 @@ Use the guided migration tool to move supported synchronization settings from Mi
 - A review of the [supported scenarios and feature comparison](connect-to-cloud-sync-decision-guide#comparison-between-microsoft-entra-connect-and-cloud-sync) for other differences between Connect Sync and Cloud Sync.
 - Access to the active Microsoft Entra Connect Sync server. You can't run the migration tool from a server in staging mode.
 - A two-week validation period after migration. Keep Microsoft Entra Connect Sync installed during this period.
+
+Note
+
+Cloud Sync can support capabilities that the current guided migration tool doesn't transfer. The limits on this page describe eligibility for the guided experience, not the complete set of Cloud Sync capabilities. Review the [migration decision guide](connect-to-cloud-sync-decision-guide#comparison-between-microsoft-entra-connect-and-cloud-sync) separately.
+
+Cloud Sync supports device synchronization, but device synchronization is currently a migration blocker for the guided tool. Don't remove required device synchronization to bypass readiness. Review the decision guide and [Device Sync documentation](device-sync) before planning migration.
 
 The migration tool supports transferring the following synchronization scenarios:
 
@@ -85,6 +101,18 @@ The tool verifies access to the current Microsoft Entra Connect Sync configurati
 ## Review environment readiness
 
 The readiness review can include domains, scope, enabled features, authentication-related settings, writeback settings, object limits, existing Cloud Sync agents or configurations, and unsupported synchronization rules. The wizard also displays the Connect Sync accidental-deletion protection setting and deletion threshold. These settings must be readable and valid before migration can continue.
+
+Use the readiness results to determine your next action:
+
+| Readiness result | What it means | Customer action |
+| --- | --- | --- |
+| Supported | The scenario can proceed through the guided migration tool. | Review the assessment and continue. |
+| Attention required | The environment contains a setting that you need to review. | Follow the linked guidance and rerun or resume the assessment as documented. |
+| Migration blocked | The environment doesn't meet the current guided-tool requirements. | Don't bypass the result. Remediate the documented condition, wait for the required capability, or request more time when applicable. |
+
+For feature, scope, and object-limit blockers, review the tool prerequisites. For device synchronization, review [Device Sync](device-sync). For accidental-deletion protection, see [Accidental deletions](how-to-accidental-deletes).
+
+To review the assessment and proceed when eligible:
 
 1. Review each result and any blocking conditions.
 2. Review the accidental-deletion protection setting and deletion threshold.
@@ -163,9 +191,34 @@ Use the validation page to compare the Connect Sync staging result with the acti
 
 If you need to wait for the next Connect Sync staging cycle, close the wizard so that it releases the Connect Sync configuration mutex. The wizard preserves the transition state. To resume validation, reopen Microsoft Entra Connect Sync, select **Transition to Microsoft Entra Cloud Sync**, review the overview, and sign in to Microsoft Entra again if prompted. Continue to the validation page and refresh the results.
 
+### What the migration tool does not validate automatically
+
+The aggregate **Total Objects** comparison doesn't validate individual objects or business-specific outcomes. Manually validate:
+
+- Individual users and groups.
+- Group memberships and manager relationships.
+- Password hash synchronization results.
+- Password writeback and Exchange hybrid writeback.
+- Other business-critical object and attribute behavior.
+
+Use this checklist before completing validation:
+
+- Confirm aggregate object counts.
+- Review Cloud Sync job health and last synchronization information.
+- Review provisioning errors.
+- Validate representative users and groups.
+- Validate group memberships and manager relationships used by your organization.
+- Validate every enabled writeback scenario.
+- Investigate persistent object-level differences.
+- Keep Connect Sync installed during the two-week validation period.
+
 ## Request more time to migrate
 
 Microsoft notifies eligible organizations through in-product experiences and email. The notification identifies your organization's migration window or deadline and directs you to the migration guidance.
+
+Important
+
+Use the migration date in your organization's tenant-specific notification. Connect Sync version retirement, authentication changes, and Cloud Sync migration can have different timelines.
 
 If a confirmed technical or business blocker prevents you from completing the migration by the deadline in your notification, open a Microsoft Support request for a temporary Cloud Sync migration exception. Exceptions are reviewed individually, aren't guaranteed, and don't remove the requirement to migrate.
 
@@ -178,7 +231,7 @@ Include the following information in your support request:
 - The mitigations that you tried and why they didn't resolve the blocker.
 - A migration plan with milestones and a target completion date.
 
-Submit evidence only through the secure Microsoft Support channel. Before you upload reports, logs, or screenshots, remove credentials, secrets, tokens, certificate material, personal data, internal hostnames, distinguished names, and unrelated tenant identifiers that Microsoft Support doesn't need for the investigation. Keep requested tenant and correlation identifiers so Support can investigate the issue.
+For diagnostic evidence and redaction requirements, see Collect evidence for Microsoft Support.
 
 ## Troubleshoot common issues
 
@@ -186,9 +239,25 @@ Use the troubleshooting table to investigate migration issues and collect eviden
 
 | Issue | What to check | Support evidence to collect |
 | --- | --- | --- |
+| Migration option is missing | Start on the active Connect Sync server, not a server in staging mode. Verify that the Connect Sync version is supported and that your organization and installation are eligible for the current migration wave. See Prerequisites. | Exact error text, if displayed, and a redacted screenshot. |
 | Readiness review blocks migration | Review the blocking feature, scope, object limit, accidental-deletion protection setting, or configuration conflict. | Readiness report and a redacted screenshot of the blocking result. |
 | Transfer fails | Review Connect Sync trace logs for credential validation, agent installation, registration, Microsoft Graph operations, or job creation failures. | Trace log excerpt, timestamp, wizard step, error text, and correlation identifier, if shown. |
 | Activation fails | Follow the recovery instructions in the wizard. Don't delete, disable, or retag migration-owned Cloud Sync resources because manual changes can interfere with recovery. | Diagnostic ID, exported wizard logs, timestamp, wizard step, and error text. |
 | Provision on Demand fails | Confirm agent health, directory connectivity, permissions, the object distinguished name, and the detailed provisioning result. | Provision on Demand result details and provisioning logs. |
 | Validation counts differ | Close the wizard while you wait for the next Connect Sync staging cycle. Reopen the wizard, return to validation, refresh the aggregate count comparison, and investigate persistent object-level differences. | Validation screenshot, last-sync times, job health, and relevant provisioning errors. |
 | Existing Cloud Sync configuration is detected | Determine whether the existing configuration is a compatible writeback configuration or a conflicting Active Directory-to-Microsoft Entra configuration. | Configuration names, directions, scopes, and status, with tenant identifiers redacted. |
+
+## Collect evidence for Microsoft Support
+
+Collect the evidence relevant to the issue before you open a support request:
+
+- The readiness report.
+- Exact error text, the wizard step, and the timestamp.
+- A diagnostic or correlation ID, if displayed.
+- Exported wizard logs and relevant Connect Sync trace log excerpts.
+- Provisioning-agent health and Cloud Sync job status.
+- Provision on Demand result details.
+- Relevant provisioning errors and last synchronization information.
+- Redacted screenshots of the issue.
+
+Submit evidence only through the secure Microsoft Support channel. Before you upload reports, logs, or screenshots, remove credentials, secrets, tokens, certificate material, personal data, internal hostnames, distinguished names, and unrelated tenant identifiers that Microsoft Support doesn't need for the investigation. Keep requested tenant and correlation identifiers so Support can investigate the issue.

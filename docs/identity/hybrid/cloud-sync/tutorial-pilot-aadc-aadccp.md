@@ -12,9 +12,10 @@ ms.service: entra-id
 manager: pmwongera
 description: Learn how to migrate to Microsoft Entra Cloud Sync for a synced Active Directory forest.
 ms.topic: tutorial
-ms.date: 2025-09-29T00:00:00.0000000Z
+ms.date: 2026-10-21T00:00:00.0000000Z
 ms.subservice: hybrid-cloud-sync
-ms.custom: sfi-image-nochange
+ms.custom: sfi-image-nochange, msecd-doc-authoring-1028
+ai-usage: ai-assisted
 locale: en-us
 document_id: 18b71563-7abc-70d2-822b-61131f0e6216
 document_version_independent_id: 15c0d747-c0eb-95b9-1cd3-4601ebcff14b
@@ -41,7 +42,13 @@ platformId: 5af18f31-3270-3d1b-e329-8651a40c8f4e
 
 This tutorial walks you through how to migrate to Microsoft Entra Cloud Sync for a test Active Directory forest that was synced by using Microsoft Entra Connect Sync.
 
-This article provides information for a basic migration. Review the [Migrate to Microsoft Entra Cloud Sync](migrate-azure-ad-connect-to-cloud-sync) documentation before you attempt to migrate your production environment.
+Use this tutorial to pilot the documented manual migration process. Review the [Migrate to Microsoft Entra Cloud Sync](migrate-azure-ad-connect-to-cloud-sync) documentation before you attempt to migrate your production environment.
+
+Important
+
+This tutorial describes an advanced manual migration for a test or pilot environment. If the [guided migration tool](migrate-connect-sync-cloud-sync-tool) is available and the readiness review confirms eligibility, use the guided tool instead.
+
+Don't remove objects from Connect Sync scope before migration and reference validation are complete. Review Plan scope removal from Microsoft Entra Connect Sync before you begin.
 
 In this tutorial, you learn how to:
 
@@ -65,7 +72,7 @@ Before you try this tutorial, consider the following items:
     Removing objects from Microsoft Entra Connect Sync scope removes them from the Active Directory connector space, metaverse, and Microsoft Entra connector space. This removal can remove references in the connector space and cause reference deletes, such as group membership removals, to be exported to Microsoft Entra ID.
 - Ensure that the objects in the pilot scope have `ms-ds-consistencyGUID` populated so that Microsoft Entra Cloud Sync hard matches the objects.
 
-    Microsoft Entra Connect Sync doesn't populate `ms-ds-consistencyGUID` by default for group objects.
+    Microsoft Entra Connect Sync doesn't populate `ms-ds-consistencyGUID` by default for group objects. Review the [source-anchor guidance](../connect/plan-connect-design-concepts#using-ms-ds-consistencyguid-as-sourceanchor) for the documented differences between object types.
 - Follow the steps in this tutorial precisely. This configuration is for advanced scenarios.
 
 ### Plan scope removal from Microsoft Entra Connect Sync
@@ -151,6 +158,10 @@ To avoid unintended reference deletes such as group membership removals, keep bo
     ![Screenshot that shows the sync rule transformations.](media/tutorial-migrate-aadc-aadccp/user-4.png)
 
 Follow the same steps for all object types (user, group, and contact). Repeat the steps according to the configured Active Directory connector or Active Directory forest.
+
+Note
+
+This tutorial doesn't provide a device migration procedure. Device synchronization requires separate Cloud Sync configuration. Review the [Device Sync documentation](device-sync) and [guided migration-tool limits](migrate-connect-sync-cloud-sync-tool#prerequisites) before planning a device migration.
 
 ## Create a custom user outbound rule
 
