@@ -13,7 +13,7 @@ manager: dougeby
 description: Learn how to configure and deploy Microsoft Entra and Netskope Security Service Edge (SSE) solutions together for optimized security and connectivity across private applications, Microsoft 365, and internet access.
 contributors: 
 ms.topic: concept-article
-ms.date: 2026-03-13T00:00:00.0000000Z
+ms.date: 2026-10-18T00:00:00.0000000Z
 ms.reviewer: shkhalid
 ai-usage: ai-assisted
 locale: en-us
@@ -32,13 +32,9 @@ monikers: []
 item_type: Content
 source_path: docs/global-secure-access/how-to-netskope-coexistence.md
 cmProducts:
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/d5321f31-a36c-484d-a808-69f9088f4f84
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
-- https://authoring-docs-microsoft.poolparty.biz/devrel/1dd701e0-441f-4b0a-9806-aa47decc4e35
+- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
 spProducts:
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/6032d191-3b2e-4df1-9108-c955546973aa
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
-- https://authoring-docs-microsoft.poolparty.biz/devrel/0a2fc935-5977-4aa6-9f55-0be03bd2acb8
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
 platformId: d96c1b10-dcd4-e03b-a762-78b415c610f1
 ---
 
@@ -65,6 +61,10 @@ In the third scenario, Global Secure Access handles all Microsoft 365 traffic. N
 1. **Microsoft Entra Internet Access and Microsoft Entra Microsoft Access with Netskope Private Access**
 
 In the fourth scenario, Global Secure Access handles Internet and Microsoft 365 traffic. Netskope only captures Private application traffic.
+
+1. **Microsoft Entra Private Access and Microsoft Entra Microsoft Access with Netskope Internet Access**
+
+In the fifth scenario, Global Secure Access handles private application and Microsoft 365 traffic. Netskope only captures internet traffic.
 
 ## Prerequisites
 
@@ -105,6 +105,10 @@ Configure the `Microsoft SSE Service` policy:
 Configure the `MSFT SSE M365` policy:
 
 - Repeat Steps 1 & 2 to Add Microsoft 365 IPs and save them as `MSFT SSE M365`:`132.245.0.0/16`, `204.79.197.215/32`, `150.171.32.0/22`, `131.253.33.215/32`, `23.103.160.0/20`, `40.96.0.0/13`, `52.96.0.0/14`, `40.104.0.0/15`, `13.107.128.0/22`, `13.107.18.10/31`, `13.107.6.152/31`, `52.238.78.88/32`, `104.47.0.0/17`, `52.100.0.0/14`, `40.107.0.0/16`, `40.92.0.0/15`, `150.171.40.0/22`, `52.104.0.0/14`, `104.146.128.0/17`, `40.108.128.0/17`, `13.107.136.0/22`, `40.126.0.0/18`, `20.231.128.0/19`, `20.190.128.0/18`, `20.20.32.0/19`.
+
+Note
+
+These IP addresses should match the Microsoft services whose traffic you want the Global Secure Access client to forward. Verify the addresses against the Microsoft traffic forwarding profile rules in the Microsoft Entra admin center.
 
 The `MSFT SSE Service` and `MSFT SSE M365` profiles are used in steering configurations.
 
@@ -395,3 +399,66 @@ In the Netskope portal:
 5. Sign in to Netskope portal and browse to **Skope IT** &gt; **Events & Alerts** &gt; **Network Events**. Validate traffic related to the **RDP** session **is** present and that traffic related to Microsoft 365 and Internet Traffic such as Instagram.com, Outlook Online, and SharePoint Online is missing from Netskope Portal.
 6. In the system tray, right-click **Global Secure Access Client** and then select **Advanced Diagnostics**. In the network **traffic** dialog box, select **Stop collecting**.
 7. Scroll to observe that the Global Secure Access client **isn't** capturing traffic from the private application. Also, observe that the Global Secure Access client is capturing traffic for Microsoft 365 and other internet traffic.
+
+## Microsoft Entra Private Access and Microsoft Entra Microsoft Access with Netskope Internet Access
+
+In this scenario, Global Secure Access handles private application and Microsoft 365 traffic. Netskope only captures internet traffic.
+
+### Microsoft Entra Private Access and Microsoft Entra Microsoft Access configuration
+
+For this scenario:
+
+1. Enable the [Microsoft Entra Private Access forwarding profile](how-to-manage-private-access-profile) and the [Microsoft Entra Microsoft Access forwarding profile](how-to-manage-microsoft-profile#enable-the-microsoft-traffic-profile).
+2. Install and configure the Global Secure Access client for [Windows](how-to-install-windows-client) or [macOS](how-to-install-macos-client).
+
+### Netskope Internet Access configuration
+
+In the Netskope portal:
+
+1. Configure the `MSFT SSE Service` and `MSFT SSE M365` profiles, as described in Netskope Location Profiles, for use in the steering configuration.
+2. Set up a [Netskope steering configuration](https://docs.netskope.com/en/steering-configuration/) to steer web traffic.
+3. Install the Netskope client for [Windows](https://docs.netskope.com/en/netskope-client-for-windows) or [macOS](https://docs.netskope.com/en/netskope-client-for-macos).
+
+#### Add a steering configuration for internet access
+
+1. Navigate to **Netskope portal** &gt; **Settings** &gt; **Security Cloud Platform** &gt; **Steering Configuration** &gt; **New Configuration**.
+2. Enter a **Configuration Name**, such as `MSFTSSEWebTraffic`.
+3. Choose a **User Group** or **OU** to apply the configuration to.
+4. Under **Cloud, Web and Firewall**, select **Web Traffic**.
+5. Set **Bypass exception traffic at** to **Client**.
+6. Under **Private Apps**, select **None**.
+7. Under **Borderless SD-WAN Apps**, select **None**.
+8. Set **Status** to **Disabled** and select **Save**.
+9. Select the `MSFTSSEWebTraffic` configuration &gt; **Exceptions** &gt; **New Exception** &gt; **Destination Locations**.
+10. Select `MSFT SSE Service` and `MSFT SSE M365`.
+11. Select **Bypass**, select the **Treat it like local IP address** checkbox, and then select **Add**.
+12. Select **New Exception** &gt; **Domains** and add these domain exceptions: `*.globalsecureaccess.microsoft.com`, `*.auth.microsoft.com`, `*.msftidentity.com`, `*.msidentity.com`, `*.onmicrosoft.com`, `*.outlook.com`, `*.protection.outlook.com`, `*.sharepoint.com`, `*.sharepointonline.com`, `*.svc.ms`, `*.wns.windows.com`, `account.activedirectory.windowsazure.com`, `accounts.accesscontrol.windows.net`, `admin.onedrive.com`, `adminwebservice.microsoftonline.com`, `api.passwordreset.microsoftonline.com`, `autologon.microsoftazuread-sso.com`, `becws.microsoftonline.com`, `ccs.login.microsoftonline.com`, `clientconfig.microsoftonline-p.net`, `companymanager.microsoftonline.com`, `device.login.microsoftonline.com`, `g.live.com`, `graph.microsoft.com`, `graph.windows.net`, `login-us.microsoftonline.com`, `login.microsoft.com`, `login.microsoftonline-p.com`, `login.microsoftonline.com`, `login.windows.net`, `logincert.microsoftonline.com`, `loginex.microsoftonline.com`, `nexus.microsoftonline-p.com`, `officeclient.microsoft.com`, `oneclient.sfx.ms`, `outlook.cloud.microsoft`, `outlook.office.com`, `outlook.office365.com`, `passwordreset.microsoftonline.com`, `provisioningapi.microsoftonline.com`, `spoprod-a.akamaihd.net` &gt; **Save**.
+13. Ensure that the `MSFTSSEWebTraffic` configuration is at the top of the list of steering configurations in your tenant. Then enable the configuration.
+14. Go to the system tray to check that Global Secure Access and Netskope clients are enabled.
+
+#### Verify configurations for clients
+
+1. Right-click **Global Secure Access Client** &gt; **Advanced Diagnostics** &gt; **Forwarding Profile** and verify that only Private Access and Microsoft 365 rules are applied to this client.
+2. Navigate to **Advanced Diagnostics** &gt; **Health Check** and verify that no checks fail.
+3. Right-click **Netskope Client** &gt; **Configuration**. Verify that **Steering Configuration** matches the name of the configuration you created. If not, select the **Update** link. 
+    Note
+
+    To troubleshoot health check failures, see [Troubleshoot the Global Secure Access client](troubleshoot-global-secure-access-client-diagnostics-health-check).
+
+#### Test traffic flow
+
+1. In the system tray, right-click **Global Secure Access Client** and then select **Advanced Diagnostics**. Select the **Traffic** tab and select **Start collecting**.
+2. In a browser, access `bing.com`, `salesforce.com`, and `yelp.com`.
+3. In the system tray, right-click **Global Secure Access Client**, select **Advanced Diagnostics**, and then select the **Traffic** tab.
+4. Scroll to confirm that the Global Secure Access client **isn't** capturing traffic from these websites.
+5. Sign in to the Microsoft Entra admin center and browse to **Global Secure Access** &gt; **Monitor** &gt; **Traffic logs**. Verify that traffic to these websites **isn't** recorded in the Global Secure Access traffic logs.
+6. Sign in to the Netskope portal and browse to **Skope IT** &gt; **Events & Alerts** &gt; **Page Events**. Verify that traffic to these websites **is** recorded in the Netskope logs.
+7. Access a private application you configured in Microsoft Entra Private Access. For example, open an RDP session to a private server.
+8. Sign in to Microsoft Entra admin center and browse to **Global Secure Access** &gt; **Monitor** &gt; **Traffic logs**.
+9. Verify that traffic for the RDP session **is** recorded in the Global Secure Access traffic logs.
+10. Sign in to the Netskope portal and browse to **Skope IT** &gt; **Events & Alerts** &gt; **Network Events**. Verify that traffic for the RDP session **isn't** recorded.
+11. Access Outlook Online (`outlook.com`, `outlook.office.com`, `outlook.office365.com`) and SharePoint Online (`<yourtenantdomain>.sharepoint.com`).
+12. In the system tray, right-click **Global Secure Access Client** and then select **Advanced Diagnostics**. In the **Traffic** dialog box, select **Stop collecting**.
+13. Scroll to confirm that the Global Secure Access client handled the Microsoft 365 traffic.
+14. To verify that the traffic is recorded in the Global Secure Access traffic logs, navigate to **Global Secure Access** &gt; **Monitor** &gt; **Traffic logs** in the Microsoft Entra admin center.
+15. In the Netskope portal, browse to **Skope IT** &gt; **Events & Alerts** &gt; **Page Events**. Verify that traffic to Outlook Online and SharePoint Online **isn't** recorded.
