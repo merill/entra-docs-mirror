@@ -34,12 +34,12 @@ item_type: Content
 source_path: docs/identity/role-based-access-control/permissions-reference.md
 cmProducts:
 - https://authoring-docs-microsoft.poolparty.biz/devrel/1dd701e0-441f-4b0a-9806-aa47decc4e35
+- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/68e4b2d8-b70c-4019-b49a-d1f8881e2aea
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
 spProducts:
 - https://authoring-docs-microsoft.poolparty.biz/devrel/0a2fc935-5977-4aa6-9f55-0be03bd2acb8
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/67b2ba1a-6f74-4044-a48a-f0f8ad076b8f
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
 platformId: e3a98497-07e6-1d61-15de-e5faae141606
 ---
 
@@ -547,7 +547,7 @@ This is a [privileged role](privileged-roles-permissions). Users in this role ca
 | microsoft.directory/oAuth2PermissionGrants/createAsOwner | Create OAuth 2.0 permission grants, with creator as the first owner[![Privileged label icon.](media/permissions-reference/privileged-label.png)](privileged-roles-permissions) |
 | microsoft.directory/servicePrincipals/createAsOwner | Create service principals, with creator as the first owner |
 
-## Owned application registrations
+### Owned application registrations
 
 Users with the application developer role can perform the following actions on app registrations that they own:
 

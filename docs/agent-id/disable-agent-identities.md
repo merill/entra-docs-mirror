@@ -33,12 +33,12 @@ item_type: Content
 source_path: docs/agent-id/disable-agent-identities.md
 cmProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
+- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/68e4b2d8-b70c-4019-b49a-d1f8881e2aea
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/46e3c7c4-fe77-4a6e-b40a-44c569819fa5
 spProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/67b2ba1a-6f74-4044-a48a-f0f8ad076b8f
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/d0c6fab8-2d7d-4bb0-bf40-589e08d7c132
 platformId: ba16b950-b950-cfce-6f11-332c53f43262
 ---
 
@@ -57,10 +57,11 @@ Your Microsoft Entra tenant might contain AI agents with or without a Microsoft 
 
 ## Disabling agent identity considerations
 
-Disabling an agent identity in your tenant might have broader consequences than simply stopping new AI agents from being created or used. Before you proceed, evaluate the following considerations:
+Disabling an agent identity or agent identity blueprint in your tenant might have broader consequences than simply stopping new AI agents from being created or used. Before you proceed, evaluate the following considerations:
 
 - Existing agents running in your organization might begin to fail.
 - Microsoft product experiences that assume agent identity availability (for example, Copilot Studio agents, Security Copilot scenario agents, Microsoft Entra Conditional Access Optimization Agent) might fail or fall back to standard service principals that lack agent-specific tracking and controls.
+- If you disable a multi-tenant agent identity blueprint in all tenants, and the blueprint had principals and child identities created in other tenants, then related agents in those tenants may fail or lose functionality.
 
 ## Monitor for agent identity creation and activity
 
@@ -107,6 +108,12 @@ To disable an agent identity blueprint:
 1. Sign in to the [Microsoft Entra admin center](https://entra.microsoft.com) as at least an [Agent ID Administrator](../identity/role-based-access-control/permissions-reference#agent-id-administrator).
 2. Browse to **Entra ID** &gt; **Agents** &gt; **Agent blueprints**.
 3. Select the agent identity blueprint you want to disable then select **Disable**.
+
+To disable an agent identity blueprint in all tenants:
+
+1. Sign in to the [Microsoft Entra admin center](https://entra.microsoft.com) as at least an [Agent ID Administrator](../identity/role-based-access-control/permissions-reference#agent-id-administrator).
+2. Browse to **Entra ID** &gt; **Agents** &gt; **Agent blueprints**.
+3. Select the agent identity blueprint you want to globally disable, select the **Disable** menu and then choose **Disable in all tenants**.
 
 ## Create Conditional Access policies to disable agent activities
 
