@@ -12,8 +12,9 @@ ms.service: entra-id
 manager: pmwongera
 description: This article describes the prerequisites and hardware requirements you need for cloud sync.
 ms.topic: how-to
-ms.date: 2026-07-27T00:00:00.0000000Z
+ms.date: 2026-10-22T00:00:00.0000000Z
 ms.subservice: hybrid-cloud-sync
+ms.custom: msecd-doc-authoring-1030
 locale: en-us
 document_id: 88fc98f5-0c60-1f46-2f02-3dad22b6632a
 document_version_independent_id: 4d2ce2cc-94dd-6073-f145-5a0694e9b542
@@ -31,12 +32,12 @@ item_type: Content
 source_path: docs/identity/hybrid/cloud-sync/how-to-prerequisites.md
 cmProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/fc3f72c2-fb6f-4cea-95ee-b444e52254ee
+- https://authoring-docs-microsoft.poolparty.biz/devrel/b1cfdec6-b0c3-4209-818c-736879856e0e
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/37da4cc9-0cfc-42a9-ba5e-805706b01ef8
 spProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/f12cf087-582d-48ac-a085-0c19adf1e391
+- https://authoring-docs-microsoft.poolparty.biz/devrel/2d0723c1-cf38-4c30-ab3d-5df787b33270
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/3661fb96-d414-4a4e-b7ad-9370637790dd
 platformId: 51949239-d4e9-f71b-a4d1-d04af02959ff
 ---
 
@@ -56,6 +57,12 @@ You need the following to use Microsoft Entra Cloud Sync:
 - The Windows Credential Manager service (VaultSvc) cannot be disabled as that prevents the provisioning agent from installing.
 - High availability refers to the Microsoft Entra Cloud Sync's ability to operate continuously without failure for a long time. By having multiple active agents installed and running, Microsoft Entra Cloud Sync can continue to function even if one agent should fail. Microsoft recommends having 3 active agents installed for high availability.
 - On-premises firewall configurations.
+
+### Active Directory site configuration
+
+The Microsoft Entra provisioning agent uses standard Active Directory domain controller discovery mechanisms. Incorrect DNS configuration, subnet-to-site mappings, or site configuration can cause synchronization failures, performance issues, or intermittent connectivity problems.
+
+Ensure that servers hosting provisioning agents are in correctly defined Active Directory sites. In **Active Directory Sites and Services**, associate each server's IP subnet with the appropriate site. Proper site and DNS configuration helps the agent discover appropriate domain controllers and can improve synchronization reliability and performance.
 
 ## Harden your Microsoft Entra provisioning agent server
 

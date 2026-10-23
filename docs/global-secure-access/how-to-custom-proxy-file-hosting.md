@@ -29,13 +29,9 @@ monikers: []
 item_type: Content
 source_path: docs/global-secure-access/how-to-custom-proxy-file-hosting.md
 cmProducts:
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/05a837ba-792f-460a-9e68-3842c0ffd1c0
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/68e4b2d8-b70c-4019-b49a-d1f8881e2aea
+- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
 spProducts:
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/6640a16a-1cc5-458f-8945-86702f70af60
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/67b2ba1a-6f74-4044-a48a-f0f8ad076b8f
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
 platformId: c133f110-96c7-7032-df45-6cc4c449b46f
 ---
 
@@ -66,9 +62,8 @@ Note
 While custom PAC file hosting validates basic JavaScript, it does not validate your intent for traffic routing and JavaScript logic that was implemented. We recommend that you approach PAC files as any other custom code artifact and review the code before relying on it in production. One way to achieve this is to use AI tools to review proposed PAC file contents and check it for validity, syntax, and intended logic. Example prompt: "Analyze this custom proxy automatic configuration file for explicit forward proxy. Check for syntax and routing decisions logic. Produce a report that includes details on what conditions influence routing decisions."
 
 1. Sign in to the [Microsoft Entra Admin Center](https://entra.microsoft.com) as at least a [Global Secure Access Administrator](/en-us/entra/identity/role-based-access-control/permissions-reference#global-secure-access-administrator).
-2. Browse to **Global Secure Access** &gt; **Connect** &gt; **Session Management**.
-3. Select the **Explicit Forward Proxy** tab.
-4. In the **Internet Access** section, select the link to download the default PAC file for your tenant. [![Screenshot of the Explicit Forward Proxy configuration page.](media/how-to-custom-proxy-autoconfiguration-files/download-template.png)](media/how-to-custom-proxy-autoconfiguration-files/download-template.png#lightbox)
+2. Browse to **Global Secure Access** &gt; **Connect** &gt; **Explicit Forward Proxy**.
+3. In the **Internet Access** section, select the link to download the default PAC file for your tenant. [![Screenshot of the Explicit Forward Proxy configuration page.](media/how-to-custom-proxy-autoconfiguration-files/download-template.png)](media/how-to-custom-proxy-autoconfiguration-files/download-template.png#lightbox)
 
 Important
 
