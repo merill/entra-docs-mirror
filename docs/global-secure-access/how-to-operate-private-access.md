@@ -31,13 +31,13 @@ monikers: []
 item_type: Content
 source_path: docs/global-secure-access/how-to-operate-private-access.md
 cmProducts:
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/d5321f31-a36c-484d-a808-69f9088f4f84
+- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
 - https://authoring-docs-microsoft.poolparty.biz/devrel/8a94907f-2511-4271-b5ca-ec7f2e75067c
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
-- https://authoring-docs-microsoft.poolparty.biz/devrel/07bb3e10-d135-43ff-bc8b-360497cb39fa
 spProducts:
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/6032d191-3b2e-4df1-9108-c955546973aa
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
 - https://authoring-docs-microsoft.poolparty.biz/devrel/bffa8e88-f633-409d-a24d-083bdbc68872
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
-- https://authoring-docs-microsoft.poolparty.biz/devrel/12e559b9-eaf6-4aee-9af7-62334e15f863
 platformId: c89b7e2a-3365-81f9-8612-313604fa00f5
 ---
 
@@ -96,7 +96,6 @@ Configure the following alerts and document the response action for each. Use [M
 
 | Alert | Condition | Role | Automated by | What to do next |
 | --- | --- | --- | --- | --- |
-| Connector offline | A Private Access connector stops sending heartbeats for more than 5 minutes | Network Ops L1 | Sentinel analytics rule *Connector health degradation* (content hub) | 1. Check the connector server: verify the `Microsoft Entra private network connector` Windows service is running.2. Check outbound connectivity to `*.msappproxy.net` on port 443.3. Review Windows Event Logs on the connector host.4. If the connector can't be recovered, verify traffic has failed over to another connector in the group (see Failover validation). See [Microsoft Entra private network connectors](/en-us/entra/global-secure-access/concept-connectors#maintenance) and [Troubleshoot problems installing the private network connector](/en-us/entra/global-secure-access/troubleshoot-connectors#troubleshooting-connector-functionality). |
 | All connectors in a group offline | No connectors in a connector group are sending heartbeats | Network Ops L2 + Incident Commander | Sentinel analytics rule *Connector group offline* + Playbook 2 | **Severity: Critical.** All users of applications assigned to this group lose access.1. Escalate immediately per your incident management process.2. Check for common root cause: network outage, firewall change, or server patching affecting all connector hosts.3. If recovery isn't immediate, activate your fallback connectivity plan (for example, temporary VPN access). |
 | Connector high resource usage | CPU &gt; 80% or memory &gt; 85% sustained for 15+ minutes on a connector host | Network Ops L1 | Azure Monitor alert (Playbook 5) | 1. Check the number of active sessions on the connector.2. Redistribute load by adding another connector to the group.3. Investigate if a specific application is generating unusual traffic volume. |
 | Application segment unreachable | Users receive connection failures for a specific Private Access application | Network Ops L1 → App Owner | Sentinel analytics rule *Private access segment failures* | 1. Verify the backend application server is running and reachable from the connector host.2. Test DNS resolution from the connector host for the application fully qualified domain name (FQDN).3. Check the application segment configuration in the Microsoft Entra admin center for correct IP/FQDN and port ranges. See [Troubleshoot application access](/en-us/entra/global-secure-access/troubleshoot-app-access#how-does-dns-work-with-global-secure-access) and [Troubleshoot problems installing the private network connector](/en-us/entra/global-secure-access/troubleshoot-connectors#troubleshooting-connector-functionality). |
