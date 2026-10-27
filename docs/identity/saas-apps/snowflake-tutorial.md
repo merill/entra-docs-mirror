@@ -33,9 +33,11 @@ item_type: Content
 source_path: docs/identity/saas-apps/snowflake-tutorial.md
 cmProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
+- https://authoring-docs-microsoft.poolparty.biz/devrel/b1cfdec6-b0c3-4209-818c-736879856e0e
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
 spProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
+- https://authoring-docs-microsoft.poolparty.biz/devrel/2d0723c1-cf38-4c30-ab3d-5df787b33270
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
 platformId: fca57e2b-1bf0-82cd-299c-2b0980f20b97
 ---
@@ -132,7 +134,7 @@ Follow the guidelines in the [create and assign a user account](../enterprise-ap
 
 ## Configure Snowflake SSO
 
-1. In a different web browser window, sign in to Snowflake as a Security Administrator.
+1. In a different web browser window, sign in to Snowflake as an Account Administrator.
 2. **Switch Role** to **ACCOUNTADMIN**, by selecting **profile** on the top right side of page.
 
     Note
@@ -140,16 +142,11 @@ Follow the guidelines in the [create and assign a user account](../enterprise-ap
     This is separate from the context you have selected in the top-right corner under your User Name.
 
     ![The Snowflake admin](media/snowflake-tutorial/account.png)
-3. Open the **downloaded Base 64 certificate** in notepad. Copy the value between “-----BEGIN CERTIFICATE-----” and “-----END CERTIFICATE-----" and paste this content into the **SAML2\_X509\_CERT**.
-4. In the **SAML2\_ISSUER**, paste **Identifier** value, which you copied previously.
-5. In the **SAML2\_SSO\_URL**, paste **Login URL** value, which you copied previously.
-6. In the **SAML2\_PROVIDER**, give the value like `CUSTOM`.
-7. Select the **All Queries** and select **Run**.
-
-    ![Snowflake sql](media/snowflake-tutorial/certificate.png)
+3. Create a SQL notebook, paste the following, but do not run it. For more information, see the [CREATE SECURITY INTEGRATION (SAML2)](https://docs.snowflake.com/en/sql-reference/sql/create-security-integration-saml2) guide on how to create a SAML2 security integration in Snowflake.
 
     ```
     CREATE [ OR REPLACE ] SECURITY INTEGRATION [ IF NOT EXISTS ]
+    <your security integration name goes here>
     TYPE = SAML2
     ENABLED = TRUE | FALSE
     SAML2_ISSUER = '<EntityID/Issuer value which you have copied>'
@@ -166,21 +163,27 @@ Follow the guidelines in the [create and assign a user account](../enterprise-ap
     [ SAML2_SNOWFLAKE_ISSUER_URL = '<string_literal>' ]
     [ SAML2_SNOWFLAKE_ACS_URL = '<string_literal>' ]
     ```
+4. Set the name of the SAML integration.
+5. Open the **downloaded Base 64 certificate** in a text editor such as Notepad. Copy the value between “-----BEGIN CERTIFICATE-----” and “-----END CERTIFICATE-----" and paste this content into the **SAML2\_X509\_CERT**.
+6. In the **SAML2\_ISSUER**, paste **Identifier** value, which you copied previously.
+7. In the **SAML2\_SSO\_URL**, paste **Login URL** value, which you copied previously.
+8. In the **SAML2\_PROVIDER**, give the value like `CUSTOM`.
+9. Select the **All Queries** and select **Run**.
 
-If you're using a new Snowflake URL with an organization name as the sign in URL, it's necessary to update the following parameters:
+    ![Snowflake sql](media/snowflake-tutorial/certificate.png)
+10. If you're using a new Snowflake URL with an organization name as the sign in URL, it's necessary to update the following parameters by altering the integration to add Snowflake Issuer URL and SAML2 Snowflake ACS URL.
 
-Alter the integration to add Snowflake Issuer URL and SAML2 Snowflake ACS URL, please follow the step-6 in [this](https://community.snowflake.com/s/knowledgebase) article for more information.
+- [ SAML2\_SNOWFLAKE\_ISSUER\_URL = '&lt;string\_literal&gt;' ]
 
-1. [ SAML2\_SNOWFLAKE\_ISSUER\_URL = '&lt;string\_literal&gt;' ]
+```
+ alter security integration '<your security integration name goes here>' set SAML2_SNOWFLAKE_ISSUER_URL = 'https://<organization_name>-<account name>.snowflakecomputing.com';
+```
 
-    alter security integration `<your security integration name goes here>` set SAML2\_SNOWFLAKE\_ISSUER\_URL = `https://<organization_name>-<account name>.snowflakecomputing.com`;
-2. [ SAML2\_SNOWFLAKE\_ACS\_URL = '&lt;string\_literal&gt;' ]
+- [ SAML2\_SNOWFLAKE\_ACS\_URL = '&lt;string\_literal&gt;' ]
 
-    alter security integration `<your security integration name goes here>` set SAML2\_SNOWFLAKE\_ACS\_URL = `https://<organization_name>-<account name>.snowflakecomputing.com/fed/login`;
-
-Note
-
-Follow [this](https://docs.snowflake.com/en/sql-reference/sql/create-security-integration.html) guide to know more about how to create a SAML2 security integration.
+```
+ alter security integration '<your security integration name goes here>' set SAML2_SNOWFLAKE_ACS_URL = 'https://<organization_name>-<account name>.snowflakecomputing.com/fed/login';
+```
 
 Note
 
@@ -188,11 +191,11 @@ If you have an existing SSO setup using `saml_identity_provider` account paramet
 
 ### Create Snowflake test user
 
-To enable Microsoft Entra users to sign in to Snowflake, they must be provisioned into Snowflake. In Snowflake, provisioning is a manual task.
+To enable Microsoft Entra users to sign in to Snowflake, they must be provisioned into Snowflake.
 
 **To provision a user account, perform the following steps:**
 
-1. Sign in to Snowflake as a Security Administrator.
+1. Sign in to Snowflake as an Account Administrator.
 2. **Switch Role** to **ACCOUNTADMIN**, by selecting **profile** on the top right side of page.
 
     ![The Snowflake admin](media/snowflake-tutorial/account.png)
