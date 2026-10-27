@@ -1,6 +1,6 @@
 ---
 layout: Conceptual
-title: Configure Global Secure Access cloud firewall with remote networks for internet access - Global Secure Access | Microsoft Learn
+title: Configure cloud firewall for remote networks - Global Secure Access | Microsoft Learn
 canonicalUrl: https://learn.microsoft.com/en-us/entra/global-secure-access/how-to-configure-cloud-firewall
 uhfHeaderId: MSDocsHeader-Entra
 breadcrumb_path: /entra/breadcrumb/toc.json
@@ -33,15 +33,17 @@ monikers: []
 item_type: Content
 source_path: docs/global-secure-access/how-to-configure-cloud-firewall.md
 cmProducts:
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/68e4b2d8-b70c-4019-b49a-d1f8881e2aea
+- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/05a837ba-792f-460a-9e68-3842c0ffd1c0
+- https://authoring-docs-microsoft.poolparty.biz/devrel/e93f3d5f-c77d-4365-a7fb-c9f2234416c7
 spProducts:
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/67b2ba1a-6f74-4044-a48a-f0f8ad076b8f
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/6640a16a-1cc5-458f-8945-86702f70af60
+- https://authoring-docs-microsoft.poolparty.biz/devrel/62e8d07a-cc62-4934-b30b-e168a571e51d
 platformId: c88d0e1c-e2ab-27dc-7fe3-02d38c95fec1
 ---
 
-# Configure Global Secure Access cloud firewall with remote networks for internet access - Global Secure Access | Microsoft Learn
+# Configure cloud firewall for remote networks - Global Secure Access | Microsoft Learn
 
 Global Secure Access cloud firewall protects customers from unauthorized egress access by applying policies on network traffic. Cloud firewall provides centralized management, visibility, and consistent policies for branches.
 
