@@ -32,8 +32,10 @@ item_type: Content
 source_path: docs/agent-id/index.yml
 cmProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
+- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
 spProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
 platformId: c829696b-3a47-5692-522d-1ddcfbc7d237
 ---
 
@@ -76,6 +78,7 @@ Microsoft Entra Agent ID helps you manage, govern, and protect AI agent identiti
 - [ID Governance for agents](../id-governance/agent-id-governance-overview?toc=/entra/agent-id/toc.json&amp;bc=/entra/agent-id/breadcrumb/toc.json)
 - [Access packages for agents](agent-access-packages)
 - [Maintain agent sponsors and lifecycle](/en-us/entra/id-governance/agent-sponsor-tasks?toc=/entra/agent-id/toc.json&amp;bc=/entra/agent-id/breadcrumb/toc.json)
+- [Default agent inactivity policy](/en-us/entra/id-governance/agent-default-inactivity-policy?toc=/entra/agent-id/toc.json&amp;bc=/entra/agent-id/breadcrumb/toc.json)
 
 ### Protect agent access to resources
 

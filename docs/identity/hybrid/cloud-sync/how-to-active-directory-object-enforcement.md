@@ -33,12 +33,12 @@ item_type: Content
 source_path: docs/identity/hybrid/cloud-sync/how-to-active-directory-object-enforcement.md
 cmProducts:
 - https://authoring-docs-microsoft.poolparty.biz/devrel/b1cfdec6-b0c3-4209-818c-736879856e0e
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/37da4cc9-0cfc-42a9-ba5e-805706b01ef8
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
 spProducts:
 - https://authoring-docs-microsoft.poolparty.biz/devrel/2d0723c1-cf38-4c30-ab3d-5df787b33270
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/3661fb96-d414-4a4e-b7ad-9370637790dd
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
 platformId: ae9c555c-4bb9-6b85-d2e6-74511cf971cc
 ---
 
@@ -55,19 +55,20 @@ Make sure the following prerequisites are already in place before you start the 
 | Prerequisite | Details |
 | --- | --- |
 | Microsoft Entra license | A Microsoft Entra tenant with the licenses required for provisioning users and groups to AD. See [License requirements](overview-provision-entra-id-to-active-directory#license-requirements). |
-| AD role | Domain Admin, to run the PowerShell script that installs the policy and to manage the policy object. Use this privilege only while installing or changing the policy. Remove or deactivate the privileged access when you're finished, following your organization's just-in-time privileged-access process. |
-| Supported domain controller OS on every writable DC | Windows Server 2022 or Windows Server 2025. Because enforcement must be enabled on every writable domain controller, confirm that all of them can run a supported OS. If any writable domain controller can't be brought to a supported OS, it can't participate, and enforcement can't be configured for the domain. |
+| AD role | Domain Admin, to run the PowerShell commands that create and maintain the policy object. Use this privilege only while installing or changing the policy. Remove or deactivate the privileged access when you're finished, following your organization's just-in-time privileged-access process. |
+| Supported domain controller OS and update level on every writable DC | All writable domain controllers must be updated before you enable enforcement: **Windows Server 2022** requires October 13, 2026 — **KB5126655** (**OS Build 20348.5761**) or later; **Windows Server 2025** requires October 13, 2026 — **KB5126646** (**OS Build 26100.33650**) or later. |
 | Provisioning agent host | A domain-joined server that meets the [Cloud Sync agent requirements](how-to-prerequisites#cloud-provisioning-agent-requirements). We recommend Windows Server 2025 or Windows Server 2022. The agent doesn't have to run on a domain controller. |
+| ADSyncTools PowerShell module | Install and import **ADSyncTools** version **2.6.0** or later on the machine where you run the policy cmdlets. |
 | No domain functional level requirement | Enforcement doesn't require raising the domain or forest functional level. It's an operational requirement to enable every writable domain controller, not a functional-level setting. |
 | Schema | Uses the existing `msDS-ObjectSoa` attribute, present since the Windows Server 2016 schema. No schema extension is required. |
-| Domain controller inventory | An inventory of all writable domain controllers in the domain. To enumerate them, run `Get-ADDomainController -Filter * | Where-Object { -not $_.IsReadOnly }` or see [View the list of domain controllers](/en-us/powershell/module/activedirectory/get-addomaincontroller). |
+| Domain controller inventory | Maintain an inventory of all writable domain controllers in the domain. For guidance, see [View the list of domain controllers](/en-us/powershell/module/activedirectory/get-addomaincontroller). |
 | Provisioning to AD configured | A Microsoft Entra ID to AD configuration that provisions the users or groups you want to enforce. See [Tutorial: Govern access to an on-premises app from Microsoft Entra ID](tutorial-users-groups-provisioning-walkthrough). |
 
+Warning
+
+If any writable domain controller can't be brought to a supported OS and update level, it can't participate, and enforcement can't be configured for the domain.
+
 For the full list of provisioning agent prerequisites, see [Prerequisites for provisioning from Microsoft Entra ID to Active Directory](how-to-prerequisites-provision-entra-to-active-directory).
-
-Important
-
-AD user and group enforcement is in **PREVIEW**. The preview spans two parts that you configure together: the **Active Directory enforcement engine** on your domain controllers and the **Microsoft Entra Cloud Sync** configuration that marks users and groups for enforcement. See the [Supplemental Terms of Use for Microsoft Azure Previews](https://azure.microsoft.com/support/legal/preview-supplemental-terms/) for legal terms that apply to Azure features in preview.
 
 ## How AD object enforcement works
 
@@ -80,58 +81,130 @@ Two pieces work together:
 
 | Mode | Behavior |
 | --- | --- |
-| **Enforced** | Only SIDs allowed by the policy can change enforced users and groups. The policy blocks LDAP modify and modify DN operations and restores from the Recycle Bin. The policy still permits LDAP Add operations, even when the add contains the `msDS-ObjectSoa` attribute. Delete operations are permitted during public preview. |
+| **Enforced** | Only SIDs allowed by the policy can change enforced users and groups. The policy blocks LDAP modify and modify DN operations, restores from the Recycle Bin, and blocks delete operations. The policy still permits LDAP Add operations, even when the add contains the `msDS-ObjectSoa` attribute. |
 | **Audit** | Changes are allowed per your existing AD role-based access control (RBAC). The policy writes an event to the **Directory Service** log when an unauthorized identity changes an enforced object. Use Audit mode to discover out-of-band changes before you switch to Enforced. To see the events, enable Security Diagnostics logging (see View enforcement events in the event log). |
 
 AD object enforcement is **additive** to your existing AD RBAC model. It places an additional restriction on top of your current access control without granting any additional access.
 
 Warning
 
-**Enforcement applies only to users and groups you mark, and protection for a marked object is complete only when every writable domain controller is enabled.** Enforcement isn't a single domain-wide switch: it takes effect only for objects that have the `msDS-ObjectSoa` attribute set. For each marked object, the policy is honored only on domain controllers that run a supported operating system, have the update installed, and have the feature enabled. If even one writable domain controller isn't enabled, an unauthorized change directed at that domain controller succeeds and bypasses the control for that object. Plan to update and enable **all** writable domain controllers before you rely on enforcement.
+**Enforcement applies only to users and groups you mark, and protection for a marked object is complete only when every writable domain controller is enabled.** Enforcement isn't a single domain-wide switch: it takes effect only for objects that have the `msDS-ObjectSoa` attribute set. For each marked object, the policy is honored only on domain controllers that run a supported operating system and update level with enforcement enabled. If even one writable domain controller isn't enabled, an unauthorized change directed at that domain controller succeeds and bypasses the control for that object. Enable enforcement on **all** writable domain controllers before you rely on it. On each writable domain controller, installing the required cumulative update level and rebooting is the required action to enable enforcement.
 
 ## Plan your rollout
 
 The high-level configuration is:
 
-1. Install the update and enable the feature on every writable domain controller.
-2. Install the policy in Enforced or Audit mode.
+1. Install the required cumulative update level on every writable domain controller, reboot, and verify enforcement is enabled.
+2. Install ADSyncTools v2.6 or later, then create or update the policy in Enforced or Audit mode.
 3. Mark the users and groups you want to protect.
 
 ## Update and enable every writable domain controller
 
-Bring the enforcement engine online across the domain. Repeat the update and enablement on **every writable domain controller.**
+Bring the enforcement engine online across the domain. Repeat on **every writable domain controller**.
 
-On each writable domain controller, install the latest cumulative Windows Server update, then deploy the matching Group Policy (KIR) package to turn the feature on. The minimum version of `C:\Windows\System32\ntdsai.dll` is **10.0.20348.5257** for Windows Server 2022 and **10.0.26100.32995** for Windows Server 2025. To verify the installed version, run `(Get-Item C:\Windows\System32\ntdsai.dll).VersionInfo.FileVersion` on the domain controller.
+1. Enumerate writable domain controllers in the domain:
 
-1. On every writable domain controller, install the latest cumulative Windows Server update.
-2. Restart the domain controller if the update prompts you to.
-3. Enable the feature on all writable domain controllers by deploying the matching Group Policy package, which uses a Known Issue Rollback (KIR) enablement model. For step-by-step guidance on enabling the feature across all writable domain controllers, see [Use Group Policy to deploy a Known Issue Rollback](/en-us/troubleshoot/windows-client/group-policy/use-group-policy-to-deploy-known-issue-rollback). Download the matching package:
+    ```powershell
+    Get-ADDomainController -Filter * | Where-Object { -not $_.IsReadOnly }
+    ```
+2. Install the latest cumulative Windows Server update on each writable domain controller.
+3. Restart each domain controller if prompted.
+4. Verify update level:
 
-    - Windows Server 2022: [Group Policy package for Windows Server 2022](https://aka.ms/ADEnforcementGPMSI2022)
-    - Windows Server 2025: [Group Policy package for Windows Server 2025](https://aka.ms/ADEnforcementGPMSI2025)
-4. Restart each domain controller after enablement.
+    - Windows Server 2022: **KB5126655 / OS Build 20348.5761** or later
+    - Windows Server 2025: **KB5126646 / OS Build 26100.33650** or later
+5. Verify the enforcement binary version:
+
+    ```powershell
+    (Get-Item C:\Windows\System32\ntdsai.dll).VersionInfo.FileVersion
+    ```
+
+    Expected version (or later):
+
+    - Windows Server 2022: `10.0.20348.5139 (WinBuild.160101.0800)`
+    - Windows Server 2025: `10.0.26100.33648 (WinBuild.160101.0800)`
 
 After the primary domain controller emulator (PDCe) is updated and enabled, it automatically creates the `SOA-Policies` container under `CN=System,DC=<your domain>`, which then replicates to all domain controllers. Confirm that the container exists (substitute your actual domain name). It can take a few minutes to appear and replicate.
 
 ## Install the policy in Enforced or Audit mode
 
-The `Set-CloudSyncSOAPolicy.ps1` script creates the `Cloud` policy object inside the `SOA-Policies` container and adds the provisioning agent's group managed service account (GMSA) SID to the policy's allow list. If the `SOA-Policies` container doesn't exist yet, the script creates it.
+Use ADSyncTools cmdlets to create or update the `Cloud` policy object inside the `SOA-Policies` container and add the provisioning agent's group managed service account (GMSA) SID to the policy allow list.
 
-The script reads the agent's GMSA from the locally installed provisioning agent service. **Run it on the machine where the Cloud Sync provisioning agent is installed.**
+### Install and import ADSyncTools (minimum version 2.6.0)
 
-1. Install the Microsoft Entra Cloud Sync provisioning agent. For installation instructions, see [Install the Microsoft Entra Cloud Sync provisioning agent](how-to-install).
-2. Sign in to the machine where the provisioning agent is installed.
-3. Download the [`Set-CloudSyncSOAPolicy.ps1`](https://github.com/AzureAD/EntraIDGovernance/blob/main/Set-CloudSyncSOAPolicy.ps1) PowerShell script from the AzureAD/EntraIDGovernance repository on GitHub.
-4. Open PowerShell as an administrator.
-5. Change directory to the folder that contains the script.
-6. Run the script. Specify `Enforced` as the mode (use `Audit` for a "what-if" rollout):
+```powershell
+Install-Module ADSyncTools -MinimumVersion 2.6.0 -Scope CurrentUser
+Import-Module ADSyncTools -MinimumVersion 2.6.0 -Force
+```
+
+To confirm that the policy cmdlets are available:
+
+```powershell
+Get-Command -Module ADSyncTools -Name *CloudSyncSOAPolicy*
+```
+
+Expected output:
+
+```text
+CommandType     Name                                               Version    Source
+-----------     ----                                               -------    ------
+Function        Add-ADSyncToolsCloudSyncSOAPolicyAccount           2.6.0      ADSyncTools
+Function        Get-ADSyncToolsCloudSyncSOAPolicy                  2.6.0      ADSyncTools
+Function        Remove-ADSyncToolsCloudSyncSOAPolicyAccount        2.6.0      ADSyncTools
+Function        Set-ADSyncToolsCloudSyncSOAPolicy                  2.6.0      ADSyncTools
+Function        Test-ADSyncToolsCloudSyncSOAPolicy                 2.6.0      ADSyncTools
+```
+
+### Configure the policy
+
+Before you configure the policy, identify the Cloud Sync provisioning service gMSA account.
+
+1. If you configure the policy on a machine that doesn't have the Cloud Sync agent, pass the gMSA explicitly with `-CloudSyncGmsa` by following these steps.
+2. On the server where the Cloud Sync provisioning agent is installed, run: 
 
     ```powershell
-    .\Set-CloudSyncSOAPolicy.ps1 -EnforcementMode Enforced -Credential (Get-Credential -Message "Enter Domain Admin credentials (format: DOMAIN\Username)")
+    Get-CimInstance Win32_Service -Filter "Name='AADConnectProvisioningAgent'" |
+      Select-Object Name, StartName, State
     ```
-7. Confirm that the `Cloud` policy is configured with the keyword **Enforced** (or **Audit**). Allow time for the new object to replicate across the domain.
+3. Note the `StartName` value (for example, `CONTOSO\provAgentgMSA$`). This is the gMSA account whose SID must be present in the `Cloud` SOA policy.
 
-    [![Screenshot of ADSI Edit showing the CN=Cloud policy object under the CN=SOA-Policies container.](media/how-to-ad-group-enforcement/soa-policies-container.png)](media/how-to-ad-group-enforcement/soa-policies-container.png#lightbox)
+The cmdlets can use the current signed-in account (if it has the required rights), or an explicit Domain Admin credential.
+
+If you plan to use `-Credential`, capture it once and reuse `$cred` in the examples that follow:
+
+```powershell
+$cred = Get-Credential -Message "Enter Domain Admin credentials (format: DOMAIN\Username)"
+```
+
+- Without `-Credential` when running from a server with Cloud Sync installed (uses current logged-on credentials):
+
+    ```powershell
+    Set-ADSyncToolsCloudSyncSOAPolicy -EnforcementMode Enforced
+    ```
+- With explicit credentials when running from a server with Cloud Sync installed:
+
+    ```powershell
+    Set-ADSyncToolsCloudSyncSOAPolicy -EnforcementMode Enforced -Credential $cred
+    ```
+- With explicit gMSA (for example, when running from a DC without Cloud Sync agent installed):
+
+    ```powershell
+    Set-ADSyncToolsCloudSyncSOAPolicy -EnforcementMode Enforced -Credential $cred -CloudSyncGmsa "CONTOSO\provAgentgMSA$"
+    ```
+
+To switch to Audit mode:
+
+```powershell
+Set-ADSyncToolsCloudSyncSOAPolicy -EnforcementMode Audit -Credential $cred
+```
+
+Confirm policy state via PowerShell or ADSI Edit:
+
+```powershell
+Get-ADSyncToolsCloudSyncSOAPolicy
+```
+
+[![Screenshot of ADSI Edit showing the CN=Cloud policy object under the CN=SOA-Policies container.](media/how-to-ad-group-enforcement/soa-policies-container.png)](media/how-to-ad-group-enforcement/soa-policies-container.png#lightbox)
 
 ## Mark users and groups for enforcement
 
@@ -163,14 +236,41 @@ To confirm or configure the mapping:
 
 For details on user attribute mappings, see [Configure provisioning to Active Directory](how-to-configure-entra-to-active-directory#user-attribute-mappings).
 
-## Verify the enforcement attribute
+## Verify or set the `msDS-ObjectSoa` attribute
 
-Use ADSI Edit on a domain controller to confirm that the policy applies to each on-premises user or group that you marked:
+You can verify with Active Directory Users and Computers (ADUC) console or PowerShell.
 
-1. Open **ADSI Edit**.
+### Use ADUC on a domain controller to confirm that the policy applies to each on-premises user or group that you marked:
+
+1. Open **Active Directory Users and Computers**.
 2. Select **View** &gt; **Advanced Features**.
 3. Navigate to the user or group, then open **Properties**.
-4. Confirm that the `msDS-ObjectSoa` property is set to `Cloud`.
+4. Go to **Attribute Editor** tab
+5. Confirm that the `msDS-ObjectSoa` property is set to `Cloud`.
+
+### Get current value using PowerShell
+
+```powershell
+# Group
+Get-ADGroup -Identity "CN=HR-Admins,OU=Groups,DC=contoso,DC=com" -Properties msDS-ObjectSoa |
+  Select-Object Name,'msDS-ObjectSoa'
+
+# User
+Get-ADUser -Identity "CN=Adele Vance,OU=Users,DC=contoso,DC=com" -Properties msDS-ObjectSoa |
+  Select-Object Name,'msDS-ObjectSoa'
+```
+
+### Set or clear value using PowerShell
+
+```powershell
+# Set to Cloud
+Set-ADGroup -Identity "CN=HR-Admins,OU=Groups,DC=contoso,DC=com" -Replace @{ 'msDS-ObjectSoa' = 'Cloud' }
+Set-ADUser  -Identity "CN=Adele Vance,OU=Users,DC=contoso,DC=com" -Replace @{ 'msDS-ObjectSoa' = 'Cloud' }
+
+# Clear the attribute
+Set-ADGroup -Identity "CN=HR-Admins,OU=Groups,DC=contoso,DC=com" -Clear msDS-ObjectSoa
+Set-ADUser  -Identity "CN=Adele Vance,OU=Users,DC=contoso,DC=com" -Clear msDS-ObjectSoa
+```
 
 The following screenshot shows the attribute set on a group:
 
@@ -184,22 +284,29 @@ In **Audit** mode, the same change is allowed and an event is written to the **D
 
 ## Switch between Enforced and Audit modes
 
-To change the mode, run `Set-CloudSyncSOAPolicy.ps1` again with the new value for `-EnforcementMode`:
+To change the mode, run the policy cmdlet again with the new `-EnforcementMode` value:
 
 ```powershell
-.\Set-CloudSyncSOAPolicy.ps1 -EnforcementMode Audit -Credential (Get-Credential -Message "Enter Domain Admin credentials (format: DOMAIN\Username)")
+Set-ADSyncToolsCloudSyncSOAPolicy -EnforcementMode Audit -Credential $cred
 ```
 
 ## Break-glass accounts
 
-You can authorize additional identities to change enforced users and groups on-premises, for example an emergency administrator account to use when cloud provisioning is unavailable. You do this by adding the account's SID to the policy.
+You can authorize additional identities to change enforced users and groups on-premises, for example an emergency administrator account to use when cloud provisioning is unavailable. You do this by adding the account SID to the policy.
 
-1. Open **ADSI Edit**.
-2. Navigate to **CN=SOA-Policies** &gt; **CN=Cloud**.
-3. Open the **Attribute Editor**.
-4. Edit the `msDS-Settings` attribute and add the SID of the break-glass account.
+```powershell
+Add-ADSyncToolsCloudSyncSOAPolicyAccount -Account "CONTOSO\breakglass-admin" -Credential $cred
+```
 
-    [![Screenshot of ADSI Edit showing the msDS-Settings attribute under CN=SOA-Policies being edited in the Multi-valued String Editor with a SID value.](media/how-to-ad-group-enforcement/add-break-glass-sid.png)](media/how-to-ad-group-enforcement/add-break-glass-sid.png#lightbox)
+To remove an account from the policy:
+
+```powershell
+Remove-ADSyncToolsCloudSyncSOAPolicyAccount -Account "CONTOSO\breakglass-admin" -Credential $cred
+```
+
+Important
+
+If a group is marked with `msDS-ObjectSoa=Cloud`, standard on-premises admin writes to that group are blocked in Enforced mode. That includes attempts to clear the object's `msDS-ObjectSoa`. Keep at least one break-glass account in the policy so you retain a recovery path to manage or unprotect the object when required.
 
 Keep the following limits and behaviors in mind:
 
@@ -218,22 +325,30 @@ With Security Diagnostics at the default value of `0`, only policy-load events a
 
 ## Troubleshoot the enforcement policy
 
-If AD object enforcement doesn't behave as expected (for example, on-premises changes that should be blocked are still processed), use the `Check-CloudSyncSOAPolicy.ps1` script to confirm that enforcement is enabled on a domain controller.
+If AD object enforcement doesn't behave as expected (for example, on-premises changes that should be blocked are still processed), use `Test-ADSyncToolsCloudSyncSOAPolicy` to validate policy state and domain controller diagnostics.
 
-1. Download the [`Check-CloudSyncSOAPolicy.ps1`](https://github.com/AzureAD/EntraIDGovernance/blob/main/Check-CloudSyncSOAPolicy.ps1) script from the AzureAD/EntraIDGovernance repository on GitHub.
-2. Sign in to the domain controller you want to validate.
-3. Open PowerShell as an administrator.
-4. Change directory to the folder that contains the script.
-5. Run the script. It reports whether the AD object enforcement policy is enabled on that domain controller.
+1. Sign in to the domain controller you want to validate.
+2. Open PowerShell as an administrator.
+3. Import ADSyncTools, then run the check cmdlet:
+
+    ```powershell
+    Import-Module ADSyncTools -MinimumVersion 2.6.0 -Force
+    Test-ADSyncToolsCloudSyncSOAPolicy
+    ```
+4. If you run the check from a machine without the Cloud Sync agent service, provide the Cloud Sync gMSA explicitly:
+
+    ```powershell
+    Test-ADSyncToolsCloudSyncSOAPolicy -Credential $cred -CloudSyncGmsa "CONTOSO\provAgentgMSA$"
+    ```
 
 If a change that should be blocked still succeeds, check the following:
 
-- The change was written to a domain controller that **isn't** updated and enabled. Confirm that **every writable domain controller** has the update and the Group Policy package, and was restarted afterward. To find which domain controller a client uses, run `nltest /dsgetdc:<your domain>`.
+- The change was written to a domain controller that **isn't** updated and enabled. Confirm that **every writable domain controller** has the required update level and was restarted afterward. To find which domain controller a client uses, run `nltest /dsgetdc:<your domain>`.
 - The policy is in **Audit** mode rather than **Enforced**.
 - The `SOA-Policies` container exists under `CN=System,DC=<your domain>`.
 - The `msDS-ObjectSoa` attribute is set on the target user or group. If it isn't, confirm the applicable user or group attribute mapping and run a provisioning cycle.
 
-If an authorized change is unexpectedly blocked, confirm that the acting account's SID is present in the policy's `msDS-Settings` attribute and that the change replicated to the domain controller processing the write.
+If an authorized change is unexpectedly blocked, confirm that the acting account SID is present in the policy's `msDS-Settings` attribute and that the change replicated to the domain controller processing the write.
 
 ## Test the policy
 
@@ -245,10 +360,9 @@ Use these example test cases to validate the configuration:
 - Add a SID to the policy as a break-glass account and make an update with that account. The change should succeed.
 - Attempt the same unauthorized change against each writable domain controller to confirm enforcement is consistent across the domain.
 
-## Known behavior and limitations in this preview
+## Known behavior and limitations
 
 - Converting the source of authority of a user or group in Microsoft Entra doesn't automatically lock down the object in AD. Complete the steps in this article to mark the object as enforced through provisioning to AD.
-- Enforcement doesn't prevent deletions.
 - Enforcement protects each marked object's attributes and, for groups, membership. Nesting an enforced group into an unenforced group isn't restricted.
-- Existing limitations of user and group provisioning to AD continue to apply during this preview.
+- Existing limitations of user and group provisioning to AD still apply.
 - Enforcement is only in effect on domain controllers where it's enabled. Enable the feature on every writable domain controller; otherwise a change written to a domain controller that isn't enabled is processed.

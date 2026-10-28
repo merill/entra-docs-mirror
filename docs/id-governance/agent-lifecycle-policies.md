@@ -32,19 +32,19 @@ monikers: []
 item_type: Content
 source_path: docs/id-governance/agent-lifecycle-policies.md
 cmProducts:
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ac4b7417-d4c2-43d4-94bf-f22fa1416b34
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/302444b9-4a43-4841-8014-3d9e4251ff15
 spProducts:
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/68876bab-7da4-4e70-b295-395b3a255a1f
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/bebd8809-dac1-4c22-83e2-66d98af8a94d
 platformId: 3b69e8e8-bbe9-f3fc-3712-354bec72bc04
 ---
 
 # Entra Agent ID lifecycle policies - Microsoft Entra ID Governance | Microsoft Learn
 
-AI agent adoption is accelerating, resulting in a growing number of agent identities with access to critical resources. Without clear lifecycle controls, these identities can persist beyond their usefulness and introduce security risk. Keeping agent identities around when they are no longer needed can lead to security incidents, as forgotten identities can become easy targets for attackers, while agent identities without clear accountability may continue to retain access indefinitely. As organizations deploy more AI agents, these risks become amplified. Security and identity administrators therefore need automated lifecycle management to avoid agent proliferation to manage unmonitored, inactive and orphaned agent identities
+AI agent adoption is accelerating, resulting in a growing number of agent identities with access to critical resources. Without clear lifecycle controls, these identities can persist beyond their usefulness and introduce security risk. Keeping agent identities around when they are no longer needed can lead to security incidents, as forgotten identities can become easy targets for attackers, while agent identities without clear accountability may continue to retain access indefinitely. As organizations deploy more AI agents, these risks become amplified. Security and identity administrators therefore need automated lifecycle management to avoid agent proliferation to manage unmonitored, inactive and orphaned agent identities.
 
 Important
 
@@ -73,7 +73,7 @@ One of the following roles:
 Create a policy to define which agent identities should be evaluated and what happens when an agent identity doesn't meet an enabled rule.
 
 1. Sign in to the [Microsoft Entra admin center](https://entra.microsoft.com) as at least a [Lifecycle Workflows Administrator](../identity/role-based-access-control/permissions-reference#lifecycle-workflows-administrator) or [AI Administrator](../identity/role-based-access-control/permissions-reference#ai-administrator).
-2. Browse to **ID Governance** &gt; **Lifecycle Workflows** &gt; **Lifecycle Policies** &gt; **Agent IDs**.
+2. Browse to **ID Governance** &gt; **Lifecycle Workflows** &gt; **Lifecycle Policies** &gt; **Agent ID (Preview)**.
 3. Select **New policy**.
 4. Enter a unique policy name and description.
 5. Enable the lifecycle policy.
