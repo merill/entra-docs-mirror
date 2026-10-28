@@ -32,9 +32,11 @@ item_type: Content
 source_path: docs/identity/saas-apps/snowflake-provisioning-tutorial.md
 cmProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
+- https://authoring-docs-microsoft.poolparty.biz/devrel/b1cfdec6-b0c3-4209-818c-736879856e0e
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
 spProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
+- https://authoring-docs-microsoft.poolparty.biz/devrel/2d0723c1-cf38-4c30-ab3d-5df787b33270
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
 platformId: bedcb7b0-8b48-a764-e64e-ebf1cd2e7a8f
 ---
@@ -69,9 +71,10 @@ The scenario outlined in this article assumes that you already have the followin
 
 ## Step 2: Configure Snowflake to support provisioning with Microsoft Entra ID
 
-Before you configure Snowflake for automatic user provisioning with Microsoft Entra ID, you need to enable System for Cross-domain Identity Management (SCIM) provisioning on Snowflake.
+Before you configure Snowflake for automatic user provisioning with Microsoft Entra ID, you need to enable System for Cross-domain Identity Management (SCIM) provisioning on Snowflake. For more information, see [CREATE SECURITY INTEGRATION (SCIM)](https://docs.snowflake.com/en/sql-reference/sql/create-security-integration-scim).
 
-1. Sign in to Snowflake as an administrator and execute the following from either the Snowflake worksheet interface or SnowSQL.
+1. Sign in to Snowflake as an account administrator.
+2. Execute the following from either the Snowflake worksheet interface or SnowSQL.
 
     ```
     use role accountadmin;
@@ -79,23 +82,26 @@ Before you configure Snowflake for automatic user provisioning with Microsoft En
      create role if not exists aad_provisioner;
      grant create user on account to role aad_provisioner;
      grant create role on account to role aad_provisioner;
-    grant role aad_provisioner to role accountadmin;
+     grant role aad_provisioner to role accountadmin;
      create or replace security integration aad_provisioning
          type = scim
          scim_client = 'azure'
          run_as_role = 'AAD_PROVISIONER';
      select system$generate_scim_access_token('AAD_PROVISIONING');
     ```
-2. Use the ACCOUNTADMIN role.
 
-    ![Screenshot of a worksheet in the Snowflake UI with the SCIM access token called out.](media/snowflake-provisioning-tutorial/step-2.png)
-3. Create the custom role AAD\_PROVISIONER. All users and roles in Snowflake created by Microsoft Entra ID is owned by the scoped down AAD\_PROVISIONER role.
+    This script performs the following tasks:
 
-    ![Screenshot showing the custom role.](media/snowflake-provisioning-tutorial/step-3.png)
-4. Let the ACCOUNTADMIN role create the security integration using the AAD\_PROVISIONER custom role.
+    - Uses the `ACCOUNTADMIN` role.
 
-    ![Screenshot showing the security integrations.](media/snowflake-provisioning-tutorial/step-4.png)
-5. Create and copy the authorization token to the clipboard and store securely for later use. Use this token for each SCIM REST API request and place it in the request header. The access token expires after six months and a new access token can be generated with this statement.
+        ![Screenshot of a worksheet in the Snowflake UI with the SCIM access token called out.](media/snowflake-provisioning-tutorial/step-2.png)
+    - Creates the custom role `AAD_PROVISIONER`. The users in Snowflake created by Microsoft Entra ID are owned by the scoped down `AAD_PROVISIONER` role.
+
+        ![Screenshot showing the custom role.](media/snowflake-provisioning-tutorial/step-3.png)
+    - Let the `ACCOUNTADMIN` role create the security integration that uses the `AAD_PROVISIONER` custom role. The value `AAD_PROVISIONER` is case-sensitive and must always be capitalized.
+
+        ![Screenshot showing the security integrations.](media/snowflake-provisioning-tutorial/step-4.png)
+3. Create and copy the authorization token to the clipboard and store securely for later use. The access token expires after six months and a new access token can be generated with this statement. For more information, see [SYSTEM$GENERATE_SCIM_ACCESS_TOKEN](https://docs.snowflake.com/en/sql-reference/functions/system_generate_scim_access_token).
 
     ![Screenshot showing the token generation.](media/snowflake-provisioning-tutorial/step-5.png)
 
@@ -192,7 +198,7 @@ Once you configure provisioning, use the following resources to monitor your dep
 
 ## Connector limitations
 
-Snowflake-generated SCIM tokens expire in 6 months. Be aware that you need to refresh these tokens before they expire, to allow the provisioning syncs to continue working.
+Snowflake-generated SCIM tokens expire in 6 months. Be aware that you need to refresh these tokens before they expire, to allow the provisioning syncs to continue working. For more information, see [SYSTEM$GENERATE_SCIM_ACCESS_TOKEN](https://docs.snowflake.com/en/sql-reference/functions/system_generate_scim_access_token).
 
 ## Just-in-time (JIT) application access with PIM for Groups
 

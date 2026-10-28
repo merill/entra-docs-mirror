@@ -14,7 +14,8 @@ ms.subservice: saas-apps
 manager: pmwongera
 description: Learn how to automatically provision and deprovision user accounts from Microsoft Entra ID to Puzzel.
 ms.topic: how-to
-ms.date: 2026-08-10T00:00:00.0000000Z
+ms.date: 2026-10-22T00:00:00.0000000Z
+ai-usage: ai-assisted
 locale: en-us
 document_id: 2fa4656f-f449-17b2-5462-28a0547ff796
 document_version_independent_id: 2fa4656f-f449-17b2-5462-28a0547ff796
@@ -31,9 +32,11 @@ monikers: []
 item_type: Content
 source_path: docs/identity/saas-apps/puzzel-provisioning-tutorial.md
 cmProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/b1cfdec6-b0c3-4209-818c-736879856e0e
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
 spProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/2d0723c1-cf38-4c30-ab3d-5df787b33270
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
 platformId: 3f1fc437-1ac8-f1a6-eb09-771b18a0ef55
@@ -42,6 +45,16 @@ platformId: 3f1fc437-1ac8-f1a6-eb09-771b18a0ef55
 # Configure Puzzel for automatic user provisioning with Microsoft Entra ID - Microsoft Entra ID | Microsoft Learn
 
 This article describes the steps you need to perform in both Puzzel and Microsoft Entra ID to configure automatic user provisioning. When configured, Microsoft Entra ID automatically provisions and deprovisions users to [Puzzel](https://www.puzzel.com/) using the Microsoft Entra provisioning service. For important details on what this service does, how it works, and frequently asked questions, see [Automate user provisioning and deprovisioning to SaaS applications with Microsoft Entra ID](../app-provisioning/user-provisioning).
+
+Important
+
+To improve the security posture of application provisioning, Microsoft is retiring the **OAuth 2.0 Authorization Code Grant** for this application.
+
+**Migrate** affected provisioning jobs to **OAuth 2.0 Client Credentials Grant by March 31, 2027**, to avoid disruption to provisioning. After this date, provisioning jobs that continue to use Authorization Code Grant might stop working and could eventually be removed from the service.
+
+**This change doesn't affect SSO.** Existing provisioned users can continue signing in, but new users won't be provisioned and changes to existing users and groups won't be synchronized while provisioning isn't functioning.
+
+Follow [Configure Puzzel for automatic user provisioning with Microsoft Entra ID](puzzel-provisioning-tutorial#configure-automatic-user-provisioning-for-puzzel-in-microsoft-entra-id) in this article to migrate to OAuth 2.0 Client Credentials Grant.
 
 ## Supported capabilities
 
