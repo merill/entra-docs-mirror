@@ -1,6 +1,6 @@
 ---
 layout: Conceptual
-title: Microsoft Entra AD object enforcement (Preview) - Microsoft Entra ID | Microsoft Learn
+title: Microsoft Entra AD object enforcement - Microsoft Entra ID | Microsoft Learn
 canonicalUrl: https://learn.microsoft.com/en-us/entra/identity/hybrid/cloud-sync/how-to-active-directory-object-enforcement
 uhfHeaderId: MSDocsHeader-Entra
 breadcrumb_path: /entra/breadcrumb/toc.json
@@ -14,7 +14,7 @@ description: Configure the AD enforcement preview so that synced Active Director
 ms.subservice: hybrid-cloud-sync
 ms.topic: how-to
 ms.custom: msecd-doc-authoring-1023
-ms.date: 2026-08-11T00:00:00.0000000Z
+ms.date: 2026-10-29T00:00:00.0000000Z
 ai-usage: ai-assisted
 locale: en-us
 document_id: 5bdb42f3-a379-6c8a-59e2-40a69350a5ad
@@ -42,7 +42,7 @@ spProducts:
 platformId: ae9c555c-4bb9-6b85-d2e6-74511cf971cc
 ---
 
-# Microsoft Entra AD object enforcement (Preview) - Microsoft Entra ID | Microsoft Learn
+# Microsoft Entra AD object enforcement - Microsoft Entra ID | Microsoft Learn
 
 Microsoft Entra Cloud Sync can provision cloud users and groups to on-premises Active Directory (AD). AD object enforcement lets you protect specific provisioned users and groups so that modifications can only be performed through the Microsoft Entra provisioning service. This article explains how to enable the enforcement engine, configure its shared policy, and mark users and groups for enforcement.
 

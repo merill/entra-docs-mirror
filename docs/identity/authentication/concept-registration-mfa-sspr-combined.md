@@ -13,8 +13,9 @@ ms.subservice: authentication
 manager: dougeby
 description: Learn about the combined registration experience for Microsoft Entra ID to let users register for both Microsoft Entra multifactor authentication and self-service password reset
 ms.topic: concept-article
-ms.date: 2025-03-04T00:00:00.0000000Z
+ms.date: 2026-09-11T00:00:00.0000000Z
 ms.reviewer: tilarso
+ai-usage: ai-assisted
 ms.custom: sfi-image-nochange
 locale: en-us
 document_id: 91ad4424-8d90-7947-2f95-aec67acfec45
@@ -34,11 +35,11 @@ source_path: docs/identity/authentication/concept-registration-mfa-sspr-combined
 cmProducts:
 - https://authoring-docs-microsoft.poolparty.biz/devrel/5686b492-7c45-4088-8291-ecc0458747d3
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/c6f99e62-1cf6-4b71-af9b-649b05f80cce
+- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
 spProducts:
 - https://authoring-docs-microsoft.poolparty.biz/devrel/838f4f15-80c1-4d49-b873-501fe4ed2d28
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/3f56b378-07a9-4fa1-afe8-9889fdc77628
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
 platformId: fb0a569d-0e04-58b2-1cf2-46753344d782
 ---
 
@@ -161,9 +162,13 @@ You can make changes at either the tenant level or the user level:
 
 ## Key usage scenarios
 
-### Change a password in MySignIns
+### Change a password in My Sign-Ins
 
-A user navigates to [Security info](https://aka.ms/mysecurityinfo). After signing in, the user can change their password. If the user authenticates with a password and a multifactor authentication method, they're able to use the enhanced user experience to change their password without entering their existing password. When finished, the user has the new password updated on the Security info page. Authentication methods such as Temporary Access Pass (TAP) aren't supported for password change unless the user knows their existing password.
+A user navigates to [Security info](https://aka.ms/mysecurityinfo). After signing in, the user can change their password. If the user authenticates with a password and a multifactor authentication method, they can change their password without entering their existing password.
+
+An organization can also allow users to change their cloud password after they sign in with Microsoft Entra certificate-based authentication (CBA), a passkey (FIDO2), or a Microsoft Authenticator passwordless phone sign-in notification. Users don't need to know or enter their current password, and they don't need to be registered for SSPR. For administrator configuration, user steps, and limitations, see [Allow password change after secure sign-in.](https://review.learn.microsoft.com/en-us/entra/identity/authentication/concept-sspr-howitworks?branch=pr-en-us-14357&amp;tabs=secure-sign-in#tab/secure-sign-in)
+
+Authentication methods such as Temporary Access Pass (TAP) aren't supported for password change unless the user knows their existing password.
 
 Note
 

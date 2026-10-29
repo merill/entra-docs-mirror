@@ -32,13 +32,9 @@ monikers: []
 item_type: Content
 source_path: docs/global-secure-access/how-to-cisco-vpn-coexistence.md
 cmProducts:
-- https://authoring-docs-microsoft.poolparty.biz/devrel/bad69977-db6a-44f3-b752-d2bee7de49ca
-- https://authoring-docs-microsoft.poolparty.biz/devrel/440fefb2-823b-44b8-a593-35604cde23b7
-- https://authoring-docs-microsoft.poolparty.biz/devrel/9f747546-6aa0-47b1-90d7-ee9646fdb207
+- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
 spProducts:
-- https://authoring-docs-microsoft.poolparty.biz/devrel/b31d7aff-61be-45e2-a324-a578cf0c3360
-- https://authoring-docs-microsoft.poolparty.biz/devrel/1b2df129-9f07-41b8-9038-0761a41d8a21
-- https://authoring-docs-microsoft.poolparty.biz/devrel/c49cc9cb-c0e4-4c7c-8e26-9ab61f52e8b0
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
 platformId: ba88a2f9-0022-f405-f93c-4be55c9caff2
 ---
 

@@ -32,11 +32,13 @@ monikers: []
 item_type: Content
 source_path: docs/external-id/customers/how-to-microsoft-accounts-federation-customers.md
 cmProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/f3ce9430-47e6-4404-95f5-feb4a3243b53
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
+- https://authoring-docs-microsoft.poolparty.biz/devrel/b1cfdec6-b0c3-4209-818c-736879856e0e
 spProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/41589104-efe7-4407-ad9e-1f967185d234
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
+- https://authoring-docs-microsoft.poolparty.biz/devrel/2d0723c1-cf38-4c30-ab3d-5df787b33270
 platformId: 8edd7d77-73d0-3ec3-112a-22f6dd845390
 ---
 

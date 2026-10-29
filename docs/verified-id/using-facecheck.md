@@ -31,8 +31,10 @@ item_type: Content
 source_path: docs/verified-id/using-facecheck.md
 cmProducts:
 - https://authoring-docs-microsoft.poolparty.biz/devrel/2624a017-7337-44fa-9494-a407bb0e59fa
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/19011fa1-e010-495a-a1ea-74b88af5b9b1
 spProducts:
 - https://authoring-docs-microsoft.poolparty.biz/devrel/a438284e-c3c3-4c36-ab0b-aa7c244b912c
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/3dc5b4eb-8015-403d-9d1b-ae51b20067fe
 platformId: e70227f0-1b41-aed8-c406-ee83ad23cf10
 ---
 

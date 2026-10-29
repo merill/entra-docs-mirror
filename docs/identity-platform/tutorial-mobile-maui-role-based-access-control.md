@@ -30,11 +30,11 @@ monikers: []
 item_type: Content
 source_path: docs/identity-platform/tutorial-mobile-maui-role-based-access-control.md
 cmProducts:
-- https://authoring-docs-microsoft.poolparty.biz/devrel/7696cda6-0510-47f6-8302-71bb5d2e28cf
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/e6ea396d-3fb5-4a51-91b5-e23ac7ee4d7e
+- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
 spProducts:
-- https://authoring-docs-microsoft.poolparty.biz/devrel/69c76c32-967e-4c65-b89a-74cc527db725
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/2b99fe23-e368-4e36-9b45-11c3e25ff3e5
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
 platformId: 56a80123-8822-a4eb-f92d-69d449a3ec73
 ---
 

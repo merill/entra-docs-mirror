@@ -31,11 +31,13 @@ monikers: []
 item_type: Content
 source_path: docs/identity-platform/reference-msa-server-side-api.md
 cmProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/f3ce9430-47e6-4404-95f5-feb4a3243b53
 - https://authoring-docs-microsoft.poolparty.biz/devrel/bcbcbad5-4208-4783-8035-8481272c98b8
-- https://authoring-docs-microsoft.poolparty.biz/devrel/5f286262-a4cb-47f4-92d3-dc24f172492b
+- https://authoring-docs-microsoft.poolparty.biz/devrel/1e31b9be-b6e9-4221-a20b-d1460dbd5dfa
 spProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/41589104-efe7-4407-ad9e-1f967185d234
 - https://authoring-docs-microsoft.poolparty.biz/devrel/43b2e5aa-8a6d-4de2-a252-692232e5edc8
-- https://authoring-docs-microsoft.poolparty.biz/devrel/90571f66-8410-4272-8117-79ce87fc2dcc
+- https://authoring-docs-microsoft.poolparty.biz/devrel/8d63a4c4-4889-43b4-a98e-8e50dbfdb083
 platformId: 263b180c-1225-32bd-a2c8-0b8eb9278fd0
 ---
 

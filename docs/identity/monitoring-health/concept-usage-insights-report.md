@@ -13,9 +13,10 @@ ms.subservice: monitoring-health
 manager: dougeby
 description: Learn about the information you can explore using the Usage and insights report in Microsoft Entra ID.
 ms.topic: concept-article
-ms.date: 2025-05-27T00:00:00.0000000Z
+ms.date: 2026-10-29T00:00:00.0000000Z
 ms.reviewer: madansr7
 ms.custom: sfi-image-nochange
+ai-usage: ai-assisted
 locale: en-us
 document_id: 3cfcaab4-59e4-4487-2d7c-bd1b95c67fe1
 document_version_independent_id: 0389bd03-7087-1825-cc69-4aec722aab84
@@ -32,13 +33,13 @@ monikers: []
 item_type: Content
 source_path: docs/identity/monitoring-health/concept-usage-insights-report.md
 cmProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/b1cfdec6-b0c3-4209-818c-736879856e0e
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
 - https://authoring-docs-microsoft.poolparty.biz/devrel/5fc61396-d075-4560-aece-fdbda73d243f
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
 spProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/2d0723c1-cf38-4c30-ab3d-5df787b33270
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
 - https://authoring-docs-microsoft.poolparty.biz/devrel/ad9437c1-8cda-4537-ad69-b4b263652e13
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
 platformId: 12b38f6a-62e1-a985-5452-8b96f08fbefd
 ---
 
@@ -143,7 +144,13 @@ Looking for the status of an authentication registration or reset event of a use
 
 ## Service principal sign-in activity (preview)
 
-The Service principal sign-in activity (preview) report provides the last activity date for every service principal. The report provides you with information on the usage of the service principal - whether it was used as a client or resource app and whether it was used in an app-only or delegated context. The report shows the last time the service principal was used.
+The Service principal sign-in activity (preview) report provides the last activity date for every service principal. The report provides you with information on the usage of the service principal - whether it was used as a client or resource app and whether it was used in an app-only or delegated context.
+
+Important
+
+Last activity can include partial sign-ins and other incomplete activity that doesn't appear in sign-in logs. A reported timestamp alone doesn't establish that authentication completed or succeeded, or that an access token was issued.
+
+During preview, some partial sign-in activity can be incorrectly classified as application-authentication (app-only) activity. This is a classification limitation in the current preview, which is intended to be resolved in the future.
 
 [![Screenshot of the service principal sign-in activity report.](media/concept-usage-insights-report/service-principal-sign-ins.png)](media/concept-usage-insights-report/service-principal-sign-ins.png#lightbox)
 

@@ -33,11 +33,9 @@ monikers: []
 item_type: Content
 source_path: docs/global-secure-access/tutorial-internet-access-url-filtering.md
 cmProducts:
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/3c847666-7892-494c-aa0e-0bb3d16cc2cc
+- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
 spProducts:
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/e17fb6eb-4cdd-4a57-81df-0dfec430dfdd
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
 platformId: ee31171b-f937-0e60-e486-8514387db11b
 ---
 

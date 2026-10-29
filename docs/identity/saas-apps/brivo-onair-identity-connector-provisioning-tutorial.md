@@ -33,9 +33,11 @@ item_type: Content
 source_path: docs/identity/saas-apps/brivo-onair-identity-connector-provisioning-tutorial.md
 cmProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
+- https://authoring-docs-microsoft.poolparty.biz/devrel/b1cfdec6-b0c3-4209-818c-736879856e0e
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
 spProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
+- https://authoring-docs-microsoft.poolparty.biz/devrel/2d0723c1-cf38-4c30-ab3d-5df787b33270
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
 platformId: 75c65bc9-fae1-fb3a-ca00-ea891e621b6f
 ---
@@ -64,7 +66,7 @@ The scenario outlined in this article assumes that you already have the followin
     - [Cloud Application Administrator](/en-us/entra/identity/role-based-access-control/permissions-reference#cloud-application-administrator)
     - [Application Owner](/en-us/entra/fundamentals/users-default-permissions#owned-enterprise-applications).
 
-- [A Brivo Onair Identity Connector tenant](https://www.brivo.com/lp/quote)
+- [A Brivo Onair Identity Connector tenant](https://www.brivo.com/contact/)
 - A user account in Brivo Onair Identity Connector with Senior Administrator permissions.
 
 ## Assigning users to Brivo Onair Identity Connector
