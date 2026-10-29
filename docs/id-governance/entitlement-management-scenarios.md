@@ -32,13 +32,9 @@ monikers: []
 item_type: Content
 source_path: docs/id-governance/entitlement-management-scenarios.md
 cmProducts:
-- https://authoring-docs-microsoft.poolparty.biz/devrel/63959238-cb90-4871-a33d-4a5519097e47
-- https://authoring-docs-microsoft.poolparty.biz/devrel/9d7be3ef-f27c-4c7f-9eba-67c3cd429995
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ac4b7417-d4c2-43d4-94bf-f22fa1416b34
+- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
 spProducts:
-- https://authoring-docs-microsoft.poolparty.biz/devrel/78d87f42-5582-4a6b-90be-7db2f12b34e6
-- https://authoring-docs-microsoft.poolparty.biz/devrel/feeb50f3-b677-44f9-b3a6-5f2f58182b0d
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/68876bab-7da4-4e70-b295-395b3a255a1f
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
 platformId: 09897b65-cfbc-cb89-ee15-c70cf27e7b0e
 ---
 
@@ -139,7 +135,7 @@ There are several ways that you can configure entitlement management for your or
 1. [Sign in to the My Access portal](entitlement-management-request-access#sign-in-to-the-my-access-portal)
 2. View active access packages
 
-## Govern access for agents (preview)
+## Govern access for agents
 
 Using [Microsoft Entra ID Governance](licensing-fundamentals) for agent identities requires one of the following license plans:
 

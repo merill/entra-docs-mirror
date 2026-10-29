@@ -31,13 +31,11 @@ monikers: []
 item_type: Content
 source_path: docs/id-governance/identity-governance-overview.md
 cmProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ac4b7417-d4c2-43d4-94bf-f22fa1416b34
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
 spProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/68876bab-7da4-4e70-b295-395b3a255a1f
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
 platformId: 15544a7b-d4cf-d668-7acc-118a439141fa
 ---
 
@@ -145,7 +143,7 @@ Once you've started using these identity governance features, you can easily aut
 | Other scheduled tasks | [Automate identity governance tasks with Azure Automation](identity-governance-automation) and Microsoft Graph via the [Microsoft.Graph.Identity.Governance](https://www.powershellgallery.com/packages/Microsoft.Graph.Identity.Governance/) PowerShell module |
 | Discover orphan or local accounts in your applications | [Discover existing](../identity/app-provisioning/how-to-account-discovery) users in your applications. |
 
-## Identity governance for agents (preview)
+## Identity governance for agent identities
 
 With the addition of the Microsoft agent identity platform, managing an agent's identity and access in the same way as people is just as important in the governance lifecycle of your organization. Microsoft Entra Agent ID introduces [agent identities](../agent-id/what-is-microsoft-entra-agent-id) — purpose-built identity constructs for AI agents — with governance controls that address the unique challenges of autonomous and semi-autonomous agents operating at enterprise scale.
 
@@ -153,4 +151,4 @@ Every agent identity requires a human [sponsor](../agent-id/agent-owners-sponsor
 
 Agent identities are governed through the same [entitlement management](entitlement-management-overview) access packages available for human identities, providing time-bound, auditable access with approval workflows. Sponsors receive expiration notifications and can request extensions or let access expire. [Lifecycle Workflows](agent-sponsor-tasks) automate sponsor transition notifications when sponsorship changes occur. All agent identities are discoverable, searchable, and queryable through the Microsoft Entra admin center and Microsoft Graph, giving organizations centralized visibility to prevent agent sprawl and shadow AI.
 
-For more information, see [Governing agent identities (preview)](agent-id-governance-overview).
+For more information, see [Governing agent identities](agent-id-governance-overview).

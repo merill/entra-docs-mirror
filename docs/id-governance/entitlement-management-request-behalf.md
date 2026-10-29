@@ -30,13 +30,9 @@ monikers: []
 item_type: Content
 source_path: docs/id-governance/entitlement-management-request-behalf.md
 cmProducts:
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ac4b7417-d4c2-43d4-94bf-f22fa1416b34
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
+- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
 spProducts:
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/68876bab-7da4-4e70-b295-395b3a255a1f
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
 platformId: dc690b0a-c065-8a53-e772-b4699be05364
 ---
 
@@ -70,7 +66,7 @@ Note
 
 Both the manager/user (requestor) and the employee/user (target) must be licensed for Microsoft Entra ID Governance or Microsoft Entra Suite to use the on-behalf-of request feature.
 
-### License requirements for requesting on behalf of agent identities (preview)
+### License requirements for requesting on behalf of agent identities
 
 Using [Microsoft Entra ID Governance](licensing-fundamentals) for agent identities requires one of the following license plans:
 
