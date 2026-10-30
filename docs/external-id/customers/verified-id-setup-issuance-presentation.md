@@ -31,12 +31,6 @@ moniker_range_name:
 monikers: []
 item_type: Content
 source_path: docs/external-id/customers/verified-id-setup-issuance-presentation.md
-cmProducts:
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/19011fa1-e010-495a-a1ea-74b88af5b9b1
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/c77bc83e-f0b0-4b63-836e-6630e606bf7c
-spProducts:
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/3dc5b4eb-8015-403d-9d1b-ae51b20067fe
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/b98eda1f-6af8-444f-bbfb-7f2366948cbc
 platformId: fd05ffdb-3468-979c-2d23-b566ee3fe545
 ---
 

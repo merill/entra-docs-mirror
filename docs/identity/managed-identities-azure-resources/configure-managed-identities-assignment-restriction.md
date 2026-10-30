@@ -32,10 +32,8 @@ monikers: []
 item_type: Content
 source_path: docs/identity/managed-identities-azure-resources/configure-managed-identities-assignment-restriction.md
 cmProducts:
-- https://authoring-docs-microsoft.poolparty.biz/devrel/970f20f1-2f12-4aa9-9c95-c00fe1f5e722
 - https://authoring-docs-microsoft.poolparty.biz/devrel/68ec7f3a-2bc6-459f-b959-19beb729907d
 spProducts:
-- https://authoring-docs-microsoft.poolparty.biz/devrel/432c4950-b799-4ed5-93d5-b9b2934edf7d
 - https://authoring-docs-microsoft.poolparty.biz/devrel/90370425-aca4-4a39-9533-d52e5e002a5d
 platformId: 829ebfe3-334c-a6ee-ef93-44cdff28e2e1
 ---

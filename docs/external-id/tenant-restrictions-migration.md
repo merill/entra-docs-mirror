@@ -33,10 +33,8 @@ monikers: []
 item_type: Content
 source_path: docs/external-id/tenant-restrictions-migration.md
 cmProducts:
-- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/c77bc83e-f0b0-4b63-836e-6630e606bf7c
 spProducts:
-- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/b98eda1f-6af8-444f-bbfb-7f2366948cbc
 platformId: d237bbfb-d802-79b1-b239-50609062bd19
 ---

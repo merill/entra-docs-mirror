@@ -13,7 +13,7 @@ manager: dougeby
 description: Learn how to set up an access review in a policy for entitlement management access packages in Microsoft Entra ID part of Microsoft Entra.
 ms.subservice: entitlement-management
 ms.topic: how-to
-ms.date: 2026-03-12T00:00:00.0000000Z
+ms.date: 2026-10-29T00:00:00.0000000Z
 ms.custom: sfi-image-nochange
 locale: en-us
 document_id: c5c9f9a3-867d-70e7-ba99-8a10786e7929
@@ -44,6 +44,10 @@ To reduce the risk of stale access, you should enable periodic reviews of users 
 ## Prerequisites
 
 Using this feature requires Microsoft Entra ID Governance or Microsoft Entra Suite licenses. To find the right license for your requirements, see [Microsoft Entra ID Governance licensing fundamentals](licensing-fundamentals).
+
+Note
+
+Catalog access reviews now support access packages (preview). For more information, see [Include access packages in catalog access reviews](catalog-access-reviews-access-packages).
 
 ## Create an access review of an access package
 

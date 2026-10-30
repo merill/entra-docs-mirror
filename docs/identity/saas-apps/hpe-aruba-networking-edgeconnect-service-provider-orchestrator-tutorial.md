@@ -36,11 +36,11 @@ source_path: docs/identity/saas-apps/hpe-aruba-networking-edgeconnect-service-pr
 cmProducts:
 - https://authoring-docs-microsoft.poolparty.biz/devrel/5bfc2259-d89d-4d6b-97d7-584a51208ec1
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
-- https://authoring-docs-microsoft.poolparty.biz/devrel/b1cfdec6-b0c3-4209-818c-736879856e0e
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
 spProducts:
 - https://authoring-docs-microsoft.poolparty.biz/devrel/4e3dafb9-38f2-4708-bb18-eecf2c0a9843
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
-- https://authoring-docs-microsoft.poolparty.biz/devrel/2d0723c1-cf38-4c30-ab3d-5df787b33270
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
 platformId: 5bfc9a09-c94b-f7f8-4b5b-201e68552e7d
 ---
 

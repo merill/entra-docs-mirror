@@ -30,10 +30,8 @@ item_type: Content
 source_path: docs/id-governance/tenant-governance/how-to-investigate-related-tenants-api.md
 cmProducts:
 - https://authoring-docs-microsoft.poolparty.biz/devrel/5fc61396-d075-4560-aece-fdbda73d243f
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ac4b7417-d4c2-43d4-94bf-f22fa1416b34
 spProducts:
 - https://authoring-docs-microsoft.poolparty.biz/devrel/ad9437c1-8cda-4537-ad69-b4b263652e13
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/68876bab-7da4-4e70-b295-395b3a255a1f
 platformId: aa3e23e1-1378-ecb6-ba4c-b395e2d3cabe
 ---
 

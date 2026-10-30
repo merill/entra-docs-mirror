@@ -31,8 +31,10 @@ item_type: Content
 source_path: docs/verified-id/how-to-issuer-revoke.md
 cmProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/19011fa1-e010-495a-a1ea-74b88af5b9b1
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/12ed19f9-ebdf-4c8a-8bcd-7a681836774d
 spProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/3dc5b4eb-8015-403d-9d1b-ae51b20067fe
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/3a764584-4f97-452b-8f1d-36f19b12f6ae
 platformId: c34acddc-e1e0-57fe-c9e8-09bad4210bfa
 ---
 

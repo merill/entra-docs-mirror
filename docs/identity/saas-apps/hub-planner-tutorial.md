@@ -32,11 +32,9 @@ monikers: []
 item_type: Content
 source_path: docs/identity/saas-apps/hub-planner-tutorial.md
 cmProducts:
-- https://authoring-docs-microsoft.poolparty.biz/devrel/1bb724a6-ed07-4064-971d-80071e714f16
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
 spProducts:
-- https://authoring-docs-microsoft.poolparty.biz/devrel/b9e0ece8-b7ea-432b-9fb5-167c6aef3222
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
 platformId: f04e512f-5aab-4dc5-bdde-52f37131280d

@@ -31,12 +31,12 @@ monikers: []
 item_type: Content
 source_path: docs/global-secure-access/how-to-create-remote-network-vwan.md
 cmProducts:
-- https://authoring-docs-microsoft.poolparty.biz/devrel/1f65811f-19b7-4374-b6b1-7dab3f416544
 - https://authoring-docs-microsoft.poolparty.biz/devrel/68ec7f3a-2bc6-459f-b959-19beb729907d
+- https://authoring-docs-microsoft.poolparty.biz/devrel/1f65811f-19b7-4374-b6b1-7dab3f416544
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
 spProducts:
-- https://authoring-docs-microsoft.poolparty.biz/devrel/70626ef6-54d7-4e8b-8405-9b018e6f8179
 - https://authoring-docs-microsoft.poolparty.biz/devrel/90370425-aca4-4a39-9533-d52e5e002a5d
+- https://authoring-docs-microsoft.poolparty.biz/devrel/70626ef6-54d7-4e8b-8405-9b018e6f8179
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
 platformId: 11c6345d-3d98-5fbc-ed44-db4e968c1ed9
 ---

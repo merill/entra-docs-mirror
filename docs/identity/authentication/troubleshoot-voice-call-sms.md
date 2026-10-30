@@ -34,11 +34,11 @@ source_path: docs/identity/authentication/troubleshoot-voice-call-sms.md
 cmProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/798bd9d1-9cc5-4fc7-b0e5-8699d1f6ce2a
-- https://authoring-docs-microsoft.poolparty.biz/devrel/b1cfdec6-b0c3-4209-818c-736879856e0e
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
 spProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/b5dc5f65-34a8-4bfc-9917-97d1e20c88b2
-- https://authoring-docs-microsoft.poolparty.biz/devrel/2d0723c1-cf38-4c30-ab3d-5df787b33270
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
 platformId: 7b38d377-5576-9fcb-8f90-4ea77820b43c
 ---
 
@@ -64,7 +64,7 @@ Microsoft works with primary telecom providers that have global reach. These pro
 
 Microsoft maintains robust processes to help ensure successful delivery of every SMS and voice MFA request. However, once a request leaves the Microsoft network, delivery is delegated to external telecom providers.
 
-These providers often share the same end routes and carriers in a given destination country but might operate under different contractual agreements or traffic priorities. As a result, routing a request through a different provider doesn't always resolve the issue — the new request might follow the same downstream path and encounter the same obstacle.
+These providers often share the same end routes and carriers in a given destination country/region but might operate under different contractual agreements or traffic priorities. As a result, routing a request through a different provider doesn't always resolve the issue — the new request might follow the same downstream path and encounter the same obstacle.
 
 ## The journey of an SMS or voice MFA request
 
@@ -87,7 +87,7 @@ The provider should confirm this issue to Microsoft. Common causes include:
 
 - **Device-level configuration.** Even when all steps to send the message are correct, the device itself could refuse the call or route it to voicemail. Microsoft automatically retries these failures across different providers.
 - **Carrier-level blocking.** The carrier might block the call or message due to international automated fraud detection systems.
-- **Regional availability issues.** In rare cases, the message is dropped due to availability issues in a specific country. Microsoft and its providers have robust retry and reroute mechanisms for these scenarios and post automated outage communications when the impact is broadly reported.
+- **Regional availability issues.** In rare cases, the message is dropped due to availability issues in a specific country/region. Microsoft and its providers have robust retry and reroute mechanisms for these scenarios and post automated outage communications when the impact is broadly reported.
 
 ### The call or message is altered by a downstream carrier
 

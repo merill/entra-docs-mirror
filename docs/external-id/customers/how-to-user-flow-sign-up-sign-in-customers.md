@@ -33,8 +33,10 @@ item_type: Content
 source_path: docs/external-id/customers/how-to-user-flow-sign-up-sign-in-customers.md
 cmProducts:
 - https://authoring-docs-microsoft.poolparty.biz/devrel/1ae5c491-970a-4062-8301-6336e69f9026
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
 spProducts:
 - https://authoring-docs-microsoft.poolparty.biz/devrel/f2c3e52e-3667-4e8a-bf11-20b9eaccdc8c
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
 platformId: 28a36c1a-9663-b792-83ad-fd1d151af74a
 ---
 

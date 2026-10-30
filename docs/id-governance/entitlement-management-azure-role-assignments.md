@@ -30,13 +30,9 @@ monikers: []
 item_type: Content
 source_path: docs/id-governance/entitlement-management-azure-role-assignments.md
 cmProducts:
-- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
 - https://authoring-docs-microsoft.poolparty.biz/devrel/68ec7f3a-2bc6-459f-b959-19beb729907d
-- https://authoring-docs-microsoft.poolparty.biz/devrel/8046779e-b7d2-4c26-a33a-778fd8bd444c
 spProducts:
-- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
 - https://authoring-docs-microsoft.poolparty.biz/devrel/90370425-aca4-4a39-9533-d52e5e002a5d
-- https://authoring-docs-microsoft.poolparty.biz/devrel/ce51d519-8846-4bc1-819c-a72fbd6651b2
 platformId: 3a185826-092d-eef9-67fa-a31942a54351
 ---
 

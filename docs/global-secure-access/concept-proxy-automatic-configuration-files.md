@@ -30,10 +30,8 @@ item_type: Content
 source_path: docs/global-secure-access/concept-proxy-automatic-configuration-files.md
 cmProducts:
 - https://authoring-docs-microsoft.poolparty.biz/devrel/540ac133-a371-4dbb-8f94-28d6cc77a70b
-- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
 spProducts:
 - https://authoring-docs-microsoft.poolparty.biz/devrel/60bfc045-f127-4841-9d00-ea35495a5800
-- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
 platformId: 8c7b2c48-889f-c10e-a63d-6a48586ebefd
 ---
 

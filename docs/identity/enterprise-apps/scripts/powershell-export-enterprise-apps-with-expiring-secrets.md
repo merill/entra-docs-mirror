@@ -31,10 +31,8 @@ monikers: []
 item_type: Content
 source_path: docs/identity/enterprise-apps/scripts/powershell-export-enterprise-apps-with-expiring-secrets.md
 cmProducts:
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/5cf46315-b33f-4e99-8224-a1592697eff9
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
 spProducts:
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/715d24c3-3683-4219-82c5-1e3c813fb7fc
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
 platformId: 1c34b342-2873-4623-b4f9-e1500774ebca
 ---

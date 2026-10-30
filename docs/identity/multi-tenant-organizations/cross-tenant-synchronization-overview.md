@@ -218,11 +218,11 @@ The following table lists the required licenses, depending on your scenario.
 
 Cross-tenant synchronization is supported within the commercial cloud, Azure Government, and 21Vianet.
 
-| Source | Target | Azure portal link domains |
-| --- | --- | --- |
-| Azure commercial | Azure commercial | `portal.azure.com` --&gt; `portal.azure.com` |
-| Azure Government | Azure Government | `portal.azure.us` --&gt; `portal.azure.us` |
-| 21Vianet (China) | 21Vianet (China) | `portal.azure.cn` --&gt; `portal.azure.cn` |
+| Source | Target | Objects supported | Azure portal link domains |
+| --- | --- | --- | --- |
+| Azure commercial | Azure commercial | Users and groups | `portal.azure.com` --&gt; `portal.azure.com` |
+| Azure Government | Azure Government | Users and groups | `portal.azure.us` --&gt; `portal.azure.us` |
+| 21Vianet (China) | 21Vianet (China) | Users | `portal.azure.cn` --&gt; `portal.azure.cn` |
 
 #### Is cross-cloud synchronization supported?
 
@@ -234,11 +234,11 @@ For information about the relationship between the Azure cloud environments and 
 
 Cross-cloud synchronization supports these cloud pairs:
 
-| Source | Target | Azure portal link domains |
-| --- | --- | --- |
-| Azure commercial | Azure Government | `portal.azure.com` --&gt; `portal.azure.us` |
-| Azure Government | Azure commercial | `portal.azure.us` --&gt; `portal.azure.com` |
-| Azure commercial | Azure operated by 21Vianet(Azure in China) | `portal.azure.com` --&gt; `portal.azure.cn` |
+| Source | Target | Objects supported | Azure portal link domains |
+| --- | --- | --- | --- |
+| Azure commercial | Azure Government | Users | `portal.azure.com` --&gt; `portal.azure.us` |
+| Azure Government | Azure commercial | Users | `portal.azure.us` --&gt; `portal.azure.com` |
+| Azure commercial | Azure operated by 21Vianet(Azure in China) | Users | `portal.azure.com` --&gt; `portal.azure.cn` |
 
 #### What are the differences between cross-tenant synchronization and cross-cloud synchronization?
 

@@ -30,13 +30,13 @@ monikers: []
 item_type: Content
 source_path: docs/id-governance/scenarios/deploy-sap-netweaver.md
 cmProducts:
-- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
 - https://authoring-docs-microsoft.poolparty.biz/devrel/540ac133-a371-4dbb-8f94-28d6cc77a70b
+- https://authoring-docs-microsoft.poolparty.biz/devrel/000aaee4-f890-4b0a-bd33-24fb2aefa882
 spProducts:
-- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
 - https://authoring-docs-microsoft.poolparty.biz/devrel/60bfc045-f127-4841-9d00-ea35495a5800
+- https://authoring-docs-microsoft.poolparty.biz/devrel/57828563-e363-48c1-ac42-c4d23fb7ba52
 platformId: 12689eda-1ad5-2590-8c91-657dafa6bd2e
 ---
 

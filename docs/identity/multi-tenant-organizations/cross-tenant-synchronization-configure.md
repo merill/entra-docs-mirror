@@ -74,11 +74,11 @@ For important details on what this service does, how it works, and frequently as
 
 Cross-tenant synchronization supports these cloud pairs:
 
-| Source | Target | Azure portal link domains |
-| --- | --- | --- |
-| Azure commercial | Azure commercial | `portal.azure.com` --&gt; `portal.azure.com` |
-| Azure Government | Azure Government | `portal.azure.us` --&gt; `portal.azure.us` |
-| 21Vianet (China) | 21Vianet (China) | `portal.azure.cn` --&gt; `portal.azure.cn` |
+| Source | Target | Objects supported | Azure portal link domains |
+| --- | --- | --- | --- |
+| Azure commercial | Azure commercial | Users and groups | `portal.azure.com` --&gt; `portal.azure.com` |
+| Azure Government | Azure Government | Users and groups | `portal.azure.us` --&gt; `portal.azure.us` |
+| 21Vianet (China) | 21Vianet (China) | Users | `portal.azure.cn` --&gt; `portal.azure.cn` |
 
 ::: zone-end
 
@@ -86,11 +86,11 @@ Cross-tenant synchronization supports these cloud pairs:
 
 Cross-cloud synchronization supports these cloud pairs:
 
-| Source | Target | Azure portal link domains |
-| --- | --- | --- |
-| Azure commercial | Azure Government | `portal.azure.com` --&gt; `portal.azure.us` |
-| Azure Government | Azure commercial | `portal.azure.us` --&gt; `portal.azure.com` |
-| Azure commercial | Azure operated by 21Vianet(Azure in China) | `portal.azure.com` --&gt; `portal.azure.cn` |
+| Source | Target | Objects supported | Azure portal link domains |
+| --- | --- | --- | --- |
+| Azure commercial | Azure Government | Users | `portal.azure.com` --&gt; `portal.azure.us` |
+| Azure Government | Azure commercial | Users | `portal.azure.us` --&gt; `portal.azure.com` |
+| Azure commercial | Azure operated by 21Vianet(Azure in China) | Users | `portal.azure.com` --&gt; `portal.azure.cn` |
 
 ::: zone-end
 

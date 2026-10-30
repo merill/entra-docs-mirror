@@ -31,8 +31,10 @@ item_type: Content
 source_path: docs/verified-id/helpdesk-with-verified-id.md
 cmProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/19011fa1-e010-495a-a1ea-74b88af5b9b1
+- https://authoring-docs-microsoft.poolparty.biz/devrel/54fcef21-b24a-4ef4-9c4a-a525c23ee9a3
 spProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/3dc5b4eb-8015-403d-9d1b-ae51b20067fe
+- https://authoring-docs-microsoft.poolparty.biz/devrel/8ab60220-e56b-41ff-a8bf-45b8d7ab716f
 platformId: cc79142b-aa58-19f3-9fab-fe205fa2b088
 ---
 

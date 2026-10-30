@@ -32,9 +32,11 @@ source_path: docs/identity/hybrid/connect/reference-connect-government-cloud.md
 cmProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/15545907-caea-48c1-a546-e84930c5b845
+- https://authoring-docs-microsoft.poolparty.biz/devrel/653971be-c25b-47ce-b561-80221556af0c
 spProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/fd70c557-2c67-40b8-b517-cf047ce6d0c3
+- https://authoring-docs-microsoft.poolparty.biz/devrel/f998336e-f087-4bda-99f7-4001451d0bd2
 platformId: 75e1aa9c-f34c-1fa6-d277-a9eb8e62f5fc
 ---
 

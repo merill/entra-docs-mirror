@@ -30,12 +30,10 @@ monikers: []
 item_type: Content
 source_path: docs/architecture/service-accounts-on-premises.md
 cmProducts:
-- https://authoring-docs-microsoft.poolparty.biz/devrel/f3ce9430-47e6-4404-95f5-feb4a3243b53
-- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/37da4cc9-0cfc-42a9-ba5e-805706b01ef8
 - https://authoring-docs-microsoft.poolparty.biz/devrel/b1cfdec6-b0c3-4209-818c-736879856e0e
 spProducts:
-- https://authoring-docs-microsoft.poolparty.biz/devrel/41589104-efe7-4407-ad9e-1f967185d234
-- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/3661fb96-d414-4a4e-b7ad-9370637790dd
 - https://authoring-docs-microsoft.poolparty.biz/devrel/2d0723c1-cf38-4c30-ab3d-5df787b33270
 platformId: 33be63f7-95c8-dc9e-725f-63a0df60d4c6
 ---

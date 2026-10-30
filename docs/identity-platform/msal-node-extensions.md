@@ -30,13 +30,13 @@ monikers: []
 item_type: Content
 source_path: docs/identity-platform/msal-node-extensions.md
 cmProducts:
-- https://authoring-docs-microsoft.poolparty.biz/devrel/975ff2ab-3df8-442b-a5cf-236875030666
 - https://authoring-docs-microsoft.poolparty.biz/devrel/5f286262-a4cb-47f4-92d3-dc24f172492b
 - https://authoring-docs-microsoft.poolparty.biz/devrel/1e31b9be-b6e9-4221-a20b-d1460dbd5dfa
+- https://authoring-docs-microsoft.poolparty.biz/devrel/bcbcbad5-4208-4783-8035-8481272c98b8
 spProducts:
-- https://authoring-docs-microsoft.poolparty.biz/devrel/36e77619-d82e-46c7-aae6-66992ad8435d
 - https://authoring-docs-microsoft.poolparty.biz/devrel/90571f66-8410-4272-8117-79ce87fc2dcc
 - https://authoring-docs-microsoft.poolparty.biz/devrel/8d63a4c4-4889-43b4-a98e-8e50dbfdb083
+- https://authoring-docs-microsoft.poolparty.biz/devrel/43b2e5aa-8a6d-4de2-a252-692232e5edc8
 platformId: 5aa3e374-a376-5bc0-46f7-0438251a0f9d
 ---
 
