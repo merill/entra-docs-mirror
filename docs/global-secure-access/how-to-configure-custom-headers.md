@@ -136,8 +136,4 @@ To restrict access to Microsoft Entra tenants, use [universal tenant restriction
 
 ## Custom headers in traffic logs
 
-Note
-
-While this feature is rolling out in September 2026, you may need to use this [special Entra Admin Center link](https://entra.microsoft.com/?Microsoft_Azure_Network_Access_customheadersfields=true#view/Microsoft_Azure_Network_Access/TrafficLogs.ReactView) to see custom header details in Global Secure Access logs.
-
 You can review the Global Secure Access traffic logs to identify specific transactions with header modifications. To do that, navigate to the Entra Admin Center / Global Secure Access / Monitor / Traffic Logs. Click on the Transactions tab and add the Custom Headers column to the view.

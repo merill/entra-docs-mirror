@@ -6,8 +6,8 @@ uhfHeaderId: MSDocsHeader-Entra
 breadcrumb_path: /entra/breadcrumb/toc.json
 feedback_system: Standard
 feedback_product_url: https://aka.ms/microsoftentraexternalid
-author: csmulligan
-ms.author: cmulligan
+author: garrodonnell
+ms.author: godonnell
 ms.service: entra-external-id
 ms.subservice: external
 manager: dougeby
@@ -66,9 +66,10 @@ To analyze your custom policies, follow these steps:
 
 1. Sign in to the [Azure portal](https://portal.azure.com) and go to your Azure AD B2C tenant.
 2. Select **Identity Experience Framework** from the left menu.
-3. Select **Migration Policy Analyzer** from the toolbar.
-4. Select the policies to analyze. Your selection must include a relying party (RP) policy for the analysis to complete successfully.
-5. Select **Analyze Policies** to start the assessment.
+3. Select the policies to analyze. Your selection must include a relying party (RP) policy for the analysis to complete successfully.
+4. Select **Analyze Policies** to start the assessment.
+
+    [![Screenshot of the Migration Policy Analyzer UI.](media/how-to-analyze-azure-ad-b2c-custom-policies/migration-policy-analyzer-ui.png)](media/how-to-analyze-azure-ad-b2c-custom-policies/migration-policy-analyzer-ui.png#lightbox)
 
 When the analysis completes, the report shows:
 
