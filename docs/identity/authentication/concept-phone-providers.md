@@ -75,7 +75,7 @@ Review pricing and other commercial details for the available provider offers:
 
 - Soprano: [Per-user offer](https://securitystore.microsoft.com/solutions/sopranodesignlimited1620113206416.soprano_entraid_per_user) or [per-transaction offer](https://securitystore.microsoft.com/solutions/sopranodesignlimited1620113206416.soprano_entraid_per_transaction) in [Microsoft Security Store](https://securitystore.microsoft.com/).
 - Telesign: [Telesign Verify for Microsoft Entra](https://securitystore.microsoft.com/solutions/telesigncorporation1779799505747.telesign-verify-cyot-azure) in [Microsoft Security Store](https://securitystore.microsoft.com/).
-- Infobip.
+- Infobip: [Infobip offer](https://securitystore.microsoft.com/solutions/infobipdoo.infobip_microsoft_entra) in [Microsoft Security Store](https://securitystore.microsoft.com/).
 
 Note
 
@@ -101,7 +101,7 @@ At a high level, setting up CYOT involves:
 4. **Evaluate.** Validate the integration while Microsoft continues to deliver messages, so users aren't affected.
 5. **Roll out.** Move traffic to your provider gradually, validating at each stage.
 
-For detailed instructions, see [Set up SMS and voice with your own telecom provider by using APIs](how-to-set-up-sms-voice-api).
+For detailed instructions, see [Set up SMS and voice with your own telecom provider in the Microsoft Entra admin center](choose-your-own-telephony-set-up).
 
 ## Plan your deployment
 

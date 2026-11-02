@@ -78,7 +78,7 @@ Start with your requirements: which disruptions you must withstand, how quickly 
 
 ## Deploy across multiple regions
 
-A multi-region deployment uses Azure Front Door to expose one endpoint backed by Function Apps in two or more regions. Microsoft Entra ID calls the Front Door endpoint, and Front Door routes each request to a healthy region. Set it up manually after you validate a single-region deployment, because the setup script in [Set up SMS and voice with your own telecom provider by using APIs](how-to-set-up-sms-voice-api) deploys one region at a time.
+A multi-region deployment uses Azure Front Door to expose one endpoint backed by Function Apps in two or more regions. Microsoft Entra ID calls the Front Door endpoint, and Front Door routes each request to a healthy region. Set it up manually after you validate a single-region deployment, because the setup script in [Set up SMS and voice with your own telecom provider in the Microsoft Entra admin center](choose-your-own-telephony-set-up) deploys one region at a time.
 
 When you plan a multi-region deployment:
 

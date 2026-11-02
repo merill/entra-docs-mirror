@@ -137,11 +137,11 @@ Your provider sets SMS and voice charges under the offer you purchase in [Micros
 4. Evaluate the integration.
 5. Roll out traffic to your provider.
 
-For details, see [Set up SMS and voice with your own telecom provider by using APIs](how-to-set-up-sms-voice-api).
+For details, see [Set up SMS and voice with your own telecom provider in the Microsoft Entra admin center](choose-your-own-telephony-set-up).
 
 ### Can I test CYOT before I move traffic?
 
-Yes. **Evaluation** mode sends requests to your integration while Microsoft continues to deliver codes to users. Use `migrationPercentage` to set the evaluation sampling percentage when configuring the policy through APIs. To confirm delivery through your provider, switch to **Production** at a low traffic percentage.
+Yes. **Evaluation** mode sends requests to your integration while Microsoft continues to deliver codes to users. Set the **Evaluation sampling percentage** in your profile. To confirm delivery through your provider, switch to **Production** at a low traffic percentage.
 
 ### Can I move traffic gradually?
 
