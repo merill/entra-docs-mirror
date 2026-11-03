@@ -14,8 +14,9 @@ ms.subservice: saas-apps
 manager: pmwongera
 description: Learn the steps you need to perform in Salesforce Sandbox and Microsoft Entra ID to automatically provision and de-provision user accounts from Microsoft Entra ID to Salesforce Sandbox.
 ms.topic: how-to
-ms.date: 2026-03-23T00:00:00.0000000Z
-ms.custom: sfi-image-nochange
+ms.date: 2026-10-30T00:00:00.0000000Z
+ms.custom: sfi-image-nochange, msecd-doc-authoring-1032
+ai-usage: ai-assisted
 locale: en-us
 document_id: 1838df01-9725-c256-4ce8-239bb605d247
 document_version_independent_id: 52bf593b-ef1e-cc7c-9c62-e438fe2d4e4f
@@ -32,9 +33,11 @@ monikers: []
 item_type: Content
 source_path: docs/identity/saas-apps/salesforce-sandbox-provisioning-tutorial.md
 cmProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/b1cfdec6-b0c3-4209-818c-736879856e0e
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
 spProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/2d0723c1-cf38-4c30-ab3d-5df787b33270
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
 platformId: ee1f1e33-0966-d584-f870-a347ed178efb
@@ -51,6 +54,10 @@ The scenario outlined in this article assumes that you already have the followin
 - A Microsoft Entra tenant.
 - A valid tenant for Salesforce Sandbox for Work or Salesforce Sandbox for Education. You may use a free trial account for either service.
 - A user account in Salesforce Sandbox with Team Admin permissions.
+- SOAP API `login()` enabled in your Salesforce Sandbox org. Salesforce disables this operation by default for orgs created in Winter '26 and later. In Salesforce Setup, enter **User Interface** in the Quick Find box, select **User Interface**, and select **Enable SOAP API login()**. This action can't be reverted on the **User Interface** page. For details, see the Salesforce [SOAP API login() reference](https://developer.salesforce.com/docs/platform/api/guide/sforce-api-calls-login.html).
+- A profile for the integration account entered in **Admin Username** with **API Enabled**, **Manage Users**, and **Use Any API Auth** enabled.
+
+The **Admin Username** account needs **Use Any API Auth** because the Microsoft Entra provisioning service signs in through SOAP API `login()`. Salesforce's Winter '27 release update requires this permission for SOAP API sign-ins in all orgs, including sandboxes, from December 1, 2026. For details, see [Assign Use Any API Auth Permission for SOAP login()](https://help.salesforce.com/s/articleView?id=release-notes.rn_api_soap_login.htm&amp;language=en_US&amp;type=5).
 
 ## Assigning users to Salesforce Sandbox
 
@@ -124,3 +131,8 @@ Once you configure provisioning, use the following resources to monitor your dep
 1. Use the [provisioning logs](../monitoring-health/concept-provisioning-logs) to determine which users are provisioned successfully or unsuccessfully
 2. Check the [progress bar](../app-provisioning/application-provisioning-when-will-provisioning-finish-specific-user) to see the status of the provisioning cycle and how close it's to completion
 3. If the provisioning configuration seems to be in an unhealthy state, the application goes into quarantine. Learn more about quarantine states the [application provisioning quarantine status](../app-provisioning/application-provisioning-quarantine-status) article.
+
+## Common issues
+
+- If **Test Connection** fails, verify that SOAP API `login()` is enabled in the Salesforce Sandbox org and that the **Admin Username** account has **Use Any API Auth**.
+- **SalesforceCredentialValidation:** If **Test Connection** reports "Your Salesforce.com credentials are invalid..." even with a correct password and a fresh security token, check the integration account's **Use Any API Auth** permission. Salesforce Login History can show successful sign-ins even when this connection fails. If the underlying error is `INSUFFICIENT_ACCESS: SOAP API login() requires the Use Any API Auth user permission`, grant **Use Any API Auth** to the integration account's profile, and then retry **Test Connection**.

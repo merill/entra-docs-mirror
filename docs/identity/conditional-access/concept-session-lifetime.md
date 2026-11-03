@@ -13,8 +13,10 @@ ms.subservice: conditional-access
 manager: dougeby
 description: Learn to configure Conditional Access adaptive session lifetime policies to protect critical apps, sensitive data, and high-impact users in your organization.
 ms.topic: concept-article
-ms.date: 2026-04-08T00:00:00.0000000Z
+ms.date: 2026-11-01T00:00:00.0000000Z
 ms.reviewer: inbarc, sreyanthmora
+ms.custom: msecd-doc-authoring-1026
+ai-usage: ai-assisted
 locale: en-us
 document_id: 4ae35742-79e9-237a-e77e-8d52e9ea17c8
 document_version_independent_id: 4ae35742-79e9-237a-e77e-8d52e9ea17c8
@@ -31,13 +33,13 @@ monikers: []
 item_type: Content
 source_path: docs/identity/conditional-access/concept-session-lifetime.md
 cmProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
-- https://authoring-docs-microsoft.poolparty.biz/devrel/9d7be3ef-f27c-4c7f-9eba-67c3cd429995
 spProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
-- https://authoring-docs-microsoft.poolparty.biz/devrel/feeb50f3-b677-44f9-b3a6-5f2f58182b0d
 platformId: a1890c33-eb7e-0635-e24f-d29d103279c0
 ---
 
@@ -129,9 +131,9 @@ In some scenarios, you might want to require fresh authentication every time a u
 
 - Accessing sensitive applications.
 - Securing resources behind VPN or Network as a Service (NaaS) providers.
-- Securing privileged role elevation in PIM​.
+- Securing privileged role elevation in PIM.
 - Protecting user sign-ins to Azure Virtual Desktop machines.
-- Protecting risky users and risky sign-ins​ identified by Microsoft Entra ID Protection.
+- Protecting risky users and risky sign-ins identified by Microsoft Entra ID Protection.
 - Securing sensitive user actions like Microsoft Intune enrollment.
 
 When you select **Every time**, the policy requires full reauthentication **when the session is evaluated**. This requirement means that if the user closes and opens their browser during the session lifetime, they might not be prompted for reauthentication. Setting sign-in frequency to every time works best when the resource has the logic to identify when a client should get a new token. These resources redirect the user back to Microsoft Entra only once the session expires.
@@ -144,6 +146,28 @@ Using sign-in frequency to require reauthentication every time, without multifac
 
 - For applications in the Microsoft 365 stack, use time-based user sign-in frequency for a better user experience.
 - For the Azure portal and the Microsoft Entra admin center, use either time-based user sign-in frequency or [require reauthentication on PIM activation](../../id-governance/privileged-identity-management/pim-how-to-change-default-settings#on-activation-require-microsoft-entra-conditional-access-authentication-context) by using authentication context for a better user experience.
+
+### Every time strict (preview)
+
+**Every time strict (preview)** is a sign-in frequency control with a shorter validity window (10 seconds) for authentication freshness. It's intended for specific applications that need fresh authentication when they request a new token. These applications must be configured to work with the control. Examples include pharmaceutical e-prescribing applications and financial or banking applications that require reauthentication for sensitive actions.
+
+To require fresh authentication for a sensitive action, an application needs compatible session management. That logic must request a new token for the action. Applying the control alone isn't sufficient if the application continues to use its existing session without requesting a new token.
+
+The application decides when fresh authentication is needed through its own session management logic and intervals. Its reauthentication interval can be longer than 10 seconds. When the application requests a new token, **Every time strict (preview)** checks the time since the user's last authentication. If at least 10 seconds have elapsed, the control requires the user to reauthenticate.
+
+- Target only specific applications. Don't apply it broadly to all resources.
+- Work with the application owner to confirm that the application's token requests and session management meet its reauthentication requirements.
+- Test the sign-in experience with the selected applications before rollout. Frequent prompts can disrupt users and contribute to MFA fatigue.
+
+Warning
+
+Do not apply **Every time strict (preview)** settings to Office 365 applications.
+
+#### Global Secure Access sign-in every time (preview)
+
+Global Secure Access uses **Every time strict (preview)** in Conditional Access to require fresh reauthentication when users access sensitive private applications. Global Secure Access application session management uses a **five-minute reauthentication window**.
+
+For more information, see [Sign-in every time for Microsoft Entra Private Access (preview)](../../global-secure-access/concept-private-access-sign-in-every-time).
 
 ## Persistence of browsing sessions
 

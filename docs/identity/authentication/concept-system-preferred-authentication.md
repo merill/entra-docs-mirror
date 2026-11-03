@@ -265,9 +265,9 @@ When in the **Microsoft managed** state, the system evaluates available credenti
 | --- | --- | --- | --- |
 | 1 | [Temporary Access Pass (TAP)](howto-authentication-temporary-access-pass) | Recovery | 1FA + MFA |
 | 2 | [Passkey](concept-authentication-passkeys-fido2)^1^ | Phishing-resistant | 1FA + MFA |
-| 3 | [Certificate-based authentication (CBA)](concept-certificate-based-authentication) | Phishing-resistant | 1FA or 1FA + MFA |
-| 4 | [Microsoft Authenticator notifications](concept-authentication-authenticator-app) | Passwordless | 1FA + MFA |
-| 5 | [External multifactor authentication (MFA)](how-to-authentication-external-method-manage) | — | MFA |
+| 3 | [External multifactor authentication (MFA)](how-to-authentication-external-method-manage) | – | MFA |
+| 4 | [Certificate-based authentication (CBA)](concept-certificate-based-authentication) | Phishing-resistant | 1FA or 1FA + MFA |
+| 5 | [Microsoft Authenticator notifications](concept-authentication-authenticator-app) | Passwordless | 1FA + MFA |
 | 6 | [Time-based one-time password (TOTP)](concept-authentication-oath-tokens)^2^ | — | MFA |
 | 7 | [Telephony](concept-authentication-phone-options)^3^ | — | MFA |
 | 8 | QR code | Frontline worker | 1FA |
