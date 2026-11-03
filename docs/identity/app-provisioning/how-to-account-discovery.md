@@ -32,11 +32,13 @@ monikers: []
 item_type: Content
 source_path: docs/identity/app-provisioning/how-to-account-discovery.md
 cmProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/b1cfdec6-b0c3-4209-818c-736879856e0e
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
+- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
 spProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/2d0723c1-cf38-4c30-ab3d-5df787b33270
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
 platformId: ead32d4a-efa6-f1c9-3f53-e0e1bfa51d76
 ---
 
@@ -54,7 +56,7 @@ This classification gives you visibility into who has access to your application
 
 Important
 
-Group discovery is currently in preview. This information relates to a prerelease product that might be substantially modified before release. Microsoft makes no warranties, expressed or implied, with respect to the information provided here.
+Group discovery, including group memberships, is currently in preview. This information relates to a prerelease product that might be substantially modified before release. Microsoft makes no warranties, expressed or implied, with respect to the information provided here.
 
 ## Prerequisites
 
@@ -118,6 +120,14 @@ Unassigned identities match a user or group in Microsoft Entra ID based on the m
 ### Assigned identities
 
 Assigned identities match a user or group in Microsoft Entra ID that's already assigned to the application. These identities are fully managed by the provisioning service. No action is needed unless you want to review or update their attribute mappings.
+
+### Review group memberships
+
+You can view the number of members in each discovered group and review its membership.
+
+1. Find the discovered group in the discovery results.
+2. Review the member count for the group.
+3. Select the member count to view the list of members in the group.
 
 ## Assign correlated users to your enterprise application and/or access packages
 
