@@ -13,8 +13,9 @@ ms.subservice: external
 manager: dougeby
 description: Compare features and capabilities of a workforce versus an external tenant configuration. Determine which tenant type applies to your external identities scenario.
 ms.topic: concept-article
-ms.date: 2026-03-30T00:00:00.0000000Z
+ms.date: 2026-09-02T00:00:00.0000000Z
 ms.custom: it-pro, seo-july-2024, sfi-ropc-nochange
+ai-usage: ai-assisted
 locale: en-us
 document_id: 2bb93356-67a7-32cd-fd3b-cdce20871675
 document_version_independent_id: a5c1d845-10eb-c72e-4560-ff2206c4ee7e
@@ -31,13 +32,13 @@ monikers: []
 item_type: Content
 source_path: docs/external-id/customers/concept-supported-features-customers.md
 cmProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/c77bc83e-f0b0-4b63-836e-6630e606bf7c
-- https://authoring-docs-microsoft.poolparty.biz/devrel/54918a83-0404-4863-9c91-715186c1f582
 spProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/b98eda1f-6af8-444f-bbfb-7f2366948cbc
-- https://authoring-docs-microsoft.poolparty.biz/devrel/b26f5f7a-0913-4a95-8337-ed7543902f2d
 platformId: 82b38328-5842-5455-5bd3-9a2828bdaf81
 ---
 
@@ -102,7 +103,7 @@ The following table compares the [identity providers](../identity-providers) and
 | Feature | Workforce tenant | External tenant |
 | --- | --- | --- |
 | Identity providers for external users (primary authentication) | For self-service sign-up guests:<br>- Microsoft Entra accounts<br>- Microsoft accounts<br>- Emailed one-time passcode<br>- Google federation<br>- Facebook federation<br><br>For invited guests:<br>- Microsoft Entra accounts<br>- Microsoft accounts<br>- Emailed one-time passcode<br>- Google federation<br>- SAML/WS-Fed federation | For self-service sign-up users (consumers, business customers):<br>- Authentication methods available in External ID<br><br>For invited guests (preview) via a directory role (for example, admins):<br>- Microsoft Entra accounts<br>- Microsoft accounts<br>- [Emailed one-time passcode](concept-authentication-methods-customers#email-with-one-time-passcode-sign-in)<br>- [SAML/WS-Fed federation](../direct-federation)<br><br> You can invite external users for administrative purposes only. You can't use this feature to invite customers to sign in to your apps. This feature isn't compatible with customer identity and access management (CIAM) user flows. |
-| Authentication methods for MFA | For internal users (employees and admins):<br>- [Authentication and verification methods](../../identity/authentication/overview-authentication)<br><br>For guests (invited or self-service sign-up):<br>- [Authentication methods for guest MFA](../authentication-conditional-access#table-1-authentication-strength-mfa-methods-for-external-users) | For self-service sign-up users (consumers, business customers):<br>- [Emailed one-time passcode](concept-multifactor-authentication-customers#email-one-time-passcode)<br>- [SMS-based authentication](concept-multifactor-authentication-customers#sms-based-authentication)<br>- [Passkey (FIDO2)](how-to-sign-in-with-passkey)<br><br>For invited users (preview):<br>- [Emailed one-time passcode](concept-multifactor-authentication-customers#email-one-time-passcode)<br>- [SMS-based authentication](concept-multifactor-authentication-customers#sms-based-authentication) |
+| Authentication methods for MFA | For internal users (employees and admins):<br>- [Authentication and verification methods](../../identity/authentication/overview-authentication)<br><br>For guests (invited or self-service sign-up):<br>- [Authentication methods for guest MFA](../authentication-conditional-access#table-1-authentication-strength-mfa-methods-for-external-users) | For self-service sign-up users (consumers, business customers):<br>- [Emailed one-time passcode](concept-multifactor-authentication-customers#email-one-time-passcode)<br>- [SMS-based authentication](concept-multifactor-authentication-customers#sms-based-authentication)<br>- [Time-based one-time password (TOTP)](concept-multifactor-authentication-customers#time-based-one-time-password-totp)<br>- [Passkey (FIDO2)](how-to-sign-in-with-passkey)<br><br>For invited users (preview):<br>- [Emailed one-time passcode](concept-multifactor-authentication-customers#email-one-time-passcode)<br>- [SMS-based authentication](concept-multifactor-authentication-customers#sms-based-authentication) |
 
 ### Authentication methods available in External ID
 
@@ -113,6 +114,7 @@ You can use some authentication methods as the primary factor when users sign in
 | [Email with password](concept-authentication-methods-customers#email-and-password-sign-in) | ![](../media/common/applies-to-yes.png) | ![](../media/common/applies-to-yes.png) |  |  |
 | [Email one-time passcode](concept-authentication-methods-customers#email-with-one-time-passcode-sign-in) | ![](../media/common/applies-to-yes.png) | ![](../media/common/applies-to-yes.png) | ![](../media/common/applies-to-yes.png) | ![](../media/common/applies-to-yes.png) |
 | [SMS-based authentication](concept-multifactor-authentication-customers#sms-based-authentication) |  |  |  | ![](../media/common/applies-to-yes.png) |
+| [Time-based one-time password (TOTP)](concept-multifactor-authentication-customers#time-based-one-time-password-totp) |  |  |  | ![](../media/common/applies-to-yes.png) |
 | [Passkey (FIDO2)](how-to-sign-in-with-passkey) | ![](../media/common/applies-to-yes.png) |  |  | ![](../media/common/applies-to-yes.png) |
 | [Apple federation](how-to-apple-federation-customers) | ![](../media/common/applies-to-yes.png) | ![](../media/common/applies-to-yes.png) |  |  |
 | [Facebook federation](how-to-facebook-federation-customers) | ![](../media/common/applies-to-yes.png) | ![](../media/common/applies-to-yes.png) |  |  |

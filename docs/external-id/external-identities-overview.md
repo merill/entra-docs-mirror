@@ -13,7 +13,7 @@ ms.subservice: external
 manager: dougeby
 description: Compare solutions for using Microsoft Entra External ID to work with people outside your organization, including B2B collaboration and Azure AD B2C.
 ms.topic: overview
-ms.date: 2026-04-24T00:00:00.0000000Z
+ms.date: 2026-09-02T00:00:00.0000000Z
 ms.collection: M365-identity-device-management
 ai-usage: ai-assisted
 locale: en-us
@@ -33,12 +33,12 @@ item_type: Content
 source_path: docs/external-id/external-identities-overview.md
 cmProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/c77bc83e-f0b0-4b63-836e-6630e606bf7c
+- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
-- https://authoring-docs-microsoft.poolparty.biz/devrel/54918a83-0404-4863-9c91-715186c1f582
 spProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/b98eda1f-6af8-444f-bbfb-7f2366948cbc
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
-- https://authoring-docs-microsoft.poolparty.biz/devrel/b26f5f7a-0913-4a95-8337-ed7543902f2d
 platformId: aad50ec6-90dc-d6f5-d4d4-c709f170fe16
 ---
 
@@ -159,10 +159,12 @@ Organizations can use Microsoft Entra Conditional Access policies to enhance the
 
 #### Conditional Access and MFA in external tenants
 
-In external tenants, organizations can enforce MFA for customers by creating a Conditional Access policy and adding MFA to sign-up and sign-in user flows. External tenants support two methods for authentication as a second factor:
+In external tenants, organizations can enforce MFA for customers by creating a Conditional Access policy and adding MFA to sign-up and sign-in user flows. External tenants support the following authentication methods for MFA:
 
 - **Email one-time passcode**. After users sign in with their email and password, they're prompted for a passcode that's sent to their email.
 - **SMS-based authentication**. SMS is available as a second-factor authentication method for MFA for users in external tenants. Users who sign in with email and password, email and one-time passcode, or social identities like Google or Facebook are prompted for second verification through SMS.
+- **Time-based one-time password (TOTP)**. Users register Microsoft Authenticator or a supported third-party authenticator app and enter the temporary verification code from the app when MFA is required.
+- **Passkey (FIDO2)**. Passkeys are phishing-resistant credentials that can satisfy MFA in a single gesture and enable passwordless sign-in.
 
 [Learn more about authentication methods in external tenants](customers/concept-multifactor-authentication-customers).
 

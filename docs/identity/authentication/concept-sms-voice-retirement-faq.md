@@ -97,7 +97,7 @@ To find users still using SMS or Voice, run the [PowerShell script](https://gith
 
 ## Which cloud environments are included in this timeline?
 
-This timeline applies to public cloud environments only. Other cloud environments will follow on a later schedule, and we will provide advance communications to help customers prepare for the transition.
+This timeline applies to public cloud environments, including GCC. Other cloud environments will follow on a later schedule, and we will provide advance communications to help customers prepare for the transition.
 
 ## What authentication options can my organization use in China as Microsoft-provided SMS and voice are retired?
 

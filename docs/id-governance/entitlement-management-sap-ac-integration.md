@@ -69,30 +69,6 @@ The [SAP Identity Access Governance (IAG) integration](entitlement-management-sa
 - SAP AC processes the request using its existing business roles, workflows, approvals, and risk controls.
 - Microsoft Entra polls SAP AC for request status through the same chain, and updates the access-package assignment when SAP completes its workflow. Status reconciliation can take up to 10 minutes.
 
-The following diagram shows the request and status-reconciliation path across Microsoft Entra, SAP BTP, and the on-premises SAP AC system.
-
-```mermaid
-flowchart LR
-    subgraph MS["Microsoft cloud"]
-        EM["Microsoft Entra ID Governance<br/>Entitlement management"]
-        KV["Azure Key Vault<br/>SAP BTP client secret"]
-    end
-    subgraph BTP["SAP Business Technology Platform"]
-        IS["SAP Integration Suite<br/>iFlows: REST to SOAP"]
-    end
-    subgraph ONPREM["Customer network (on-premises)"]
-        CC["SAP Cloud Connector<br/>secure tunnel"]
-        AC["SAP AC<br/>SAP GRC"]
-    end
-    KV -. "connector reads secret" .-> EM
-    EM -- "1. REST call with OAuth token" --> IS
-    IS -- "2. SOAP via virtual host" --> CC
-    CC -- "3. SOAP" --> AC
-    AC -. "4. request status (polled)" .-> CC
-    CC -. "status" .-> IS
-    IS -. "status" .-> EM
-```
-
 ## License requirements
 
 This feature requires Microsoft Entra ID Governance or Microsoft Entra Suite subscriptions, for your organization's users. Some capabilities, within this feature, may operate with a Microsoft Entra ID P2 subscription. For more information, see the articles of each capability for more details. To find the right license for your requirements, see [Microsoft Entra ID Governance licensing fundamentals](licensing-fundamentals).
@@ -193,7 +169,7 @@ For the preview, the integration is distributed as a downloadable ZIP package of
 
 ### Import the integration package
 
-1. Download the integration-flow ZIP package from the preview team's GitHub repository (`<add GitHub branch archive URL in the format https://github.com/microsoft/REPOSITORY/archive/refs/heads/main.zip>`).
+1. Download the integration-flow ZIP package
 2. Sign in to your SAP BTP subaccount and open **SAP Integration Suite** &gt; **Design** &gt; **Integrations**.
 3. Select **Import** and upload the ZIP file.
 4. Confirm that the imported package and all of its integration flows are listed. The package contains one flow for each SAP AC web service the integration uses.

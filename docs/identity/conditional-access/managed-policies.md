@@ -33,13 +33,9 @@ monikers: []
 item_type: Content
 source_path: docs/identity/conditional-access/managed-policies.md
 cmProducts:
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
-- https://authoring-docs-microsoft.poolparty.biz/devrel/1ae5c491-970a-4062-8301-6336e69f9026
+- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
 spProducts:
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
-- https://authoring-docs-microsoft.poolparty.biz/devrel/f2c3e52e-3667-4e8a-bf11-20b9eaccdc8c
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
 platformId: 08c6103d-da93-c011-d7a2-1657a33c9d64
 ---
 
@@ -194,7 +190,7 @@ Administrators can review policy impact in report-only mode, exclude emergency a
 
 ### Require remediation for high-risk users
 
-This policy requires users identified as high risk by Microsoft Entra ID Protection to remediate their risk before continuing to access organizational resources. A new security group is created alongside this policy to scope the affected users. Instead of blocking access entirely, this policy uses [adaptive risk remediation](/en-us/entra/id-protection/concept-identity-protection-user-experience) to guide users through the appropriate recovery flow based on their authentication method and the type of threat detected. For more information about the remediation experience, see [User self-remediation with Microsoft Entra ID Protection](/en-us/entra/id-protection/concept-identity-protection-user-experience).
+This policy requires users identified as high risk by Microsoft Entra ID Protection to remediate their risk before continuing to access organizational resources. A new security group named “Conditional Access: User Risk remediation” is created alongside this policy to scope the affected users. Microsoft populates this group with eligible active users registered for MFA, up to the tenant’s available Microsoft Entra ID P2 license count. Instead of blocking access entirely, this policy uses [adaptive risk remediation](/en-us/entra/id-protection/concept-identity-protection-user-experience) to guide users through the appropriate recovery flow based on their authentication method and the type of threat detected. For more information about the remediation experience, see [User self-remediation with Microsoft Entra ID Protection](/en-us/entra/id-protection/concept-identity-protection-user-experience).
 
 Note
 
@@ -203,6 +199,7 @@ Note
 This policy targets:
 
 - Organizations with Microsoft Entra ID P2 licenses
+- Organizations that don't already have an enabled customer-managed Conditional Access policy targeting user risk. Microsoft skips tenants that already have an enabled customer-managed Conditional Access policy targeting user risk. Existing user risk policies in Report-only or Off state don't prevent this Microsoft-managed policy from being created. This check is specific to user risk policies, not all Conditional Access policies.
 
 Key considerations:
 
@@ -211,7 +208,7 @@ Key considerations:
 - Authentication strength and sign-in frequency (every time) are automatically applied to ensure users reauthenticate with the required strength after session revocation.
 - This policy isn't supported for external and guest users.
 
-Administrators can review policy impact in report-only mode, exclude emergency access accounts, and move the policy to On when ready.
+Administrators can review policy impact in report-only mode, exclude emergency access accounts, and turn the policy On before the scheduled enforcement date. If the policy remains in Report-only, Microsoft automatically enables it according to the schedule communicated to your tenant.
 
 ## Upgrade from security defaults
 

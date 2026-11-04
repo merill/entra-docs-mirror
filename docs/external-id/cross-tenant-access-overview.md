@@ -32,8 +32,10 @@ monikers: []
 item_type: Content
 source_path: docs/external-id/cross-tenant-access-overview.md
 cmProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
 spProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
 platformId: 9fe7fa95-ccad-95de-76d9-6f1632e762c6
 ---
@@ -180,7 +182,11 @@ You must always have at least one fallback identity provider active. So, if you 
 
 The cross-tenant synchronization settings are inbound-only organizational settings to allow the administrator of a source tenant to synchronize users and groups into a target tenant. These settings are checkboxes with the names **Allow user synchronization into this tenant** and **Allow group synchronization into this tenant** that are specified in the target tenant. These settings don't affect B2B invitations created through other processes such as [manual invitation](add-users-administrator) or [Microsoft Entra entitlement management](../id-governance/entitlement-management-external-users).
 
-[![Screenshot that shows the tab for cross-tenant synchronization with the checkboxes for synchronizing users and groups into a target tenant.](../media/external-identities/access-settings-users-sync.png)](../media/external-identities/access-settings-users-sync.png#lightbox)
+When role-enabled group sync is available in your environment, the target tenant also controls inbound role-assignable group synchronization through **Allow role-enabled group synchronization into this tenant**. Select this checkbox together with **Allow group synchronization into this tenant** to allow role-enabled group sync. This feature synchronizes role-assignability, not the source group's role assignments.
+
+[![Screenshot of the Cross-tenant sync tab showing the inbound user, group, and role-enabled group synchronization checkboxes.](../media/external-identities/allow-role-enabled-groups-inbound.png)](../media/external-identities/allow-role-enabled-groups-inbound.png#lightbox)
+
+The screenshot identifies the settings. The group and role-enabled group checkboxes aren't selected in this example.
 
 To configure these settings using Microsoft Graph, see the [Update crossTenantIdentitySyncPolicyPartner](/en-us/graph/api/crosstenantidentitysyncpolicypartner-update) API. For more information, see [Configure cross-tenant synchronization](../identity/multi-tenant-organizations/cross-tenant-synchronization-configure).
 

@@ -6,16 +6,16 @@ uhfHeaderId: MSDocsHeader-Entra
 breadcrumb_path: /entra/breadcrumb/toc.json
 feedback_system: Standard
 feedback_product_url: https://feedback.azure.com/d365community/forum/22920db1-ad25-ec11-b6e6-000d3a4f0789
-author: kenwith
-ms.author: kenwith
+author: akhil-potturi
+ms.author: potturiakhil
 ms.reviewer: hafowler
 ms.service: entra-id
 ms.subservice: multitenant-organizations
 manager: dougeby
 description: Configure cross-tenant synchronization using the Microsoft Entra admin center. Step-by-step guide covering trust settings, provisioning scope, attribute mappings, and testing.
 ms.topic: how-to
-ms.date: 2026-08-06T00:00:00.0000000Z
-ms.custom: it-pro, sfi-image-nochange
+ms.date: 2026-11-02T00:00:00.0000000Z
+ms.custom: it-pro, msecd-doc-authoring-1032
 ai-usage: ai-assisted
 zone_pivot_groups: same-cloud-cross-cloud-synchronization
 locale: en-us
@@ -34,12 +34,12 @@ monikers: []
 item_type: Content
 source_path: docs/identity/multi-tenant-organizations/cross-tenant-synchronization-configure.md
 cmProducts:
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
 - https://authoring-docs-microsoft.poolparty.biz/devrel/b1cfdec6-b0c3-4209-818c-736879856e0e
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
 spProducts:
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
 - https://authoring-docs-microsoft.poolparty.biz/devrel/2d0723c1-cf38-4c30-ab3d-5df787b33270
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
 platformId: 2ec78ed5-c6cc-8b6d-f320-350835a6ac9b
 ---
@@ -121,6 +121,7 @@ By the end of this article, you'll be able to:
 ::: zone pivot="same-cloud-synchronization"
 
 - Microsoft Entra ID P1 or P2 license for cross-tenant user sync. Microsoft Entra ID Governance or Microsoft Entra Suite licenses for cross-tenant group sync. For more information, see [License requirements](cross-tenant-synchronization-overview#license-requirements).
+- For role-enabled group sync (preview), a role-assignable group in the source tenant. The administrative roles listed here are sufficient to configure role-enabled group sync.
 - [Security Administrator](../role-based-access-control/permissions-reference#security-administrator) role to configure cross-tenant access settings.
 - [Hybrid Identity Administrator](../role-based-access-control/permissions-reference#hybrid-identity-administrator) role to configure cross-tenant synchronization.
 - [Cloud Application Administrator](../role-based-access-control/permissions-reference#cloud-application-administrator) or [Application Administrator](../role-based-access-control/permissions-reference#application-administrator) role to assign users to a configuration and to delete a configuration.
@@ -213,9 +214,13 @@ By the end of this article, you'll be able to:
 
     Optionally, select the **Allow group synchronization into this tenant** checkbox.
 
+    To synchronize role-assignable groups, also select **Allow role-enabled group synchronization into this tenant**. Keep both group synchronization checkboxes selected.
+
     For more information, see [Group synchronization](cross-tenant-synchronization-overview#group-synchronization).
 
-    [![Screenshot that shows the Cross-tenant sync tab with the Allow user synchronization into this tenant and Allow group synchronization into this tenant checkboxes.](../../media/external-identities/access-settings-users-sync.png)](../../media/external-identities/access-settings-users-sync.png#lightbox)
+    [![Screenshot of the Cross-tenant sync tab showing the inbound user, group, and role-enabled group synchronization checkboxes.](../../media/external-identities/allow-role-enabled-groups-inbound.png)](../../media/external-identities/allow-role-enabled-groups-inbound.png#lightbox)
+
+    The screenshot identifies the settings. The group and role-enabled group checkboxes aren't selected in this example.
 
 ::: zone-end
 
@@ -335,6 +340,14 @@ The Microsoft Entra provisioning service allows you to define who will be provis
 
 Start small. Test with a small set of users before rolling out to everyone. When the scope for provisioning is set to assigned users and groups, you can control it by assigning one or two users to the configuration. You can further refine who is in scope for provisioning by creating attribute-based scoping filters, described in the next step.
 
+::: zone pivot="same-cloud-synchronization"
+
+Important
+
+Before assigning role-assignable groups to the configuration, complete Configure role-enabled group sync. The `isAssignableToRole` mapping applies only when the target group is created. After saving the mapping, return to this step to assign the groups.
+
+::: zone-end
+
 1. In the source tenant, on the **Overview** page, select the **Properties** tab.
 
     [![Screenshot of the Overview page that shows the Properties tab.](media/cross-tenant-synchronization-configure/provisioning-settings.png)](media/cross-tenant-synchronization-configure/provisioning-settings.png#lightbox)
@@ -396,7 +409,7 @@ Regardless of the value you selected for **Scope** in the previous step, you can
 2. If you want to synchronize groups, set the **Enabled** toggle to **Yes**.
 
     By default, this toggle is set to **No**.
-3. If you want to scoping filters for groups, follow similar previous steps as users.
+3. If you want to define scoping filters for groups, follow the previous steps for users.
 
 ::: zone-end
 
@@ -448,7 +461,33 @@ Attribute mappings allow you to define how data should flow between the source t
 ::: zone pivot="same-cloud-synchronization"
 
 1. On the **Provisioning** page, under the **Mappings** section, select **Provision Microsoft Entra ID Groups** to open the **Attribute Mapping** page.
-2. If you want to modify attribute mappings for groups, follow similar previous steps as users.
+2. If you want to modify attribute mappings for groups, follow the previous steps for users.
+
+### Configure role-enabled group sync
+
+Role-enabled group sync lets you create role-assignable groups in the target tenant. It doesn't copy the source group's role assignments. Configure the mapping before adding role-assignable groups to the job's scope, including when you add this feature to an existing group synchronization configuration.
+
+1. Confirm that the target tenant allows both group synchronization and role-enabled group synchronization, as described in step 2.
+2. In the source tenant, open your cross-tenant synchronization configuration. Select **Attribute mapping** &gt; **Groups**. If your configuration uses the older interface, select **Provisioning** &gt; **Mappings** &gt; **Provision Microsoft Entra ID Groups**.
+3. Confirm that group provisioning is enabled, as described in step 8.
+4. Select **Add attribute mapping** and configure these settings:
+
+    | Setting | Value |
+    | --- | --- |
+    | **Mapping type** | **Direct** |
+    | **Source attribute** | `isAssignableToRole` |
+    | **Target attribute** | `isAssignableToRole` |
+    | **Default value (if null)** | Leave blank. |
+    | **Apply this mapping** | **Only during object creation** |
+    | **Match objects using this attribute** | Leave unchecked. |
+
+    [![Screenshot of a direct isAssignableToRole mapping applied only during object creation, with a blank default value and matching unchecked.](media/cross-tenant-synchronization-configure/mapping-creation-only.png)](media/cross-tenant-synchronization-configure/mapping-creation-only.png#lightbox)
+5. Save the mapping and confirm that the group attribute mapping list includes a direct `isAssignableToRole` to `isAssignableToRole` mapping. Don't use a constant `true` or an expression.
+
+    [![Screenshot of the Groups attribute mapping list showing a direct isAssignableToRole to isAssignableToRole mapping.](media/cross-tenant-synchronization-configure/role-assignable-mapping.png)](media/cross-tenant-synchronization-configure/role-assignable-mapping.png#lightbox)
+6. Return to step 7 to assign the intended source role-assignable groups. Review the group scoping filters in step 8 to ensure those groups are included.
+
+The mapping doesn't convert existing non-role-assignable target groups. If groups were synchronized before you configured this mapping, see Replace previously synchronized groups.
 
 ::: zone-end
 
@@ -528,7 +567,7 @@ Once you've started a provisioning job, you can monitor the status.
     If provisioning seems to be in an unhealthy state, the configuration will go into quarantine. For more information, see [Application provisioning in quarantine status](../app-provisioning/application-provisioning-quarantine-status).
 
     [![Screenshot of the Configurations Overview page that shows the status of the provisioning cycle.](media/cross-tenant-synchronization-configure/provisioning-job-start.png)](media/cross-tenant-synchronization-configure/provisioning-job-start.png#lightbox)
-2. Select **Provisioning logs** to determine which users have been provisioned successfully or unsuccessfully. By default, the logs are filtered by the service principal ID of the configuration. For more information, see [Provisioning logs in Microsoft Entra ID](../monitoring-health/concept-provisioning-logs?toc=/entra/identity/multi-tenant-organizations/toc.json).
+2. Select **Provisioning logs** to determine which objects have been provisioned successfully or unsuccessfully. By default, the logs are filtered by the service principal ID of the configuration. For more information, see [Provisioning logs in Microsoft Entra ID](../monitoring-health/concept-provisioning-logs?toc=/entra/identity/multi-tenant-organizations/toc.json).
 
     [![Screenshot of the Provisioning logs page that lists the log entries and their status.](media/cross-tenant-synchronization-configure/provisioning-logs.png)](media/cross-tenant-synchronization-configure/provisioning-logs.png#lightbox)
 3. Select **Audit logs** to view all logged events in Microsoft Entra ID. For more information, see [Audit logs in Microsoft Entra ID](../monitoring-health/concept-audit-logs).
@@ -539,6 +578,20 @@ Once you've started a provisioning job, you can monitor the status.
 4. In the target tenant, select **Users** &gt; **Audit logs** to view logged events for user management. Cross-tenant synchronization in the target tenant will be logged as the actor being the "Microsoft.Azure.SyncFabric" application.
 
     [![Screenshot of the Audit logs page in the target tenant that lists the log entries for user management.](media/cross-tenant-synchronization-configure/audit-logs-users-target.png)](media/cross-tenant-synchronization-configure/audit-logs-users-target.png#lightbox)
+
+::: zone pivot="same-cloud-synchronization"
+
+### Verify role-enabled group sync
+
+For role-enabled group sync, verify that the target groups can receive role assignments.
+
+1. In the source tenant, check **Provisioning logs** for the selected groups and resolve any reported errors.
+2. In the target tenant, verify that each newly provisioned group is role-assignable.
+3. Assign the required roles to the target groups using the target tenant's role-assignment process. For more information, see [Use Microsoft Entra groups to manage role assignments](../role-based-access-control/groups-concept).
+
+A role assigned to a source group isn't automatically assigned to its target group.
+
+::: zone-end
 
 ## Step 14: Configure leave settings
 
@@ -551,7 +604,39 @@ Even though users are being provisioned in the target tenant, they still might b
 
 This setting also applies to B2B collaboration and B2B direct connect, so if you set **External user leave settings** to **No**, B2B collaboration users and B2B direct connect users can't leave your organization themselves. For more information, see [Leave an organization as an external user](../../external-id/leave-the-organization#more-information-for-administrators).
 
+::: zone pivot="same-cloud-synchronization"
+
+## Replace previously synchronized groups
+
+Groups synchronized before you configured the `isAssignableToRole` mapping might already exist as non-role-assignable groups in the target tenant. Adding the mapping doesn't convert those groups because the property is set only during object creation.
+
+Warning
+
+Replacing these groups requires manually hard-deleting the old target groups. Hard deletion is destructive. Review group dependencies and the impact of replacement with the target tenant administrator before proceeding. Don't delete the source groups.
+
+1. Identify the affected target groups and plan their replacement with the target tenant administrator.
+2. Confirm that the inbound policy and creation-only attribute mapping are configured as described in Configure role-enabled group sync.
+3. Follow your approved change process to manually hard-delete the affected old target groups.
+4. Provision the source groups again and verify that the replacement target groups are role-assignable before assigning roles.
+
+::: zone-end
+
 ## Troubleshoot common cross-tenant synchronization scenarios
+
+::: zone pivot="same-cloud-synchronization"
+
+### Role-enabled group sync doesn't produce the expected result
+
+Use the following checks before changing the configuration.
+
+| Symptom | Check |
+| --- | --- |
+| A new target group isn't role-assignable. | Verify that the source group is role-assignable and that the direct `isAssignableToRole` mapping was saved before target group creation. |
+| An existing target group remains non-role-assignable. | Adding the mapping doesn't convert existing groups. See Replace previously synchronized groups. |
+| A group isn't provisioned. | Check inbound group and role-enabled group synchronization permissions, group provisioning enablement, assigned scope, scoping filters, and provisioning logs. |
+| The source group's role is missing in the target tenant. | Assign the role separately in the target tenant. Role assignments aren't synchronized. |
+
+::: zone-end
 
 ### Symptom - Test connection fails with AzureActiveDirectoryCrossTenantSyncPolicyCheckFailure
 

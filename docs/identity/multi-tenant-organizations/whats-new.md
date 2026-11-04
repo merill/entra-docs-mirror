@@ -14,8 +14,8 @@ ms.subservice: multitenant-organizations
 manager: dougeby
 description: Learn about the new features and documentation improvements in multitenant organizations for Microsoft Entra ID.
 ms.topic: overview
-ms.date: 2026-03-18T00:00:00.0000000Z
-ms.custom: it-pro
+ms.date: 2026-11-02T00:00:00.0000000Z
+ms.custom: it-pro, msecd-doc-authoring-1032
 ai-usage: ai-assisted
 locale: en-us
 document_id: 77c4af6b-9b6a-9577-b063-e37f4e85a99e
@@ -33,9 +33,13 @@ monikers: []
 item_type: Content
 source_path: docs/identity/multi-tenant-organizations/whats-new.md
 cmProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/b1cfdec6-b0c3-4209-818c-736879856e0e
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
 spProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/2d0723c1-cf38-4c30-ab3d-5df787b33270
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
 platformId: ac6b1dba-d04a-2ca8-a44b-2f9dff34150b
 ---
 
@@ -49,6 +53,7 @@ This article provides information about new features and documentation improveme
 
 | Date | Area | Description |
 | --- | --- | --- |
+| November 2026 | Cross-tenant synchronization | Preview support for role-enabled group synchronization lets you create role-assignable groups across tenants in the same cloud. Configure inbound settings and a creation-only attribute mapping, then verify the target groups. Role assignments aren't synchronized. See [Role-assignable group synchronization](cross-tenant-synchronization-overview#can-i-synchronize-role-assignable-groups) and [Configure role-enabled group sync](cross-tenant-synchronization-configure?pivots=same-cloud-synchronization#configure-role-enabled-group-sync). |
 | August 2026 | Cross-tenant synchronization | Revised configuration steps for updated Overview, Attribute mapping, Provisioning configuration, and Basics settings pages. See [Configure cross-tenant synchronization](cross-tenant-synchronization-configure). |
 | March 2026 | Cross-tenant synchronization | Added support for security group synchronization (same cloud) in preview. See [Group synchronization](cross-tenant-synchronization-overview#group-synchronization) and [Configure cross-tenant synchronization](cross-tenant-synchronization-configure?pivots=same-cloud-synchronization). |
 
