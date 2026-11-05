@@ -38,13 +38,11 @@ monikers: []
 item_type: Content
 source_path: docs/identity/conditional-access/concept-conditional-access-grant.md
 cmProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
-- https://authoring-docs-microsoft.poolparty.biz/devrel/bcbcbad5-4208-4783-8035-8481272c98b8
 spProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
-- https://authoring-docs-microsoft.poolparty.biz/devrel/43b2e5aa-8a6d-4de2-a252-692232e5edc8
 platformId: e67093ae-a1d2-8771-25bf-9f0ce84c350b
 ---
 
@@ -127,7 +125,7 @@ On iOS and macOS, as Microsoft Entra ID transitions device identity key storage 
 
 You can use the Microsoft Defender for Endpoint app with the approved client app policy in Intune to set the device compliance policy to Conditional Access policies. There's no exclusion required for the Microsoft Defender for Endpoint app while you're setting up Conditional Access. Although Microsoft Defender for Endpoint on Android and iOS (app ID dd47d17a-3194-4d86-bfd5-c6ae6f5651e3) isn't an approved app, it has permission to report device security posture. This permission enables the flow of compliance information to Conditional Access.
 
-Similarly, the **Require device to be marked as compliant** doesn't block Microsoft Authenticator app access to the `UserAuthenticationMethod.Read` scope. Authenticator needs access to the `UserAuthenticationMethod.Read` scope during Authenticator registration to determine which credentials a user can configure. Authenticator needs access to `UserAuthenticationMethod.ReadWrite` to register credentials, which doesn't bypass the **Require device to be marked as compliant** check.
+Microsoft Authenticator requires `UserAuthenticationMethod.ReadWrite` access to register credentials. When this permission is used in a delegated context by Microsoft Authenticator, access required for credential registration isn't blocked by the **Require device to be marked as compliant** grant control. This exception doesn't apply to application permissions. Requests using the `UserAuthenticationMethod.ReadWrite` application permission remain subject to the **Require device to be marked as compliant** check.
 
 ### Require Microsoft Entra hybrid joined device
 

@@ -38,7 +38,7 @@ spProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
 - https://authoring-docs-microsoft.poolparty.biz/devrel/90370425-aca4-4a39-9533-d52e5e002a5d
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/67b2ba1a-6f74-4044-a48a-f0f8ad076b8f
-platformId: 4e94a184-939b-d5d0-74d8-b80d60b64609
+platformId: d1478d6e-e3fe-f3ee-72af-76324d2160dd
 ---
 
 # Set up SMS and voice with your own telecom provider in the Microsoft Entra admin center - Microsoft Entra ID | Microsoft Learn
@@ -88,7 +88,12 @@ Before you begin, confirm that your Microsoft Entra policies allow the setup scr
     [![Redacted screenshot of the telecom provider selection pane. Demo pricing and offer details are obscured.](media/choose-your-own-telephony-set-up/subscribe-telecom-provider.png)](media/choose-your-own-telephony-set-up/subscribe-telecom-provider.png#lightbox)
 4. Purchase your provider's offer. For detailed purchasing instructions, see [Purchase and deploy a SaaS solution from Security Store](/en-us/security/store/customers/how-to-purchase-a-saas-solution-and-deploy-a-linked-solution).
 5. After you **Place Order**, select **Configure Account Now** and follow your provider's registration instructions.
-6. Keep the registration page available and return to the Microsoft Entra setup page. Continue to step 2; you'll complete registration in step 3 with the application ID from the deployment summary.
+6. Keep your provider's registration page open, but leave the **Application (client) ID** field blank. The setup script creates this ID in step 2.
+7. Return to the Microsoft Entra setup page and continue to step 2.
+
+Important
+
+Don't enter any other ID in the provider's **Application (client) ID** field, such as your tenant ID, subscription ID, or an existing app's ID. Use only the **Application (client) ID** from the step 2 deployment summary.
 
 ## Step 2: Deploy the integration
 
