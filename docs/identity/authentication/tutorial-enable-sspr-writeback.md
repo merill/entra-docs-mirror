@@ -17,6 +17,7 @@ ms.date: 2026-05-27T00:00:00.0000000Z
 ms.reviewer: tilarso
 ms.custom: msecd-doc-authoring-106
 adobe-target: true
+ai-usage: ai-assisted
 locale: en-us
 document_id: 115ae83a-95dd-5643-bc88-f5447ebb2b99
 document_version_independent_id: 7462ce84-0a9f-4bfd-7eba-c00928d77865
@@ -35,9 +36,11 @@ source_path: docs/identity/authentication/tutorial-enable-sspr-writeback.md
 cmProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
+- https://authoring-docs-microsoft.poolparty.biz/devrel/b1cfdec6-b0c3-4209-818c-736879856e0e
 spProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
+- https://authoring-docs-microsoft.poolparty.biz/devrel/2d0723c1-cf38-4c30-ab3d-5df787b33270
 platformId: 7540c817-89a9-d5f5-47ca-4efa303c6da2
 ---
 
@@ -102,18 +105,18 @@ To set up the appropriate permissions for password writeback to occur, complete 
 7. Under **Permissions**, select the box for **Reset password**.
 8. Under **Properties**, select the boxes for the following options. Scroll through the list to find these options, which might already be set by default:
 
-- **Write lockoutTime**
-- **Write pwdLastSet**
+    - **Write lockoutTime**
+    - **Write pwdLastSet**
 
     [![Set the appropriate permissions in Active Users and Computers for the account that Microsoft Entra Connect uses.](media/tutorial-enable-sspr-writeback/set-ad-ds-permissions-cropped.png)](media/tutorial-enable-sspr-writeback/set-ad-ds-permissions.png#lightbox)
+9. When ready, select **Apply / OK** to apply the changes.
+10. From the **Permissions** tab, select **Add**.
+11. For **Principal**, select the account that permissions should be applied to (the account Microsoft Entra Connect uses).
+12. In the **Applies to** drop-down list, select **This object and all descendant objects**
+13. Under **Permissions**, select the box for the following option:
 
-1. When ready, select **Apply / OK** to apply the changes.
-2. From the **Permissions** tab, select **Add**.
-3. For **Principal**, select the account that permissions should be applied to (the account Microsoft Entra Connect uses).
-4. In the **Applies to** drop-down list, select **This object and all descendant objects**
-5. Under **Permissions**, select the box for the following option:
     - **Unexpire Password**
-6. When ready, select **Apply / OK** to apply the changes and exit any open dialog boxes.
+14. When ready, select **Apply / OK** to apply the changes and exit any open dialog boxes.
 
 When you update permissions, it might take up to an hour or more for these permissions to replicate to all the objects in your directory.
 
@@ -128,6 +131,10 @@ If you need to allow users to change or reset passwords more than once per day, 
 ## Enable password writeback in Microsoft Entra Connect
 
 One of the configuration options in Microsoft Entra Connect is for password writeback. When this option is enabled, password change events cause Microsoft Entra Connect to synchronize the updated credentials back to the on-premises AD DS environment.
+
+Important
+
+Enabling password writeback for the first time might trigger password change events 656 and 657, even if a password change hasn't occurred. This is because all password hashes are resynchronized after a password hash synchronization cycle runs.
 
 To enable SSPR writeback, first enable the writeback option in Microsoft Entra Connect. From your Microsoft Entra Connect server, complete the following steps:
 
@@ -169,14 +176,14 @@ If you no longer want to use the SSPR writeback functionality you have configure
 5. Uncheck the option for **Allow users to unlock accounts without resetting their password**.
 6. When ready, select **Save**.
 
-If you no longer want to use the Microsoft Entra Connect cloud sync for SSPR writeback functionality but want to continue using Microsoft Entra Connect Sync agent for writebacks complete the following steps:
+To stop using Microsoft Entra Connect cloud sync for SSPR writeback while continuing to use the Microsoft Entra Connect Sync agent, complete the following steps:
 
 1. Sign in to the [Microsoft Entra admin center](https://entra.microsoft.com) as at least a [Hybrid Identity Administrator](../role-based-access-control/permissions-reference#hybrid-identity-administrator).
 2. Browse to **Entra ID** &gt; **Password reset**, then choose **On-premises integration**.
 3. Uncheck the option for **Write back passwords with Microsoft Entra Connect cloud sync**.
 4. When ready, select **Save**.
 
-If you no longer want to use any password functionality, complete the following steps from your Microsoft Entra Connect server:
+If you no longer want to use password writeback in Microsoft Entra Connect, complete the following steps from your Microsoft Entra Connect server:
 
 1. Sign in to your Microsoft Entra Connect server and start the **Microsoft Entra Connect** configuration wizard.
 2. On the **Welcome** page, select **Configure**.
@@ -186,7 +193,3 @@ If you no longer want to use any password functionality, complete the following 
 6. On the **Optional features** page, deselect the box next to **Password writeback** and select **Next**.
 7. On the **Ready to configure** page, select **Configure** and wait for the process to finish.
 8. When you see the configuration finish, select **Exit**.
-
-Important
-
-Enabling password writeback for the first time might trigger password change events 656 and 657, even if a password change hasn't occurred. This is because all password hashes are resynchronized after a password hash synchronization cycle runs.
