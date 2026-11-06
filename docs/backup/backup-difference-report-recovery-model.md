@@ -115,7 +115,7 @@ Backup and Recovery doesn't create new objects or hard-delete objects from your 
 
 Warning
 
-Hard-deleted objects can't be recovered. Configure [protected actions](/en-us/entra/identity/role-based-access-control/protected-actions-overview) to prevent unwanted hard deletions.
+Hard-deleted objects can't be recovered. [Configure Hard Deletion Protection](configure-hard-deletion-protection) to block permanent deletion of supported objects during the first seven days after they're soft deleted. You can also configure [protected actions](/en-us/entra/identity/role-based-access-control/protected-actions-overview) to protect hard-deletion permissions.
 
 For soft-deleted users, Microsoft 365 Groups, cloud security groups, application registrations, and service principals, you can also use [soft deletion](soft-deletion) within the 30-day retention window.
 

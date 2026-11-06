@@ -6,16 +6,17 @@ uhfHeaderId: MSDocsHeader-Entra
 breadcrumb_path: /entra/breadcrumb/toc.json
 feedback_system: Standard
 feedback_product_url: https://feedback.azure.com/d365community/forum/22920db1-ad25-ec11-b6e6-000d3a4f0789
-author: Justinha
-ms.author: justinha
+author: tilarso
+ms.author: tilarso
 ms.service: entra-id
 ms.subservice: authentication
 manager: dougeby
 description: Learn how to prepopulate contact information for users of Microsoft Entra self-service password reset (SSPR) so that they can use the feature without completing a registration process.
 ms.topic: how-to
-ms.date: 2025-03-04T00:00:00.0000000Z
+ms.date: 2026-11-05T00:00:00.0000000Z
 ms.reviewer: tilarso
 ms.custom: has-azure-ad-ps-ref, sfi-image-nochange
+ai-usage: ai-assisted
 locale: en-us
 document_id: aae83fda-27b9-edca-1b59-1140de4cc3f5
 document_version_independent_id: c93eb84b-f04b-de03-f3f5-57d4672b0559
@@ -33,9 +34,11 @@ item_type: Content
 source_path: docs/identity/authentication/howto-sspr-authenticationdata.md
 cmProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
+- https://authoring-docs-microsoft.poolparty.biz/devrel/b1cfdec6-b0c3-4209-818c-736879856e0e
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
 spProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
+- https://authoring-docs-microsoft.poolparty.biz/devrel/2d0723c1-cf38-4c30-ab3d-5df787b33270
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
 platformId: 03942258-078b-029c-0618-24d0ee08ffa1
 ---
@@ -48,9 +51,7 @@ Some organizations prefer to bootstrap this process through synchronization of a
 
 Important
 
-Starting **Nov 9, 2026**, If your SSPR settings require users to register during sign-in, and enabled users do not have enough methods to complete SSPR, a registration campaign will prompt affected users to register methods ahead of enforcement. Ensure users have registered at least one method that satisfies your SSPR policy. For more information, see [How to manage authentication methods](how-to-authentication-methods-manage).
-
-Starting **Oct 5, 2026**, SSPR will only accept explicitly registered authentication methods. Directory-sourced properties — such as `mobilePhone`, `businessPhone`, and `otherMails` — that were never registered will no longer work for SSPR verification.
+Starting **February 2027**, SSPR will only accept explicitly registered authentication methods. Directory-sourced properties — such as `mobilePhone`, `businessPhone`, and `otherMails` — that were never registered will no longer work for SSPR verification.
 
 You can prepopulate authentication contact information if you meet the following requirements:
 

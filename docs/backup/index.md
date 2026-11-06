@@ -59,6 +59,7 @@ Learn how to use Microsoft Entra Backup and Recovery to protect your tenant from
 ### How-To Guide
 
 - [View available backups](view-available-backups)
+- [Configure Hard Deletion Protection](configure-hard-deletion-protection)
 - [Create and review difference reports](create-review-difference-reports)
 - [Recover objects](recover-objects)
 - [Review recovery history](review-recovery-history)

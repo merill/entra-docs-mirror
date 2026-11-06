@@ -112,4 +112,4 @@ Cancel a recovery job while it's running. Any recovery actions completed before 
 Note
 
 - Soft-deleted users, Microsoft 365 Groups, cloud security groups, application registrations, and service principals can be restored for 30 days. For more information, see [Soft deletion in Microsoft Entra Backup and Recovery](soft-deletion). Backup and Recovery restores supported properties and links from retained backups.
-- Hard-deleted objects can't be recovered. Use Protected Actions to prevent unwanted hard deletions in your tenant.
+- Hard-deleted objects can't be recovered. [Configure Hard Deletion Protection](configure-hard-deletion-protection) to block permanent deletion of supported objects during the first seven days after they're soft deleted. You can also use Protected Actions to protect hard-deletion permissions.
