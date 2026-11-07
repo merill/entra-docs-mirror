@@ -55,7 +55,7 @@ For more information, see [Microsoft Agent 365 plans and pricing](https://www.mi
 
 ## Agent identities basics
 
-Historically, AI agents would rely upon tools to interact with various applications and systems, and each of those tools would have their own identities in those applications and systems. Some of those tools would use service principals to authenticate to Microsoft services via Microsoft Graph or Microsoft Azure APIs. [Microsoft Entra Agent ID](../agent-id/what-are-agent-identities) introduces support for identities for the agents themselves, with four new types of object: agent identity blueprint, agent identity blueprint principal, agent identity, and agent user. Through the [agent identity blueprint](../agent-id/agent-blueprint), the agent can create one or more agent identities, and optionally an agent user for each agent identity. Each agent identity and agent user can have distinct access rights.
+Historically, AI agents would rely upon tools to interact with various applications and systems, and each of those tools would have their own identities in those applications and systems. Some of those tools would use service principals to authenticate to Microsoft services via Microsoft Graph or Microsoft Azure APIs. [Microsoft Entra Agent ID](../agent-id/what-are-agent-identities) introduces support for identities for the agents themselves, with four new types of object: agent identity blueprint, agent identity blueprint principal, agent identity, and agent user. Through the [agent identity blueprint](../agent-id/agent-blueprint), the agent can create one or more agent identities, and optionally an agent user for each agent identity, which it can use for authentication to Microsoft, third party and line of business applications. Each agent identity and agent user can have distinct access rights.
 
 ![Diagram of the relationship of Microsoft Entra Agent ID objects in a single tenant.](media/agent-id-governance-overview/agent-identity-objects-single-tenant.png)
 
@@ -69,7 +69,7 @@ The agent identity and the agent user allow AI agents to take on digital identit
 
 - **Microsoft Foundry** automatically provisions and manages agent identities throughout the agent lifecycle. When the first agent in a Foundry project is created, Microsoft Foundry provisions a default agent identity blueprint and a default agent identity for the project, and agents in the project authenticate by using the shared project's agent identity. Publishing an agent automatically creates a dedicated agent identity blueprint and agent identity, and the agent will authenticate by using the unique agent identity. Foundry supports use of the agent identity for authentication in Model Context Protocol (MCP) and Agent-to-Agent (A2A) tools. For more information, see [Agent identity concepts in Microsoft Foundry](/en-us/azure/ai-foundry/agents/concepts/agent-identity).
 - You can configure an **Azure App Service or Azure Functions app** to use the Microsoft Entra agent identity platform to securely connect to resources as an agent. For more information, see [How to use an agent identity in App Service and Azure Functions](/en-us/azure/app-service/overview-agent-identity).
-- Agents created in **Microsoft Copilot Studio** can be configured to automatically be assigned to an agent identity. When an agent identity is first created in a Power Platform environment after enabling this setting, a Microsoft Copilot Studio agent identity blueprint, and an agent identity blueprint principal, are automatically created. For more information, see [Microsoft Entra Agent IDs for Copilot Studio agents](/en-us/microsoft-copilot-studio/admin-use-entra-agent-identities).
+- Agents created in **Microsoft Copilot Studio** can be configured to automatically be assigned to an agent identity. When an agent identity is first created in a Power Platform environment after enabling this setting, a Microsoft Copilot Studio agent identity blueprint, and an agent identity blueprint principal, are automatically created. For more information, see [Microsoft Entra Agent IDs for Copilot Studio agents](/en-us/microsoft-copilot-studio/admin-use-entra-agent-identities) and [Agent identities and authentication for Copilot Studio](/en-us/microsoft-copilot-studio/govern-agents-identities-overview).
 - For agents in the **Microsoft Teams** platform, a developer can create and manage agent identity blueprints in the Developer Portal for Teams. For more information, see [Manage your apps in Developer Portal](/en-us/microsoftteams/platform/concepts/build-and-test/manage-your-apps-in-developer-portal).
 - **Microsoft Agent 365** gives each AI agent its own Microsoft Entra Agent ID, for identity, lifecycle, and access management. For more information, see [Agent identity platform capabilities for Agent 365](/en-us/microsoft-agent-365/admin/capabilities-entra).
 
@@ -85,7 +85,7 @@ To use access packages for agent identities, configure an access package with th
 
 Note
 
-If your agents aren't using Microsoft Entra agent IDs, then also create an access package assignment policy with the option **All Service principals** to allow service principals in your directory to be able to request this access package.
+If your agents aren't using Microsoft Entra agent IDs, but are using service principals, then also create an access package assignment policy with the option **All Service principals** to allow service principals in your directory to be able to request this access package.
 
 Agents can then be assigned access packages through three different request pathways.
 
@@ -105,7 +105,7 @@ Entitlement management controls which resources an agent identity can be assigne
 
 For more information, see [Conditional Access for agents](../identity/conditional-access/agent-id) and [Identity Protection for agents](../id-protection/concept-risky-agents).
 
-## Management of agents
+## Delegated management of agent identities and access
 
 When agent identities are created, owners and sponsors of the agent can manually make decisions for the agent identity via both the My Account portal, and the My Access Portal.
 
