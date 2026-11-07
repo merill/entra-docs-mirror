@@ -14,7 +14,8 @@ description: Reduce risk from malicious or manipulated prompts sent to generativ
 ms.topic: troubleshooting
 ms.subservice: entra-internet-access
 ms.reviewer: KaTabish, jricketts
-ms.date: 2026-04-21T00:00:00.0000000Z
+ms.date: 2026-11-06T00:00:00.0000000Z
+ai-usage: ai-assisted
 locale: en-us
 document_id: bec8d8d7-3b09-5b52-21c4-392948049e5c
 document_version_independent_id: bec8d8d7-3b09-5b52-21c4-392948049e5c
@@ -31,9 +32,9 @@ monikers: []
 item_type: Content
 source_path: docs/global-secure-access/troubleshoot-prompt-injection-protection.md
 cmProducts:
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
+- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
 spProducts:
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
 platformId: 28396d58-231c-01fd-2d2f-8daa79d260d3
 ---
 
@@ -42,7 +43,7 @@ platformId: 28396d58-231c-01fd-2d2f-8daa79d260d3
 Prompt injection protection policies in Global Secure Access help reduce risk from malicious or manipulated prompts sent to generative AI sites and apps. When protection doesn't apply or doesn't behave as expected, these issues are the most common causes:
 
 - Missing Transport Layer Security (TLS) inspection
-- Failed device health prerequisites (including disabled QUIC)
+- Failed device health prerequisites or missing QUIC acquisition and cloud firewall blocking
 - Improperly configured or incorrectly attached prompt policy rules
 
 This article helps you validate tenant and device prerequisites and troubleshoot configuration issues.
@@ -54,7 +55,7 @@ Follow these steps so that prompt injection policies can inspect HTTPS traffic a
 1. Confirm TLS inspection applies to the target AI site.
 2. Confirm TLS inspection works for other Global Secure Access policies.
 3. Confirm successful device Global Secure Access health check.
-4. Disable QUIC.
+4. Block QUIC with cloud firewall.
 5. Confirm successful prompt injection protection.
 
 ## 1. Confirm TLS inspection applies to the target AI site
@@ -97,18 +98,20 @@ If prompt injection protection works for some devices but not others, troublesho
 
     ![Screenshot of successful Health check.](media/troubleshoot-prompt-injection-protection/successful-checks.png)
 
-## 4. Disable QUIC
+Note
 
-If you enable QUIC on the device, TLS inspection doesn't work for certain sites. This issue occurs with Claude, ChatGPT, and most AI sites and apps. Browser and machine updates can cause QUIC settings to reset even when you previously disabled QUIC. If you enabled QUIC, add the browser flag to disable it (for example, `edge://flags/#enable-quic`).
+The client health check still checks browser QUIC settings and can report a QUIC failure even when cloud firewall blocks the traffic. Until the client health check is updated, you can ignore this specific failure only after you verify traffic acquisition and a matching cloud firewall **Block** decision as described in step 4. Continue to investigate all other failed health checks.
 
-1. Ensure that you disabled QUIC. Global Secure access doesn't acquire QUIC traffic.
-2. To ensure that settings persist, disable QUIC in the group policy or registry settings on the device.
-    1. Press **Win + R**. Type `gpedit.msc`. Press **Enter**.
-    2. Go to **Computer Configuration** or **User Configuration** &gt; **Administrative Templates** &gt; **Microsoft Edge**.
-    3. Locate the policy, **Allows QUIC protocol**.
-    4. Select the policy. Select **Disabled**.
-    5. Select **Apply**. Select **OK**.
-    6. To apply the policy, run `gpupdate /force` at the Command Prompt or restart the device.
+## 4. Block QUIC with cloud firewall
+
+Keep QUIC enabled in browsers. Prompt injection protection relies on TLS inspection of HTTPS traffic over TCP. Use **Custom Acquire** and cloud firewall to block QUIC traffic to the target AI sites so that applications that support fallback use HTTPS over TCP.
+
+1. Enable **Custom Acquire** in the Internet Access traffic forwarding profile and acquire **UDP** destination port `443` for the intended destinations. **Default Acquire** on TCP port `443` doesn't acquire UDP port `443`.
+2. Configure an enabled cloud firewall **Block** rule for the same destinations, protocol **UDP**, and destination port `443`. Link the policy to a security profile, enable the policy link, and apply the profile to the intended users through Conditional Access.
+3. Verify that the client acquires the connection and that **Traffic logs** record a **Block** decision for the UDP port `443` connection. A timeout alone doesn't prove cloud firewall blocking.
+4. Confirm that the browser falls back to HTTPS over TCP and that the certificate for the target AI site is the Global Secure Access inspection certificate.
+
+Cloud firewall for clients supports QUIC acquisition and blocking in preview, not end-to-end QUIC forwarding. An **Allow** rule for UDP port `443` doesn't enable supported end-to-end QUIC connectivity. For prerequisites, configuration, and verification steps, see [Control QUIC traffic on UDP port 443](how-to-configure-cloud-firewall-clients#control-quic-traffic-on-udp-port-443).
 
 ## 5. Confirm successful prompt injection protection
 

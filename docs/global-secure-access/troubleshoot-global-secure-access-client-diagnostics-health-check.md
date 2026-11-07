@@ -12,9 +12,10 @@ ms.service: global-secure-access
 manager: dougeby
 description: Troubleshoot the Global Secure Access client using the Health check tab in the Advanced diagnostics utility.
 ms.topic: troubleshooting
-ms.date: 2026-02-24T00:00:00.0000000Z
+ms.date: 2026-11-06T00:00:00.0000000Z
 ms.reviewer: lirazbarak
 ms.custom: sfi-image-nochange
+ai-usage: ai-assisted
 locale: en-us
 document_id: 8bf5bcdb-7797-918c-2ba9-20f9e6e43101
 document_version_independent_id: 8bf5bcdb-7797-918c-2ba9-20f9e6e43101
@@ -31,11 +32,9 @@ monikers: []
 item_type: Content
 source_path: docs/global-secure-access/troubleshoot-global-secure-access-client-diagnostics-health-check.md
 cmProducts:
-- https://authoring-docs-microsoft.poolparty.biz/devrel/bcbcbad5-4208-4783-8035-8481272c98b8
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
+- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
 spProducts:
-- https://authoring-docs-microsoft.poolparty.biz/devrel/43b2e5aa-8a6d-4de2-a252-692232e5edc8
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
 platformId: 925f56de-8ba1-edaf-fd16-f040fafa3444
 ---
 
@@ -402,37 +401,36 @@ To investigate the process dump file when a process crashes:
 4. Review the Event Viewer logs and filter for crash events (Filter current logs: Event ID = 1000). ![Screenshot of the Event Viewer showing a filtered log list.](media/troubleshoot-global-secure-access-client-diagnostics-health-check/troubleshoot-health-check-filtered-logs.png)
 5. Save the filtered log as a file and attach the log file to the support ticket.
 
-### QUIC not supported for Internet Access
+## Troubleshoot QUIC acquisition and blocking
 
-Since QUIC isn't yet supported for Internet Access, traffic to ports 80 UDP and 443 UDP can't be tunneled.
+Keep QUIC enabled in Microsoft Edge, Chrome, and Firefox. To prevent QUIC connections from bypassing Internet Access inspection, acquire and block the traffic with **Custom Acquire** and cloud firewall instead of disabling QUIC in browsers.
+
+Cloud firewall for clients supports QUIC acquisition and blocking in preview, not end-to-end QUIC forwarding. An **Allow** rule for UDP port `443` doesn't enable supported end-to-end QUIC connectivity.
 
 Tip
 
 QUIC is currently supported in Private Access and Microsoft 365 workloads.
 
-Administrators can disable QUIC protocol triggering clients to fall back to HTTPS over TCP, which is fully supported in Internet Access.
+### Configure acquisition and enforcement
 
-### Disable QUIC in Microsoft Edge
+1. In the Internet Access traffic forwarding profile, enable **Custom Acquire** and add a rule for the intended destinations with protocol **UDP** and destination port `443`. **Default Acquire** only acquires TCP ports `80` and `443`.
+2. Create an enabled cloud firewall rule for those destinations with protocol **UDP**, destination port `443`, and action **Block**. The rule blocks all matching UDP port `443` traffic, not only QUIC.
+3. Link the firewall policy to a security profile, enable the policy link, and apply the profile to the intended users through an enabled Conditional Access policy. Review matching rule and security profile priorities.
+4. Keep **Default Acquire** enabled for TCP ports `80` and `443` so that applications that support fallback can connect over HTTPS using TCP.
 
-To disable QUIC in Microsoft Edge:
+For prerequisites and detailed steps, see [Configure cloud firewall for Global Secure Access clients](how-to-configure-cloud-firewall-clients#control-quic-traffic-on-udp-port-443).
 
-1. Open Microsoft Edge.
-2. Paste `edge://flags/#enable-quic` in the address bar.
-3. Set the **Experimental QUIC protocol** drop-down to **Disabled**.
+### Verify effective QUIC blocking
 
-### Disable QUIC in Chrome
+Browser QUIC settings don't establish whether cloud firewall blocks traffic. If your client version reports that QUIC is enabled in a browser, verify acquisition and enforcement with the following steps instead of disabling QUIC. These are manual troubleshooting steps, not an automated Health check test for cloud firewall.
 
-To disable QUIC in Google Chrome:
+Note
 
-1. Open Google Chrome.
-2. Paste `chrome://flags/#enable-quic` in the address bar.
-3. Set the **Experimental QUIC protocol** drop-down to **Disabled**.
+Until the client health check is updated to recognize cloud firewall enforcement, it can still report a QUIC failure because QUIC is enabled in the browser. You can ignore this specific failure only after you verify traffic acquisition and a matching cloud firewall **Block** decision by following these steps. Continue to investigate all other failed health checks.
 
-### Disable QUIC in Mozilla Firefox
+1. Use **Advanced diagnostics** to confirm that the client acquires the test connection through the Internet Access traffic forwarding profile. Acquisition rules don't override traffic bypass exclusions.
+2. From a browser with QUIC enabled, make a new connection to a QUIC-capable destination covered by the acquisition and firewall rules.
+3. In **Global Secure Access** &gt; **Monitor** &gt; **Traffic logs**, open **Connections**. Find the UDP port `443` connection by its test time and destination, and confirm a logged **Block** decision. Review the associated security profile, policy, and rule information where available.
+4. Confirm that the application falls back to HTTPS over TCP and that the expected inspection or filtering applies.
 
-To disable QUIC in Mozilla Firefox:
-
-1. Open Firefox.
-2. Paste `about:config` in the address bar.
-3. In the **Search preference name field**, paste `network.http.http3.enable`.
-4. Toggle the **network.http.http3.enable** option to **false**.
+A UDP timeout alone doesn't prove cloud firewall enforcement. If you can't correlate the test connection with a logged **Block** decision, blocking isn't verified. Check acquisition, bypass exclusions, policy applicability, and rule priorities.
