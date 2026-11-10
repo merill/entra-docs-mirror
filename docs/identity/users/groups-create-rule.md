@@ -33,9 +33,11 @@ item_type: Content
 source_path: docs/identity/users/groups-create-rule.md
 cmProducts:
 - https://authoring-docs-microsoft.poolparty.biz/devrel/68cb9039-df60-49b0-8ef8-89ad96497f63
+- https://authoring-docs-microsoft.poolparty.biz/devrel/b1cfdec6-b0c3-4209-818c-736879856e0e
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
 spProducts:
 - https://authoring-docs-microsoft.poolparty.biz/devrel/725b6df3-93e8-472d-834e-e7e0d2953d35
+- https://authoring-docs-microsoft.poolparty.biz/devrel/2d0723c1-cf38-4c30-ab3d-5df787b33270
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
 platformId: 5e52b69d-7c65-8879-648e-2b87694a4128
 ---
@@ -114,6 +116,10 @@ If the rule that you entered isn't valid, the portal displays an explanation of 
     2. Enter the application ID, and then select **Refresh properties**.
 7. After you finish updating the rule, select **Save**.
 
+Note
+
+When processing is on, a rule that references an unsupported property can't be saved. If processing is paused for the group, the rule is saved anyway, and the error appears only after you resume processing, when the status changes to **Processing error**.
+
 ## Turn on or off the welcome email
 
 When an admin creates a new Microsoft 365 group, the users who are added to the group receive a welcome email notification. Later, if any attributes of a user or device (only for security groups) change, all rules for dynamic membership groups in the organization are processed for changes. Users who are added then also receive the welcome notification.
@@ -152,3 +158,5 @@ After you pause and unpause the processing of dynamic membership groups, the **L
 If an error occurs during processing of the membership rule for a specific group, an alert appears on the top of the overview page for the group. If no pending updates for dynamic membership groups can be processed for all the groups within the organization for more than 24 hours, an alert appears above **All groups**.
 
 ![Screenshot of an alert that says dynamic group memberships have not been updated due to system delays.](media/groups-create-rule/processing-error.png)
+
+While the status is **Processing error**, membership isn't updated. Members from the last successful evaluation stay in the group, and no new members are added. If the group is used to target policies or assignments, users who should have joined it aren't covered.
