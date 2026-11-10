@@ -31,11 +31,11 @@ monikers: []
 item_type: Content
 source_path: docs/id-governance/services-and-integration-partners.md
 cmProducts:
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ac4b7417-d4c2-43d4-94bf-f22fa1416b34
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
 spProducts:
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/68876bab-7da4-4e70-b295-395b3a255a1f
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
 platformId: c239a3fd-ed8b-a904-7c25-f5b0271f9b66
 ---
 
@@ -52,7 +52,7 @@ Partners can help your organization with planning and deployment of Microsoft En
 | [InSpark](https://aka.ms/InSparkEntraIDGov) | "InSpark is a Dutch Microsoft partner helping customers to go from Zero-to-Hero with the full Microsoft cloud portfolio. The Microsoft Entra ID Governance stack is one of our strong focus points as we believe securing and protecting your digital identity and the access it has is crucial in today's world." |
 | [Invoke](https://www.invokellc.com/identity-access-management) | "Invoke's Identity Solution Journey begins with assessments, building trust by showcasing security & compliance risk mitigation, along with productivity gains. In cost-sensitive markets, they deliver economic assessments, reporting cost savings by transitioning to a Microsoft-centric solution. By partnering with the Microsoft Entra team, they jointly empower customers to achieve more." |
 | [KPMG](https://aka.ms/KPMGEntraIDGov) | "KPMG and Microsoft further strengthen their alliance by delivering a comprehensive identity governance proposition. By adeptly navigating the complexities of identity governance, the combination of Microsoft Entra advanced tools with KPMG Powered Enterprise helps drive functional transformation. This synergy can propel accelerated digital capabilities, enhance operational efficiency, fortify security and ensure compliance." |
-| [Oxford Computer Group](https://aka.ms/OCGEntraIDGov) | "Oxford Computer Group (OCG) has extensive experience migrating organizations to Microsoft Entra ID Governance from complex legacy platforms. OCG's field-tested IP extends Microsoft Entra capabilities to remove adoption barriers and enable unified identity data, automated workflows, AI-driven access optimization, and governance visibility. This helps organizations replace fragmented, manual solutions and confidently migrate to Microsoft Entra." |
+| [MajorKey Technologies](https://www.majorkeytech.com/microsoft-entra-id-governance) | "MajorKey helps customers automate access, improve visibility, and reduce identity-related risk across the user lifecycle using Microsoft Entra ID Governance. MajorKey's HorizonID solution extends the capabilities of Microsoft Entra ID Governance to streamline migrations, manage complex identity environments, and simplify integrations with custom applications and multiple authoritative sources." |
 | [PwC](https://aka.ms/PwCEntraIDGov) | "Organizations use identity and access management to build trust, and doing so sustainably often requires the right technology and a multi-disciplinary team. Our team can help you implement Microsoft Entra ID Governance from strategy through execution by collaborating with you and our network of professionals by focusing on three key aspects: people, process, and technology." |
 
 ## Services and integration partners for deploying Microsoft Entra with SAP applications

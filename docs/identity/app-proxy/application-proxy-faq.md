@@ -35,9 +35,11 @@ item_type: Content
 source_path: docs/identity/app-proxy/application-proxy-faq.yml
 cmProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
+- https://authoring-docs-microsoft.poolparty.biz/devrel/b1cfdec6-b0c3-4209-818c-736879856e0e
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
 spProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
+- https://authoring-docs-microsoft.poolparty.biz/devrel/2d0723c1-cf38-4c30-ab3d-5df787b33270
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
 platformId: fe090621-d683-5b4a-9616-a559eb011a3e
 ---
@@ -61,6 +63,12 @@ No, the following configuration items are being used by app proxy and shouldn't 
 Application Proxy apps no longer rely on CWAP secrets. For apps using Microsoft Entra ID preauthentication, Federated Identity Credentials (FIC) are now used instead. FIC is more secure, don't expire, and require significantly less maintenance. Applications configured with Passthrough pre-authentication or those using Access Tokens don't require Federated Identity Credentials — even if an FIC was previously created.
 
 You can safely ignore any existing CWAP secrets in the app registration of your Application Proxy app or clean up old or expired secrets. For more information about Federated Identity Credentials, see [Overview of federated identity credentials in Microsoft Entra ID](/en-us/graph/api/resources/federatedidentitycredentials-overview).
+
+### Does Microsoft Entra application proxy support Internet Explorer or Edge IE mode?
+
+Internet Explorer and Microsoft Edge in IE mode are deprecated for use with Microsoft Entra application proxy.
+
+These legacy browser experiences aren't currently blocked and may continue to work with Application Proxy. However, due to technical limitations in legacy browsers, they will no longer receive Application Proxy security improvements. We strongly recommend that customers migrate to a modern browser to ensure they can benefit from the latest security protections and improvements.
 
 ### Can I delete an application proxy app from the App registrations page in the Microsoft Entra admin center?
 

@@ -31,9 +31,11 @@ monikers: []
 item_type: Content
 source_path: docs/id-governance/sap.md
 cmProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/b1cfdec6-b0c3-4209-818c-736879856e0e
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
 spProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/2d0723c1-cf38-4c30-ab3d-5df787b33270
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
 platformId: 1c05dff1-0956-22e6-00aa-69bb96d8593f
@@ -100,6 +102,8 @@ Also see the following blog posts and SAP resources:
 - [Managing access to SAP BTP](https://community.sap.com/t5/technology-blogs-by-members/identity-and-access-management-with-microsoft-entra-part-i-managing-access/ba-p/13873276)
 - [Azure Application Gateway setup of SAML Single Sign On for Public and Internal SAP URLs](https://blogs.sap.com/2020/12/10/sap-on-azure-single-sign-on-configuration-using-saml-and-azure-active-directory-for-public-and-internal-urls/)
 - [Single sign on using Microsoft Entra Domain Services and Kerberos](https://blogs.sap.com/2018/08/03/your-sap-on-azure-part-8-single-sign-on-using-azure-ad-domain-services/)
+
+Joule, SAP's AI assistant, works across multiple connected SAP applications. For more information on enabling Joule in SAP Cloud Identity Services, see [Identity and Access Management for Joule](https://help.sap.com/docs/cloud-identity-services/cloud-identity-services/identity-and-access-management-for-joule).
 
 ### Provision identities into modern SAP applications
 
