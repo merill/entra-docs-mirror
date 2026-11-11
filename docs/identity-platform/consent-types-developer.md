@@ -30,13 +30,13 @@ monikers: []
 item_type: Content
 source_path: docs/identity-platform/consent-types-developer.md
 cmProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
 - https://authoring-docs-microsoft.poolparty.biz/devrel/68cb9039-df60-49b0-8ef8-89ad96497f63
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/68e4b2d8-b70c-4019-b49a-d1f8881e2aea
 spProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
 - https://authoring-docs-microsoft.poolparty.biz/devrel/725b6df3-93e8-472d-834e-e7e0d2953d35
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/67b2ba1a-6f74-4044-a48a-f0f8ad076b8f
 platformId: 4e37db0a-d24d-8f91-a191-7421b9dc8292
 ---
 
@@ -68,7 +68,7 @@ Allowing an application to request permissions dynamically through the `scope` p
 
 Important
 
-Dynamic consent can be convenient, but presents a significant challenge for permissions that require admin consent. The admin consent experience in the **App registrations** and **Enterprise applications** blades in the portal doesn't know about those dynamic permissions at consent time. We recommend that a developer list all the admin privileged permissions that the application needs in the portal.
+Dynamic consent can be convenient, but presents a significant challenge for permissions that require admin consent. The admin consent experience in the **App registrations** and **Enterprise applications** blades in the portal doesn't know about those dynamic consent permissions at consent time. We recommend that a developer list all the admin privileged permissions that the application needs in the portal.
 
 This enables tenant admins to consent on behalf of all their users in the portal once. Users don't need to go through the consent experience for those permissions on sign in. The alternative is to use dynamic consent for those permissions. To grant admin consent, an individual admin signs in to the app, triggers a consent prompt for the appropriate permissions, and selects **consent for my entire org** in the consent dialogue.
 
