@@ -32,13 +32,13 @@ monikers: []
 item_type: Content
 source_path: docs/identity/users/clean-up-stale-guest-accounts.md
 cmProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
 - https://authoring-docs-microsoft.poolparty.biz/devrel/07bb3e10-d135-43ff-bc8b-360497cb39fa
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
 spProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
 - https://authoring-docs-microsoft.poolparty.biz/devrel/12e559b9-eaf6-4aee-9af7-62334e15f863
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
 platformId: 6ff6c45c-076f-2430-7632-2b54cfc42991
 ---
 
@@ -63,6 +63,10 @@ Use the following instructions to learn how to enhance monitoring of inactive gu
 Using this feature requires Microsoft Entra ID Governance or Microsoft Entra Suite licenses. To find the right license for your requirements, see [Microsoft Entra ID Governance licensing fundamentals](../../id-governance/licensing-fundamentals).
 
 ## Monitor guest accounts at scale with inactive guest insights
+
+Note
+
+The inactive guest report updates once per day and displays a timestamp showing when it was last updated. Because of this refresh schedule, the total guest count in the report might differ from the current total in your tenant or the counts shown on the **ID Governance** dashboard or the **Users** page.
 
 1. Sign in to the [Microsoft Entra admin center](https://entra.microsoft.com).
 2. Browse to **ID Governance** &gt; **Dashboard**.

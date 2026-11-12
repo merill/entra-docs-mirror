@@ -11,7 +11,7 @@ ms.author: justinha
 ms.service: entra-id
 ms.subservice: authentication
 manager: dougeby
-description: Plan CYOT resiliency with multi-region Azure Functions, Azure Front Door, a secondary telecom provider, and failover and recovery testing.
+description: Plan CYOT resiliency with multi-region Azure Functions, Azure Front Door, a secondary telephony provider, and failover and recovery testing.
 ms.topic: concept-article
 ms.date: 2026-10-30T00:00:00.0000000Z
 ai-usage: ai-assisted
@@ -45,7 +45,7 @@ platformId: 65568529-c791-e245-877b-79d9fc439e28
 
 SMS and voice authentication sit on the critical path to your applications. When users rely on a phone code for multifactor authentication (MFA) or self-service password reset (SSPR), the availability of that code determines whether they can sign in.
 
-With Choose Your Own Telephony Provider (CYOT), the delivery path includes components your organization owns: the Azure Function in your subscription and your telecom provider. Design these components for resiliency so authentication stays available through regional outages and provider incidents.
+With Choose Your Own Telephony Provider (CYOT), the delivery path includes components your organization owns: the Azure Function in your subscription and your telephony provider. Design these components for resiliency so authentication stays available through regional outages and provider incidents.
 
 ## Understand your delivery path
 
@@ -53,9 +53,9 @@ With Choose Your Own Telephony Provider (CYOT), the delivery path includes compo
 | --- | --- | --- |
 | Microsoft Entra ID | Microsoft | Generates and validates the code, and sends the request to your endpoint. |
 | Endpoint and Azure Function | Your organization | Receives the request in your Azure subscription and sends it to your provider. |
-| Telecom provider | Your provider | Delivers the SMS message or voice call to the user's phone. |
+| Telephony provider | Your provider | Delivers the SMS message or voice call to the user's phone. |
 
-The guided setup creates one Azure Function in a single region, connected to one telecom provider. This setup works well for evaluation and many production workloads. To protect against a regional outage or a provider incident, extend it with the options in this article.
+The guided setup creates one Azure Function in a single region, connected to one telephony provider. This setup works well for evaluation and many production workloads. To protect against a regional outage or a provider incident, extend it with the options in this article.
 
 Important
 
@@ -73,26 +73,26 @@ Start with your requirements: which disruptions you must withstand, how quickly 
 | --- | --- | --- |
 | Single region, one provider (default setup) | Function App instance failures within the region | Evaluation, and production workloads that can tolerate a regional outage |
 | Multi-region with Azure Front Door | Regional outages | Production workloads that require authentication during a regional disruption |
-| Secondary telecom provider | Provider-specific incidents | When your primary provider alone doesn't meet your availability or coverage requirements |
+| Secondary telephony provider | Provider-specific incidents | When your primary provider alone doesn't meet your availability or coverage requirements |
 | Multi-region and secondary provider | Regional outages and provider incidents | Organizations with the highest availability requirements |
 
 ## Deploy across multiple regions
 
-A multi-region deployment uses Azure Front Door to expose one endpoint backed by Function Apps in two or more regions. Microsoft Entra ID calls the Front Door endpoint, and Front Door routes each request to a healthy region. Set it up manually after you validate a single-region deployment, because the setup script in [Set up SMS and voice with your own telecom provider in the Microsoft Entra admin center](choose-your-own-telephony-set-up) deploys one region at a time.
+A multi-region deployment uses Azure Front Door to expose one endpoint backed by Function Apps in two or more regions. Microsoft Entra ID calls the Front Door endpoint, and Front Door routes each request to a healthy region. Set it up manually after you validate a single-region deployment, because the setup script in [Set up SMS and voice with your own telephony provider in the Microsoft Entra admin center](choose-your-own-telephony-set-up) deploys one region at a time.
 
 When you plan a multi-region deployment:
 
 - **Size each region for the full workload.** If one region is unavailable, the remaining regions must handle all authentication traffic.
 - Use the same code, settings, and encryption key in every region, and coordinate certificate renewal across regions.
 - **Expect failover to take time.** Some requests can fail while Front Door detects an unhealthy region and shifts traffic.
-- **Plan for added cost.** Each region adds its own Function App plan, storage, Key Vault, and monitoring, plus Front Door. For estimates, see [Estimate telecom-provider and Azure hosting costs](https://github.com/Azure-Samples/ExternalPhoneProvider-AzureFunction-Sample/blob/main/docs/COST-CALCULATOR.md).
+- **Plan for added cost.** Each region adds its own Function App plan, storage, Key Vault, and monitoring, plus Front Door. For estimates, see [Estimate telephony-provider and Azure hosting costs](https://github.com/Azure-Samples/ExternalPhoneProvider-AzureFunction-Sample/blob/main/docs/COST-CALCULATOR.md).
 - Adding regions improves availability, not delivery speed. SMS and voice delivery time depends mostly on your provider and carriers.
 
 For architecture, region and capacity planning, and step-by-step setup, see [Azure Front Door multi-region deployment](https://github.com/Azure-Samples/ExternalPhoneProvider-AzureFunction-Sample/blob/main/docs/FRONTDOOR.md).
 
-## Add a secondary telecom provider
+## Add a secondary telephony provider
 
-A multi-region deployment still relies on your telecom provider. Confirm that your provider's availability commitments, redundancy, and disaster recovery meet your requirements in the countries/regions you serve.
+A multi-region deployment still relies on your telephony provider. Confirm that your provider's availability commitments, redundancy, and disaster recovery meet your requirements in the countries/regions you serve.
 
 If one provider isn't enough, you can implement fallback to a secondary provider in your Azure Function. To avoid sending a user two codes, use the secondary provider only when the primary provider confirms it didn't accept the request. Don't resend after a timeout or unknown result, because the primary provider might already have sent the code.
 
@@ -109,4 +109,4 @@ Before production use, test your design in a nonproduction environment:
 
 Evaluation mode doesn't call your provider. Repeat your tests after any change to code, routing, configuration, or your provider integration.
 
-To monitor each region and provider, see [Monitor and troubleshoot SMS and voice with your own telecom provider](choose-your-own-telephony-troubleshoot#monitor-and-troubleshoot-your-own-telephony-provider).
+To monitor each region and provider, see [Monitor and troubleshoot SMS and voice with your own telephony provider](choose-your-own-telephony-troubleshoot#monitor-and-troubleshoot-your-own-telephony-provider).

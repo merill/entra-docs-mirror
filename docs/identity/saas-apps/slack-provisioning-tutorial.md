@@ -14,7 +14,9 @@ ms.subservice: saas-apps
 manager: pmwongera
 description: Learn how to configure Microsoft Entra ID to automatically provision and deprovision user accounts to Slack.
 ms.topic: how-to
-ms.date: 2026-04-16T00:00:00.0000000Z
+ms.date: 2026-10-30T00:00:00.0000000Z
+ms.custom: msecd-doc-authoring-1032
+ai-usage: ai-assisted
 locale: en-us
 document_id: d2a7e715-dfec-112c-6726-a0e243dd499d
 document_version_independent_id: cc0c0ae3-aaf4-31b0-0704-5b3861b014f4
@@ -32,9 +34,11 @@ item_type: Content
 source_path: docs/identity/saas-apps/slack-provisioning-tutorial.md
 cmProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
+- https://authoring-docs-microsoft.poolparty.biz/devrel/b1cfdec6-b0c3-4209-818c-736879856e0e
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
 spProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
+- https://authoring-docs-microsoft.poolparty.biz/devrel/2d0723c1-cf38-4c30-ab3d-5df787b33270
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
 platformId: 5c80773b-d247-2e0e-e917-45028803cd07
 ---
@@ -93,8 +97,8 @@ This section guides you through connecting your Microsoft Entra ID to Slack's us
 
 ### To configure automatic user account provisioning to Slack in Microsoft Entra ID:
 
-1. Sign in to the [Microsoft Entra admin center](https://entra.microsoft.com) as at least a [Cloud Application Administrator](../role-based-access-control/permissions-reference#cloud-application-administrator).
-2. Browse to **Entra ID** &gt; **Enterprise apps**
+1. Sign in to the [Azure portal](https://portal.azure.com) as at least a [Cloud Application Administrator](../role-based-access-control/permissions-reference#cloud-application-administrator).
+2. Browse to **Microsoft Entra ID** &gt; **Enterprise applications**.
 
     ![Enterprise applications blade](common/enterprise-applications.png)
 3. In the applications list, select **Slack**.
@@ -109,7 +113,11 @@ This section guides you through connecting your Microsoft Entra ID to Slack's us
 6. In the **Tenant URL** field, enter your Slack Tenant URL and Secret Token. Select **Test Connection** to ensure Microsoft Entra ID can connect to Slack. If the connection fails, ensure your Slack account has the required admin permissions and try again.
 
     ![Screenshot of Provisioning test connection.](common/provisioning-test-connection.png)
-7. In the new window, sign into Slack using your Team Admin account. In the resulting authorization dialog, select the Slack team that you want to enable provisioning for, and then select **Authorize**. Once completed, return to the Microsoft Entra admin center to complete the provisioning configuration.
+
+    Important
+
+    Configure OAuth-based provisioning admin credentials that require interactive consent in the [Azure portal](https://portal.azure.com). The Microsoft Entra admin center doesn't currently support this authorization flow. In the Azure portal, go to **Microsoft Entra ID** &gt; **Enterprise applications**, select your application, and then select **Provisioning** before you authorize access.
+7. In the new window, sign into Slack using your Team Admin account. In the resulting authorization dialog, select the Slack team that you want to enable provisioning for, and then select **Authorize**. Once completed, return to the Azure portal to complete the provisioning configuration.
 
     ![Authorization Dialog](media/slack-provisioning-tutorial/slackauthorize.png)
 8. Select **Create** to create your configuration.

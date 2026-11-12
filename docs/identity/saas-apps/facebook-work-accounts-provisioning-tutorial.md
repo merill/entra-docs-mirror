@@ -14,7 +14,9 @@ ms.subservice: saas-apps
 manager: pmwongera
 description: Learn how to automatically provision and de-provision user accounts from Microsoft Entra ID to Meta Work Accounts.
 ms.topic: how-to
-ms.date: 2026-03-09T00:00:00.0000000Z
+ms.date: 2026-10-30T00:00:00.0000000Z
+ms.custom: msecd-doc-authoring-1032
+ai-usage: ai-assisted
 locale: en-us
 document_id: e011cc34-d817-f8e3-62bc-d618dffb566a
 document_version_independent_id: a659e696-5f6e-cd15-a012-9b7c6563e810
@@ -31,9 +33,11 @@ monikers: []
 item_type: Content
 source_path: docs/identity/saas-apps/facebook-work-accounts-provisioning-tutorial.md
 cmProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/b1cfdec6-b0c3-4209-818c-736879856e0e
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
 spProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/2d0723c1-cf38-4c30-ab3d-5df787b33270
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
 platformId: b2a26b8b-bb3d-24d0-cb2b-d12b46b6a19f
@@ -81,13 +85,17 @@ This section guides you through the steps to configure the Microsoft Entra provi
 
 ### To configure automatic user provisioning for Meta Work Accounts in Microsoft Entra ID:
 
-1. Sign in to the [Microsoft Entra admin center](https://entra.microsoft.com) as at least a [Cloud Application Administrator](../role-based-access-control/permissions-reference#cloud-application-administrator).
-2. Browse to **Entra ID** &gt; **Enterprise apps**
+1. Sign in to the [Azure portal](https://portal.azure.com) as at least a [Cloud Application Administrator](../role-based-access-control/permissions-reference#cloud-application-administrator).
+2. Browse to **Microsoft Entra ID** &gt; **Enterprise applications**.
 3. In the applications list, select **Meta Work Accounts**.
 4. Select the **Provisioning** tab.
 5. Set **+ New configuration**.
 
     ![Screenshot of Provisioning tab automatic.](common/application-provisioning.png)
+
+    Important
+
+    Configure OAuth-based provisioning admin credentials that require interactive consent in the [Azure portal](https://portal.azure.com). The Microsoft Entra admin center doesn't currently support this authorization flow. In the Azure portal, go to **Microsoft Entra ID** &gt; **Enterprise applications**, select your application, and then select **Provisioning** before you authorize access.
 6. Under the **Admin Credentials** section, select **Authorize**. You be redirected to **Meta Work Accounts**'s authorization page. Input your Meta Work Accounts username and select the **Continue** button. Select **Test Connection** to ensure Microsoft Entra ID can connect to Meta Work Accounts. If the connection fails, ensure your Meta Work Accounts account has Admin permissions and try again.
 
     ![Screenshot shows the Meta Work Accounts authorization page.](media/facebook-work-accounts-provisioning-tutorial/azure-connect.png)

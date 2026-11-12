@@ -13,8 +13,10 @@ ms.subservice: app-provisioning
 manager: dougeby
 description: Learn about known issues when you work with automated application provisioning or cross-tenant synchronization in Microsoft Entra ID.
 ms.topic: troubleshooting
-ms.date: 2026-03-31T00:00:00.0000000Z
+ms.date: 2026-11-09T00:00:00.0000000Z
 ms.reviewer: arvinh
+ai-usage: ai-assisted
+ms.custom: msecd-doc-authoring-1032
 zone_pivot_groups: app-provisioning-cross-tenant-synchronization
 locale: en-us
 document_id: a2382361-1699-3beb-574e-0879c87f7442
@@ -33,12 +35,12 @@ item_type: Content
 source_path: docs/identity/app-provisioning/known-issues.md
 cmProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
+- https://authoring-docs-microsoft.poolparty.biz/devrel/b1cfdec6-b0c3-4209-818c-736879856e0e
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
-- https://authoring-docs-microsoft.poolparty.biz/devrel/cf9b82c5-b6dc-45f3-b005-b1bc5fc03bea
 spProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
+- https://authoring-docs-microsoft.poolparty.biz/devrel/2d0723c1-cf38-4c30-ab3d-5df787b33270
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
-- https://authoring-docs-microsoft.poolparty.biz/devrel/0c85d34e-bfd2-4466-957c-f0b61e9692df
 platformId: 3f175e5e-1b46-6bef-4584-7a77806abf2a
 ---
 
@@ -94,6 +96,12 @@ If the user in the target tenant is assigned an exchange license, cross-tenant s
 ### Configuring synchronization from target tenant
 
 Configuring synchronization from the target tenant isn't supported. All configurations must be done in the source tenant. The target administrator is able to turn off cross-tenant synchronization at any time.
+
+### Users removed from scope aren't deleted after an immediate restart
+
+If you remove a previously synchronized user from the scope of a cross-tenant synchronization job and restart the job before the next synchronization cycle, the user isn't deleted from the target tenant in subsequent cycles. The user remains in the target tenant until a change to the source user object causes the service to recognize that the user is out of scope and delete the user from the target tenant.
+
+After removing a user from scope, wait for the next synchronization cycle before restarting the job.
 
 ### Two users in the source tenant matched with the same user in the target tenant
 

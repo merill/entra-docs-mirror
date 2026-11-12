@@ -14,8 +14,9 @@ ms.subservice: saas-apps
 manager: pmwongera
 description: Learn how to configure Microsoft Entra ID to automatically provision and deprovision user organization membership in GitHub Enterprise Cloud.
 ms.topic: how-to
-ms.date: 2026-04-08T00:00:00.0000000Z
-ms.custom: sfi-image-nochange
+ms.date: 2026-10-30T00:00:00.0000000Z
+ms.custom: sfi-image-nochange, msecd-doc-authoring-1032
+ai-usage: ai-assisted
 locale: en-us
 document_id: 61e856ff-405a-62ab-20d6-b91a336c674f
 document_version_independent_id: a54166e0-1a4a-b9ef-1c41-9a9f61dc6af9
@@ -33,9 +34,11 @@ item_type: Content
 source_path: docs/identity/saas-apps/github-provisioning-tutorial.md
 cmProducts:
 - https://authoring-docs-microsoft.poolparty.biz/devrel/9bdc1705-9b40-49d6-8377-caa0b71fda66
+- https://authoring-docs-microsoft.poolparty.biz/devrel/b1cfdec6-b0c3-4209-818c-736879856e0e
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
 spProducts:
 - https://authoring-docs-microsoft.poolparty.biz/devrel/686ed158-d915-41e9-9760-efa46ba88f6d
+- https://authoring-docs-microsoft.poolparty.biz/devrel/2d0723c1-cf38-4c30-ab3d-5df787b33270
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
 platformId: 5936d55a-4a8f-f7b6-67aa-c270bb5b2391
 ---
@@ -89,8 +92,8 @@ This section guides you through connecting your Microsoft Entra ID to GitHub's S
 
 ### Configure automatic user account provisioning to GitHub in Microsoft Entra ID
 
-1. Sign in to the [Microsoft Entra admin center](https://entra.microsoft.com) as at least a [Cloud Application Administrator](../role-based-access-control/permissions-reference#cloud-application-administrator).
-2. Browse to **Entra ID** &gt; **Enterprise apps**.
+1. Sign in to the [Azure portal](https://portal.azure.com) as at least a [Cloud Application Administrator](../role-based-access-control/permissions-reference#cloud-application-administrator).
+2. Browse to **Microsoft Entra ID** &gt; **Enterprise applications**.
 3. If you have already configured GitHub for single sign-on, search for your instance of GitHub using the search field.
 4. Select your instance of GitHub, then select the **Provisioning** tab.
 5. Select **+ New configuration**.
@@ -99,6 +102,10 @@ This section guides you through connecting your Microsoft Entra ID to GitHub's S
 6. In the **Tenant URL** field, enter your GitHub Tenant URL and Secret Token. Select **Test Connection** to ensure Microsoft Entra ID can connect to GitHub. If the connection fails, ensure your GitHub account has the required admin permissions and try again.
 
     ![Screenshot of Provisioning test connection.](common/provisioning-test-connection.png)
+
+    Important
+
+    Configure OAuth-based provisioning admin credentials that require interactive consent in the [Azure portal](https://portal.azure.com). The Microsoft Entra admin center doesn't currently support this authorization flow. In the Azure portal, go to **Microsoft Entra ID** &gt; **Enterprise applications**, select your application, and then select **Provisioning** before you authorize access.
 7. In the new window, sign into GitHub using your Admin account. In the resulting authorization dialog, select the GitHub Organization that you want to enable provisioning for, and then select **Authorize**. Once completed, return to the Azure portal to complete the provisioning configuration.
 
     ![Screenshot shows the sign-in page for GitHub.](media/github-provisioning-tutorial/github2.png)

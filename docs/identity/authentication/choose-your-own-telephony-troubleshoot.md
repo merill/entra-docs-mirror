@@ -1,6 +1,6 @@
 ---
 layout: Conceptual
-title: Troubleshoot SMS and voice with your own telecom provider - Microsoft Entra ID | Microsoft Learn
+title: Troubleshoot SMS and voice with your own telephony provider - Microsoft Entra ID | Microsoft Learn
 canonicalUrl: https://learn.microsoft.com/en-us/entra/identity/authentication/choose-your-own-telephony-troubleshoot
 uhfHeaderId: MSDocsHeader-Entra
 breadcrumb_path: /entra/breadcrumb/toc.json
@@ -43,9 +43,9 @@ spProducts:
 platformId: 1a61b24c-d1b3-96ac-ce83-038be39e309a
 ---
 
-# Troubleshoot SMS and voice with your own telecom provider - Microsoft Entra ID | Microsoft Learn
+# Troubleshoot SMS and voice with your own telephony provider - Microsoft Entra ID | Microsoft Learn
 
-Use this article to trace SMS and voice requests end to end with Choose Your Own Telephony Provider (CYOT), find where a request stopped, and contact the right team to resolve it: Microsoft support, your Azure team, or your telecom provider.
+Use this article to trace SMS and voice requests end to end with Choose Your Own Telephony Provider (CYOT), find where a request stopped, and contact the right team to resolve it: Microsoft support, your Azure team, or your telephony provider.
 
 ## How a CYOT request flows
 
@@ -54,7 +54,7 @@ Each request passes through four stages, and each stage is recorded in its own l
 | Stage | What happens | Where to look |
 | --- | --- | --- |
 | 1. Microsoft Entra sends the request | Microsoft Entra requires an SMS or voice code and sends the request to your endpoint. | Microsoft Entra audit logs |
-| 2. Your endpoint processes it | Your Function App receives the request and sends it to your telecom provider. | Function App logs |
+| 2. Your endpoint processes it | Your Function App receives the request and sends it to your telephony provider. | Function App logs |
 | 3. Your provider delivers it | Your provider sends the SMS message or voice call to the user's phone. | Your provider's portal |
 | 4. The user signs in | The user enters the code, and Microsoft Entra completes authentication. | Microsoft Entra sign-in logs |
 
@@ -119,9 +119,9 @@ Use what you see in audit logs to find the right contact.
 | `CyotDeliveryFailed` with `EndpointClientError` | Your endpoint rejected the request. Check your Function App logs and authentication settings. | Your Azure team |
 | `CyotDeliveryFailed` with `EndpointServerError` | Your endpoint returned an error or didn't respond in time. Check your Function App logs and your provider's status. | Your Azure team |
 | `CyotDeliveryFailed` with `NonceMismatch` | Your endpoint's response didn't match what Microsoft Entra expects. Compare any customizations with the CYOT sample. | Your Azure team |
-| `CyotDeliverySucceeded`, but the user didn't receive the code | Your endpoint accepted the request. Check your provider's delivery records. | Your telecom provider |
+| `CyotDeliverySucceeded`, but the user didn't receive the code | Your endpoint accepted the request. Check your provider's delivery records. | Your telephony provider |
 | The user received the code, but sign-in failed | Check the sign-in logs for an expired, reused, or incorrect code. | Microsoft support |
-| Delivery blocked to certain countries/regions, fraud blocks, or unexpected charges | Review your provider's fraud, destination, and spending controls. | Your telecom provider |
+| Delivery blocked to certain countries/regions, fraud blocks, or unexpected charges | Review your provider's fraud, destination, and spending controls. | Your telephony provider |
 
 Tip
 
@@ -133,7 +133,7 @@ When a request times out, check your provider's records before you try again. Yo
 | --- | --- | --- |
 | Microsoft support | Authentication method policy, Microsoft Entra authentication, and the request to your endpoint | [Get support for Microsoft Entra](/en-us/entra/fundamentals/how-to-get-support) |
 | Your Azure team | Your Function App, its configuration, and Azure resources | Internal. For Azure platform issues, contact Azure support. |
-| Your telecom provider | Provider account, delivery, fraud controls, and usage charges | Support details in the provider's [Microsoft Security Store](https://securitystore.microsoft.com/) listing |
+| Your telephony provider | Provider account, delivery, fraud controls, and usage charges | Support details in the provider's [Microsoft Security Store](https://securitystore.microsoft.com/) listing |
 
 ### Information to include
 
