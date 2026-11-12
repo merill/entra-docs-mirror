@@ -13,7 +13,7 @@ ms.subservice: role-based-access-control
 manager: pmwongera
 description: Learn what each Microsoft Entra built-in role can do, from Global Administrator to Reports Reader. Find role descriptions, permissions, and template IDs.
 ms.topic: reference
-ms.date: 2026-07-17T00:00:00.0000000Z
+ms.date: 2026-11-03T00:00:00.0000000Z
 ms.reviewer: abhijeetsinha
 ms.custom: generated, it-pro, fasttrack-edit, has-azure-ad-ps-ref, azure-ad-ref-level-one-done, sfi-ga-nochange
 ai-usage: ai-assisted
@@ -157,6 +157,9 @@ This article lists the permissions used by **built-in** roles. Only a subset of 
 | Purview Workload Content Reader | Read data from Microsoft 365 when accessing from the Microsoft Purview portal. | e07494ad-1654-4dd2-922e-6f81a71bf00f |
 | Purview Workload Content Writer | Read and edit data from Microsoft 365 when accessing from the Microsoft Purview portal. | 02d5655b-c1cf-4e5f-98da-5fb919085bf6 |
 | Reports Reader | Can read sign-in and audit reports. | 4a5d8f65-41da-4de4-8968-e035b65339cf |
+| Resource Policy Administrator | Can manage resource policy definitions, assignments, tenant-wide configuration, and evaluation. | c0c46a03-c257-4f91-ab71-3c7e59c89d97 |
+| Resource Policy Evaluator | Can evaluate a supplied resource policy without reading or changing policy definitions or assignments. | 1dae4b79-8aea-40ab-9ad0-30d3ab1fa9c1 |
+| Resource Policy Reader | Can read resource policy definitions, assignments, and tenant-wide configuration, and evaluate policies without making changes. | 311877b7-9a2e-4337-81c2-068a250eaa22 |
 | Search Administrator | Can create and manage all aspects of Microsoft Search settings. | 0964bb5e-9bdb-4d7b-ac29-58e794862a40 |
 | Search Editor | Can create and manage the editorial content such as bookmarks, Q and As, locations, floorplan. | 8835291a-918c-4fd7-a9ce-faa49f0cf7d9 |
 | Security Administrator | Can read security information and reports, and manage configuration in Microsoft Entra ID and Office 365.[![Privileged label icon.](media/permissions-reference/privileged-label.png)](privileged-roles-permissions) | 194ae4cb-b126-40b2-bd5b-6091b380977d |
@@ -2957,6 +2960,45 @@ Users with this role can view usage reporting data and the reports dashboard in 
 | microsoft.office365.network/performance/allProperties/read | Read all network performance properties in the Microsoft 365 admin center |
 | microsoft.office365.usageReports/allEntities/allProperties/read | Read Office 365 usage reports |
 | microsoft.office365.webPortal/allEntities/standard/read | Read basic properties on all resources in the Microsoft 365 admin center |
+
+## Resource Policy Administrator
+
+Users with this role can create, read, update, and delete resource policy definitions and assignments in Microsoft Graph. They can also read and update tenant-wide resource policy configuration and evaluate policies.
+
+| Actions | Description |
+| --- | --- |
+| microsoft.directory/resourcePolicy/assignments/basic/update | Update resource policy assignments basic properties. |
+| microsoft.directory/resourcePolicy/assignments/create | Create resource policy assignments. |
+| microsoft.directory/resourcePolicy/assignments/delete | Delete resource policy assignments. |
+| microsoft.directory/resourcePolicy/assignments/standard/read | Read resource policy assignments standard properties. |
+| microsoft.directory/resourcePolicy/configuration/basic/update | Update basic properties of the tenant-wide resource policy configuration, such as the privileged-read app ID. |
+| microsoft.directory/resourcePolicy/configuration/standard/read | Read standard properties of the tenant-wide resource policy configuration, such as the privileged-read app ID. |
+| microsoft.directory/resourcePolicy/definitions/basic/update | Update resource policy definitions basic properties. |
+| microsoft.directory/resourcePolicy/definitions/create | Create resource policy definitions. |
+| microsoft.directory/resourcePolicy/definitions/delete | Delete resource policy definitions. |
+| microsoft.directory/resourcePolicy/definitions/standard/read | Read resource policy definitions standard properties. |
+| microsoft.directory/resourcePolicy/evaluateAssignedPolicies | Evaluate all policies assigned to a resource. |
+| microsoft.directory/resourcePolicy/evaluatePolicy | Evaluate a specific resource policy against a supplied resource. |
+
+## Resource Policy Evaluator
+
+Users with this role can evaluate a supplied resource policy in Microsoft Graph by using `evaluatePolicy`. This role doesn't grant read or write access to policy definitions or assignments.
+
+| Actions | Description |
+| --- | --- |
+| microsoft.directory/resourcePolicy/evaluatePolicy | Evaluate a specific resource policy against a supplied resource. |
+
+## Resource Policy Reader
+
+Users with this role can read resource policy definitions, assignments, and tenant-wide configuration in Microsoft Graph. They can evaluate supplied policies and assigned policies, but can't change policy definitions, assignments, or configuration.
+
+| Actions | Description |
+| --- | --- |
+| microsoft.directory/resourcePolicy/assignments/standard/read | Read resource policy assignments standard properties. |
+| microsoft.directory/resourcePolicy/configuration/standard/read | Read standard properties of the tenant-wide resource policy configuration, such as the privileged-read app ID. |
+| microsoft.directory/resourcePolicy/definitions/standard/read | Read resource policy definitions standard properties. |
+| microsoft.directory/resourcePolicy/evaluateAssignedPolicies | Evaluate all policies assigned to a resource. |
+| microsoft.directory/resourcePolicy/evaluatePolicy | Evaluate a specific resource policy against a supplied resource. |
 
 ## Search Administrator
 
