@@ -12,7 +12,8 @@ ms.service: entra-id-governance
 manager: dougeby
 description: Learn about Microsoft Entra Tenant Governance and how it helps organizations discover, manage, and govern tenants across their environment
 ms.topic: overview
-ms.date: 2026-03-05T00:00:00.0000000Z
+ms.date: 2026-11-11T00:00:00.0000000Z
+ai-usage: ai-assisted
 locale: en-us
 document_id: ea1f3bcd-625d-ab16-3a78-919d00827025
 document_version_independent_id: ea1f3bcd-625d-ab16-3a78-919d00827025
@@ -29,9 +30,11 @@ monikers: []
 item_type: Content
 source_path: docs/id-governance/tenant-governance/overview.md
 cmProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
 - https://authoring-docs-microsoft.poolparty.biz/devrel/07bb3e10-d135-43ff-bc8b-360497cb39fa
 spProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
 - https://authoring-docs-microsoft.poolparty.biz/devrel/12e559b9-eaf6-4aee-9af7-62334e15f863
 platformId: 3cf185d4-b005-18b0-e5d0-3b7c15e5fb79
@@ -42,6 +45,16 @@ platformId: 3cf185d4-b005-18b0-e5d0-3b7c15e5fb79
 Most large organizations operate Microsoft services in multiple tenants because of mergers and acquisitions, requirements for partitioning security or privacy-sensitive workloads, test environments, and other reasons. Most organizations also have user-created "shadow IT" tenants that central IT doesn't administer and often doesn't know about. In many environments, it's not easy to verify that each of these tenants is configured properly, especially if you don't know that some tenants even exist. This creates risk for your organization's security and compliance objectives.
 
 Microsoft Entra Tenant Governance enables you to get visibility across all your tenants and ensure they are configured to meet your security and compliance requirements. This includes the tenants you administer today, "shadow IT" tenants that you don't administer but that create risks for your organization, and new tenants that your users create.
+
+Tenant Governance also includes resource policy for request-time governance within a tenant. Choose the capabilities that address your requirements; resource policy doesn't require related tenant discovery or a governance relationship.
+
+| Capability | Purpose |
+| --- | --- |
+| Related tenants | Discover observable tenant relationships. |
+| Governance relationships | Establish approved cross-tenant administrative access. |
+| Configuration management | Compare resource configuration with a baseline and report drift. |
+| Resource policy (preview) | Evaluate matching Microsoft Graph requests and help prevent noncompliant resource changes. |
+| Secure tenant creation | Create add-on tenants with governance and recovery capabilities. |
 
 ## Related tenants
 
@@ -85,6 +98,23 @@ Key features:
 - View a list of configuration drifts in one monitor or across all monitors running in the tenant. Each configuration drift shows which properties of the resource differ from what the configuration baseline defines.
 
 Learn more about [configuration management](configuration-management).
+
+## Resource policy (preview)
+
+Resource policy capabilities help you prevent supported configuration changes that don't meet your organization's requirements.
+
+Key features:
+
+- Assign built-in policies without authoring policy code.
+- Author custom policies in Rego to express your organization's configuration requirements.
+- Reuse custom policy logic with assignment parameters and explicitly selected policy versions.
+- Test policies with simulated requests and assess real request impact in `doNotEnforce` mode before enforcement.
+- Block noncompliant requests through assignments in `enforce` mode before the requested changes occur.
+- Inspect evaluation audit events through Microsoft Graph to assess policy impact and investigate request outcomes.
+
+Request-time policy evaluation doesn't automatically scan or remediate preexisting resources.
+
+Learn more about [resource policy](resource-policy-overview) and the [built-in policy quickstart](resource-policy-quickstart-portal).
 
 ## Secure tenant creation
 

@@ -13,9 +13,9 @@ ms.subservice: devices
 manager: dougeby
 description: This article describes how to use the Microsoft Entra admin center to manage device identities and monitor related event information.
 ms.topic: how-to
-ms.date: 2026-06-17T00:00:00.0000000Z
+ms.date: 2026-11-12T00:00:00.0000000Z
 ms.reviewer: myra-ramdenbourg
-ms.custom: sfi-image-nochange
+ms.custom: sfi-image-nochange, msecd-doc-authoring-1030
 locale: en-us
 document_id: a8119688-e88d-2916-3dcf-bf777a5fc80c
 document_version_independent_id: e767d695-1c9f-64e4-e6c4-fef07b0f3d2e
@@ -33,9 +33,11 @@ item_type: Content
 source_path: docs/identity/devices/manage-device-identities.md
 cmProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
+- https://authoring-docs-microsoft.poolparty.biz/devrel/b1cfdec6-b0c3-4209-818c-736879856e0e
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
 spProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
+- https://authoring-docs-microsoft.poolparty.biz/devrel/2d0723c1-cf38-4c30-ab3d-5df787b33270
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
 platformId: 295390ca-aab1-5f76-adce-5faa90dc55b0
 ---
@@ -135,7 +137,7 @@ To view or copy BitLocker keys, you need to be the owner of the device or have o
 
 Note
 
-When devices that utilize [Windows Autopilot](/en-us/mem/autopilot/windows-autopilot) are reused, **and there is a new device owner**, that new device owner must contact an administrator to acquire the BitLocker recovery key for that device. Custom role or administrative unit scoped administrators will continue to have access to BitLocker recovery keys for those devices that have undergone device ownership changes, unless the new device owner belongs to a custom role or administrative unit scope. In such an instance, the user will need to contact other scoped administrator for the recovery keys. For more information, see the article [Find the primary user of an Intune device](/en-us/mem/intune/remote-actions/find-primary-user#change-a-devices-primary-user).
+When devices that utilize [Windows Autopilot](/en-us/mem/autopilot/windows-autopilot) are reused, **and there is a new device owner**, that new device owner must contact a non-device owner administrator to acquire the BitLocker recovery key for that device, even if the new device owner is an admin. Custom role or administrative unit scoped administrators will continue to have access to BitLocker recovery keys for those devices that have undergone device ownership changes, unless the new device owner belongs to a custom role or administrative unit scope. In such an instance, the user will need to contact other scoped administrator for the recovery keys. For more information, see the article [Find the primary user of an Intune device](/en-us/mem/intune/remote-actions/find-primary-user#change-a-devices-primary-user).
 
 ## View and filter your devices
 

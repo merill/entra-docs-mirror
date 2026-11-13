@@ -12,7 +12,7 @@ ms.service: entra-id-governance
 manager: dougeby
 description: Learn how to deploy Microsoft Entra Tenant Governance from setup through tenant discovery, governance, and configuration monitoring
 ms.topic: how-to
-ms.date: 2026-07-29T00:00:00.0000000Z
+ms.date: 2026-10-12T00:00:00.0000000Z
 ai-usage: ai-assisted
 ms.custom: msecd-doc-authoring-1018
 locale: en-us
@@ -43,9 +43,19 @@ platformId: 6aed2ece-b1d5-12f1-f54c-17b56abf274c
 
 # Deploy Microsoft Entra Tenant Governance end to end - Microsoft Entra ID Governance | Microsoft Learn
 
-This article describes how to deploy Microsoft Entra Tenant Governance across your organization. The deployment follows five phases: verifying prerequisites, discovering related tenants, establishing governance relationships, implementing delegated administration, and setting up configuration monitoring.
+This article describes how to deploy Microsoft Entra Tenant Governance across your organization. Choose the capabilities that address your governance requirements. Resource policy has an independent adoption path; it isn't an additional phase of cross-tenant deployment.
 
-Each phase builds on the previous one. Complete the phases in order, but skip optional phases if they don't apply to your environment.
+## Choose Tenant Governance features
+
+Use related tenants and governance relationships for tenant discovery and cross-tenant administration. Use configuration management to detect drift from approved resource configuration. Use resource policy to help prevent supported noncompliant changes at request time.
+
+| Adoption path | Start here |
+| --- | --- |
+| Discover and administer related tenants. | Follow the prerequisites and existing phases in this guide. Skip optional phases that don't apply. |
+| Monitor existing resource configuration. | Review [configuration management](configuration-management) and its service permissions. |
+| Adopt resource policy in a tenant. | Start with the [built-in policy quickstart](resource-policy-quickstart-portal), continue with the [observe-and-enforce tutorial](resource-policy-tutorial-portal), then follow [safe assignment deployment](resource-policy-safe-deployment) for a production rollout. |
+
+The resource policy path doesn't require related tenant discovery or a governance relationship. Its permissions, licensing, and procedures are separate from the cross-tenant prerequisites below.
 
 ## Prerequisites
 

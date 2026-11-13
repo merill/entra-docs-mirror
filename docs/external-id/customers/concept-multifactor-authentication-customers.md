@@ -13,7 +13,7 @@ ms.subservice: external
 manager: dougeby
 description: Learn about using MFA to secure apps in your external tenant and enabling email one-time passcodes (EOTP), SMS, time-based one-time passwords (TOTP), or passkeys (FIDO2) for verification.
 ms.topic: concept-article
-ms.date: 2026-09-02T00:00:00.0000000Z
+ms.date: 2026-11-06T00:00:00.0000000Z
 ms.custom: it-pro, references_regions
 ai-usage: ai-assisted
 locale: en-us
@@ -120,6 +120,10 @@ SMS is an add-on feature and requires a [linked subscription](../external-identi
 Starting January 2025, certain country codes will be deactivated by default for SMS verification. If you want to allow traffic from deactivated regions, you need to activate them for your application using the Microsoft Graph `onPhoneMethodLoadStartevent` policy. See [Regions requiring opt-in for SMS verification](how-to-region-code-opt-in).
 
 ## Time-based one-time password (TOTP)
+
+Note
+
+TOTP authentication in external tenants will become generally available at the end of November 2026. Rollout will finish in early December 2026.
 
 TOTP is a standards-based method that generates a temporary verification code in Microsoft Authenticator or a supported third-party authenticator app. It works as a second-factor verification method for MFA in external tenants.
 

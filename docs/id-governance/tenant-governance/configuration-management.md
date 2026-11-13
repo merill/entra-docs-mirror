@@ -12,7 +12,7 @@ ms.service: entra-id-governance
 manager: dougeby
 description: Learn about configuration management capabilities in Microsoft Entra Tenant Governance, including baselines and drift monitoring
 ms.topic: concept-article
-ms.date: 2026-06-05T00:00:00.0000000Z
+ms.date: 2026-10-27T00:00:00.0000000Z
 ai-usage: ai-assisted
 locale: en-us
 document_id: 11bf4ac6-07d1-7705-eca6-6cc39548becc

@@ -14,7 +14,8 @@ ms.service: entra-id-governance
 manager: dougeby
 description: Find answers to common questions about Microsoft Entra Tenant Governance, including discovery, governance relationships, and monitoring
 ms.topic: faq
-ms.date: 2026-03-17T00:00:00.0000000Z
+ms.date: 2026-10-27T00:00:00.0000000Z
+ai-usage: ai-assisted
 locale: en-us
 document_id: 8eff4261-c85c-c3b8-da19-fc93a9083094
 document_version_independent_id: 8eff4261-c85c-c3b8-da19-fc93a9083094
@@ -33,11 +34,11 @@ source_path: docs/id-governance/tenant-governance/faq.yml
 cmProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
 - https://authoring-docs-microsoft.poolparty.biz/devrel/07bb3e10-d135-43ff-bc8b-360497cb39fa
-- https://authoring-docs-microsoft.poolparty.biz/devrel/5fc61396-d075-4560-aece-fdbda73d243f
+- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
 spProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
 - https://authoring-docs-microsoft.poolparty.biz/devrel/12e559b9-eaf6-4aee-9af7-62334e15f863
-- https://authoring-docs-microsoft.poolparty.biz/devrel/ad9437c1-8cda-4537-ad69-b4b263652e13
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
 platformId: 8b343e83-7a7b-5816-933b-48fd9c565a3c
 ---
 
@@ -102,6 +103,12 @@ No. Multi-tier relationships aren't currently supported. For example, you can't 
 Yes. Use [PIM for Groups](/en-us/entra/id-governance/privileged-identity-management/concept-pim-for-groups) so that admins activate group membership in the governing tenant before using GDAP access configured in the relationship to manage other tenants. PIM policies configured in the governed tenant and applied to a governing tenant administrator aren't supported.
 
 ## Configuration management
+
+### How does configuration management differ from resource policy?
+
+[Configuration management](configuration-management) detects drift from a baseline. [Resource policy (preview)](resource-policy-overview) evaluates matching Microsoft Graph requests and can block noncompliant changes. It doesn't scan or remediate preexisting resources.
+
+Use the features together to detect drift and help prevent noncompliant changes. Check each feature's supported resources, permissions, and policy format; they aren't interchangeable.
 
 ### What Microsoft services and resources can I monitor?
 

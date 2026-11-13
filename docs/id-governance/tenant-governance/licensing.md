@@ -12,7 +12,7 @@ ms.service: entra-id-governance
 manager: dougeby
 description: Learn which Microsoft Entra Tenant Governance features are available with each license tier, including P1, P2, and ID Governance
 ms.topic: concept-article
-ms.date: 2026-09-14T00:00:00.0000000Z
+ms.date: 2026-11-11T00:00:00.0000000Z
 ms.custom: msecd-doc-authoring-1018
 ai-usage: ai-assisted
 locale: en-us
@@ -32,12 +32,12 @@ item_type: Content
 source_path: docs/id-governance/tenant-governance/licensing.md
 cmProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
-- https://authoring-docs-microsoft.poolparty.biz/devrel/07bb3e10-d135-43ff-bc8b-360497cb39fa
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ac4b7417-d4c2-43d4-94bf-f22fa1416b34
+- https://authoring-docs-microsoft.poolparty.biz/devrel/07bb3e10-d135-43ff-bc8b-360497cb39fa
 spProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
-- https://authoring-docs-microsoft.poolparty.biz/devrel/12e559b9-eaf6-4aee-9af7-62334e15f863
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/68876bab-7da4-4e70-b295-395b3a255a1f
+- https://authoring-docs-microsoft.poolparty.biz/devrel/12e559b9-eaf6-4aee-9af7-62334e15f863
 platformId: 85f1fc46-81bd-bbfc-0b13-a92a022acada
 ---
 
@@ -80,6 +80,18 @@ Microsoft Entra P1 is also included in Microsoft 365 E3 and Microsoft 365 Busine
 | Feature | Free | Microsoft Entra P1 | Microsoft Entra P2 | Microsoft Entra ID Governance |
 | --- | --- | --- | --- | --- |
 | New tenant creation with governance relationship | ✅ | ✅ | ✅ | ✅ |
+
+### Resource policy (preview)
+
+Most resource policy operations during preview require a Microsoft Entra ID Governance service plan, available with Microsoft Entra ID Governance or another offering that includes that service plan. Microsoft Entra P1 or P2 alone doesn't meet this requirement.
+
+| Feature | Free | Microsoft Entra P1 | Microsoft Entra P2 | Microsoft Entra ID Governance |
+| --- | --- | --- | --- | --- |
+| Most resource policy operations, including creating or editing definitions and assignments, activating assignments, and restoring deleted policies |  |  |  | ✅ |
+| Browse and view policy definitions, including Rego source | ✅ | ✅ | ✅ | ✅ |
+| Delete policy definitions or assignments, or deactivate an assignment | ✅ | ✅ | ✅ | ✅ |
+
+The browsing, viewing, deletion, and deactivation exceptions don't remove role or API permission requirements.
 
 ## Licensing scenarios by feature
 
@@ -148,3 +160,13 @@ One administrator enables Related tenants discovery for the tenant. After discov
 Secure add-on tenant creation is available with Microsoft Entra Free for paid Microsoft customers. A premium Microsoft Entra license isn't required, but the customer's existing tenant must be associated with a paid Microsoft cloud subscription. Customers who use only a free tenant or trial subscription can't create more tenants from the Microsoft Entra admin center.
 
 For more information about the general tenant creation requirements, see [Create a new tenant in Microsoft Entra ID](../../fundamentals/create-new-tenant).
+
+### Resource policy (preview)
+
+Most resource policy operations during preview require a Microsoft Entra ID Governance service plan, available with Microsoft Entra ID Governance or an offering such as Microsoft Entra Suite. Microsoft Entra P1 or P2 alone doesn't meet this requirement.
+
+The features-by-license tables list required operations and exceptions for built-in and custom policies. Role and API permission requirements still apply to operations that don't require this service plan.
+
+An enabled assignment in `doNotEnforce` mode still evaluates requests. Creating or editing that assignment requires the service plan; switching to `doNotEnforce` isn't the same as deactivating it.
+
+For feature behavior and availability, see [What is Microsoft Entra resource policy?](resource-policy-overview). To assign a built-in policy, see the [built-in policy quickstart](resource-policy-quickstart-portal).

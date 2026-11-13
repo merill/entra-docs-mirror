@@ -12,7 +12,7 @@ ms.service: entra-id-governance
 manager: dougeby
 description: Learn about governance policy templates and how to use them to enforce consistent governance across tenants in Microsoft Entra
 ms.topic: concept-article
-ms.date: 2026-07-01T00:00:00.0000000Z
+ms.date: 2026-10-12T00:00:00.0000000Z
 ai-usage: ai-assisted
 locale: en-us
 document_id: b5f28d83-6869-c2bc-a131-ae63a1b2cc4d
@@ -30,12 +30,12 @@ monikers: []
 item_type: Content
 source_path: docs/id-governance/tenant-governance/governance-policy-templates.md
 cmProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ac4b7417-d4c2-43d4-94bf-f22fa1416b34
 spProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/68876bab-7da4-4e70-b295-395b3a255a1f
 platformId: 5ce1d584-17de-399c-4de1-0a43a9c3af56
 ---
@@ -43,6 +43,10 @@ platformId: 5ce1d584-17de-399c-4de1-0a43a9c3af56
 # Governance policy templates - Microsoft Entra ID Governance | Microsoft Learn
 
 Governance policy templates are a foundational component of the Tenant Governance service, which helps organizations secure Microsoft Entra tenants at scale. Before establishing a governance relationship between tenants, create a governance policy template that defines the relationship behavior. These templates are reusable across distinct governance relationships, enabling consistent and scalable management of cross-tenant access.
+
+Note
+
+Governance policy templates define cross-tenant access for governance relationships. They aren't [resource policy definitions](resource-policy-concepts), which use Rego to evaluate resource changes. Creating a governance policy template doesn't create a resource policy assignment.
 
 ## How governance policy templates work
 

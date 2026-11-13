@@ -32,11 +32,11 @@ source_path: docs/fundamentals/licensing.md
 cmProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
-- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
+- https://authoring-docs-microsoft.poolparty.biz/devrel/b1cfdec6-b0c3-4209-818c-736879856e0e
 spProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
-- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
+- https://authoring-docs-microsoft.poolparty.biz/devrel/2d0723c1-cf38-4c30-ab3d-5df787b33270
 platformId: 582d1cc7-69d1-3bd6-a334-bf7570fd510a
 ---
 
@@ -156,7 +156,7 @@ The following table shows what features associated with identity governance are 
 | **Lifecycle Workflows (LCW)** | **Free** | **Microsoft Entra ID P1** | **Microsoft Entra ID P2** | **Microsoft Entra ID Governance** | **Microsoft Entra Suite** | **Microsoft Agent 365** | **Microsoft 365 E7** |
 | [Lifecycle Workflows](../id-governance/what-are-lifecycle-workflows) |  |  |  | ✅ | ✅ |  | ✅ |
 | [LCW + Custom Extensions (Logic Apps)](../id-governance/lifecycle-workflow-extensibility) |  |  |  | ✅ | ✅ |  | ✅ |
-| [LCW + Agent Sponsorship tasks](../id-governance/agent-sponsor-tasks) |  |  |  |  |  | ✅ | ✅ |
+| [LCW + Agent ID sponsorship tasks](../id-governance/agent-sponsor-tasks) |  |  |  |  |  | ✅ | ✅ |
 | **Access reviews (AR)** | **Free** | **Microsoft Entra ID P1** | **Microsoft Entra ID P2** | **Microsoft Entra ID Governance** | **Microsoft Entra Suite** | **Microsoft Agent 365** | **Microsoft 365 E7** |
 | [AR - Capabilities previously generally available in Microsoft Entra ID P2](../id-governance/access-reviews-overview) |  |  | ✅ | ✅ | ✅ |  | ✅ |
 | [AR - PIM For Groups (Preview)](../id-governance/create-access-review-pim-for-groups) |  |  |  | ✅ | ✅ |  | ✅ |
@@ -168,13 +168,13 @@ The following table shows what features associated with identity governance are 
 | **Entitlement management (EM)** | **Free** | **Microsoft Entra ID P1** | **Microsoft Entra ID P2** | **Microsoft Entra ID Governance** | **Microsoft Entra Suite** | **Microsoft Agent 365** | **Microsoft 365 E7** |
 | [EM - Capabilities previously generally available in Microsoft Entra ID P2](../id-governance/entitlement-management-overview) |  |  | ✅ | ✅ | ✅ |  | ✅ |
 | [EM - Users assigned to access packages](../id-governance/entitlement-management-access-package-create#allow-users-service-principals-and-agent-identities-in-your-directory-to-request-the-access-package) |  |  | ✅ | ✅ | ✅ |  | ✅ |
-| [EM - Agents and service principals assigned to access packages](../id-governance/entitlement-management-access-package-create#allow-users-service-principals-and-agent-identities-in-your-directory-to-request-the-access-package) |  |  |  |  |  | ✅ | ✅ |
+| [EM - Agent IDs and service principals assigned to access packages](../id-governance/entitlement-management-access-package-create#allow-users-service-principals-and-agent-identities-in-your-directory-to-request-the-access-package) |  |  |  |  |  | ✅ | ✅ |
 | [EM - Users request access for themselves](../id-governance/entitlement-management-overview) |  |  | ✅ | ✅ | ✅ |  | ✅ |
 | [EM - Admins directly assign a user assignments(including guests)](../id-governance/entitlement-management-access-package-assignments#directly-assign-an-identity) |  |  | ✅ | ✅ | ✅ |  | ✅ |
-| [EM - Admins directly assign agents and service principals](../id-governance/entitlement-management-access-package-assignments#directly-assign-any-identity) |  |  |  |  |  | ✅ | ✅ |
+| [EM - Admins directly assign agent IDs and service principals](../id-governance/entitlement-management-access-package-assignments#directly-assign-any-identity) |  |  |  |  |  | ✅ | ✅ |
 | [EM - Admins directly assign any user - via email address for users not yet in your directory](../id-governance/entitlement-management-access-package-assignments#directly-assign-any-identity) |  |  |  | ✅ | ✅ |  | ✅ |
 | [EM - Managers requesting on behalf of employees](../id-governance/entitlement-management-request-behalf) |  |  |  | ✅ | ✅ |  | ✅ |
-| [EM - Owners and sponsors request access on behalf of their agents or service principals](../id-governance/entitlement-management-request-behalf#scenarios-for-requesting-on-behalf-of-agent-identities) |  |  |  |  |  | ✅ | ✅ |
+| [EM - Owners and sponsors request access on behalf of their agent IDs or service principals](../id-governance/entitlement-management-request-behalf#scenarios-for-requesting-on-behalf-of-agent-identities) |  |  |  |  |  | ✅ | ✅ |
 | **EM - Supported resources** | **Free** | **Microsoft Entra ID P1** | **Microsoft Entra ID P2** | **Microsoft Entra ID Governance** | **Microsoft Entra Suite** | **Microsoft Agent 365** | **Microsoft 365 E7** |
 | [EM - Groups and teams in access packages](../id-governance/entitlement-management-access-package-resources#add-a-group-or-team-resource-role) |  |  | ✅ | ✅ | ✅ |  | ✅ |
 | [EM - Eligible group ownerships and memberships in access packages (PIM for Groups)](../id-governance/entitlement-management-access-package-eligible) |  |  |  | ✅ | ✅ |  | ✅ |
@@ -190,7 +190,7 @@ The following table shows what features associated with identity governance are 
 | [EM - Internal sponsors as approvers (from assignees' connected organizations)](../id-governance/entitlement-management-access-package-approval-policy) |  |  | ✅ | ✅ | ✅ |  | ✅ |
 | [EM - External sponsors as approvers (from assignees' connected organizations)](../id-governance/entitlement-management-access-package-approval-policy) |  |  | ✅ | ✅ | ✅ |  | ✅ |
 | [EM - Sponsors as approvers (from assignees' user profile)](../id-governance/entitlement-management-access-package-approval-policy) |  |  |  | ✅ | ✅ |  | ✅ |
-| [EM - Agent Sponsors as approvers](../id-governance/entitlement-management-access-package-approval-policy) |  |  |  |  |  | ✅ | ✅ |
+| [EM - Agent ID sponsors as approvers](../id-governance/entitlement-management-access-package-approval-policy) |  |  |  |  |  | ✅ | ✅ |
 | [EM - Externally determine approval requirements using custom extensions](../id-governance/entitlement-management-dynamic-approval) |  |  |  | ✅ | ✅ |  | ✅ |
 | [EM - Collect additional requestor information for approval](../id-governance/entitlement-management-access-package-approval-policy#collect-additional-requestor-information-for-approval) |  |  | ✅ | ✅ | ✅ |  | ✅ |
 | **EM - Lifecycle** | **Free** | **Microsoft Entra ID P1** | **Microsoft Entra ID P2** | **Microsoft Entra ID Governance** | **Microsoft Entra Suite** | **Microsoft Agent 365** | **Microsoft 365 E7** |
@@ -220,6 +220,8 @@ The following table shows what features associated with identity governance are 
 | [Identity governance dashboard](../id-governance/governance-dashboard) |  | ✅ | ✅ | ✅ | ✅ |  | ✅ |
 | [Insights and reporting - Inactive guest accounts](../identity/users/clean-up-stale-guest-accounts) |  |  |  | ✅ | ✅ |  | ✅ |
 | [Conditional Access - Terms of use attestation](../identity/conditional-access/terms-of-use) |  | ✅ | ✅ | ✅ | ✅ |  | ✅ |
+| [Agent ID default inactivity policy (preview)](../id-governance/agent-default-inactivity-policy) | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| [Agent ID lifecycle policies (preview)](../id-governance/agent-lifecycle-policies) |  |  |  |  |  | ✅ | ✅ |
 
 ### Entitlement Management
 
@@ -238,7 +240,7 @@ With Microsoft Entra ID Governance licenses for Lifecycle Workflows, you can:
 - Manage and configure existing tasks to create workflows that are specific to your needs.
 - Create up to 100 custom task extensions to be used in your workflows.
 
-Using this feature requires a Microsoft Entra ID Governance subscription for your organization's member users. Some capabilities within this feature require guest billing.
+Using this feature, for tasks other than agent ID sponsor reassignment, requires a Microsoft Entra ID Governance subscription for your organization's member users. Some capabilities within this feature require guest billing.
 
 ## Microsoft Entra Tenant Governance
 
@@ -273,6 +275,18 @@ Microsoft Entra P1 is also included in Microsoft 365 E3 and Microsoft 365 Busine
 | Feature | Free | Microsoft Entra P1 | Microsoft Entra P2 | Microsoft Entra ID Governance |
 | --- | --- | --- | --- | --- |
 | New tenant creation with governance relationship | ✅ | ✅ | ✅ | ✅ |
+
+### Resource policy (preview)
+
+Most resource policy operations during preview require a Microsoft Entra ID Governance service plan, available with Microsoft Entra ID Governance or another offering that includes that service plan. Microsoft Entra P1 or P2 alone doesn't meet this requirement.
+
+| Feature | Free | Microsoft Entra P1 | Microsoft Entra P2 | Microsoft Entra ID Governance |
+| --- | --- | --- | --- | --- |
+| Most resource policy operations, including creating or editing definitions and assignments, activating assignments, and restoring deleted policies |  |  |  | ✅ |
+| Browse and view policy definitions, including Rego source | ✅ | ✅ | ✅ | ✅ |
+| Delete policy definitions or assignments, or deactivate an assignment | ✅ | ✅ | ✅ | ✅ |
+
+The browsing, viewing, deletion, and deactivation exceptions don't remove role or API permission requirements.
 
 ## Microsoft Entra Connect
 
