@@ -30,19 +30,21 @@ monikers: []
 item_type: Content
 source_path: docs/architecture/governance-deployment-intro.md
 cmProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ac4b7417-d4c2-43d4-94bf-f22fa1416b34
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
+- https://authoring-docs-microsoft.poolparty.biz/devrel/b1cfdec6-b0c3-4209-818c-736879856e0e
 spProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/68876bab-7da4-4e70-b295-395b3a255a1f
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
+- https://authoring-docs-microsoft.poolparty.biz/devrel/2d0723c1-cf38-4c30-ab3d-5df787b33270
 platformId: 79166136-d81c-b5a8-dd3e-90dd8decedf0
 ---
 
 # Introduction to Microsoft Entra ID Governance deployment guide - Microsoft Entra | Microsoft Learn
 
-[Microsoft Entra ID Governance](../id-governance/identity-governance-overview) is an identity governance solution to improve productivity, strengthen security, and meet compliance and regulatory requirements. Ensure the right people have the right access to the right resources. Enable identity and access process automation, delegation to business groups, and increased visibility. Mitigate identity and access risk, protect, monitor, and audit access to your assets. Learn more about Microsoft Entra ID Governance [use cases](../id-governance/scenarios/identity-governance-use-cases) and [documentation](../id-governance/identity-governance-overview).
+[Microsoft Entra ID Governance](../id-governance/identity-governance-overview) is an identity governance solution to improve productivity, strengthen security, and meet compliance and regulatory requirements. It can be used to ensure the right people have the right access to the right resources, enabling identity and access process automation, delegation to business groups, with increased visibility. With Microsoft Entra ID Governance and related Microsoft Security features, organizations can mitigate identity and access risk, protect, monitor, and audit access to their assets. Learn more about Microsoft Entra ID Governance [use cases](../id-governance/scenarios/identity-governance-use-cases) and [documentation](../id-governance/identity-governance-overview).
+
+This version of the guide is focused on identity governance use cases for employees and business guests. For more information on governance of AI agent identity and access, see [Governing Agent Identities](../id-governance/agent-id-governance-overview).
 
 ## Deployment approach
 

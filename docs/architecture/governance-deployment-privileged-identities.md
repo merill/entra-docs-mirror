@@ -1,6 +1,6 @@
 ---
 layout: Conceptual
-title: Microsoft Entra ID Governance deployment guide to govern privileged identities - Microsoft Entra | Microsoft Learn
+title: Microsoft Entra ID Governance deployment guide to govern privileged identities and access - Microsoft Entra | Microsoft Learn
 canonicalUrl: https://learn.microsoft.com/en-us/entra/architecture/governance-deployment-privileged-identities
 uhfHeaderId: MSDocsHeader-Entra
 breadcrumb_path: /entra/breadcrumb/toc.json
@@ -31,12 +31,16 @@ item_type: Content
 source_path: docs/architecture/governance-deployment-privileged-identities.md
 cmProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
+- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
+- https://authoring-docs-microsoft.poolparty.biz/devrel/b1cfdec6-b0c3-4209-818c-736879856e0e
 spProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
+- https://authoring-docs-microsoft.poolparty.biz/devrel/2d0723c1-cf38-4c30-ab3d-5df787b33270
 platformId: fce1028d-29da-15af-01ce-3c450676bac4
 ---
 
-# Microsoft Entra ID Governance deployment guide to govern privileged identities - Microsoft Entra | Microsoft Learn
+# Microsoft Entra ID Governance deployment guide to govern privileged identities and access - Microsoft Entra | Microsoft Learn
 
 Deployment scenarios are guidance on how to combine and test Microsoft Security products and services. You can discover how capabilities work together to improve productivity, strengthen security, and more easily meet compliance and regulatory requirements.
 

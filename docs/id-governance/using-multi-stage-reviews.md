@@ -1,6 +1,6 @@
 ---
 layout: Conceptual
-title: Using multi-stage reviews to meet your attestation and certification needs - Microsoft Entra - Microsoft Entra ID Governance | Microsoft Learn
+title: Using multi-stage access reviews to meet your attestation and certification needs - Microsoft Entra - Microsoft Entra ID Governance | Microsoft Learn
 canonicalUrl: https://learn.microsoft.com/en-us/entra/id-governance/using-multi-stage-reviews
 uhfHeaderId: MSDocsHeader-Entra
 breadcrumb_path: /entra/breadcrumb/toc.json
@@ -10,7 +10,7 @@ author: OWinfreyATL
 ms.author: owinfrey
 ms.service: entra-id-governance
 manager: dougeby
-description: Learn how to use multi-stage reviews to design more efficient reviews with Microsoft Entra.
+description: Learn how to use multi-stage access reviews to design more efficient reviews with Microsoft Entra.
 editor: florianf
 ms.subservice: access-reviews
 ms.topic: how-to
@@ -32,25 +32,21 @@ monikers: []
 item_type: Content
 source_path: docs/id-governance/using-multi-stage-reviews.md
 cmProducts:
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
-- https://authoring-docs-microsoft.poolparty.biz/devrel/63959238-cb90-4871-a33d-4a5519097e47
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
+- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
 spProducts:
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
-- https://authoring-docs-microsoft.poolparty.biz/devrel/78d87f42-5582-4a6b-90be-7db2f12b34e6
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
 platformId: 2226f862-d972-74bf-368d-9c2820fba033
 ---
 
-# Using multi-stage reviews to meet your attestation and certification needs - Microsoft Entra - Microsoft Entra ID Governance | Microsoft Learn
+# Using multi-stage access reviews to meet your attestation and certification needs - Microsoft Entra - Microsoft Entra ID Governance | Microsoft Learn
 
 Microsoft Entra access reviews support up to three review stages, in which multiple types of reviewers engage in determining who still needs access to company resources. These reviews could be for membership in groups or teams, access to applications, assignments to privileged roles, or access package assignments. When review administrators configure the review for automatic application of decisions, at the end of the review period, access is revoked for denied users.
 
-## Use cases for multi-stage reviews
+## Use cases for multi-stage access reviews
 
 Multi-stage access reviews allow you and your organization to enable complex workflows to meet recertification and audit requirements calling for multiple reviewers to attest to access for users in a particular sequence. It also helps you design more efficient reviews for your resource owners and auditors by reducing the number of decisions each reviewer is accountable for. This approach allows for combining otherwise disjoint, separate reviews for the same resource, to be combined in one access review.
 
-[![Screenshot of admin experience to configure multi-stage reviews.](media/using-multi-stage-reviews/new-access-reviews.png)](media/using-multi-stage-reviews/new-access-reviews.png#lightbox)
+[![Screenshot of admin experience to configure multi-stage access reviews.](media/using-multi-stage-reviews/new-access-reviews.png)](media/using-multi-stage-reviews/new-access-reviews.png#lightbox)
 
 Here are some scenarios you might want to consider:
 
@@ -78,7 +74,7 @@ The configuration for this scenario would look like this:
 
 ## Assign alternate reviewers to weigh in on unreviewed decisions
 
-For scenarios that you need decisions recorded and need to make sure that access is preserved for the right people, multi-stage reviews let you progress a subset of reviewees to the next stage, that potentially needs a second reviewer audience for double-checking or decision making. Use this pattern to ensure that there are fewer unreviewed users or users marked as **Don’t know**, by progressing these reviewees to another stage, and having another group of reviewers take decisions.
+For scenarios that you need decisions recorded and need to make sure that access is preserved for the right people, multi-stage access reviews let you progress a subset of reviewees to the next stage, that potentially needs a second reviewer audience for double-checking or decision making. Use this pattern to ensure that there are fewer unreviewed users or users marked as **Don’t know**, by progressing these reviewees to another stage, and having another group of reviewers take decisions.
 
 An example would be a review that contains two stages that determine access to an application. In the review settings, the review administrator chooses to **Show previous stage(s) decisions to later stage reviewers**. For **Reviewees going to the next stage**, the decisions that need confirmation would be added: to ensure all reviewees have a decision, select **reviewees marked as ‘Don’t know’** and **Not reviewed reviewees**, so that later-stage reviewers only see the undecided or unsure reviewees to retain the right access.
 
@@ -109,13 +105,13 @@ An example would be a review of a group that grants an IT exception, that an adm
 | Reviewees going to the next stage | Select **Approved reviewees** |
 | If reviewers don’t respond | Remove Access |
 
-[![Screenshot of multi-stage reviews.](media/using-multi-stage-reviews/multi-stage-reviews.png)](media/using-multi-stage-reviews/multi-stage-reviews.png#lightbox)
+[![Screenshot of multi-stage access reviews.](media/using-multi-stage-reviews/multi-stage-reviews.png)](media/using-multi-stage-reviews/multi-stage-reviews.png#lightbox)
 
 ## Guest user reviews
 
 Guest user reviews help organizations that use Microsoft Entra B2B for collaboration. These guest users’ access should be reviewed regularly to check on whether these guest users have the right access still, and that collaboration is still desired, so revoking access or a cleanup of guest user accounts that are no longer needed is possible.
 
-This scenario can be configured with multi-stage reviews similar to how the "Reduce burden on later stage reviewers" scenario works. First, ask guest users to self-review and attest their continued interest and need for collaboration, including the requirement to provide a business justification. Only self-approved guests are progressed to a later stage, where a sponsor or other employee approves or denies continued access or collaboration.
+This scenario can be configured with multi-stage access reviews similar to how the "Reduce burden on later stage reviewers" scenario works. First, ask guest users to self-review and attest their continued interest and need for collaboration, including the requirement to provide a business justification. Only self-approved guests are progressed to a later stage, where a sponsor or other employee approves or denies continued access or collaboration.
 
 For guest user reviews, also consider leveraging the **Inactive users (on tenant level) only** setting. This will scope the review to inactive external users that haven't signed in to the resource tenant in the number of specified days.
 
@@ -145,7 +141,7 @@ The **Action to apply on denied guest users** setting is only visible in the rev
 
 Review administrators define the duration of every review stage and therefore, how much time reviewers in their stage have to record their decisions. Each stage can be configured to have its own duration, to cater for availability and expectation of reviewers.
 
-[![Screenshot of using multi-stage reviews.](media/using-multi-stage-reviews/using-multi-stage-reviews.png)](media/using-multi-stage-reviews/using-multi-stage-reviews.png#lightbox)
+[![Screenshot of using multi-stage access reviews.](media/using-multi-stage-reviews/using-multi-stage-reviews.png)](media/using-multi-stage-reviews/using-multi-stage-reviews.png#lightbox)
 
 Each review stage stays open for reviewers to add decisions for the length of the duration. Review administrators can stop a running stage and automatically progress the overall review to the next review stage on the reviewer overview page, by selecting **Stop current stage**.
 
