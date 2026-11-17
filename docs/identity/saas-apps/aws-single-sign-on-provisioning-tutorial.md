@@ -14,7 +14,9 @@ ms.subservice: saas-apps
 manager: pmwongera
 description: Learn how to automatically provision and de-provision user accounts from Microsoft Entra ID to AWS IAM Identity Center.
 ms.topic: how-to
-ms.date: 2026-05-26T00:00:00.0000000Z
+ms.date: 2026-11-16T00:00:00.0000000Z
+ms.custom: msecd-doc-authoring-1032
+ai-usage: ai-assisted
 locale: en-us
 document_id: a63d94b1-c9fe-53e6-959e-790b57d3c3ce
 document_version_independent_id: 3a8cb353-6c8d-10a6-9ffd-2cbabb3e74e3
@@ -32,9 +34,11 @@ item_type: Content
 source_path: docs/identity/saas-apps/aws-single-sign-on-provisioning-tutorial.md
 cmProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
+- https://authoring-docs-microsoft.poolparty.biz/devrel/b1cfdec6-b0c3-4209-818c-736879856e0e
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
 spProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
+- https://authoring-docs-microsoft.poolparty.biz/devrel/2d0723c1-cf38-4c30-ab3d-5df787b33270
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
 platformId: efb9f009-3294-566a-2ba7-b8f9d783a42f
 ---
@@ -207,7 +211,7 @@ Now any end user that was made eligible for the group in PIM can get JIT access 
         - For the sixth user and above within a 10-second period activating their group membership for a specific application, group membership is provisioned to the application in the next synchronization cycle. The synchronization cycle runs every 40 minutes. The throttling limits are per enterprise application.
 - If the user is unable to access the necessary group in AWS, please review the troubleshooting tips below, PIM logs, and provisioning logs to ensure that the group membership was updated successfully. Depending on how the target application has been architected, it may take additional time for the group membership to take effect in the application.
 - You can create alerts for failures using [Azure Monitor](/en-us/entra/identity/app-provisioning/application-provisioning-log-analytics).
-- Deactivation is done during the regular incremental cycle. It isn't processed immediately through on-demand provisioning.
+- If a user manually ends an active PIM group membership before its scheduled expiry, accelerated deprovisioning isn't triggered. The membership removal can be processed during the next regular provisioning synchronization cycle, which can take up to about 40 minutes. This early-termination delay doesn't apply when the activation reaches its scheduled expiry.
 
 ## Troubleshooting Tips
 

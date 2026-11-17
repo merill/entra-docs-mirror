@@ -13,7 +13,7 @@ ms.subservice: authentication
 manager: dougeby
 description: Learn about Authenticator-specific requirements, configuration, and troubleshooting for passkeys in Microsoft Authenticator for Microsoft Entra ID.
 ms.topic: how-to
-ms.date: 2026-10-02T00:00:00.0000000Z
+ms.date: 2026-11-04T00:00:00.0000000Z
 ms.reviewer: mjsantani, guptashi, tilarso
 ms.collection: M365-identity-device-management
 ms.custom: sfi-ga-nochange, sfi-image-nochange, msecd-doc-authoring-108
@@ -227,15 +227,13 @@ Here are some workarounds:
     | Policy result | Users who can't sign in with a passkey in Authenticator are directed to the **My Sign-ins** wizard mode. After registration, they're asked to sign in to Authenticator on their mobile device. | Users who sign in to Authenticator with a TAP or another allowed method can register a passkey directly in Authenticator. No loop occurs because the user meets the authentication requirements. |
 
     ^1^For users to register new sign-in methods, your grant control for the mobile policy needs to match your Conditional Access policy to register [Security info](https://mysignins.microsoft.com/security-info).
-- You can exclude the **Microsoft Authenticator Credential Registration** resource from the Conditional Access policy.
+- You can exclude the **Microsoft Authenticator Credential Registration** resource from the Conditional Access policy. To use this resource for passkey registration, you must also opt in users by using the Microsoft Graph API.
 
     Note
 
-    The Microsoft Authenticator Credential Registration resource will be available in November 2026. Before you can exclude the resource from a Conditional Access policy, you must provision the Microsoft Authenticator Credential Registration enterprise application in your tenant.
+    The Microsoft Authenticator Credential Registration resource will be available at the end of November 2026. Before you can exclude the resource from a Conditional Access policy, you must provision the Microsoft Authenticator Credential Registration enterprise application in your tenant.
 
-    As a Cloud Application Administrator or Application Administrator:
-
-    1. Manually provision the **Microsoft Authenticator Credential Registration** app by using one of the [supported methods for creating an enterprise application from a multitenant app](/en-us/entra/identity/enterprise-apps/create-service-principal-cross-tenant?pivots=ms-graph). Use the following details:
+    1. As a **Cloud Application Administrator** or **Application Administrator**, manually provision the **Microsoft Authenticator Credential Registration** app by using one of the [supported methods for creating an enterprise application from a multitenant app](../enterprise-apps/create-service-principal-cross-tenant?pivots=ms-graph). Use the following details:
 
         - **App ID**: `6aa00308-ea33-4caa-90d6-ae905d8cb51b`
         - **Required role**: Cloud Application Administrator or Application Administrator
@@ -247,7 +245,20 @@ Here are some workarounds:
           "appId": "6aa00308-ea33-4caa-90d6-ae905d8cb51b"
         }
         ```
-    2. After you provision the app, **Microsoft Authenticator Credential Registration** appears as a resource in Conditional Access. Exclude it from any Conditional Access policies scoped to **All resources** to unblock passkey registration in Microsoft Authenticator.
+    2. As a **Conditional Access Administrator**, opt in users to the dedicated registration resource. In Microsoft Graph Explorer, use the `Policy.ReadWrite.ConditionalAccess` permission to make a `PATCH` request to `https://graph.microsoft.com/beta/identity/conditionalAccess/settings` with the following body:
+
+        ```json
+        {
+          "authenticatorPasskeyRegistrationResourceMapping": {
+            "isEnabled": true,
+            "includeUsers": ["All"]
+          }
+        }
+        ```
+
+        To opt in selected users instead, replace `"All"` with their tenant user object IDs. Updating `includeUsers` replaces the existing list.
+    3. This workaround requires Microsoft Authenticator version **6.2607.4697 or later** for Android and version **6.8.56 or later** for iOS.
+    4. As a **Conditional Access Administrator**, exclude **Microsoft Authenticator Credential Registration** from the Conditional Access policies scoped to **All resources** that block passkey registration.
 
 Note
 

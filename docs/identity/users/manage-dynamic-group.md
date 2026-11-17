@@ -13,7 +13,7 @@ ms.subservice: users
 manager: dougeby
 description: Learn how dynamic group management works.
 ms.topic: concept-article
-ms.date: 2025-04-08T00:00:00.0000000Z
+ms.date: 2026-11-16T00:00:00.0000000Z
 ms.reviewer: mbhargava
 ai-usage: ai-assisted
 locale: en-us
@@ -33,9 +33,11 @@ item_type: Content
 source_path: docs/identity/users/manage-dynamic-group.md
 cmProducts:
 - https://authoring-docs-microsoft.poolparty.biz/devrel/68cb9039-df60-49b0-8ef8-89ad96497f63
+- https://authoring-docs-microsoft.poolparty.biz/devrel/b1cfdec6-b0c3-4209-818c-736879856e0e
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
 spProducts:
 - https://authoring-docs-microsoft.poolparty.biz/devrel/725b6df3-93e8-472d-834e-e7e0d2953d35
+- https://authoring-docs-microsoft.poolparty.biz/devrel/2d0723c1-cf38-4c30-ab3d-5df787b33270
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
 platformId: ef208121-1b60-4cd7-c5f9-acc2954385c1
 ---
@@ -58,7 +60,7 @@ The three biggest factors that influence processing and can cause membership upd
 
 - **Number of dynamic groups**: Tenants that have a large number of dynamic groups require more evaluations, increasing processing time.
 - **Number of object changes**: A high volume of user or device changes can create a long processing queue and extend the processing time. Examples include changes to extension attributes, device additions or removals, and bulk user updates.
-- **Rule configuration**: Certain rule configurations can affect processing time. For instance, the choice of inefficient operators like `Match`, `Contains`, or `memberOf` can increase processing time. Rule complexity is also a contributing factor.
+- **Rule configuration**: Certain rule configurations can affect processing time. For instance, the choice of inefficient operators like `Match` or `Contains` can increase processing time. Rule complexity is also a contributing factor.
 
 Note
 
@@ -88,7 +90,7 @@ Don't unpause the groups immediately. Wait a minimum of 24 hours to allow group 
 - Avoid the use of the `Match` operator in rules as much as possible. Instead, use the `StartsWith`, `Equals`, or `EndsWith` operator.
 - Avoid the use of the `Contains` operator in rules as much as possible. It can lead to increased processing time.
 - Use fewer `-or` operators. Instead, use the `-in` operator to group rules into a single criterion. Grouping rules makes them easier to evaluate.
-- Avoid the use of the [`memberOf`](groups-dynamic-rule-member-of) operator if possible. It's currently in preview, and it comes with bugs and limitations. It can also introduce more complexity, particularly if a tenant has a large number of groups or frequent updates. The recommendation is to delete existing `memberOf` groups in your tenant.
+- The earlier [`memberOf` preview](groups-dynamic-rule-member-of) was deprecated because it could slow dynamic membership processing for the tenant. MemberOf Next uses separate processing on a twice-daily schedule. For requirements and migration guidance, see [Move existing MemberOf groups to MemberOf Next](groups-dynamic-rule-advanced#move-existing-memberof-groups-to-memberof-next).
 
 For more help with optimizing dynamic group processing, review [Create simpler, more efficient rules for dynamic membership groups in Microsoft Entra ID](groups-dynamic-rule-more-efficient).
 

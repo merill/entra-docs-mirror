@@ -13,7 +13,7 @@ ms.subservice: authentication
 manager: pmwongera
 description: Learn how to configure and manage Microsoft Entra Kerberos trust between Microsoft Entra ID and Active Directory Domain Services.
 ms.topic: how-to
-ms.date: 2026-10-19T00:00:00.0000000Z
+ms.date: 2026-10-22T00:00:00.0000000Z
 ms.reviewer: Vimala, vimrang, barclayn
 ms.custom: msecd-doc-authoring-1012
 ai-usage: ai-assisted
@@ -35,11 +35,11 @@ source_path: docs/identity/authentication/configure-microsoft-entra-kerberos-tru
 cmProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/5cf46315-b33f-4e99-8224-a1592697eff9
+- https://authoring-docs-microsoft.poolparty.biz/devrel/b1cfdec6-b0c3-4209-818c-736879856e0e
 spProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/715d24c3-3683-4219-82c5-1e3c813fb7fc
+- https://authoring-docs-microsoft.poolparty.biz/devrel/2d0723c1-cf38-4c30-ab3d-5df787b33270
 platformId: 9782c02b-8781-40b2-e75c-94b522ba568f
 ---
 
@@ -84,7 +84,7 @@ You only need to set up the Trusted Domain Object once per domain. If you alread
     5. Installs the PowerShellGet module.
     6. Installs the Azure AD Hybrid Authentication Management PowerShell module.
 
-    The Azure AD Hybrid Authentication Management PowerShell module uses the AzureADPreview module, which provides advanced Microsoft Entra management features. To prevent unnecessary installation conflicts with the Azure AD PowerShell module, the installation command includes the `-AllowClobber` parameter.
+    Use the Azure AD Hybrid Authentication Management PowerShell module to configure Microsoft Entra Kerberos. For installation and version requirements, see [Install the AzureADHybridAuthenticationManagement module](howto-authentication-passwordless-security-key-on-premises#install-the-azureadhybridauthenticationmanagement-module).
 
     ```powershell
     [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12

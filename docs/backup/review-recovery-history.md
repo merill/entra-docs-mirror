@@ -60,8 +60,6 @@ To view available recovery history in your tenant, you must sign in with at leas
 1. Sign in to the [Microsoft Entra admin center](https://entra.microsoft.com) as at least a **Microsoft Entra Backup Reader**.
 2. In the left navigation pane, select **Recovery History** under **Backup and recovery**.
 
-    ![Screenshot of the Recovery History page showing recovery operations with Status, Backup timestamp, Recovery started, and Modified objects columns.](media/review-recovery-history/recovery-history-page.png#lightbox)
-
     The Recovery History page displays all recent recovery operations in your tenant. From this page:
 
     - View the **Recovery ID** for each operation.
@@ -70,8 +68,6 @@ To view available recovery history in your tenant, you must sign in with at leas
     - Review when the recovery started and completed.
     - See how many objects and links the recovery modified.
     - Filter or search recovery records to narrow results.
-
-    ![Screenshot of the Recovery History page showing multiple recovery operations with status and timestamp details.](media/review-recovery-history/recovery-history-details.png#lightbox)
 
 Note
 

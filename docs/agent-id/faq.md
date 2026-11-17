@@ -15,7 +15,7 @@ ms.subservice: agent-id
 manager: pmwongera
 description: Common questions and answers about Microsoft Entra Agent ID and the Microsoft Entra agent identity platform.
 ms.topic: faq
-ms.date: 2026-11-05T00:00:00.0000000Z
+ms.date: 2026-11-13T00:00:00.0000000Z
 ai-usage: ai-assisted
 locale: en-us
 document_id: e74d08a2-b4bc-c870-dcc3-7c5743d3d96f
@@ -73,7 +73,7 @@ The following limits apply to agent identity blueprints:
 
 - Non-Microsoft management platforms using app-only permissions are limited to 250 agent identities per blueprint. Delegated calls and Microsoft-owned platforms (Foundry, Copilot Studio) aren't subject to this cap.
 - Non-admin users are subject to the preexisting 250-owned-objects limit in Microsoft Entra ID, which applies across all Microsoft Entra resource types.
-- Blueprints can take up no more than 95% of the tenant's overall resource quota. For more information, see the **Resources** row in [Microsoft Entra service limits and restrictions](../identity/users/directory-service-limits-restrictions).
+- By default, blueprints can take up no more than 80% of the tenant's overall resource quota. For more information, see the **Resources** row in [Microsoft Entra service limits and restrictions](../identity/users/directory-service-limits-restrictions).
 
 ### How do I know when an admin approves my agent identity blueprint in their tenant?
 

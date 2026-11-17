@@ -2,7 +2,7 @@
 layout: Landing
 title: Microsoft Entra ID Governance documentation - Microsoft Entra ID Governance | Microsoft Learn
 canonicalUrl: https://learn.microsoft.com/en-us/entra/id-governance/
-summary: Microsoft Entra ID Governance helps you to protect, monitor, and audit access to critical assets while ensuring employee productivity.
+summary: Microsoft Entra ID Governance helps you to protect, monitor, and audit access to critical assets.
 uhfHeaderId: MSDocsHeader-Entra
 breadcrumb_path: /entra/breadcrumb/toc.json
 feedback_system: Standard
@@ -11,7 +11,7 @@ author: OWinfreyATL
 ms.author: owinfrey
 ms.service: entra-id-governance
 manager: dougeby
-description: Learn how to protect, monitor, and audit access to critical assets while ensuring employee productivity.
+description: Learn how to protect, monitor, and audit access to critical assets.
 ms.date: 2024-11-25T00:00:00.0000000Z
 ms.subservice: entitlement-management
 ms.topic: landing-page
@@ -33,16 +33,16 @@ item_type: Content
 source_path: docs/id-governance/index.yml
 cmProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ac4b7417-d4c2-43d4-94bf-f22fa1416b34
-- https://authoring-docs-microsoft.poolparty.biz/devrel/07bb3e10-d135-43ff-bc8b-360497cb39fa
+- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
 spProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/68876bab-7da4-4e70-b295-395b3a255a1f
-- https://authoring-docs-microsoft.poolparty.biz/devrel/12e559b9-eaf6-4aee-9af7-62334e15f863
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
 platformId: fb953bb8-d9f2-0d54-78cd-9b13c5f48ab8
 ---
 
 # Microsoft Entra ID Governance documentation
 
-Microsoft Entra ID Governance helps you to protect, monitor, and audit access to critical assets while ensuring employee productivity.
+Microsoft Entra ID Governance helps you to protect, monitor, and audit access to critical assets.
 
 ## About ID Governance
 
@@ -58,7 +58,7 @@ Microsoft Entra ID Governance helps you to protect, monitor, and audit access to
 ### Reference
 
 - [Microsoft Entra ID Governance licensing fundamentals](licensing-fundamentals)
-- [Identity Governance dashboard (Preview)](governance-dashboard)
+- [Identity Governance dashboard](governance-dashboard)
 - [Identity Governance service limits](governance-service-limits)
 
 ## Scenarios
@@ -69,6 +69,7 @@ Microsoft Entra ID Governance helps you to protect, monitor, and audit access to
 - [Govern the employee and guest lifecycle](scenarios/govern-the-employee-lifecycle)
 - [Planning new governance scenarios for business partners and external users](scenarios/govern-guest-lifecycle-new-project)
 - [Govern access for applications in your environment](identity-governance-applications-prepare)
+- [Govern agent identities and their access](agent-id-governance-overview)
 
 ## Govern the lifecycle of access to groups, apps, and sites
 
@@ -85,7 +86,7 @@ Microsoft Entra ID Governance helps you to protect, monitor, and audit access to
 
 - [Delegation and roles](entitlement-management-delegate)
 
-## Recertify access to groups, apps, and privileged roles
+## Recertify app access, group and role memberships
 
 ### Overview
 
@@ -96,7 +97,7 @@ Microsoft Entra ID Governance helps you to protect, monitor, and audit access to
 - [Create an access review to ensure users do not retain excessive access](create-access-review)
 - [Review access to group or apps](perform-access-review)
 
-## Govern the lifecycle of users as they join, move within, and leave organizations
+## Govern the lifecycle of users as they join, move within, and leave the organization
 
 ### Overview
 

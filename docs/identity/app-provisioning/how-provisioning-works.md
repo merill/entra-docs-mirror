@@ -13,9 +13,10 @@ ms.subservice: app-provisioning
 manager: dougeby
 description: Understand how Application Provisioning works in Microsoft Entra ID.
 ms.topic: how-to
-ms.date: 2025-03-04T00:00:00.0000000Z
+ms.date: 2026-11-03T00:00:00.0000000Z
 ms.reviewer: arvinh
 ai-usage: ai-assisted
+ms.custom: msecd-doc-authoring-1032
 locale: en-us
 document_id: 035a9b42-a420-6329-26e4-0e5d05c83f7f
 document_version_independent_id: f45f26d2-6d5d-273a-18d2-2acc5ae07268
@@ -32,13 +33,13 @@ monikers: []
 item_type: Content
 source_path: docs/identity/app-provisioning/how-provisioning-works.md
 cmProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/b1cfdec6-b0c3-4209-818c-736879856e0e
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
-- https://authoring-docs-microsoft.poolparty.biz/devrel/68cb9039-df60-49b0-8ef8-89ad96497f63
 spProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/2d0723c1-cf38-4c30-ab3d-5df787b33270
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
-- https://authoring-docs-microsoft.poolparty.biz/devrel/725b6df3-93e8-472d-834e-e7e0d2953d35
 platformId: d52844f9-8823-4b9a-86dd-f619b2cc0ca6
 ---
 
@@ -60,9 +61,11 @@ The Microsoft Entra provisioning service uses the [SCIM 2.0 protocol](https://te
 
 To request an automatic Microsoft Entra provisioning connector for an app that doesn't currently have one, see [Microsoft Entra Application Request](../enterprise-apps/v2-howto-app-gallery-listing).
 
-## Authorization
+## Connectivity
 
 Credentials are required for Microsoft Entra ID to connect to the application's user management API. While you're configuring automatic user provisioning for an application, you need to enter valid credentials. For gallery applications, you can find credential types and requirements for the application by referring to the app tutorial. For non-gallery applications, you can refer to the [SCIM](use-scim-to-provision-users-and-groups#authorization-to-provisioning-connectors-in-the-application-gallery) documentation to understand the credential types and requirements. In the Microsoft Entra admin center, you're able to test the credentials by having Microsoft Entra ID attempt to connect to the app's provisioning app using the supplied credentials.
+
+Some Microsoft Entra application integrations provide capabilities beyond user and group provisioning and might require additional credentials. For example, [Snowflake](../../id-governance/tutorial-dynamic-permissions-prevent-excessive-permissions) requires additional credentials to retrieve entitlements and activity data and govern human and non-human identities.
 
 ## Mapping attributes
 

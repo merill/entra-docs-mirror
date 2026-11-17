@@ -13,8 +13,8 @@ manager: dougeby
 description: Describes an overview of Lifecycle workflows and the various parts.
 ms.subservice: lifecycle-workflows
 ms.topic: concept-article
-ms.date: 2026-11-03T00:00:00.0000000Z
-ms.custom: sfi-image-nochange, msecd-doc-authoring-1026
+ms.date: 2026-11-10T00:00:00.0000000Z
+ms.custom: sfi-image-nochange
 locale: en-us
 document_id: 2cb0168e-ae3a-8521-3ff7-bc0d632f2637
 document_version_independent_id: e04daa4d-6607-f535-c23c-030457257190
@@ -33,11 +33,9 @@ source_path: docs/id-governance/understanding-lifecycle-workflows.md
 cmProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ac4b7417-d4c2-43d4-94bf-f22fa1416b34
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/68e4b2d8-b70c-4019-b49a-d1f8881e2aea
 spProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/68876bab-7da4-4e70-b295-395b3a255a1f
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/67b2ba1a-6f74-4044-a48a-f0f8ad076b8f
 platformId: eccae83b-d0b7-97fa-e6a1-4c8b255322a6
 ---
 
@@ -162,14 +160,14 @@ The supported scheduled triggers are:
 
 - Attribute changes
 - Group membership change
-- Time based
+- Time based attribute
 - Sign-in inactivity
 
 The type of workflow you choose determines which trigger you use.
 
 Important
 
-Relative time-based comparisons expand the time-based attribute trigger and are in public preview. During public preview, the Microsoft Entra admin center temporarily shows **Time based attribute** and **Time based attribute V2 (Preview)** as separate choices. Both choices represent the same time-based trigger capability, and the V2 choice can also reproduce the standard time-based behavior. At general availability, customers will see only one time-based trigger choice that includes relative comparisons. For supported comparisons and configuration details, see [Time based attribute trigger](lifecycle-workflow-execution-conditions#time-based-attribute-trigger). For more information about previews, see [Universal License Terms for Online Services](https://www.microsoft.com/licensing/terms/product/ForOnlineServices/all).
+The **Time based attribute** trigger supports exact day offsets and relative time ranges. For supported comparisons and configuration details, see [Time based attribute trigger](lifecycle-workflow-execution-conditions#time-based-attribute-trigger).
 
 ## Scope
 
@@ -194,7 +192,7 @@ Once scheduling is enabled, the workflow is evaluated based on the interval that
 
 Note
 
-The standard time based attribute choice processes a user at a specific point in time based on the workflow configuration (e.g., seven days before the user’s hire date) and user account configuration. For reliable workflow execution, the user account must be configured with all relevant details (e.g., trigger and scoping attributes) in advance of the scheduled workflow execution. Once the designated time arrives, the next scheduled workflow run will process the user if it meets the execution conditions. If the workflow or user account is configured after the intended processing time (e.g., due to a delay in the HR system), Lifecycle Workflows will still attempt to process the user—provided the necessary setup is completed within three days of the original processing time. This catch-up behavior doesn't apply when you select **Time based attribute V2 (Preview)** during public preview.
+The **Time based attribute** trigger processes users whose date attribute meets the configured **Equal to**, **Between**, or **Within** comparison and whose accounts meet the scope rules. Configure the relevant trigger and scoping attributes before users need to meet the execution conditions. New workflows that use the updated trigger don't have an automatic three-day catch-up window. Existing workflows aren't affected by this change and retain their current catch-up behavior. To allow for delays in user data updates in new workflows, configure a relative time range with **Between** or **Within**. For details and examples, see [Time based attribute trigger](lifecycle-workflow-execution-conditions#time-based-attribute-trigger).
 
 To view a detailed guide on customizing the schedule of a workflow, see: [Customize the schedule of workflows](customize-workflow-schedule).
 

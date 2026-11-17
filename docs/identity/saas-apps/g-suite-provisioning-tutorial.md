@@ -14,7 +14,7 @@ ms.subservice: saas-apps
 manager: pmwongera
 description: Learn how to automatically provision and deprovision user accounts from Microsoft Entra ID to Google Cloud or Google Workspace.
 ms.topic: how-to
-ms.date: 2026-10-30T00:00:00.0000000Z
+ms.date: 2026-11-16T00:00:00.0000000Z
 ms.custom: sfi-image-nochange, msecd-doc-authoring-1032
 ai-usage: ai-assisted
 locale: en-us
@@ -296,7 +296,7 @@ With PIM for Groups, you can provide just-in-time access to groups in Google Clo
 5. Use on-demand provisioning to create the group in Google Cloud / Google Workspace.
 6. Sign-in to Google Cloud / Google Workspace and assign the second group the necessary permissions to perform admin tasks.
 
-Now any end user that was made eligible for the group in PIM can get JIT access to the group in Google Cloud / Google Workspace by [activating their group membership](/en-us/azure/active-directory/privileged-identity-management/groups-activate-roles#activate-a-role). When their assignment expires, the user is removed from the group in Google Cloud / Google Workspace. During the next incremental cycle, the provisioning service attempts to remove the user from the group again. This might result in an error in the provisioning logs. This error is expected because the group membership was already removed. The error message can be ignored.
+Now any end user that was made eligible for the group in PIM can get JIT access to the group in Google Cloud / Google Workspace by [activating their group membership](/en-us/azure/active-directory/privileged-identity-management/groups-activate-roles#activate-a-role). When their assignment reaches its scheduled expiry, the user is removed from the group in Google Cloud / Google Workspace. During the next incremental cycle, the provisioning service attempts to remove the user from the group again. This might result in an error in the provisioning logs. This error is expected because the group membership was already removed. The error message can be ignored.
 
 - How long does it take to have a user provisioned to the application?
     - When a user is added to a group in Microsoft Entra ID outside of activating their group membership using Microsoft Entra ID Privileged Identity Management (PIM):
@@ -305,6 +305,7 @@ Now any end user that was made eligible for the group in PIM can get JIT access 
         - The group membership is provisioned in 2 – 10 minutes. When there's a high rate of requests at one time, requests are throttled at a rate of five requests per 10 seconds.
         - For the first five users within a 10-second period activating their group membership for a specific application, group membership is provisioned in the application within 2-10 minutes.
         - For the sixth user and beyond within a 10-second period activating their group membership for a specific application, group membership is provisioned to the application in the next synchronization cycle. The synchronization cycle runs every 40 minutes. The throttling limits are per enterprise application.
+- If a user manually ends an active PIM group membership before its scheduled expiry, accelerated deprovisioning isn't triggered. The membership removal can be processed during the next regular provisioning synchronization cycle, which can take up to about 40 minutes. This early-termination delay doesn't apply when the activation reaches its scheduled expiry.
 - If the user is unable to access the necessary group in Google Cloud / Google Workspace, review the PIM logs, and provisioning logs to ensure that the group membership was updated successfully. Depending on how the target application is architected, it might take more time for the group membership to take effect in the application.
 - You can create alerts for failures using [Azure Monitor](/en-us/entra/identity/app-provisioning/application-provisioning-log-analytics).
 

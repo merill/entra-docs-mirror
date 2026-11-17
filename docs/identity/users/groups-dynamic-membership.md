@@ -13,7 +13,7 @@ ms.subservice: users
 manager: dougeby
 description: Learn how to manage rules for dynamic membership groups to automatically populate group members and rule references.
 ms.topic: how-to
-ms.date: 2026-08-13T00:00:00.0000000Z
+ms.date: 2026-11-16T00:00:00.0000000Z
 ms.reviewer: mbhargav
 ms.custom: it-pro
 ai-usage: ai-assisted
@@ -35,9 +35,11 @@ source_path: docs/identity/users/groups-dynamic-membership.md
 cmProducts:
 - https://authoring-docs-microsoft.poolparty.biz/devrel/68cb9039-df60-49b0-8ef8-89ad96497f63
 - https://authoring-docs-microsoft.poolparty.biz/devrel/8b896464-3b7d-4e1f-84b0-9bb45aeb5f64
+- https://authoring-docs-microsoft.poolparty.biz/devrel/b1cfdec6-b0c3-4209-818c-736879856e0e
 spProducts:
 - https://authoring-docs-microsoft.poolparty.biz/devrel/725b6df3-93e8-472d-834e-e7e0d2953d35
 - https://authoring-docs-microsoft.poolparty.biz/devrel/b1d2d671-9549-46e8-918c-24349120dbf5
+- https://authoring-docs-microsoft.poolparty.biz/devrel/2d0723c1-cf38-4c30-ab3d-5df787b33270
 platformId: 1cd114b0-5b2f-beb9-40db-0a6f7aeaa349
 ---
 
@@ -207,7 +209,7 @@ The following table lists all the supported operators and their syntax for a sin
 
 Caution
 
-For best results, minimize the use of `Match` or `Contains` as much as possible. The article [Create simpler, more efficient rules for dynamic membership groups](groups-dynamic-rule-more-efficient) provides guidance on how to create rules that result in better dynamic group processing times. The [`memberOf`](groups-dynamic-rule-member-of) operator is in preview and has some limitations, so use it with caution.
+For best results, minimize the use of `Match` or `Contains` as much as possible. The article [Create simpler, more efficient rules for dynamic membership groups](groups-dynamic-rule-more-efficient) provides guidance on how to create rules that result in better dynamic group processing times. The earlier [`memberOf` preview](groups-dynamic-rule-member-of) was deprecated. For current capabilities and migration guidance, see [MemberOf Next and Transitive Reports To](groups-dynamic-rule-advanced).
 
 | Operator | Syntax |
 | --- | --- |

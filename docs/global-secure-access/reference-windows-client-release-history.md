@@ -12,7 +12,7 @@ ms.service: global-secure-access
 manager: dougeby
 description: Review Global Secure Access client for Windows release notes, including new features, fixes, minimum versions, and Windows Update upgrade behavior.
 ms.topic: reference
-ms.date: 2026-10-19T00:00:00.0000000Z
+ms.date: 2026-11-16T00:00:00.0000000Z
 ms.reviewer: lirazbarak
 ms.custom: msecd-doc-authoring-1023
 ai-usage: ai-assisted
@@ -81,7 +81,24 @@ Important
 
 If you opt out of automatic upgrades, you're responsible for keeping the Global Secure Access client up to date on those devices. Devices that run older client versions don't receive the latest features, fixes, and security updates.
 
+## Version 2.35.136 (preview)
+
+Released for download on November 16, 2026.
+
+### Functional changes
+
+- Adds support for Device Access for pre-logon scenarios (preview).
+- The user interface indicates when the client is configured through the forwarding profile to acquire only agentic traffic.
+
+### Other changes
+
+- Memory improvements.
+- Telemetry changes.
+- Miscellaneous bug fixes and improvements.
+
 ## Version 2.34.222
+
+Released for download on October 19, 2026.
 
 ### Functional changes
 
