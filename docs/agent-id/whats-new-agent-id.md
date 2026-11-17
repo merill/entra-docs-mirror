@@ -13,7 +13,7 @@ ms.subservice: agent-id
 manager: pmwongera
 description: Learn about new features and updates in Microsoft Entra Agent ID at general availability, including non-Microsoft integrations, migration guides, and enterprise governance.
 ms.topic: whats-new
-ms.date: 2026-05-01T00:00:00.0000000Z
+ms.date: 2026-10-23T00:00:00.0000000Z
 ai-usage: ai-assisted
 locale: en-us
 document_id: d98524e2-fd85-c6d8-25e0-46d1fd7599e7
@@ -32,8 +32,12 @@ item_type: Content
 source_path: docs/agent-id/whats-new-agent-id.md
 cmProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
+- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
+- https://authoring-docs-microsoft.poolparty.biz/devrel/b1cfdec6-b0c3-4209-818c-736879856e0e
 spProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
+- https://authoring-docs-microsoft.poolparty.biz/devrel/2d0723c1-cf38-4c30-ab3d-5df787b33270
 platformId: 8b6af3ef-35a6-0bbb-5a57-176059ca2f58
 ---
 
@@ -42,6 +46,26 @@ platformId: 8b6af3ef-35a6-0bbb-5a57-176059ca2f58
 Microsoft Entra Agent ID is now generally available. This release brings first-class identity and access management to AI agents, enabling organizations to authenticate, authorize, govern, and protect agent identities at enterprise scale. Microsoft Entra Agent ID extends Zero Trust principles to AI workloads with purpose-built identity constructs, specialized OAuth flows, and comprehensive security controls.
 
 This article summarizes the key capabilities and documentation currently available.
+
+## Local agent authentication (preview)
+
+Microsoft Entra Agent ID now supports local agents as OAuth public clients. An agent running on an endpoint device can sign in a Microsoft Entra user and request delegated access to protected services by using the authorization code flow with PKCE, without storing or presenting a client credential.
+
+- [Authenticate a local agent with Microsoft Entra ID](authenticate-local-agent) - Register a public-client Agent ID, configure MSAL, or use a CIMD URL as the client ID.
+
+## Agent identity blueprint instance modes (preview)
+
+Agent identity blueprints can be configured for one Agent ID or multiple Agent IDs per tenant. A single-instance blueprint uses the same OAuth client ID for the blueprint and its one Agent ID in every tenant. A multi-instance blueprint can create a fleet of Agent IDs with distinct client IDs.
+
+- [Agent identity blueprint instance modes](agent-blueprint#instance-modes-preview) - Compare the two topologies and configure the immutable `isSingleInstance` setting.
+
+## Client ID Metadata Document support (preview)
+
+Microsoft Entra ID now supports Client ID Metadata Documents (CIMD). CIMD lets an OAuth client use a public HTTPS metadata URL as its client ID. This model enables MCP clients to connect to Entra-protected MCP servers without requiring every client to be registered with Microsoft Entra ID in advance.
+
+- [Client ID Metadata Documents in Microsoft Entra ID](client-id-metadata-documents) - Learn how CIMD works, when to use it, and which limitations apply.
+- [Configure a client to use a Client ID Metadata Document](configure-client-id-metadata-document) - Publish client metadata and request delegated access tokens.
+- [Manage CIMD clients in Microsoft Entra ID](manage-client-id-metadata-document-clients) - Add, approve, monitor, disable, and remove CIMD-backed agent identities.
 
 ## Manage AI agents at scale
 
@@ -59,7 +83,6 @@ Microsoft Entra Agent ID introduces new identity constructs and authentication p
 - [Configure Microsoft Entra ID Auth SDK (sidecar) for agent identities](microsoft-entra-sdk-for-agent-identities) - SDK configuration for token acquisition.
 - [Run the sidecar for local development](sidecar-local-development) (New) - Local development setup for the Auth SDK.
 - [Validate agent tokens in a downstream API](how-to-validate-agent-tokens-downstream-api) (New) - Token validation guidance for APIs that receive agent tokens.
-- [Configure non-Microsoft agents with Agent ID](configure-third-party-agents) (New) - Integration patterns (sidecar and federation) for platforms like AWS, GCP, and n8n.
 - [Secure an Amazon Bedrock agent](integrate-aws-bedrock-agent) (New) - Step-by-step guide for securing Bedrock agents with Agent ID.
 - [Secure an n8n agent](integrate-n8n-agent) (New) - Deploy n8n on Azure with Agent ID integration.
 - [Migrate custom app registrations](migrate-custom-app-registrations-to-agent-id) (New) - Move agents using standard app registrations to Agent ID.
@@ -82,6 +105,6 @@ Microsoft Entra ID Governance extends lifecycle and access management capabiliti
 Conditional Access and ID Protection features extend Microsoft Entra Agent ID to help secure agent identities and their access to resources:
 
 - [Conditional Access for agents](/en-us/entra/identity/conditional-access/agent-id) (Updated)- Improved guidance and detailed scenarios for Conditional Access policies, plus new templates for agent-specific policies.
-- [Block access for high-risk agent identities](../identity/conditional-access/policy-agent-block-high-risk) (New) - Conditional Access template to block sign-ins from risky agent identities.
+- [Block access for high-risk agent identities](/en-us/entra/identity/conditional-access/policy-agent-block-high-risk) (New) - Conditional Access template to block sign-ins from risky agent identities.
 - [Autonomous agent access policy](../identity/conditional-access/policy-autonomous-agents) (New) - Conditional Access template for autonomous agents without user context.
-- [On behalf of agent access policy](../identity/conditional-access/policy-on-behalf-of-agents) (New) - Conditional Access template for agents acting on behalf of users.
+- [On behalf of agent access policy](/en-us/entra/identity/conditional-access/policy-on-behalf-of-agents) (New) - Conditional Access template for agents acting on behalf of users.

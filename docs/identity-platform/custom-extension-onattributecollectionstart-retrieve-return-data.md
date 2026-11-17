@@ -1,6 +1,6 @@
 ---
 layout: Conceptual
-title: Retrieve and return data from an OnAttributeCollectionStart event - Microsoft identity platform | Microsoft Learn
+title: OnAttributeCollectionStart event reference - Microsoft identity platform | Microsoft Learn
 canonicalUrl: https://learn.microsoft.com/en-us/entra/identity-platform/custom-extension-onattributecollectionstart-retrieve-return-data
 uhfHeaderId: MSDocsHeader-Entra
 breadcrumb_path: /entra/breadcrumb/toc.json
@@ -39,7 +39,7 @@ spProducts:
 platformId: 6472d1b6-a1e0-c269-ff99-dd4750552b8c
 ---
 
-# Retrieve and return data from an OnAttributeCollectionStart event - Microsoft identity platform | Microsoft Learn
+# OnAttributeCollectionStart event reference - Microsoft identity platform | Microsoft Learn
 
 **Applies to**: ![Green circle with a white check mark symbol that indicates the following content applies to external tenants.](../external-id/media/common/applies-to-yes.png) External tenants ([learn more](/en-us/entra/external-id/tenant-configurations))
 

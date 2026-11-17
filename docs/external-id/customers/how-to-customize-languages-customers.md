@@ -13,8 +13,8 @@ ms.subservice: external
 manager: dougeby
 description: Learn about how to customize the browser language for your app's authentication experience to provide a personalized sign-in.
 ms.topic: how-to
-ms.date: 2026-04-24T00:00:00.0000000Z
-ms.custom: it-pro
+ms.date: 2026-11-11T00:00:00.0000000Z
+ms.custom: it-pro, msecd-doc-authoring-1030
 ai-usage: ai-assisted
 locale: en-us
 document_id: 2bacf417-cb67-bbae-8bb3-18b229b11f25
@@ -42,13 +42,13 @@ platformId: bae80f04-b3bb-cd17-1c70-6c68bb0e3de1
 
 # Customize the browser language - Microsoft Entra External ID | Microsoft Learn
 
-**Applies to**: ![Green circle with a white check mark symbol that indicates the following content applies to external tenants.](../media/common/applies-to-yes.png) External tenants ([learn more](/en-us/entra/external-id/tenant-configurations))
-
 Tip
 
 This article applies to user flows in external tenants. For information about workforce tenants, see [Language customization in Microsoft Entra External ID](../user-flow-customize-language).
 
-This article explains how to customize the browser language for your app's authentication experience. By personalizing the sign-in process based on browser language, you can deliver a tailored experience for your users and override default branding settings.
+This article explains how to customize the browser language on Microsoft-hosted authentication pages. These settings override hosted branding text; they don't configure native or self-hosted interface text.
+
+**Applies to external tenants:** Feature support varies by authentication approach and API or SDK version. Compare Microsoft-hosted authentication, Embedded native authentication, and Bring Your Own UX (BYO UX) in the [authentication approach overview](concept-choose-authentication-approach). Check feature availability in the [authentication support matrix](concept-supported-features-customers#authentication-approach-supportability).
 
 ## Prerequisites
 

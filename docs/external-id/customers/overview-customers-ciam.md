@@ -13,8 +13,9 @@ ms.subservice: external
 manager: dougeby
 description: Learn how Microsoft Entra External ID provides to manage your external identities scenarios, including guest user access and customer identity and access management (CIAM) for apps.
 ms.topic: overview
-ms.date: 2026-01-30T00:00:00.0000000Z
-ms.custom: it-pro, seo-july-2024
+ms.date: 2026-11-11T00:00:00.0000000Z
+ms.custom: it-pro, seo-july-2024, msecd-doc-authoring-1030
+ai-usage: ai-assisted
 locale: en-us
 document_id: a7c61515-5609-a07c-f0b6-840a86851e73
 document_version_independent_id: 4b443a57-720b-f4c9-7fbe-eee201997831
@@ -32,12 +33,12 @@ item_type: Content
 source_path: docs/external-id/customers/overview-customers-ciam.md
 cmProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/c77bc83e-f0b0-4b63-836e-6630e606bf7c
+- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
 - https://authoring-docs-microsoft.poolparty.biz/devrel/1ae5c491-970a-4062-8301-6336e69f9026
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
 spProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/b98eda1f-6af8-444f-bbfb-7f2366948cbc
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
 - https://authoring-docs-microsoft.poolparty.biz/devrel/f2c3e52e-3667-4e8a-bf11-20b9eaccdc8c
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
 platformId: 8ca29374-0920-5a3a-763f-2b00bd373552
 ---
 
@@ -73,18 +74,21 @@ Learn more about managing [customer accounts](how-to-manage-customer-accounts) a
 
 ## Add customized sign-in
 
-External ID is intended for businesses that want to make applications available to their customers using the Microsoft Entra platform for identity and access.
+For customer apps in external tenants, choose where the authentication interface runs and how it integrates with your app. See [Choose an authentication approach](concept-choose-authentication-approach) for selection criteria and the [authentication support matrix](concept-supported-features-customers#authentication-approach-supportability) for availability.
 
-- **Add sign-up and sign-in pages to your apps.** Quickly add intuitive, user-friendly sign-up and sign-in experiences for your customer apps. With a single identity, a customer can securely access all the applications you want them to use.
-- **Add single sign-on (SSO) with social and enterprise identities.** Customers can choose a social, enterprise, or managed identity to sign in with a username and password, email, or one-time passcode.
-- **Add your company branding to the sign-up page.** Customize the look and feel of your sign-up and sign-in experiences, including both the default experience and the experience for specific browser languages.
+- **Microsoft-hosted authentication.** Configure Microsoft-managed sign-up and sign-in pages with company branding, including browser-language variations, or application-specific branding themes.
+- **Embedded native authentication.** Integrate authentication screens with your app using a supported SDK or the Native Authentication API. See the [native authentication overview](../../identity-platform/concept-native-authentication) for platform and integration requirements.
+- **Bring Your Own UX (BYO UX).** Use a separately hosted authentication website within a browser-based authorization flow. The website can serve one or several applications.
+
+Configure the tenant capabilities your integration requires:
+
+- **Add single sign-on (SSO) with social and enterprise identities.** Customers can choose a social, enterprise, or managed identity to sign in with a username and password, email, or one-time passcode. With a single identity, a customer can securely access all the applications you want them to use.
 - **Easily customize and extend your sign-up flows.** Tailor your identity user flows to your needs. Choose the attributes you want to collect from a customer during sign-up, or add your own custom attributes. If the information your app needs is contained in an external system, create custom authentication extensions to collect and add data to authentication tokens.
 - **Integrate multiple app languages and platforms.** With Microsoft Entra, you can quickly set up and deliver secure, branded authentication flows for multiple app types, platforms, and languages.
-- **Use native authentication for your apps.** Create seamless authentication experiences for mobile and desktop applications using the Microsoft Authentication Library (MSAL) for iOS and Android.
 - **Provide self-service account management.** Customers can register for your online services by themselves, manage their profile, delete their account, enroll in a multifactor authentication (MFA) method, or reset their password with no admin or help desk assistance.
 - **Consent to your terms of use and privacy policies.** You can prompt users to accept your terms and conditions during sign-up. By using customer user attributes, you can add checkboxes to your sign-up form and include links to your terms of use and privacy policies.
 
-Learn more about [planning your integration](concept-planning-your-solution), [choosing an authentication approach](concept-choose-authentication-approach), and [customizing the sign-in look and feel](concept-branding-customers).
+Learn more about [planning your integration](concept-planning-your-solution) and [customizing the sign-in look and feel](concept-branding-customers).
 
 ## Design user flows for self-service sign-up
 

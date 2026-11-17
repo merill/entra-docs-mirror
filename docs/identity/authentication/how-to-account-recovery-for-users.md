@@ -6,16 +6,17 @@ uhfHeaderId: MSDocsHeader-Entra
 breadcrumb_path: /entra/breadcrumb/toc.json
 feedback_system: Standard
 feedback_product_url: https://feedback.azure.com/d365community/forum/22920db1-ad25-ec11-b6e6-000d3a4f0789
-author: Justinha
-ms.author: justinha
+author: tilarso
+ms.author: tilarso
 ms.service: entra-id
 ms.subservice: authentication
 manager: dougeby
-description: Learn how end users can recover their Microsoft Entra ID accounts through identity verification when all authentication methods are lost. Follow the step-by-step recovery process.
+description: Recover your Microsoft Entra ID account when you lose all authentication methods. Follow identity verification and register replacement methods.
 ms.topic: how-to
-ms.date: 2026-04-02T00:00:00.0000000Z
+ms.date: 2026-11-12T00:00:00.0000000Z
+ai-usage: ai-assisted
 ms.reviewer: tilarso
-ms.custom: sfi-ga-nochange, sfi-image-nochange, msecd-doc-authoring-1012
+ms.custom: sfi-ga-nochange, sfi-image-nochange, msecd-doc-authoring-1026
 locale: en-us
 document_id: 7a93b2d0-1bcb-52dc-0ac2-9e5e10088d76
 document_version_independent_id: 7a93b2d0-1bcb-52dc-0ac2-9e5e10088d76
@@ -32,13 +33,13 @@ monikers: []
 item_type: Content
 source_path: docs/identity/authentication/how-to-account-recovery-for-users.md
 cmProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/b1cfdec6-b0c3-4209-818c-736879856e0e
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
-- https://authoring-docs-microsoft.poolparty.biz/devrel/2624a017-7337-44fa-9494-a407bb0e59fa
-- https://authoring-docs-microsoft.poolparty.biz/devrel/5686b492-7c45-4088-8291-ecc0458747d3
+- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
 spProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/2d0723c1-cf38-4c30-ab3d-5df787b33270
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
-- https://authoring-docs-microsoft.poolparty.biz/devrel/a438284e-c3c3-4c36-ab0b-aa7c244b912c
-- https://authoring-docs-microsoft.poolparty.biz/devrel/838f4f15-80c1-4d49-b873-501fe4ed2d28
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
 platformId: c07752aa-0f4f-1f97-f66d-b8b26241c52a
 ---
 
@@ -46,9 +47,15 @@ platformId: c07752aa-0f4f-1f97-f66d-b8b26241c52a
 
 Users can recover their accounts in a few simple steps. This article describes how users discover and start the account recovery process and what to expect during identity verification through an organization's configured provider.
 
+## Prerequisites
+
+Before you begin, install Microsoft Authenticator version 6.2610.7075 or later for Android, or version 6.8.58 or later for iOS.
+
 ## Video: Recover your work or school account in Microsoft Entra ID
 
 ## User steps
+
+These steps describe the default Temporary Access Pass (TAP)-based experience. If your organization explicitly enables registration without a TAP, complete the identity verification and account-validation prompts. Then follow Complete registration without a TAP instead of the TAP sign-in steps.
 
 1. Start by attempting to sign in to an application such as Microsoft Teams or directly at https://login.microsoftonline.com.
 2. You're presented with an initial authentication method to sign in with.
@@ -80,6 +87,29 @@ Users can recover their accounts in a few simple steps. This article describes h
 18. Finally, you're redirected to [Security info](https://mysignins.microsoft.com/security-info), where you can register a new authentication method and fully regain access.
 
     [![Screenshot that shows how to create a passkey for account recovery.](media/how-to-account-recovery-for-users/create-passkey.png)](media/how-to-account-recovery-for-users/create-passkey.png#lightbox)
+
+## Complete registration without a TAP
+
+This path applies only when your organization explicitly enables the preview option to stop issuing a TAP. TAP issuance is on by default. If you receive a TAP, follow the user steps above; the absence of a TAP isn't enough to determine that the TAP-free path is enabled.
+
+Note
+
+When your organization requires passkey attestation, registration without a TAP is supported only on Android. On iOS, you continue to receive a TAP, even when your organization's TAP issuance setting is off, because the TAP-free registration path doesn't support attestation on iOS. Follow the TAP-based steps above.
+
+The provider's identity verification steps can still vary. Complete account validation first, then continue to authentication method registration in the same recovery session without receiving a TAP.
+
+1. Complete your organization's identity verification and account-validation prompts.
+2. On a supported device, continue to My Sign-ins when the recovery experience directs you there.
+3. Complete the passkey registration prompts for your organization's supported method.
+4. If registration can't complete, contact your organization's support team rather than assuming identity verification alone restored account access.
+
+Ask your support team to confirm the supported device and registration path; successful identity verification alone doesn't guarantee that registration can complete.
+
+### Distinguish expected behavior from an error
+
+An evaluation-mode result doesn't restore your account. In the TAP-based experience, a missing TAP can indicate an account-matching or TAP policy problem, as described below. In the TAP-free experience, not receiving a TAP is expected only after successful validation and a supported transition to registration.
+
+If you aren't sure which experience your organization enabled, ask your support team. TAP-free session expiration and retry instructions still need verification; don't apply the TAP-expiration instructions to that session.
 
 ## Troubleshooting
 

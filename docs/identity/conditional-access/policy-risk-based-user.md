@@ -6,14 +6,16 @@ uhfHeaderId: MSDocsHeader-Entra
 breadcrumb_path: /entra/breadcrumb/toc.json
 feedback_system: Standard
 feedback_product_url: https://feedback.azure.com/d365community/forum/22920db1-ad25-ec11-b6e6-000d3a4f0789
-author: kenwith
-ms.author: kenwith
+author: tilarso
+ms.author: tilarso
 ms.service: entra-id
 ms.subservice: conditional-access
 manager: dougeby
 description: Create Conditional Access policies using Microsoft Entra ID Protection user risk.
 ms.topic: how-to
-ms.date: 2026-03-24T00:00:00.0000000Z
+ms.date: 2026-10-06T00:00:00.0000000Z
+ms.custom: msecd-doc-authoring-108
+ai-usage: ai-assisted
 ms.reviewer: lhuangnorth, cokoopma
 locale: en-us
 document_id: a0863ea0-5143-2cef-84d9-d5920fb72656
@@ -31,13 +33,9 @@ monikers: []
 item_type: Content
 source_path: docs/identity/conditional-access/policy-risk-based-user.md
 cmProducts:
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/079cf7bf-da09-4bd3-ab74-bd5a5da031d1
+- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
 spProducts:
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/b606cead-f1a2-4925-9a71-5fbd7a0d9b81
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
 platformId: 68648119-6e5f-ca99-f032-e367310f39be
 ---
 
@@ -84,3 +82,15 @@ This risk remediation policy covers both password-based and passwordless users.
 11. Select **Create** to create your policy.
 
 After confirming your settings using [policy impact or report-only mode](concept-conditional-access-report-only#reviewing-results), move the **Enable policy** toggle from **Report-only** to **On**.
+
+## Remediate risk with identity verification
+
+Identity verification provides a separate risk-remediation path. Before configuring the policy, [create an identity verification profile](../authentication/concept-authentication-verified-id#create-and-manage-identity-verification-profiles) with **Profile purpose** set to **All** or **Verification** and a provider and credential type that support your risk scenario. For tenant-issued credentials, select **Verification**. Use [Configure risk policies](../../id-protection/howto-identity-protection-configure-risk-policies) to configure the policy, test the user journey, and check the remediation outcome.
+
+Review [Identity verification licensing](../../fundamentals/licensing#identity-verification) for the requirements that apply to this remediation path. Don't assume that the user-risk policy license requirement above covers every identity verification capability.
+
+Don't substitute the **Require risk remediation** steps above for identity verification configuration. That control covers password-based and passwordless users and doesn't automatically use identity verification.
+
+Use the risk conditions supported for identity verification in your tenant. Resource-access verification and risk remediation are different outcomes: check both the verification result and the applicable risk outcome in your pilot. Don't assume that every successful identity verification clears every risk state.
+
+Preserve emergency access and approved user exclusions when configuring identity verification for risk remediation. Report-only mode evaluates which policies could apply without triggering identity verification. Don't interpret report-only results as actual identity verification or cleared risk. Conduct enforcement and remediation tests separately with approved pilot users before expanding scope.

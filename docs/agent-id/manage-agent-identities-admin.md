@@ -13,8 +13,9 @@ ms.subservice: agent-id
 manager: pmwongera
 description: Learn how to manage agent identities across your organization. View, disable, govern, and monitor agents using the Microsoft Entra admin center and Conditional Access.
 ms.topic: how-to
-ms.date: 2026-05-01T00:00:00.0000000Z
+ms.date: 2026-11-06T00:00:00.0000000Z
 ms.custom: msecd-doc-authoring-108
+ai-usage: ai-assisted
 locale: en-us
 document_id: 146fd252-2c0e-a85e-8ffd-cb4bfb776cb4
 document_version_independent_id: 146fd252-2c0e-a85e-8ffd-cb4bfb776cb4
@@ -31,13 +32,13 @@ monikers: []
 item_type: Content
 source_path: docs/agent-id/manage-agent-identities-admin.md
 cmProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/68e4b2d8-b70c-4019-b49a-d1f8881e2aea
 spProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/67b2ba1a-6f74-4044-a48a-f0f8ad076b8f
 platformId: 54c3c724-cf4e-b2b9-de7b-08be321b5c4a
 ---
 
@@ -93,7 +94,9 @@ For detailed instructions, see [View and manage agent identity blueprints in you
 
 ## Configure inheritable permissions for blueprints
 
-Inheritable permissions let agent identities automatically inherit OAuth 2.0 delegated permission scopes from their parent blueprint. When you configure inheritable permissions on a blueprint, newly created agent identities receive a base set of scopes without requiring interactive user or admin consent prompts.
+Inheritable permissions can make permissions granted to a blueprint principal available to its agent identities. The current Microsoft Graph beta reference documents delegated scope inheritance through `inheritableScopes`. The broader Agent ID permission model also describes application-role inheritance, but the public Graph reference doesn't define an application-role property or payload. Confirm Graph support before relying on application-role inheritance.
+
+Inheritance requires both a resource app to be configured as inheritable and the permission to be granted to the blueprint principal. Required resource access declares requested permissions for consent review; it doesn't grant access by itself. For static consent, include the permission in required resource access. For dynamic consent, explicitly request the permission. For details, see [Inheritable permissions and required resource access](concept-inheritable-permissions) and the [Microsoft Graph `inheritablePermission` resource](/en-us/graph/api/resources/inheritablepermission?view=graph-rest-beta&amp;preserve-view=true).
 
 Two inheritance patterns are supported per resource app:
 
@@ -104,11 +107,7 @@ Two inheritance patterns are supported per resource app:
 
 Start with enumerated scopes using only essential permissions, then expand as needed. This approach follows the principle of least privilege and makes it easier to audit which permissions agents actually use.
 
-Key limits:
-
-- Maximum of 10 resource apps per blueprint.
-- For enumerated scopes, maximum of 40 scopes per resource app.
-- Some high-privilege scopes are blocked by platform policy and can't be inherited.
+For current API constraints and platform restrictions, see [Inheritable permissions limitations](configure-inheritable-permissions-blueprints#inheritable-permissions-limitations).
 
 Inheritable permissions are configured via the `inheritablePermissions` navigation property on the `agentIdentityBlueprint` application resource using Microsoft Graph. For step-by-step API examples (add, update, delete), see [Configure inheritable permissions for agent identity blueprints](configure-inheritable-permissions-blueprints).
 
@@ -146,7 +145,7 @@ To view agent sign-in logs:
     - **Agent type**: Choose from **Agent ID user**, **Agent Identity**, **Agent Identity Blueprint**, or **Not Agentic**.
     - **Is Agent**: Choose from **No** or **Yes**.
 
-You can also retrieve agent sign-in events using Microsoft Graph:
+This Microsoft Graph example retrieves only service principal sign-in events for agent identities. It doesn't return every sign-in type associated with agents; see [Microsoft Entra Agent ID logs](sign-in-audit-logs-agents) for the other log types and filtering options.
 
 ```http
 GET https://graph.microsoft.com/beta/auditLogs/signIns?$filter=signInEventTypes/any(t: t eq 'servicePrincipal') and agent/agentType eq 'AgentIdentity'

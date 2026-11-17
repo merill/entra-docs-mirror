@@ -12,7 +12,8 @@ ms.service: entra-id-governance
 manager: dougeby
 description: Learn how to update an existing governance relationship between a governing and governed tenant in Microsoft Entra Tenant Governance
 ms.topic: how-to
-ms.date: 2026-03-10T00:00:00.0000000Z
+ms.date: 2026-11-11T00:00:00.0000000Z
+ai-usage: ai-assisted
 locale: en-us
 document_id: c5e5386f-774d-8fe6-eb12-2d906051a517
 document_version_independent_id: c5e5386f-774d-8fe6-eb12-2d906051a517
@@ -31,11 +32,11 @@ source_path: docs/id-governance/tenant-governance/how-to-update-governance-relat
 cmProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ac4b7417-d4c2-43d4-94bf-f22fa1416b34
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
+- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
 spProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/68876bab-7da4-4e70-b295-395b3a255a1f
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
 platformId: 8a843513-5bc9-2111-bd8c-08590e52cf44
 ---
 
@@ -60,11 +61,14 @@ Before you can update a governance relationship, you must first modify the gover
 
     - **Delegated administration roles**: Add or change the Microsoft Entra built-in roles assigned to security groups in the governing tenant. These roles determine the access level that users in those groups have when they sign in to the governed tenant.
     - **Multitenant application management**: Add or update custom, multitenant applications. When you update the relationship, Tenant Governance creates or updates a service principal with the corresponding permissions in the governed tenant.
+    - **Relationship lifetime (Preview)**: Add or change the lifetime for an active relationship. Use the same template ID in the new **Initial** request to update that relationship rather than create a separate one.
 4. Save the updated governance policy template. The version number of the template increments by one.
 
 Note
 
 Updating the governance policy template doesn't automatically update the governance relationship. The tenant admins must complete the governance request and approval process described in the sections that follow for the policy template changes to take effect.
+
+Renewing a time-bound relationship is different from updating its terms. **Request renewal** preserves the existing policy snapshot and lifetime; it doesn't apply template edits. See [Manage relationship expiration and renewal](how-to-manage-relationship-expiration).
 
 ## Send a new governance request with the updated template
 
@@ -89,3 +93,4 @@ When the governed tenant accepts the governance request, these changes take effe
 - Tenant Governance updates the policy snapshot of the existing governance relationship to reflect the latest version of the policy template.
 - If you updated delegated administration roles, Tenant Governance updates the GDAP role assignments in the governed tenant accordingly.
 - If you updated multitenant application management, Tenant Governance updates the corresponding service principal and its permissions in the governed tenant.
+- If you updated the relationship lifetime, Tenant Governance updates the existing relationship's policy snapshot and expiration after acceptance.

@@ -6,15 +6,16 @@ uhfHeaderId: MSDocsHeader-Entra
 breadcrumb_path: /entra/breadcrumb/toc.json
 feedback_system: Standard
 feedback_product_url: https://feedback.azure.com/d365community/forum/79b1327d-d925-ec11-b6e6-000d3a4f06a4
-author: shlipsey3
-ms.author: sarahlipsey
+author: tilarso
+ms.author: tilarso
 ms.service: entra-id-protection
 manager: dougeby
 description: Identifying risk-based Conditional Access policies
 ms.topic: concept-article
-ms.date: 2026-05-15T00:00:00.0000000Z
+ms.date: 2026-11-03T00:00:00.0000000Z
+ai-usage: ai-assisted
 ms.reviewer: ebasseri
-ms.custom: sfi-image-nochange
+ms.custom: sfi-image-nochange, msecd-doc-authoring-108
 locale: en-us
 document_id: 196f4c49-ee5c-dc51-774a-05f42b72d425
 document_version_independent_id: 29d381d5-68b1-6198-f3ee-c78d9cc9e629
@@ -31,13 +32,11 @@ monikers: []
 item_type: Content
 source_path: docs/id-protection/concept-identity-protection-policies.md
 cmProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/079cf7bf-da09-4bd3-ab74-bd5a5da031d1
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
 spProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/b606cead-f1a2-4925-9a71-5fbd7a0d9b81
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
 platformId: 556e2af0-c51c-3740-76df-e7d50ebfeb33
 ---
 
@@ -45,7 +44,7 @@ platformId: 556e2af0-c51c-3740-76df-e7d50ebfeb33
 
 Risk-based access control policies can be applied to protect organizations when a sign-in or user is detected to be at risk.
 
-![Diagram that shows a conceptual risk-based Conditional Access policy.](media/concept-identity-protection-policies/risk-based-conditional-access-diagram.png)
+![Diagram of user, location, device, application, and risk signals informing Conditional Access decisions, including requiring identity verification.](media/concept-identity-protection-policies/risk-based-conditional-access-diagram.png)
 
 Microsoft Entra Conditional Access offers two user-specific risk conditions powered by Microsoft Entra ID Protection signals: **[Sign-in risk](../identity/conditional-access/concept-conditional-access-conditions#sign-in-risk)** and **[User risk](../identity/conditional-access/concept-conditional-access-conditions#user-risk)**. Organizations can create risk-based Conditional Access policies by configuring these two risk conditions and choosing an access control method. During each sign-in, ID Protection sends the detected risk levels to Conditional Access, and the risk-based policies apply if the policy conditions are satisfied.
 
@@ -68,6 +67,7 @@ ID Protection analyzes signals about user accounts and calculates a risk score b
 1. Require risk remediation: ID Protection manages the appropriate remediation flow for all authentication methods.
 2. Require password change: ID Protection blocks access until user completes a secure password change.
 3. Block access: ID Protection blocks the user until risk is addressed.
+4. **Require Identity Verification (preview)**: Users complete identity verification to remediate risk in supported scenarios.
 
 Policies requiring either #1 or #2 forces end users to remediate their user risk and unblock themselves.
 
@@ -89,6 +89,28 @@ This control uses adaptive risk remediation to let you author a Conditional Acce
     - `AppId`: Public cloud = `93625bc8-bfe2-437a-97e0-3d0060024faa`, Azure for US Government = `00001111-aaaa-2222-bbbb-3333cccc4444`
     - `ResourceId`: `00000003-0000-0000-c000-000000000000`
 
+## Identity verification for risk
+
+The **Require Identity Verification (preview)** grant control lets users remediate risk by verifying their identity in supported scenarios. Use this control in a Conditional Access policy with a **User risk** or **Sign-in risk** condition to require identity verification when the detected risk matches the policy. Create separate policies for the two risk conditions.
+
+An eligible identity verification profile is a prerequisite for a policy that uses this grant control to work. Before configuring the policy, [create and configure an identity verification profile](../identity/authentication/concept-authentication-verified-id#create-and-manage-identity-verification-profiles) with **Profile purpose** set to **All** or **Verification** and a provider and credential type that support your risk scenario. For tenant-issued credentials, select **Verification**. Don't use an **Onboarding**- or **Recovery**-purpose profile for the risk-based resource-access policy.
+
+- **Policy configuration:** Select an identity verification profile and credential type that support the risk scenario, and apply the identity verification grant control to your risk-based policy.
+- **User experience:** When the policy applies, the user completes the required identity verification challenge. Microsoft Entra ID Protection can use the successful verification result to remediate the applicable risk.
+- **Remediation outcome:** Review the verification result, access decision, and relevant risk record separately to confirm the outcome for the scenario.
+
+Successful identity verification remediates user risk when the triggering policy uses a **User risk** condition, or sign-in risk when it uses a **Sign-in risk** condition. Failed verification doesn't remediate risk.
+
+Note
+
+**Require Identity Verification (preview)** is independent of the **Require risk remediation** control described earlier. **Require risk remediation** manages adaptive remediation based on the observed threat and authentication method; selecting it doesn't automatically require an identity verification challenge.
+
+Follow the existing guidance to [configure identity verification for risk](howto-identity-protection-configure-risk-policies#configure-identity-verification-for-risk), [complete the verification journey](concept-identity-protection-user-experience#identity-verification-for-risk), and [validate the remediation outcome](howto-identity-protection-remediate-unblock#validate-identity-verification-remediation). Review the risk targeted by the triggering policy; don't infer that every risk was cleared.
+
+For licensing specific to this integration, see [identity verification licensing](../fundamentals/licensing#identity-verification).
+
+[![Screenshot of the Conditional Access Grant pane with Grant access selected and Require identity verification checked.](../identity/conditional-access/media/policy-require-identity-verification/require-identity-verification-grant-control.png)](../identity/conditional-access/media/policy-require-identity-verification/require-identity-verification-grant-control.png#lightbox)
+
 ## Sign-in risk-based Conditional Access policy
 
 During each sign-in, ID Protection analyzes hundreds of signals in real-time and calculates a sign-in risk level that represents the probability that the given authentication request isn't authorized. This risk level then gets sent to Conditional Access, where the organization's configured policies are evaluated. Administrators can configure sign-in risk-based Conditional Access policies to enforce access controls based on sign-in risk, including requirements such as:
@@ -97,6 +119,7 @@ During each sign-in, ID Protection analyzes hundreds of signals in real-time and
 - Allow access
 - Require multifactor authentication
 - Require reauthentication (Sign-in frequency)
+- **Require Identity Verification (preview)**: Users complete identity verification to remediate risk in supported scenarios.
 
 If risks are detected on a sign-in, users can perform the required access control such as multifactor authentication to self-remediate and close the risky sign-in event to prevent unnecessary noise for administrators.
 
@@ -104,7 +127,7 @@ If risks are detected on a sign-in, users can perform the required access contro
 
 Note
 
-Users must have registered an authentication method that can satisfy Microsoft Entra multifactor authentication before triggering a sign-in risk policy.
+If your sign-in risk policy requires multifactor authentication, users must have registered an authentication method that can satisfy that requirement before triggering the policy.
 
 ## Migrate ID Protection risk policies to Conditional Access
 

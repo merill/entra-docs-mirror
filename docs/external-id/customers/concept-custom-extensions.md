@@ -1,6 +1,6 @@
 ---
 layout: Conceptual
-title: Custom authentication extensions - Microsoft Entra External ID | Microsoft Learn
+title: Custom Authentication Extensions - Microsoft Entra External ID | Microsoft Learn
 canonicalUrl: https://learn.microsoft.com/en-us/entra/external-id/customers/concept-custom-extensions
 uhfHeaderId: MSDocsHeader-Entra
 breadcrumb_path: /entra/breadcrumb/toc.json
@@ -11,10 +11,11 @@ ms.author: cmulligan
 ms.service: entra-external-id
 ms.subservice: external
 manager: dougeby
-description: Learn how to use custom authentication extensions in Microsoft Entra External ID. Integrate with external systems, add custom logic to authentication flows, and enhance user experiences.
+description: Use Microsoft Entra External ID custom authentication extensions to customize attribute collection, email passcode delivery, and token issuance.
 ms.topic: concept-article
-ms.date: 2025-04-10T00:00:00.0000000Z
-ms.custom: it-pro
+ms.date: 2026-11-13T00:00:00.0000000Z
+ms.custom: it-pro, msecd-doc-authoring-1030
+ai-usage: ai-assisted
 locale: en-us
 document_id: 243a8eac-13bc-1757-4ca5-e6d429b81962
 document_version_independent_id: 5e474120-15a2-c09d-2d13-1cebc6bd0e62
@@ -31,44 +32,51 @@ monikers: []
 item_type: Content
 source_path: docs/external-id/customers/concept-custom-extensions.md
 cmProducts:
-- https://authoring-docs-microsoft.poolparty.biz/devrel/1ae5c491-970a-4062-8301-6336e69f9026
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/c77bc83e-f0b0-4b63-836e-6630e606bf7c
+- https://authoring-docs-microsoft.poolparty.biz/devrel/1ae5c491-970a-4062-8301-6336e69f9026
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
 spProducts:
-- https://authoring-docs-microsoft.poolparty.biz/devrel/f2c3e52e-3667-4e8a-bf11-20b9eaccdc8c
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/b98eda1f-6af8-444f-bbfb-7f2366948cbc
+- https://authoring-docs-microsoft.poolparty.biz/devrel/f2c3e52e-3667-4e8a-bf11-20b9eaccdc8c
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
 platformId: 8d1c591b-a280-bccb-c6c9-00db6877974b
 ---
 
-# Custom authentication extensions - Microsoft Entra External ID | Microsoft Learn
+# Custom Authentication Extensions - Microsoft Entra External ID | Microsoft Learn
 
-**Applies to**: ![Green circle with a white check mark symbol that indicates the following content applies to external tenants.](../media/common/applies-to-yes.png) External tenants ([learn more](/en-us/entra/external-id/tenant-configurations))
+Custom authentication extensions add business logic at specific events in Microsoft Entra External ID sign-up and sign-in flows. An extension listens for an event and calls a REST API endpoint where you define a workflow action. For example, an extension can validate submitted sign-up attributes or add claims from an external system before token issuance.
 
-Microsoft Entra External ID user flows are designed for flexibility. Within a sign-up and sign-in user flow, there are built-in authentication events. You can also add custom authentication extensions at specific points within the authentication flow. A custom authentication extension is essentially an event listener that, when activated, makes an HTTP call to a REST API endpoint where you define a workflow action. For example, you could add an attribute collection workflow to validate the attributes a user enters during sign-up, or you could use a custom claims provider to add external user data to the token before the token is issued.
+**Applies to external tenants:** Feature support varies by authentication approach and API or SDK version. Compare Microsoft-hosted authentication, Embedded native authentication, and Bring Your Own UX (BYO UX) in the [authentication approach overview](concept-choose-authentication-approach). Check feature availability in the [authentication support matrix](concept-supported-features-customers#authentication-approach-supportability).
 
-Note
+## Event coverage by authentication approach
 
-Token-issuance extensions (the **OnTokenIssuanceStart** event) apply to both browser-delegated and native authentication, because the extension runs server-side just before the token is issued. Attribute-collection extensions (the **OnAttributeCollectionStart** and **OnAttributeCollectionSubmit** events) apply only to **browser-delegated authentication**, because they fire on the Microsoft-hosted attribute collection page. For help choosing an approach, see [Choose an authentication approach](concept-choose-authentication-approach).
+Important
 
-There are two components you need to configure: a custom authentication extension and a REST API. The custom authentication extension specifies your REST API endpoint, when the REST API should be called, and the credentials to call the REST API. You can create custom authentication extensions at the following points in the authentication flow:
+The Native Authentication API V2 is in preview. The [Native Authentication API V1](../../identity-platform/reference-native-authentication-api-v1) remains generally available. See the [Supplemental Terms of Use for Microsoft Azure Previews](https://azure.microsoft.com/support/legal/preview-supplemental-terms/) for legal terms that apply to preview features.
 
-- During sign-up, before or after attribute collection:
-    - The **OnAttributeCollectionStart** event occurs at the beginning of the attribute collection step, before the attribute collection page renders.
-    - The **OnAttributeCollectionSubmit** event occurs after the user enters and submits attributes.
-- Upon token issuance using the **OnTokenIssuanceStart** event, which triggers just before a token is issued to the application.
+Tenant, application, and user-flow configuration define the extension and the event listener. The event also needs a supported execution point in the selected integration. Sharing tenant policies doesn't imply that every authentication approach executes every event.
 
-[![Diagram showing extensibility points in the authentication flow.](media/concept-custom-extensions/authentication-flow-events-inline.png)](media/concept-custom-extensions/authentication-flow-events-expanded.png#lightbox)
+Confirm event availability for your approach and API or SDK version in the [custom authentication extension event comparison](concept-supported-features-customers#custom-authentication-extension-applicability).
 
-If you have a custom authentication extension configured at one of these points, Microsoft Entra ID makes a call to the REST API you define. The request to the REST API contains information about the event, the user profile, authentication request data, and other context information. In turn, the REST API performs the workflow actions.
+Use the event's documented inputs and responses. Support for the four documented events doesn't establish password-migration hooks, password-update synchronization, or arbitrary context propagation. For architectural guidance, see [Choose an authentication approach](concept-choose-authentication-approach).
 
-This article provides an overview of custom authentication extensions in Microsoft Entra External ID.
+Configure two components: a custom authentication extension and a REST API. The extension specifies the REST API endpoint, when to call it, and the credentials for the call. You can create extensions at the following points in the authentication flow:
+
+- During sign-up, before or after attribute collection.
+- When sending an email one-time passcode through a configured email provider.
+- Upon token issuance, before the configured claims are added to the application's token.
+
+[![Diagram of attribute collection and token issuance extension points.](media/concept-custom-extensions/authentication-flow-events-inline.png)](media/concept-custom-extensions/authentication-flow-events-expanded.png#lightbox)
+
+When an applicable event runs, Microsoft Entra ID calls your REST API with the event's defined payload. The REST API returns one of the actions supported by that event. Use the event's documented payload to determine which application context is available.
 
 ## Attribute collection start and submit events
 
-You can use custom authentication extensions to add workflows to attribute collection in your self-service sign-up user flows. For example, you can prefill attribute fields with custom values, validate a user's entries, and modify attributes, and display errors. Two events are enabled:
+Use these events with Microsoft-hosted authentication to prefill fields, validate entries, modify attributes, or block self-service sign-up. `OnAttributeCollectionStart` and `OnAttributeCollectionSubmit` aren't supported for Embedded native authentication or Bring Your Own UX. Ordinary attribute collection through the Native Authentication API doesn't enable these extension events; follow the [attribute collection contract](../../identity-platform/concept-native-authentication-user-attributes) instead.
 
-- **OnAttributeCollectionStart** - The OnAttributeCollectionStart event occurs at the beginning of the attribute collection process before the attribute collection page renders. This event can be used for scenarios like preventing the user from signing up based on their domain or adding attributes to be collected. The following scenarios are configurable for the OnAttributeCollectionStart event:
+- **OnAttributeCollectionStart** - This event runs before attribute collection. It can prefill attributes or block sign-up, for example based on the customer's email domain. The supported actions are:
 
-    - **continueWithDefaultBehavior** - Render the attribute collection page as usual.
+    - **continueWithDefaultBehavior** - Continue with the configured attribute collection.
     - **setPreFillValues** - Prefill attributes in the sign-up form.
     - **showBlockPage** - Show an error message and block the user from signing up.
 - **OnAttributeCollectionSubmit** - The OnAttributeCollectionSubmit event occurs after the user enters and submits attributes. This event can be used for scenarios like validating or modifying the information provided by the user. For example, you can validate an invitation code or partner number, modify an address format, or return an error.
@@ -82,9 +90,17 @@ To configure the attribute collection start and submit events, you create a cust
 
 For details, see [Add attribute collection custom extensions to your user flow](../../identity-platform/custom-extension-attribute-collection?context=/entra/external-id/customers/context/customers-context).
 
+For attribute collection without these extension events, see [Native authentication user attributes](../../identity-platform/concept-native-authentication-user-attributes).
+
+## Email one-time passcode send event
+
+The `OnOtpSend` event lets a configured provider send email one-time passcodes. It doesn't register an MFA method or make email eligible as both the first and second factor. The service's current transaction still determines the required verification.
+
+For setup, see [Configure a custom email provider](../../identity-platform/custom-extension-email-otp-get-started).
+
 ## Token issuance start event
 
-The token issuance start event is triggered once a user completes all of their authentication challenges and a security token is about to be issued.
+The token issuance start event occurs after a user completes all authentication challenges, just before a security token is issued.
 
 When users authenticate to your application with Microsoft Entra ID, a security token is returned to your application. The security token contains claims that are statements about the user, such as name, unique identifier, or application roles. Beyond the default set of claims that are contained in the security token, you can define your own custom claims from external systems using a REST API you develop.
 

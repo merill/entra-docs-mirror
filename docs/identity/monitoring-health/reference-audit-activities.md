@@ -13,7 +13,7 @@ ms.subservice: monitoring-health
 manager: dougeby
 description: Get an overview of the audit activities that can be logged in your audit logs in Microsoft Entra ID.
 ms.topic: reference
-ms.date: 2025-03-25T00:00:00.0000000Z
+ms.date: 2026-11-09T00:00:00.0000000Z
 ms.reviewer: dhanyahk
 locale: en-us
 document_id: f93b9e06-06c7-696e-6a04-d90281ccee6c
@@ -31,13 +31,13 @@ monikers: []
 item_type: Content
 source_path: docs/identity/monitoring-health/reference-audit-activities.md
 cmProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
-- https://authoring-docs-microsoft.poolparty.biz/devrel/1ae5c491-970a-4062-8301-6336e69f9026
 spProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
-- https://authoring-docs-microsoft.poolparty.biz/devrel/f2c3e52e-3667-4e8a-bf11-20b9eaccdc8c
 platformId: 89da84dc-4bcc-8a98-e6b8-aa9e80fa88d4
 ---
 
@@ -1412,8 +1412,20 @@ The Self-service password management logs provide insight into changes made to p
 
 ## Verified ID
 
+Microsoft Entra Verified ID audit events have a `loggedByService` value of `Verified ID`. Possible identity verification journey events use `RequestManagement`. Issuance, presentation, partner validation and billing, and administration events use `ResourceManagement`. The table isn't a required event sequence.
+
 | Audit Category | Activity |
 | --- | --- |
+| RequestManagement | Account recovery completed |
+| RequestManagement | Account recovery failed |
+| RequestManagement | Account recovery initiated |
+| RequestManagement | Verified ID issuance requested |
+| RequestManagement | Verified ID onboarding completed |
+| RequestManagement | Verified ID onboarding failed |
+| RequestManagement | Verified ID onboarding initiated |
+| RequestManagement | Verified ID verification completed |
+| RequestManagement | Verified ID verification initiated |
+| ResourceManagement | Certified Partner validation and billing completed successfully |
 | ResourceManagement | Create authority |
 | ResourceManagement | Create authorization policy |
 | ResourceManagement | Create contract |
@@ -1430,3 +1442,18 @@ The Self-service password management logs provide insight into changes made to p
 | ResourceManagement | Update contract |
 | ResourceManagement | Update issuance policy |
 | ResourceManagement | Update linked domains |
+| ResourceManagement | Verifiable Credential Issued |
+| ResourceManagement | Verifiable Credential Presentation Failed |
+| ResourceManagement | Verifiable Credential Presented |
+
+For lifecycle events, review `additionalDetails` to distinguish the scenario:
+
+- Onboarding events use `scenario=OnboardingScenario` and `purpose=Onboarding`.
+- Authentication verification events use `scenario=AuthenticationScenario` and `purpose=Verification`.
+- When included, `onboardingDayType` identifies `DayZero` or `DayOne`. Don't infer the day type when the field isn't present.
+
+`Verified ID issuance requested` records a request, not confirmation of issuance. Credential issuance and presentation are separate from verification completion. `Verified ID verification completed` and `Verified ID onboarding completed` record different outcomes. Authority and contract updates aren't ID verification profile updates.
+
+Issuance, presentation, and partner events don't by themselves identify a My Account, recovery, or onboarding journey. Use available correlation fields to investigate related records. Partner validation and billing completion doesn't establish completion of the user's entire journey.
+
+A successful initiation event doesn't establish that the journey completed. Verification or onboarding completion doesn't independently establish a passkey's assurance level, a Conditional Access grant, or risk remediation. Review account verification history, the individual passkey's credential assurance, sign-in results, and risk records separately.

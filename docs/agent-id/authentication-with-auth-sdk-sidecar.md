@@ -1,6 +1,6 @@
 ---
 layout: Conceptual
-title: Authentication with Microsoft Entra ID Auth SDK (sidecar) - Microsoft Entra Agent ID | Microsoft Learn
+title: Authentication with Microsoft Entra ID Auth SDK sidecar - Microsoft Entra Agent ID | Microsoft Learn
 canonicalUrl: https://learn.microsoft.com/en-us/entra/agent-id/authentication-with-auth-sdk-sidecar
 uhfHeaderId: MSDocsHeader-Entra
 breadcrumb_path: /entra/breadcrumb/toc.json
@@ -11,11 +11,11 @@ ms.author: dmwendia
 ms.service: entra-id
 ms.subservice: agent-id
 manager: pmwongera
-description: Learn how Microsoft Entra ID Auth SDK (sidecar) manages credentials and tokens for AI agents so that secrets never enter agent code.
+description: Understand when and how to use the Microsoft Entra ID Auth SDK sidecar with agents built in frameworks other than ASP.NET Core.
 ms.topic: concept-article
-ms.date: 2026-04-28T00:00:00.0000000Z
-ms.custom: agent-id, msecd-doc-authoring-1012
+ms.date: 2026-11-05T00:00:00.0000000Z
 ai-usage: ai-assisted
+ms.reviewer: dastrock
 locale: en-us
 document_id: 72318d5b-7543-0b3a-53ae-52bb6786aff2
 document_version_independent_id: 72318d5b-7543-0b3a-53ae-52bb6786aff2
@@ -32,72 +32,53 @@ monikers: []
 item_type: Content
 source_path: docs/agent-id/authentication-with-auth-sdk-sidecar.md
 cmProducts:
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
+- https://authoring-docs-microsoft.poolparty.biz/devrel/b1cfdec6-b0c3-4209-818c-736879856e0e
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d452572f-6212-498f-9050-ca4a9e50a425
 spProducts:
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
+- https://authoring-docs-microsoft.poolparty.biz/devrel/2d0723c1-cf38-4c30-ab3d-5df787b33270
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
+- https://authoring-docs-microsoft.poolparty.biz/devrel/a12e40b7-59a2-4437-96e2-166ce622b864
 platformId: a81799e4-e453-fb65-0b87-f2c2b537ae41
 ---
 
-# Authentication with Microsoft Entra ID Auth SDK (sidecar) - Microsoft Entra Agent ID | Microsoft Learn
+# Authentication with Microsoft Entra ID Auth SDK sidecar - Microsoft Entra Agent ID | Microsoft Learn
 
-The [Microsoft Entra ID Auth SDK (sidecar)](https://mcr.microsoft.com/en-us/product/entra-sdk/auth-sidecar/about) handles authentication and token operations for your AI agent. It runs as a second container next to your agent that handles client-credentials exchange, on-behalf-of flows, and token lifecycle management. This article explains the Microsoft Entra ID Auth SDK (sidecar) design pattern, how it works, and the identity objects involved.
+Use the Microsoft Entra ID Auth SDK sidecar when your cloud agent isn't built with ASP.NET Core and Microsoft.Identity.Web. The sidecar runs next to the agent, holds the blueprint credential, acquires and caches tokens, and returns authorization headers or calls downstream APIs.
 
-## Why use the Microsoft Entra ID Auth SDK (sidecar)?
+The agent communicates with the sidecar through `localhost` in a shared network namespace. Don't expose the sidecar endpoint publicly.
 
-AI agents need credentials to call downstream APIs, but the common approaches to agent authentication fall short:
+## Choose this integration
 
-- **Hard-coded secrets in agent code:** Every agent image holds a copy of your app's `client_secret`. Any compromise, log leak, or forgotten `.env` file committed to Git exposes the full tenant.
-- **Delegated user tokens for everything:** The agent can only act when a human is present. You also lose individual auditability because every call looks like the same service principal.
+Use the sidecar when the agent needs to:
 
-Microsoft Entra Agent ID gives each agent its own identity. The sidecar pattern makes that identity easy to use by keeping all credential handling outside your agent code.
+- Call an API as its Agent ID.
+- Call an API as a signed-in user through On-Behalf-Of (OBO).
+- Validate an incoming user token and read its claims.
+- Change credential sources without changing agent code.
 
-## How the Microsoft Entra ID Auth SDK (sidecar) works
+For ASP.NET Core agents, use the integrated Microsoft.Identity.Web guidance in this documentation instead.
 
-The [Microsoft Entra ID Auth SDK (sidecar)](https://mcr.microsoft.com/en-us/product/entra-sdk/auth-sidecar/about) runs as a container that exposes HTTP endpoints on the pod-local network. It handles the following responsibilities:
+## How the sidecar works
 
-- Exchanges client credentials with `login.microsoftonline.com`.
-- Acquires tokens through client credentials or federated identity credentials (FIC) for the agent identity in autonomous flows.
-- Handles on-behalf-of (OBO) flows for user-context calls.
-- Caches tokens and manages refresh and expiry.
-- Abstracts the credential source - uses `ClientSecret` for development and `SignedAssertionFromManagedIdentity` for Azure deployments through the same API.
-
-The following table summarizes the flow of auth actions between your agent and the sidecar:
-
-| Agent (your code) | Microsoft Entra ID Auth SDK (sidecar) |
+| Component | Responsibility |
 | --- | --- |
-| Decide when to call the API | Acquire and cache the right token |
-| Build the HTTP request | Perform client-credentials and OBO exchange |
-| Pass through user token for OBO | Validate and forward user assertion |
-| Handle business logic | Communicate with `login.microsoftonline.com` |
+| Upstream client | Signs in a user and sends an access token to the agent when user context is required. |
+| Agent | Applies business logic and requests an authorization header or downstream call. |
+| Sidecar | Validates inbound tokens, authenticates with the configured shared client ID and blueprint credential, and caches tokens. |
+| Protected API | Validates the resulting access token and authorizes the request. |
 
-The security boundary is explicit: the sidecar has no host port. Only services inside the same network, such as your agent container, can request tokens.
+For a cloud agent, the sidecar supports two token acquisition patterns:
 
-## Identity objects in the sidecar pattern
+- **App-only Agent ID:** The agent requests a token without an inbound user token.
+- **Agent acting for a signed-in user:** The agent forwards the inbound user token and the sidecar performs OBO.
 
-The following table describes the Microsoft Entra objects in the sidecar pattern:
+If you're building a platform that hosts separate agents for teams or customers, or your scenario needs an agent's dedicated user account, follow the [agent fleet tutorial](sidecar-fleet-provision-agent-identities).
 
-| Object | Role | Location |
-| --- | --- | --- |
-| **Blueprint application** | Template that creates and issues agent identities. Holds the client credential (secret or federated). | Your Microsoft Entra tenant |
-| **Agent identity** | The individual AI agent. Has a unique app ID, permission grants, and audit trail. | Your Microsoft Entra tenant |
-| **Client single-page application (SPA)** (OBO only) | Web UI that signs the user in and exchanges the user's token for an agent token on their behalf. | Your Microsoft Entra tenant |
-| **Sidecar container** | Runs client-credentials and OBO flows. Holds the blueprint credential. | Next to your agent |
-| **Agent container** | Your application code. Requests authorization headers from the sidecar. | Your pod, compose service, or App Service |
+The following diagram shows an agent and sidecar running in the same private environment. The agent requests an authorization header from the sidecar, which gets an access token from Microsoft Entra.
 
-For more information about blueprints and agent identities, see [Agent identity blueprints](agent-blueprint) and [Agent identities](what-are-agent-identities).
+[![Diagram that shows an agent requesting an authorization header from a sidecar, which obtains an access token from Microsoft Entra ID.](media/configure-third-party-agents/sidecar-pattern-architecture.png)](media/configure-third-party-agents/sidecar-pattern-architecture.png#lightbox)
 
-## Credential source abstraction
+## Security boundary
 
-The sidecar abstracts the credential source from your agent code. During development, you can use a `ClientSecret` for convenience. In production Azure deployments, you can switch to `SignedAssertionFromManagedIdentity`, a federated identity credential backed by managed identity, without changing your agent code.
-
-The sidecar's configuration determines which credential source to use. Your agent continues to call the same `/AuthorizationHeader` endpoint regardless of the authentication mechanism.
-
-## Sidecar sample scenarios
-
-The [Microsoft Entra Agent ID sidecar samples](https://github.com/microsoft/entra-agentid-samples/tree/dev/sidecar) demonstrate the following concepts:
-
-- How a blueprint differs from an agent identity and why agents need their own identity.
-- How the sidecar exposes `/AuthorizationHeader` (get token) and `/DownstreamApi` (token + proxied call) endpoints.
-- How the sidecar forwards a signed-in user's token and has the Microsoft Entra ID Auth SDK (sidecar) mint an agent-on-behalf-of-user token via OBO.
-- How the downstream API validates agent tokens including the signature, issuer, `xms_par_app_azp`, and audience.
-- How to swap from `ClientSecret` (development) to `SignedAssertionFromManagedIdentity` (Azure deployments) without changing agent code.
+Run the sidecar in the same network namespace as the agent, such as the same pod or container app. Production builds restrict callers to loopback; separate containers on a private bridge aren't sufficient. For Docker Compose, follow the [shared-network configuration](microsoft-entra-sdk-for-agent-identities#add-the-sidecar-container). Only trusted agent code should be able to call it. Use a managed identity and federated identity credential for hosted deployments. Use client secrets only for local development.

@@ -13,7 +13,8 @@ ms.subservice: agent-id
 manager: pmwongera
 description: Learn about specialized token claims used by agent applications in Microsoft Entra to identify entity types, relationships, and roles during authentication and authorization flows.
 ms.topic: reference
-ms.date: 2025-11-04T00:00:00.0000000Z
+ms.date: 2026-11-06T00:00:00.0000000Z
+ai-usage: ai-assisted
 ms.reviewer: jmprieur
 locale: en-us
 document_id: fe6f3d42-6075-795d-ec73-039d66fc6cec
@@ -31,9 +32,11 @@ monikers: []
 item_type: Content
 source_path: docs/agent-id/agent-token-claims.md
 cmProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
 - https://authoring-docs-microsoft.poolparty.biz/devrel/1ae5c491-970a-4062-8301-6336e69f9026
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
 spProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
 - https://authoring-docs-microsoft.poolparty.biz/devrel/f2c3e52e-3667-4e8a-bf11-20b9eaccdc8c
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
 platformId: 1baa76e1-810b-0c73-dd9e-8d506241a4dd
@@ -44,6 +47,8 @@ platformId: 1baa76e1-810b-0c73-dd9e-8d506241a4dd
 Agents use specialized token claims to identify different entity types and their relationships during authentication and authorization flows. These claims enable proper attribution, policy evaluation, and audit trails for agent operations. This article outlines the token claims for agent applications, detailing how tokens identify agent entities and their roles in authentication flows.
 
 Clients using agent identities are expected to treat the access tokens issued to them to use at resource servers as opaque, and not try to parse them. However, resource servers that receive access tokens issued to agents need to parse the tokens to validate them and extract claims for authorization purposes.
+
+Resource servers must validate the signature, issuer, audience, and lifetime before using any claims. Agent identity claims describe the caller and its relationships; they don't replace the delegated scope or application role required by an operation. For implementation guidance, see [Validate Agent ID tokens in a downstream API](how-to-validate-agent-tokens-downstream-api).
 
 ## Core token claim types
 
@@ -151,11 +156,11 @@ Here are the relevant values for these claims. These claims are multivalued, mea
 | `11` | AgentIdentity |
 | `13` | AgentIDUser |
 
-You should ignore any values that aren't relevant to your scenario or validation logic. Ignore the values that aren't relevant to your application. Don't assume any order of the values in these claims.
+Ignore values that aren't relevant to your scenario or validation logic. Don't assume any order of the values in these claims.
 
 ## xms\_par\_app\_azp
 
-The `xms_par_app_azp` claim is used to identify the parent application of the authorized party (`azp` or `appid`). It's a GUID, when included. You can use the claim to determine the parent
+The `xms_par_app_azp` claim identifies the parent application of the authorized party (`azp` or `appid`). When included, its GUID identifies the agent identity blueprint associated with the acting agent identity.
 
 Log the parent application ID for auditing purposes. Microsoft Entra ID sign-in logs always includes the parent ID if available, so resource server should do the same. It isn't recommended to use the parent application ID for authorization decisions, as it would result in widespread access by many agents.
 

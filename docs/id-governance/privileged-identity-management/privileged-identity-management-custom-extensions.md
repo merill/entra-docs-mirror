@@ -1,6 +1,6 @@
 ---
 layout: Conceptual
-title: Configure custom extensions for PIM role activation (Preview) - Microsoft Entra ID Governance | Microsoft Learn
+title: Configure custom extensions for PIM role activation - Microsoft Entra ID Governance | Microsoft Learn
 canonicalUrl: https://learn.microsoft.com/en-us/entra/id-governance/privileged-identity-management/privileged-identity-management-custom-extensions
 uhfHeaderId: MSDocsHeader-Entra
 breadcrumb_path: /entra/breadcrumb/toc.json
@@ -38,7 +38,7 @@ spProducts:
 platformId: 937dfdb8-5aad-c982-5a0c-bde789568de3
 ---
 
-# Configure custom extensions for PIM role activation (Preview) - Microsoft Entra ID Governance | Microsoft Learn
+# Configure custom extensions for PIM role activation - Microsoft Entra ID Governance | Microsoft Learn
 
 Custom extensions in Microsoft Entra Privileged Identity Management (PIM) enable organizations to integrate custom business logic into the role activation process. These extensions are implemented as REST APIs that PIM calls during policy evaluation. The custom extension evaluates the activation request and returns a decision to PIM indicating whether the activation should be allowed or denied.
 
@@ -55,10 +55,6 @@ Custom extensions support PIM for Groups, PIM for Microsoft Entra roles, and PIM
 
 [![Diagram that shows the PIM custom extension architecture flow from activation request through policy evaluation to the custom extension API and external services.](media/privileged-identity-management-custom-extensions/custom-extension-architecture-flow.png)](media/privileged-identity-management-custom-extensions/custom-extension-architecture-flow.png#lightbox)
 
-Important
-
-Custom extensions for PIM are in preview. See the [Supplemental Terms of Use for Microsoft Azure Previews](https://azure.microsoft.com/support/legal/preview-supplemental-terms/) for legal terms that apply to Azure features that are in beta, preview, or otherwise not yet released into general availability.
-
 ## License requirements
 
 Using custom extensions with PIM requires an active Microsoft Entra ID Governance or Microsoft Entra Suite license. Microsoft Entra ID P2 alone doesn't include PIM custom extensions. For more information, see [Microsoft Entra ID Governance licensing fundamentals](../licensing-fundamentals).
@@ -68,7 +64,6 @@ Using custom extensions with PIM requires an active Microsoft Entra ID Governanc
 - An assignment of at least the **Privileged Role Administrator** role.
 - A REST API endpoint that accepts HTTP POST requests and returns evaluation responses in the format PIM expects. The API can be built in any language and hosted on any platform.
 - A Microsoft Entra ID application registration to secure communication between PIM and your custom extension endpoint.
-- The Microsoft Graph API `beta` endpoint is required because this feature is in preview.
 - The following delegated Microsoft Graph permissions, depending on the operation:
 
     | Operation | Permission (least privileged) |

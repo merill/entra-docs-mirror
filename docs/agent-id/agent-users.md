@@ -11,8 +11,9 @@ ms.author: dmwendia
 ms.service: entra-id
 ms.subservice: agent-id
 manager: pmwongera
-description: This article explains the concept of the agent's user account, how it functions within Microsoft Entra ID, and its relationship with agent identities.
-ms.date: 2025-11-04T00:00:00.0000000Z
+description: Learn when an agent needs its own user account, how the account relates to its parent agent identity, and which authentication and access restrictions apply.
+ms.date: 2026-11-06T00:00:00.0000000Z
+ai-usage: ai-assisted
 ms.topic: concept-article
 ms.reviewer: yukarppa
 locale: en-us
@@ -31,27 +32,27 @@ monikers: []
 item_type: Content
 source_path: docs/agent-id/agent-users.md
 cmProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
 - https://authoring-docs-microsoft.poolparty.biz/devrel/540ac133-a371-4dbb-8f94-28d6cc77a70b
-- https://authoring-docs-microsoft.poolparty.biz/devrel/63959238-cb90-4871-a33d-4a5519097e47
 spProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
 - https://authoring-docs-microsoft.poolparty.biz/devrel/60bfc045-f127-4841-9d00-ea35495a5800
-- https://authoring-docs-microsoft.poolparty.biz/devrel/78d87f42-5582-4a6b-90be-7db2f12b34e6
 platformId: 08ac836b-0804-f6ed-cad5-5d379348b4de
 ---
 
 # Learn about the agent's user account in Microsoft Entra Agent ID - Microsoft Entra Agent ID | Microsoft Learn
 
-The agent's user account is a specialized identity type designed to bridge the gap between agents and human user capabilities. The agent's user account enables AI-powered applications to interact with systems and services that require user identities, while maintaining appropriate security boundaries and management controls. It allows organizations to manage the agent's access using similar capabilities as they do for human users.
+Create an agent's user account only when the agent needs its own user identity to access a resource. This optional account belongs to a parent agent identity; it isn't the human user who signs in to an agent. If your agent instead calls an API on behalf of a signed-in human, use [user-delegated access](aspnet-core-call-custom-api-as-user).
 
 ## Example of agent's user account scenarios
 
 Sometimes it's not enough for an agent to perform tasks on behalf of a user or operate as an autonomous application. In certain scenarios, an agent needs to act as a user, functioning essentially as a digital worker. The following are example scenarios where the agent's user account would be applicable:
 
 - The organization needs long-term digital employees that function as team members with mailboxes, chat access, and inclusion in HR systems.
-- The agent needs to access APIs or resources that are only available to user identities
-- The agent needs to participate in collaborative workflows as a team member
+- The agent needs to access APIs or resources that are only available to user identities.
+- The agent needs to participate in collaborative workflows as a team member.
 
 For these reasons, the agent's user account is created. The agent's user account is optional and should only be created for interactions where the agent needs to act as a user or access resources restricted to user accounts.
 
@@ -82,7 +83,7 @@ Admins manage the lifecycle of an agent's user account. An admin user can delete
 
 The authentication model for the agent's user account differs significantly from human-user accounts:
 
-- **Federated identity credentials**: Authentication happens through credentials assigned to the agent's user account. In production systems, use Federated Identity Credentials (FIC). These credentials are used for authenticating both the agent identity blueprint and the agent identity. The credential assigned to the user is used for authenticating across the agent ecosystem.
+- **Blueprint credentials**: The blueprint authenticates with its configured credential, such as a federated identity credential. The associated agent identity then obtains tokens for its dedicated agent user through their parent relationship. Don't assign a federated credential, password, or certificate directly to the agent's user account. For the exchange, see [Agent user OAuth flow](agent-user-oauth-flow).
 - **Restricted credential model**: The agent's user account doesn't have regular credentials like passwords. Instead, it's restricted to using the credentials provided through its parent relationship. This restriction on credentials, along with restrictions on interactive sign-in, ensures that the agent's user account can't be used like a standard user account.
 - **Impersonation mechanism**: The associated agent identity can impersonate its child agent's user account. It allows the parent's business logic to obtain tokens and act as the agent's user account when needed.
 

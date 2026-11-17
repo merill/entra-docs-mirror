@@ -13,8 +13,9 @@ ms.subservice: agent-id
 manager: pmwongera
 description: Learn how agent applications operate on behalf of signed-in users using OAuth 2.0 On-Behalf-Of flows with agent identity blueprints and agent identities.
 ms.topic: concept-article
-ms.date: 2025-11-04T00:00:00.0000000Z
+ms.date: 2026-11-03T00:00:00.0000000Z
 ms.reviewer: jmprieur
+ai-usage: ai-assisted
 locale: en-us
 document_id: 2ce787b9-ee65-aeb6-5e31-c3db2b5b7852
 document_version_independent_id: 2ce787b9-ee65-aeb6-5e31-c3db2b5b7852
@@ -32,20 +33,26 @@ item_type: Content
 source_path: docs/agent-id/agent-on-behalf-of-oauth-flow.md
 cmProducts:
 - https://authoring-docs-microsoft.poolparty.biz/devrel/1ae5c491-970a-4062-8301-6336e69f9026
+- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
 spProducts:
 - https://authoring-docs-microsoft.poolparty.biz/devrel/f2c3e52e-3667-4e8a-bf11-20b9eaccdc8c
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
 platformId: b0496786-2082-d728-532d-c2c882d80440
 ---
 
 # Agent OAuth flows - On-behalf-of flow - Microsoft Entra Agent ID | Microsoft Learn
 
-Agents (agent identity blueprints) operating on behalf of regular, signed-in users use the standard OAuth 2.0 protocol with all its capabilities. User delegation enables agent identities to operate on behalf of signed-in users using standard OAuth 2.0 On-Behalf-Of flows with agent-specific impersonation. The agent identity is assigned the necessary delegated permissions needed for OBO access. It requires consent from users to access their data.
+This article describes hosted, confidential-client agents operating on behalf of regular, signed-in users. The protocol below applies to **multi-instance** Agent IDs and uses blueprint impersonation. The agent identity needs delegated permissions and user or administrator consent to access the downstream API.
 
-Agents have the capabilities of Microsoft Entra ID resource (API) applications and support the API attributes required for the (OAuth2Permissions, AppURI). Agent identity blueprints can't initiate interactive authorization (`/authorize`) flows directly. They must receive a user token from a client application and then perform an OBO token exchange. A web redirect URI can be configured on a blueprint for consent flows only (`response_type=none`), but it has limited functionality compared to a redirect URI on an app registration.
+A single-instance Agent ID performs OBO directly with the shared client ID and a credential configured on the blueprint. It doesn't use a blueprint impersonation token or inherit permissions from a blueprint principal. For its requests and the preview consent workaround, see [Call a downstream API on behalf of a user with a single-instance Agent ID](authenticate-single-instance-agent#call-a-downstream-api-on-behalf-of-a-user).
+
+In this confidential-client pattern, the agent identity blueprint doesn't initiate an interactive authorization (`/authorize`) flow. It receives a user token from a client application and then performs an OBO token exchange. For an agent that runs locally and signs in the user directly, see [Authenticate a local agent with Microsoft Entra ID](authenticate-local-agent).
 
 Important
 
-Like their parent blueprints, child agent identities can't initiate interactive `/authorize` flows. Consequently, users can't grant them consent interactively (attempting this on the child identity returns the error `AADSTS82014`). Instead, you must preauthorize the required delegated permissions by configuring inheritable permissions on the parent agent identity blueprint. Ensure an administrator has actually granted consent for these permissions on the blueprint. The child agent identities will then inherit these scopes without triggering an interactive consent prompt. For step-by-step guidance, see [Configure inheritable permissions for agent identity blueprints](configure-inheritable-permissions-blueprints).
+In this confidential-client OBO pattern, child agent identities can't initiate interactive `/authorize` flows. Consequently, users can't grant them consent interactively (attempting this on the child identity returns the error `AADSTS82014`). Instead, you must preauthorize the required delegated permissions by configuring inheritable permissions on the parent agent identity blueprint. Ensure an administrator has granted consent for these permissions on the blueprint. The child agent identities then inherit these scopes without triggering an interactive consent prompt. For step-by-step guidance, see [Configure inheritable permissions for agent identity blueprints](configure-inheritable-permissions-blueprints).
 
 Warning
 
@@ -53,11 +60,11 @@ Microsoft recommends using the approved SDKs like Microsoft.Identity.Web and Mic
 
 ## Managed identities integration
 
-Managed identities are the preferred credential type. In this configuration, the managed identity token serves as the credential for the parent agent identity blueprint, while standard MSI protocols apply for credential acquisition. This integration allows the agent ID to receive the full benefits of MSI security and management, including automatic credential rotation and secure storage.
+For Azure-hosted agents, prefer a managed identity when the hosting service provides one. Its token authenticates the parent blueprint through a configured federated identity credential; configuring the managed identity alone doesn't grant API access to the agent. A local developer's Azure CLI sign-in isn't a managed identity. For hosting requirements and local credential alternatives, see [Configure blueprint credentials](create-blueprint#configure-credentials-for-the-agent-identity-blueprint).
 
 ## Protocol steps
 
-Agents aren't supported for interactive (`/authorize`) flows. Supported grant types are `client_credential`, `jwt-bearer`, and `refresh_token`. The flow involves the agent identity blueprint, agent identity, and a client credential. The client credential can be a client secret, a client certificate, or a Federated Identity Credential (FIC). When possible, use a managed identity to obtain the FIC.
+This OBO flow doesn't use an interactive (`/authorize`) request. Supported grant types are `client_credentials`, `jwt-bearer`, and `refresh_token`. The flow involves the agent identity blueprint, agent identity, and a client credential. The client credential can be a client secret, a client certificate, or a federated identity credential (FIC). When possible, use a managed identity to obtain the FIC.
 
 ![Diagram showing the illustration of on-behalf-of token acquisition flow for agents.](media/agent-on-behalf-of-oauth-flow/on-behalf-of-flow.png)
 
@@ -76,6 +83,7 @@ Agents aren't supported for interactive (`/authorize`) flows. Supported grant ty
     client_id=AgentBlueprint
     &scope=api://AzureADTokenExchange/.default
     &fmi_path=AgentIdentity
+    &client_assertion_type=urn:ietf:params:oauth:client-assertion-type:jwt-bearer
     &client_assertion=TUAMI
     &grant_type=client_credentials
     ```

@@ -12,7 +12,8 @@ ms.service: entra-id
 ms.subservice: agent-id
 manager: pmwongera
 description: Learn about how authorization in Microsoft Entra Agent ID works for AI agents.
-ms.date: 2026-06-12T00:00:00.0000000Z
+ms.date: 2026-11-05T00:00:00.0000000Z
+ai-usage: ai-assisted
 ms.topic: concept-article
 locale: en-us
 document_id: 9082808b-baac-3d18-b1c4-95585b37c384
@@ -31,22 +32,20 @@ item_type: Content
 source_path: docs/agent-id/authorization-agent-id.md
 cmProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
-- https://authoring-docs-microsoft.poolparty.biz/devrel/63959238-cb90-4871-a33d-4a5519097e47
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
+- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
+- https://authoring-docs-microsoft.poolparty.biz/devrel/5fc61396-d075-4560-aece-fdbda73d243f
 spProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
-- https://authoring-docs-microsoft.poolparty.biz/devrel/78d87f42-5582-4a6b-90be-7db2f12b34e6
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
+- https://authoring-docs-microsoft.poolparty.biz/devrel/ad9437c1-8cda-4537-ad69-b4b263652e13
 platformId: 624bcf00-8b6f-cdf8-f010-db1c0260bd7a
 ---
 
 # Authorization in Microsoft Entra Agent ID | Microsoft Learn
 
-The introduction of agent identities is driven by the rise of AI-powered agents in organizations. Traditional identity types (like standard app registrations or user accounts) aren't ideal for autonomous agents. AI agents have unique security concerns because their autonomous decision-making, dynamic learning capabilities, and potentially access to sensitive data can introduce unpredictable behaviors.
+Authorize an agent according to the resource it needs to access: Azure roles govern Azure resources, Microsoft Entra roles govern directory administration, and API permissions govern calls to Microsoft Graph and other APIs. Microsoft Entra Agent ID restricts high-privilege assignments to limit what an autonomous agent can do.
 
-Microsoft Entra Agent ID was created to fill this gap. Built on the Microsoft Entra ID platform, it provides a dedicated authentication and authorization framework for AI agents that enables them to safely access services and APIs while giving administrators a central way to monitor and control their actions. In short, agent identities let organizations discover, manage, and secure AI agents operating in a tenant, with proper policy enforcement, instead of treating agents as either full users or generic apps.
-
-This article explains how authorization in Microsoft Entra Agent ID works for AI agents by providing information about roles, permission controls, and best practices for managing agent access.
+This article explains those downstream permission controls. Permissions to call a downstream API don't determine who can invoke the agent itself; for that separate boundary, see [Control access to agents with app roles](control-user-access-agents).
 
 ## Why agent identity authorization is important
 
@@ -176,7 +175,7 @@ Depending on what an agent needs to do, administrators can grant access in diffe
 
 ### Azure roles
 
-**If an agent needs to access Azure resources**: Assign Azure roles for those specific resources. For example, to let an agent read an Azure Key Vault, give its identity a Key Vault Reader role on that vault. This keeps scope narrow (just that resource or resource group) and uses least privilege. For more information, see [Assign Azure roles using the Azure portal](/en-us/azure/role-based-access-control/role-assignments-portal).
+**If an agent needs to access Azure resources**: Assign Azure roles for those specific resources. For example, **Key Vault Reader** allows reading vault metadata, not secret values. Reading secret values requires a data-plane role such as **Key Vault Secrets User** on a vault configured for Azure RBAC. Assign the role at the narrowest required scope. For more information, see [Azure built-in roles for Key Vault](/en-us/azure/role-based-access-control/built-in-roles/security#key-vault-secrets-user) and [Assign Azure roles using the Azure portal](/en-us/azure/role-based-access-control/role-assignments-portal).
 
 ### Microsoft Entra roles
 
@@ -184,7 +183,7 @@ Depending on what an agent needs to do, administrators can grant access in diffe
 
 ### Delegated Microsoft Graph permissions
 
-**If an agent acts on behalf of a user (user-centric scenarios)**: Use delegated Microsoft Graph permissions. This option requires interactive user consent but ensures the agent can't exceed that user's access. For example, an agent scheduling meetings for Alice would use delegated calendar API permissions; Alice consents, and the agent can only manage Alice's calendar (just as Alice could by themselves). For more information, see [Overview of permissions and consent in the Microsoft identity platform](../identity-platform/permissions-consent-overview).
+**If an agent acts on behalf of a user (user-centric scenarios)**: Use delegated Microsoft Graph permissions. These require user or administrator consent, and the agent can't exceed the user's access. For example, an agent scheduling meetings for Alice uses delegated calendar API permissions. A hosted agent's OBO flow can't display an interactive consent prompt; configure consent before the downstream call. For supported consent paths, see [Grant delegated permissions to an agent identity](grant-agent-access-microsoft-365).
 
 ### Microsoft Graph application permissions
 
@@ -194,6 +193,6 @@ Always review the permission's scope: tenant-wide read access might be fine for 
 
 ## Inheritable permissions for agent identities
 
-Agent identity blueprints support inheritable permissions, which let administrators grant permissions once at the blueprint level and have those grants automatically apply to all agent identities created from the blueprint. This capability reduces repeated consent prompts across multiple deployments and environments.
+Multi-instance agent identity blueprints support inheritable permissions, which let administrators configure eligible blueprint grants for use by child agent identities. This capability reduces repeated consent setup across a fleet. A single-instance blueprint has no blueprint principal; grant permissions directly to its agent identity instead.
 
 For more information about how inheritable permissions, required resource access, and direct grants work together, see [Inheritable permissions](concept-inheritable-permissions).

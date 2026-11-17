@@ -6,16 +6,16 @@ uhfHeaderId: MSDocsHeader-Entra
 breadcrumb_path: /entra/breadcrumb/toc.json
 feedback_system: Standard
 feedback_product_url: https://feedback.azure.com/d365community/forum/79b1327d-d925-ec11-b6e6-000d3a4f06a4
-author: shlipsey3
-ms.author: sarahlipsey
+author: tilarso
+ms.author: tilarso
 ms.service: entra-id-protection
 manager: dougeby
 description: Learn how to investigate risky users, detections, and sign-ins in Microsoft Entra ID Protection.
 ms.topic: how-to
-ms.date: 2026-05-27T00:00:00.0000000Z
+ms.date: 2026-10-08T00:00:00.0000000Z
 ms.reviewer: lvandenende
 ai-usage: ai-assisted
-ms.custom: sfi-image-nochange
+ms.custom: sfi-image-nochange, msecd-doc-authoring-108
 locale: en-us
 document_id: 5779b726-83b3-3242-297a-17410b372ab5
 document_version_independent_id: ff902d75-e5b4-25db-4d31-80d28808efff
@@ -32,13 +32,11 @@ monikers: []
 item_type: Content
 source_path: docs/id-protection/howto-identity-protection-investigate-risk.md
 cmProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/079cf7bf-da09-4bd3-ab74-bd5a5da031d1
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
 spProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/b606cead-f1a2-4925-9a71-5fbd7a0d9b81
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
 platformId: ebdf2cf4-fc1c-981c-3951-eae31f9c828d
 ---
 
@@ -103,6 +101,24 @@ Once the risk is contained, more investigation might be required to mark the ris
         - IP address
 4. Depending on the results of the investigation, mark the user or sign-in as confirmed compromised, confirmed safe, or dismiss the risk. You can confirm compromise in the Microsoft Entra admin center or [programmatically using Microsoft Graph](howto-identity-protection-simulate-risk#confirm-compromise-using-microsoft-graph).
 5. [Set up risk-based Conditional Access policies](howto-identity-protection-configure-risk-policies#enable-policies) to prevent similar attacks or to address any gaps in coverage.
+
+## Investigate identity verification outcomes
+
+For a risk-based policy using **Require Identity Verification (preview)**, investigate verification completion, the policy's access decision, and the relevant risk record as separate outcomes. An issued credential, successful access attempt, or registered passkey alone isn't evidence that the risk was remediated.
+
+To view users' verification status and history, enable verification data collection as described in the [Verified ID authentication method prerequisites](../identity/authentication/concept-authentication-verified-id#prerequisites).
+
+Note
+
+Creating an identity verification profile automatically enables **Collect identity verification history**; otherwise, enable it in the authentication methods policy under **Authentication Methods** &gt; **Policies** &gt; **Verified ID** &gt; **Configure** &gt; **Data collection**.
+
+1. Review the applicable risk condition, policy, and sign-in result for the tested access attempt.
+2. Review available [identity verification status and history](../identity/authentication/concept-authentication-methods-manage#identity-verification-status-and-history). Distinguish credential issuance and presentation from a completed verification outcome.
+3. Check the relevant user-risk or sign-in-risk record for the expected remediation outcome. Successful verification can remediate risk in supported scenarios, but isn't proof that every risk was cleared.
+4. If verification succeeds but risk remains, continue the investigation and record both outcomes. Don't dismiss risk solely because verification succeeded.
+5. Record cancellation, failed verification, missing or unavailable credentials, and the return to the original access attempt as separate test outcomes. Use the [existing remediation process](howto-identity-protection-remediate-unblock#validate-identity-verification-remediation) when self-remediation doesn't complete.
+
+If you review [credential provenance](../identity/authentication/concept-authentication-passkeys-fido2#credential-provenance), remember that during preview it applies only to passkeys. It isn't a substitute for verification history or the risk record. Collect only approved diagnostic evidence.
 
 ## Investigate specific detections
 

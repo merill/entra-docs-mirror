@@ -7,12 +7,14 @@ breadcrumb_path: /entra/breadcrumb/toc.json
 feedback_system: Standard
 feedback_product_url: https://feedback.azure.com/d365community/forum/79b1327d-d925-ec11-b6e6-000d3a4f06a4
 author: OWinfreyATL
-ms.author: owinfrey
+ms.author: tamimsangrar
 ms.service: entra-id-governance
 manager: dougeby
-description: A description of the My Access portal where users can manage access within Microsoft Entra.
+description: Learn how the My Access portal helps you request and review access, activate eligible roles, and connect to supported resources in Microsoft Entra.
 ms.topic: overview
-ms.date: 2024-12-10T00:00:00.0000000Z
+ms.date: 2026-11-17T00:00:00.0000000Z
+ms.custom: msecd-doc-authoring-1032
+ai-usage: ai-assisted
 locale: en-us
 document_id: d1ee0ddc-e767-7f54-3cad-7e97afb261a2
 document_version_independent_id: d1ee0ddc-e767-7f54-3cad-7e97afb261a2
@@ -46,6 +48,8 @@ Users access the My Access portal to:
 - Review access for themselves
 - Review access for users
 - Manage and review access for agents managed
+- Activate eligible role assignments with Microsoft Entra Privileged Identity Management (PIM).
+- View active and eligible role assignments, activate eligible roles when needed, and connect to Azure Virtual Machines and supported Azure Arc-enabled Linux servers.
 
 Administrators, via the Microsoft Entra admin center, can configure:
 
@@ -63,7 +67,7 @@ Using [Microsoft Entra ID Governance](licensing-fundamentals) for agent identiti
 - **Microsoft 365 E7**, which includes Agent 365 and Microsoft Entra Suite, to provide governance of user and agent identities.
 - **Microsoft Agent 365** license paired with at least Microsoft Entra P1 or Microsoft 365 E3.
 
-For more information, see [Microsoft Agent 365 plans and pricing](https://www.microsoft.com/microsoft-agent-365#plans-and-pricing). For the full list of agent-specific capabilities, refer to the **Microsoft Agent 365** column in the [Microsoft Entra ID Governance licensing table](licensing-fundamentals).
+For more information, see [Microsoft Agent 365 and Microsoft 365 E7 plans and pricing](https://www.microsoft.com/microsoft-agent-365#plans-and-pricing). For a list of generally available agent-specific identity governance capabilities, refer to the [Microsoft Entra ID Governance licensing table](licensing-fundamentals).
 
 ## Overview page
 
@@ -93,8 +97,26 @@ For more information about self-reviews, see: [Review your access to resources i
 
 For more information about reviews for others, see: [Review access to groups & applications in access reviews](perform-access-review).
 
+## Activate eligible role assignments (Preview)
+
+Use [**Roles**](https://aka.ms/pim/roles) in the My Access portal to activate your eligible role assignments in Microsoft Entra Privileged Identity Management (PIM). You can activate Microsoft Entra roles, Azure resource roles, and group membership or ownership when you need access.
+
+Role activation through **Roles** is in preview.
+
+For activation instructions, see:
+
+- [Activate eligible Microsoft Entra roles](privileged-identity-management/pim-how-to-activate-role?pivots=my-access#activate-a-microsoft-entra-role-in-my-access).
+- [Activate eligible Azure resource roles](privileged-identity-management/pim-resource-roles-activate-your-roles?pivots=my-access#activate-an-azure-resource-role-in-my-access).
+- [Activate group membership or ownership](privileged-identity-management/groups-activate-roles?pivots=my-access#activate-group-membership-or-ownership-in-my-access).
+
+## Connect to resources (Preview)
+
+Use [**Resource Connections**](https://aka.ms/pim/resource-connections) in the My Access portal to view your active and eligible role assignments for Azure Virtual Machines and supported Azure Arc-enabled Linux servers, activate eligible roles when needed, and connect using an available connection method.
+
+For setup requirements and connection instructions, see [Connect to an Azure Virtual Machine](privileged-identity-management/pim-connect-virtual-machine-my-access).
+
 ## Manage agents
 
 In the My Access portal, you can view a list of agent identities that you own and sponsor. For more about managing and sponsoring agent identities, see: [Administrative relationships for agent identities (Owners, sponsors, and managers)](../agent-id/agent-owners-sponsors-managers).
 
-You're able to manage, approve, review, and enable the agent identities. For all agent identities you own or sponsor you're also able to see general information such as level of access, and agent identities activity. For more information on managing agent identities using the My Access portal, see: [Manage Agent](../agent-id/manage-agent).
+You're able to manage, approve, review, and enable the agent identities. For all agent identities you own or sponsor you're also able to see general information such as level of access, and agent identities activity. For more information on managing agent identities using the My Access portal, see: [Manage Agent](../agent-id/manage-agent-identities-end-user).

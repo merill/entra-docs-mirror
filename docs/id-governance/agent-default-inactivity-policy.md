@@ -21,7 +21,7 @@ original_content_git_url: https://github.com/MicrosoftDocs/entra-docs-pr/blob/li
 site_name: Docs
 depot_name: MSDN.entra-docs
 page_type: conceptual
-toc_rel: ../agent-id/toc.json
+toc_rel: toc.json
 feedback_help_link_type: ''
 feedback_help_link_url: ''
 asset_id: id-governance/agent-default-inactivity-policy

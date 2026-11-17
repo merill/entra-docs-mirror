@@ -16,7 +16,7 @@ ms.topic: how-to
 ms.date: 2026-10-02T00:00:00.0000000Z
 ms.reviewer: mjsantani, guptashi, tilarso
 ms.collection: M365-identity-device-management
-ms.custom: sfi-ga-nochange, sfi-image-nochange, msecd-doc-authoring-1013
+ms.custom: sfi-ga-nochange, sfi-image-nochange, msecd-doc-authoring-108
 ai-usage: ai-assisted
 locale: en-us
 document_id: 80c33300-fb5d-d2ac-b684-1de963c45bc6
@@ -35,11 +35,11 @@ item_type: Content
 source_path: docs/identity/authentication/how-to-enable-authenticator-passkey.md
 cmProducts:
 - https://authoring-docs-microsoft.poolparty.biz/devrel/5686b492-7c45-4088-8291-ecc0458747d3
-- https://authoring-docs-microsoft.poolparty.biz/devrel/b1cfdec6-b0c3-4209-818c-736879856e0e
+- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
 spProducts:
 - https://authoring-docs-microsoft.poolparty.biz/devrel/838f4f15-80c1-4d49-b873-501fe4ed2d28
-- https://authoring-docs-microsoft.poolparty.biz/devrel/2d0723c1-cf38-4c30-ab3d-5df787b33270
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
 platformId: f75c3195-7aa0-d709-9c87-771fd5225741
 ---
@@ -191,6 +191,8 @@ This section covers issues that users might see when they use passkeys in Authen
 
 Passkeys on Android are used only from the profile where they're stored. If a passkey is stored in an Android Work profile, it's used from that profile. If a passkey is stored in an Android Personal profile, it's used from that profile. To make sure that users can access and use the passkey they need, users with both an Android Personal profile and an Android Work profile should create their passkeys in Authenticator for each profile.
 
+For identity-verified onboarding and recovery during preview, users enrolled through Android Management API (AM API) should complete the journey with TAP issuance instead of being required to set up a passkey. See Passkey registration during Identity-verified onboarding and recovery (preview).
+
 ### Workarounds for an authentication strength Conditional Access policy loop
 
 Users can get in a loop when they try to add a passkey in Authenticator if a Conditional Access policy requires phishing-resistant authentication to access **All resources (formerly 'All cloud apps')**. For example:
@@ -274,6 +276,37 @@ Here are some workarounds:
 Note
 
 With any proposed workaround, users must also satisfy any Conditional Access policy that targets **Register security info** or they can't register the passkey. If you have other conditions set up with the **All resources** policies, they also must be met before users can register a passkey.
+
+## Passkey registration during Identity-verified onboarding and recovery (preview)
+
+The minimum Authenticator app versions listed below apply to identity verification step-up, onboarding, and recovery.
+
+Before deploying identity-verified onboarding or recovery with passkey setup:
+
+- **Authenticator app:** Before registering device-bound passkeys in Microsoft Authenticator, meet the requirements for your platform and enable Authenticator as a passkey provider.
+
+    - **Android:** Install Microsoft Authenticator version **6.2610.7075** or later. Earlier versions can't complete passkey setup during onboarding or recovery.
+
+        Enable Authenticator as a passkey provider:
+
+        1. Open device **Settings** and search for **Passkey**, or open **Passwords & accounts**.
+        2. Under **Additional providers**, enable **Authenticator**.
+
+        Settings names vary by device manufacturer and Android version. For Android work profiles, also review the [enrollment-method and app-deployment requirements](../conditional-access/policy-require-identity-verification#android-work-profile-compatibility-during-preview).
+    - **iOS:** Install Microsoft Authenticator version **6.8.58** or later. Earlier versions can't complete passkey setup.
+
+        Enable Authenticator as a passkey provider:
+
+        1. On **iOS 18**, open **Settings** &gt; **General** &gt; **AutoFill & Passwords**. On **iOS 17**, open **Settings** &gt; **Passwords** &gt; **Password Options**.
+        2. Turn on **AutoFill Passwords and Passkeys**.
+        3. Under **AutoFill From**, select **Authenticator**.
+
+    For detailed instructions, see [Register passkeys in Authenticator](how-to-register-passkey-authenticator).
+- For Android users enrolled through Android Management API (AM API), configure onboarding and recovery to issue a [Temporary Access Pass (TAP)](howto-authentication-temporary-access-pass) at completion instead of requiring passkey setup. Those journeys remain supported, but a device-bound passkey created in the personal profile can't currently be used from the work profile.
+
+For Android identity verification step-up with a device-compliance requirement, review [work-profile compatibility and deployment prerequisites](../conditional-access/policy-require-identity-verification#android-work-profile-compatibility-during-preview). The Android Management API (AM API) restriction and Enterprise Mobility Management API (EMM API) app-deployment requirements apply to that policy combination, not to all Authenticator use.
+
+For step-up or recovery initiated from a mobile app, also review [Link to Windows compatibility](../conditional-access/policy-require-identity-verification#link-to-windows-compatibility).
 
 ## Register a passkey in Authenticator
 

@@ -11,10 +11,10 @@ ms.author: kenwith
 ms.service: entra-id
 manager: dougeby
 description: Understand how Microsoft Entra Backup and Recovery creates backups, generates difference reports, and recovers tenant objects to a previous state
-ms.date: 2026-08-25T00:00:00.0000000Z
+ms.date: 2026-10-19T00:00:00.0000000Z
 ms.topic: concept-article
 ai-usage: ai-assisted
-ms.custom: msecd-doc-authoring-1023
+ms.custom: msecd-doc-authoring-1026
 locale: en-us
 document_id: c8de0803-3665-8d68-e778-09848f7b0312
 document_version_independent_id: c8de0803-3665-8d68-e778-09848f7b0312
@@ -65,18 +65,29 @@ Changes for users and groups synchronized from on-premises Active Directory appe
 
 ### First-time difference report generation
 
-The first time you create a difference report, you might experience a delay as backup data loads before the difference calculation starts. Check the progress of report generation in the **Difference Reports** section.
+When you create a difference report against a Standard backup whose data hasn't already been loaded, the backup data loads before the difference calculation starts. A difference report against a Premium backup skips data loading and starts with difference calculation. Check the progress of report generation in the **Difference Reports** section.
 
-| Tenant size | Estimated data loading time for first-time report generation |
+For Standard backups that require data loading, use the following estimates:
+
+| Tenant size | Estimated data loading time for Standard backups |
 | --- | --- |
 | 1-50,000 objects | Up to 1 hour |
-| 50,000-300,000 objects | Up to 1 hour 30 minutes |
-| 300,000-1,000,000 objects | Up to 2 hours |
+| 50,001-300,000 objects | Up to 1 hour 30 minutes |
+| 300,001-1,000,000 objects | Up to 2 hours |
 | More than 1,000,000 objects | Up to 2 hours and 30 minutes |
 
-The second time you create a difference report against the same backup, the report doesn't need the data loading step, so it finishes faster.
+After data loading, difference calculation time depends on the number of changes between the backup state and the current state. For 100,000 object and/or link changes, the calculation can take approximately 45 minutes.
 
-Difference calculation depends on the changes that have happened between the backup state and the current state. For 100,000 object and/or link changes, full report generation could take approximately 45 minutes to complete.
+### Example: First difference report performance
+
+The following example compares first-time difference report generation for Standard and Premium. The selected backup contains 300,000 objects, and 100,000 objects have changed since it was taken. For Standard, assume no previous operation has loaded the backup data.
+
+| Plan | Data loading | Difference calculation | Total report generation |
+| --- | --- | --- | --- |
+| **Standard** | Up to 1 hour 30 minutes | Up to 45 minutes | Up to 2 hours 15 minutes |
+| **Premium** | Skipped | Up to 45 minutes | Up to 45 minutes |
+
+After data loads for a Standard backup, subsequent difference reports and recovery operations against the same backup don't repeat the data loading phase.
 
 Note
 
@@ -90,7 +101,9 @@ When you recover your tenant, apply filters to control which objects to recover:
 - **By object ID**: Supply the object type and object ID to recover a specific object.
 - **All changes**: Recover all changed objects to the state captured in the selected backup.
 
-Recovery performance depends on the number of changes to be recovered. Recovering 500,000 changes can take up to 30 hours.
+If no previous operation has loaded a backup, recovery under the Standard plan begins with data loading. Under the Premium plan, recovery skips this phase.
+
+Recovery performance depends on the number of changes to be recovered. Recovering 500,000 changes can take up to 30 hours, excluding any time required for data loading.
 
 Note
 
@@ -98,7 +111,7 @@ Time estimates are approximate and provided for general planning purposes only. 
 
 Important
 
-Only one job can run at a time, including difference reports and recovery jobs. For example, if a difference report is running in your tenant, you can't start a recovery job. Wait until the current job finishes before starting a new one.
+Only one job can run at a time, including difference reports and recovery jobs. For example, if a difference report is running in your tenant, you can't start a recovery job. Wait until the current job finishes or cancel it before starting a new one.
 
 ## Recovery model
 

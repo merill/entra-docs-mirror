@@ -50,7 +50,7 @@ Microsoft Entra Agent ID brings together identity management, access protection,
 
 The [Microsoft Entra Agent identity platform](what-is-agent-id-platform) enables developers to create and manage [agent identities](what-are-agent-identities), which are specialized identity constructs built for AI agents. Agent identity blueprints serve as templates for creating individual agent identities with parent-child relationships, enabling consistent security policies across large numbers of agents. The platform supports standard protocols such as OAuth 2.0, Model Context Protocol (MCP), and agent-to-agent (A2A) for authentication and agent-to-agent communication.
 
-Microsoft Entra Agent ID works with agents built on Microsoft and non-Microsoft platforms. Organizations can [integrate third-party agents](configure-third-party-agents) from platforms such as AWS Bedrock and n8n by using the Microsoft Entra ID Auth SDK (sidecar) or workload identity federation, giving every agent a governed identity regardless of where it was built.
+Microsoft Entra Agent ID works with agents built on Microsoft and non-Microsoft platforms. Organizations can [integrate third-party agents](choose-agent-integration-path) from platforms such as AWS Bedrock and n8n by using the Microsoft Entra ID Auth SDK (sidecar) or workload identity federation, giving every agent a governed identity regardless of where it was built.
 
 ## Security and governance for agents
 
@@ -72,3 +72,5 @@ Microsoft Entra Agent ID is a product within Microsoft Entra that provides the p
 [Microsoft Agent 365](/en-us/microsoft-agent-365/overview) enables agents to operate across Microsoft 365 services and enterprise workflows, which requires a **Microsoft Agent 365** license for each user. For pricing details, see [Microsoft Agent 365 plans and pricing](https://www.microsoft.com/microsoft-agent-365#plans-and-pricing).
 
 Extending Microsoft Entra security features to agents requires Microsoft Agent 365. Agent 365 is included with Microsoft 365 E7 and is available as an add-on to Microsoft E5/A5/Business Premium (or Microsoft Defender Suite + Microsoft Purview Suite). See our latest [Agent 365 product terms for more details](https://www.microsoft.com/licensing/terms/productoffering/Agent365/EAEAS#clause-2755-h3-1).
+
+To build or connect an agent, [choose an integration path](choose-agent-integration-path). To administer an existing deployment, start with [Manage agent identities](manage-agent-identities-admin) and its owner, sponsor, and access controls.

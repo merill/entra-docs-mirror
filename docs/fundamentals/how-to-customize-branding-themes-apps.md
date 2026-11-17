@@ -12,10 +12,10 @@ ms.service: entra
 ms.subservice: fundamentals
 manager: dougeby
 description: Learn how to create branding themes and apply them to the sign-in experience for your application in Microsoft Entra ID.
-ms.date: 2026-08-18T00:00:00.0000000Z
+ms.date: 2026-11-13T00:00:00.0000000Z
 ms.reviewer: 
 ms.topic: how-to
-ms.custom: msecd-doc-authoring-1015
+ms.custom: msecd-doc-authoring-1026
 ai-usage: ai-assisted
 locale: en-us
 document_id: 00de8e12-082f-ab38-0c5a-ce5b6df78cd4
@@ -34,9 +34,11 @@ item_type: Content
 source_path: docs/fundamentals/how-to-customize-branding-themes-apps.md
 cmProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
+- https://authoring-docs-microsoft.poolparty.biz/devrel/b1cfdec6-b0c3-4209-818c-736879856e0e
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
 spProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
+- https://authoring-docs-microsoft.poolparty.biz/devrel/2d0723c1-cf38-4c30-ab3d-5df787b33270
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
 platformId: ee6f6e73-3693-63c8-3acf-2eb8bae5072e
 ---
@@ -50,6 +52,10 @@ This article describes how you can create multiple branding themes for different
 Important
 
 For external tenants, branding themes is generally available. For Microsoft Entra ID tenants, branding themes is in PREVIEW. This information relates to a prerelease product that may be substantially modified before it's released. Microsoft makes no warranties, expressed or implied, with respect to the information provided here.
+
+Important
+
+The modern authentication experience, new customization capabilities, and redesigned branding themes experience for Microsoft Entra External ID are scheduled to become available in public preview on December 7, 2026. For more information, see the [Microsoft Entra External ID customization overview](../external-id/customization-overview).
 
 ## Prerequisites
 

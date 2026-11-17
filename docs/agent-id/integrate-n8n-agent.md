@@ -11,9 +11,9 @@ ms.author: dmwendia
 ms.service: entra-id
 ms.subservice: agent-id
 manager: pmwongera
-description: Deploy n8n on Azure Container Apps and secure AI agent workflows with Microsoft Entra Agent ID and Microsoft Graph MCP Server for Enterprise.
+description: Deploy n8n on Azure Container Apps. Then use an agent identity to call Microsoft Graph or its MCP server.
 ms.topic: how-to
-ms.date: 2026-06-15T00:00:00.0000000Z
+ms.date: 2026-11-05T00:00:00.0000000Z
 ms.reviewer: astaykov
 ms.custom: msecd-doc-authoring-1013
 ai-usage: ai-assisted
@@ -33,21 +33,21 @@ monikers: []
 item_type: Content
 source_path: docs/agent-id/integrate-n8n-agent.md
 cmProducts:
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
 - https://authoring-docs-microsoft.poolparty.biz/devrel/68ec7f3a-2bc6-459f-b959-19beb729907d
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
 - https://authoring-docs-microsoft.poolparty.biz/devrel/5fc61396-d075-4560-aece-fdbda73d243f
 spProducts:
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
 - https://authoring-docs-microsoft.poolparty.biz/devrel/90370425-aca4-4a39-9533-d52e5e002a5d
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
 - https://authoring-docs-microsoft.poolparty.biz/devrel/ad9437c1-8cda-4537-ad69-b4b263652e13
 platformId: a395ecbc-7a0b-a09e-62c7-79f70de7b5db
 ---
 
 # Secure an n8n agent with Microsoft Entra Agent ID - Microsoft Entra Agent ID | Microsoft Learn
 
-This guide shows how to deploy [n8n](https://n8n.io/) on Azure Container Apps with Microsoft Entra Agent ID integration. The deployment uses the Azure Developer CLI (`azd`) to provision infrastructure, create Microsoft Entra identity objects, and configure n8n workflows automatically.
+This article shows you how to deploy [n8n](https://n8n.io/) on Azure Container Apps and configure sample workflows that use Microsoft Entra Agent ID. The Azure Developer CLI (`azd`) provisions the infrastructure, creates the Microsoft Entra objects, and configures n8n.
 
-Unlike the [Authentication with Microsoft Entra ID Auth SDK (sidecar)](authentication-with-auth-sdk-sidecar) pattern used for custom agents, the n8n integration uses the [n8n-nodes-entraagentid](https://www.npmjs.com/package/@astaykov/n8n-nodes-entraagentid) community node to manage token acquisition directly within n8n workflows. The deployed workflows demonstrate both autonomous (app-only) and on-behalf-of (OBO) token flows, with access to Microsoft Graph and the Microsoft Graph MCP Server for Enterprise, `https://mcp.svc.cloud.microsoft/enterprise`.
+This integration doesn't use the Microsoft Entra ID Auth SDK sidecar. The [n8n-nodes-entraagentid](https://www.npmjs.com/package/@astaykov/n8n-nodes-entraagentid) community node runs inside n8n. It reads the blueprint credential from the n8n credential store, obtains and caches access tokens, and makes them available to downstream workflow nodes. The sample includes autonomous (app-only) and on-behalf-of (OBO) flows for Microsoft Graph and the Microsoft Graph MCP Server for Enterprise.
 
 Note
 
@@ -57,8 +57,8 @@ This sample demonstrates the use of the `n8n-nodes-entraagentid` community node 
 
 Before you begin, make sure you have:
 
-- An Azure subscription with quota for Azure OpenAI (GPT-4o or similar), PostgreSQL Flexible Server, and Azure Container Apps.
-- **Global Administrator** role in your Microsoft Entra tenant. This role is required because the automation creates multiple Microsoft Entra objects and grants admin consent to permissions. Use [Privileged Identity Management (PIM)](/en-us/entra/id-governance/privileged-identity-management/pim-configure) to activate this role just-in-time.
+- An Azure subscription with quota for Azure OpenAI (GPT-4o or a similar model), Azure Database for PostgreSQL flexible server, and Azure Container Apps.
+- **Global Administrator** role in your Microsoft Entra tenant for the object creation and admin consent steps. Use [Privileged Identity Management (PIM)](/en-us/entra/id-governance/privileged-identity-management/pim-configure) to activate this role only when needed.
 
 **Azure Cloud Shell** (recommended) comes with everything preinstalled: Azure CLI, Azure Developer CLI (`azd`), PowerShell 7, and Git.
 
@@ -96,18 +96,24 @@ The entire deployment runs through a single `azd up` command that provisions Azu
     - **Azure location:** Select a region (for example, `northeurope`).
     - **n8n admin email:** Email for the n8n owner account.
     - **n8n admin password:** Password for the n8n owner account (minimum 8 characters, mixed case, number).
-4. During the postprovision phase, the automation performs a second sign-in. A device code is displayed. Open the URL and enter the code. This step requires the Global Administrator or Application Administrator role. The `azd up` postprovision hook then:
+4. During the postprovision phase, the automation performs a second sign-in. A device code is displayed. Open the URL and enter the code. Sign in with the Global Administrator account required for the setup and consent operations. The `azd up` postprovision hook then:
 
-    - Creates Microsoft Entra Agent ID objects (Blueprint, Agent Identity, Agent User).
-    - Enables the Microsoft Graph MCP Server for Enterprise.
-    - Waits for n8n to become ready.
-    - Creates the owner account.
-    - Installs the `@astaykov/n8n-nodes-entraagentid` community node.
-    - Generates an API key for n8n automation.
-    - Creates all five credentials with real values.
-    - Imports and activates the three demo workflows.
+    1. Creates the agent identity blueprint, agent identity, and agent user.
+    2. Enables the Microsoft Graph MCP Server for Enterprise.
+    3. Waits for n8n to become ready.
+    4. Creates the owner account.
+    5. Installs the `@astaykov/n8n-nodes-entraagentid` community node.
+    6. Generates an API key for n8n automation.
+    7. Creates all five credentials with real values.
+    8. Imports and activates the three demo workflows.
 
 When the deployment completes, the script prints your n8n URL and a summary of what was configured. The tenant ID is autodetected from your Azure sign-in, so no manual configuration is needed.
+
+### Verify the first workflow
+
+Open the printed n8n URL and sign in with the owner account you configured. Start with **HTTP Request with autonomous agent token**, the included app-only Microsoft Graph workflow. Run it and check the execution result for a successful Graph response before adding MCP or interactive sign-in to your test.
+
+A reachable n8n page verifies hosting, not Agent ID access. If the workflow fails, use the failing node to distinguish token acquisition from the Graph request. For a Graph authorization failure, review the agent identity's application permissions and admin consent. Don't use this autonomous credential to test the delegated-only MCP server.
 
 ## Explore the deployed resources
 
@@ -129,22 +135,21 @@ The deployment creates the following Azure resources:
 
 The automation creates these objects once and reuses them on subsequent runs:
 
-- **Agent identity blueprint:** App registration that issues tokens on behalf of Agent Identities via Federated Identity Credentials.
-- **Agent identity service principal:** The AI agent's service principal. Acquires Microsoft Graph and MCP tokens autonomously.
-- **Agent user account:** A cloud-only user identity that enables delegated (OBO) token flows.
+- **Agent identity blueprint:** App registration whose credential the community node uses to request tokens for the agent identity.
+- **Agent identity service principal:** Service principal represented by app-only tokens for autonomous Microsoft Graph calls.
+- **Agent user account:** Cloud-only user identity represented by delegated tokens in the OBO flow.
 - **Single page app (SPA) app registration:** Client app for the webhook demo, preconfigured with redirect URIs and Blueprint API permissions.
 
 ### Review the n8n credentials and workflows
 
 The postprovision hook automatically configures n8n:
 
-**Credentials created:**
+**Credentials configured:**
 
-- **EntraAgentID - Autonomous:** App-only Microsoft Graph API token (no user context).
-- **EntraAgentID - Agent User OBO:** Delegated token on behalf of the Agent User.
+- **EntraAgentID - Autonomous:** Blueprint credential used by the community node to obtain an app-only Microsoft Graph access token.
+- **EntraAgentID - Agent User OBO:** Credential configuration used by the community node to obtain a delegated access token for the agent user.
 - **Azure OpenAI:** Connection to the deployed GPT model for AI agent workflows.
-- **AgentID Auth Manager - Access Token:** Token forwarding from the Auth Manager to downstream nodes.
-- **Bearer from AuthManager:** Bearer token forwarding for MCP calls.
+- **Auth Manager credentials:** Access-token forwarding configuration used by downstream HTTP Request and MCP workflow nodes.
 
 **Workflows imported:**
 
@@ -152,14 +157,14 @@ The postprovision hook automatically configures n8n:
 - **HTTP Request with autonomous agent token:** Demonstrates an autonomous agent calling Microsoft Graph directly with an app-only token.
 - **Webhook - interactive agent (on-behalf-of):** Webhook entry point that receives a bearer token from the SPA, calls the Auth Manager, and responds via the Graph MCP Server on behalf of the signed-in user.
 
-### Understand token flow
+### Understand the token flow
 
 The n8n deployment supports two token flow patterns:
 
-- **Autonomous (app-only):** The n8n workflow uses the Agent Identity Blueprint credentials with Federated Identity Credentials to acquire an app-only token for the Agent Identity service principal. The workflow then calls Microsoft Graph directly with this token. No user context is involved.
-- **On-behalf-of (OBO) with MCP:** A browser-based SPA sends a bearer token to an n8n webhook. The webhook calls the Auth Manager workflow, which uses the Blueprint credentials to acquire a delegated token on behalf of the Agent User. The Auth Manager forwards the token to a subworkflow that calls the Microsoft Graph MCP Server for Enterprise, which translates MCP tool calls into Microsoft Graph API requests using the delegated token.
+- **Autonomous (app-only):** The community node reads the blueprint credential from the n8n credential store and obtains an app-only token that represents the agent identity service principal. The HTTP Request node passes the token in the authorization header when it calls Microsoft Graph. No user context is involved.
+- **On-behalf-of (OBO) with MCP:** The browser-based SPA obtains the signed-in user's token and passes it as a bearer token to the n8n webhook. The Auth Manager workflow gives that token and the blueprint credential to the community node, which performs the OBO exchange. The Auth Manager passes the resulting delegated token to the MCP subworkflow, which includes it when calling the Microsoft Graph MCP Server for Enterprise.
 
-In both patterns, the Agent Identity Blueprint acts as a token factory. The Agent Identity Blueprint issues tokens for Agent Identities without storing credentials on the agent itself. The Auth Manager community node handles token acquisition and AES-256-GCM caching within each workflow run.
+In both patterns, n8n stores the blueprint credential. The community node obtains and caches the access token by using AES-256-GCM encryption within each workflow run. Downstream nodes receive the token for the resource call; they don't receive the blueprint credential.
 
 ## Deploy the test SPA (optional)
 
@@ -194,11 +199,13 @@ The MCP Server only supports delegated permission flows. Use the autonomous cred
 
 ## Rerun and update the deployment
 
-The deployment is fully idempotent:
+The deployment reuses existing resources and reapplies sample configuration:
 
 - Bicep skips Azure resources that already exist.
 - The `azd` environment saves Microsoft Entra object IDs (Blueprint, Agent Identity, Agent User, Blueprint secret) after the first run and reuses them on subsequent runs.
 - n8n configuration (credentials, workflows) is applied fresh each run, which allows repairing a broken state.
+
+Preserve any workflow customizations before rerunning, and review the postprovision hooks because they reapply credentials and workflows. A rerun isn't a substitute for diagnosing a failed token exchange or missing permission grant.
 
 To rerun just the postprovision scripts without modifying infrastructure, run provisioning again. The Bicep templates detect no infrastructure changes and only execute the deployment hooks:
 

@@ -14,7 +14,7 @@ manager: dougeby
 description: Understand the SMS and voice retirement experience for users and administrators, including sign-in, password reset, NPS, and apps that don't support passkeys.
 ms.topic: concept-article
 ms.custom: msecd-doc-authoring-1026
-ms.date: 2026-11-13T00:00:00.0000000Z
+ms.date: 2026-11-16T00:00:00.0000000Z
 ai-usage: ai-generated
 locale: en-us
 document_id: 62c121ab-f705-2e8c-b126-1ed7068ea968
@@ -47,10 +47,6 @@ platformId: 84faece4-db9b-f6c6-10bb-1edb2e79cd99
 Microsoft-provided SMS and voice authentication retirement starts rolling out on **February 1, 2027**. What a user sees depends on their registered methods, the app they use, and whether your organization has migrated them to a telephony provider.
 
 This article explains the user and admin experiences when retirement reaches your tenant. For preparation steps and the full timeline, see [Passkeys by default and retirement of Microsoft-provided SMS and voice authentication](concept-sms-voice-retirement).
-
-Important
-
-**Review draft, not ready for publication.** This article describes behavior from product specifications approved for this draft. Confirm the SSPR timing, final UI, and items in Review before publication before publishing.
 
 ## At a glance
 
@@ -215,7 +211,7 @@ Test with representative users under the affected policies. Verify both passkey 
 
 ## What changes in My Sign-Ins
 
-When sign-in retirement reaches the tenant, the product specification describes these changes for Microsoft-provided SMS and voice registrations:
+When sign-in retirement reaches the tenant, these changes apply to Microsoft-provided SMS and voice registrations:
 
 - Existing SMS and voice registrations appear disabled or greyed out.
 - Users can't edit or replace the phone number for those registrations.
@@ -306,7 +302,7 @@ Unlike Scenario 5, this user has no permitted passkey registration path on the i
 
 ### When settings become editable again
 
-The following table summarizes the planned admin experience after retirement reaches the tenant. Retirement-locked SMS and voice group targeting remains read-only until you configure a telephony provider (CYOT), even if you turn both methods off. Passkey settings and the retirement profile remain editable.
+The following table summarizes the admin experience after retirement reaches the tenant. Retirement-locked SMS and voice group targeting remains read-only until you configure a telephony provider (CYOT), even if you turn both methods off. Passkey settings and the retirement profile remain editable.
 
 | Tenant state | SMS and voice settings | Passkey settings |
 | --- | --- | --- |
@@ -334,7 +330,7 @@ Sign-in and self-service password reset are separate. A user can retain sign-in 
 
 ### SSPR has a separate grace period
 
-The approved source specification describes a **tenant-specific 50-day SSPR grace period**:
+SSPR has a **tenant-specific 50-day grace period**:
 
 | Stage | Sign-in | SSPR |
 | --- | --- | --- |
@@ -378,7 +374,7 @@ The retirement doesn't automatically enable [password change after secure sign-i
 
 This feature lets eligible users change their cloud password from **Security info** in [My Sign-Ins](https://aka.ms/mysignins) without entering their current password, after signing in with a supported passwordless method such as a passkey. It's separate from SSPR and doesn't require SSPR registration.
 
-The source specification describes a banner at the SSPR entry point for tenants where this feature is enabled. It doesn't automatically redirect **Forgot my password** to [My Sign-Ins](https://aka.ms/mysignins).
+A banner appears at the SSPR entry point for tenants where this feature is enabled. It doesn't automatically redirect **Forgot my password** to [My Sign-Ins](https://aka.ms/mysignins).
 
 ## What happens to NPS and RADIUS
 
@@ -471,15 +467,3 @@ If affected users can't complete registration and need immediate sign-in relief,
 Within the SMS/voice-only retirement flow, **the blocking retirement prompt takes precedence over other prompts**, including a registration campaign for Microsoft Authenticator or a prompt from a Conditional Access policy. Another prompt doesn't replace the retirement passkey registration requirement or let the user skip it.
 
 This precedence is about the prompt shown to the user, not a policy bypass. Passkey registration still respects the user's assigned profiles, and completing registration doesn't override Conditional Access requirements for access to the application. See Custom authentication strengths can prevent passkey sign-in.
-
-## Review before publication
-
-This section is for the documentation and product reviewers. The following bullets are independent verification items, not sequential procedure steps. Resolve them and remove all review notes before publishing.
-
-- Confirm the 50-day SSPR grace period and timing rules. The three newly supplied sources don't cover SSPR, so its existing guidance still needs source confirmation.
-- Confirm final admin labels, banners, passkey profile behavior, and the registration campaign's editable controls.
-- Confirm method-management behavior for users migrated to a telephony provider.
-- Confirm final screen text, helpdesk recovery actions, and error-specific retries. For unsupported browser/device sessions, the supplied screen points to aka.ms/addpasskey on another device or the help desk. Preserve the separate, author-confirmed My Sign-Ins recovery path for registering another method.
-- Confirm final NPS error text and any additional unsupported-protocol scenarios without inventing error codes or redirect promises. Preserve the deployment-specific TOTP restrictions and supported customer-managed telephony option.
-- Align the retirement overview and FAQ with the more detailed SSPR timing and identity verification behavior described here.
-- Confirm password change after secure sign-in availability and links.

@@ -1,21 +1,22 @@
 ---
 layout: Conceptual
-title: Enable and configure account recovery in Microsoft Entra ID - Microsoft Entra ID | Microsoft Learn
+title: Configure account recovery settings in Microsoft Entra ID - Microsoft Entra ID | Microsoft Learn
 canonicalUrl: https://learn.microsoft.com/en-us/entra/identity/authentication/how-to-account-recovery-enable
 uhfHeaderId: MSDocsHeader-Entra
 breadcrumb_path: /entra/breadcrumb/toc.json
 feedback_system: Standard
 feedback_product_url: https://feedback.azure.com/d365community/forum/22920db1-ad25-ec11-b6e6-000d3a4f0789
-author: Justinha
-ms.author: justinha
+author: rogulati
+ms.author: rogulati
 ms.service: entra-id
 ms.subservice: authentication
 manager: dougeby
-description: Configure account recovery in Microsoft Entra ID so users can regain access through identity verification. Learn how to set up profiles and providers.
+description: Enable the Account recovery policy in Microsoft Entra ID and configure actions after recovery, including Temporary Access Pass issuance and stale credential cleanup.
 ms.reviewer: tilarso
 ms.topic: how-to
-ms.custom: msecd-doc-authoring-108, msecd-doc-authoring-1012
-ms.date: 2026-04-29T00:00:00.0000000Z
+ms.custom: sfi-ga-nochange, sfi-image-nochange, msecd-doc-authoring-108, msecd-doc-authoring-1012, msecd-doc-authoring-1026
+ms.date: 2026-11-13T00:00:00.0000000Z
+ai-usage: ai-assisted
 locale: en-us
 document_id: 92772aeb-f24b-9749-9f52-b24aeefe235f
 document_version_independent_id: 92772aeb-f24b-9749-9f52-b24aeefe235f
@@ -32,207 +33,121 @@ monikers: []
 item_type: Content
 source_path: docs/identity/authentication/how-to-account-recovery-enable.md
 cmProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
+- https://authoring-docs-microsoft.poolparty.biz/devrel/b1cfdec6-b0c3-4209-818c-736879856e0e
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
-- https://authoring-docs-microsoft.poolparty.biz/devrel/2624a017-7337-44fa-9494-a407bb0e59fa
 spProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
+- https://authoring-docs-microsoft.poolparty.biz/devrel/2d0723c1-cf38-4c30-ab3d-5df787b33270
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
-- https://authoring-docs-microsoft.poolparty.biz/devrel/a438284e-c3c3-4c36-ab0b-aa7c244b912c
 platformId: b5e832ac-6e6a-c207-d102-2d2b247b75e9
 ---
 
-# Enable and configure account recovery in Microsoft Entra ID - Microsoft Entra ID | Microsoft Learn
+# Configure account recovery settings in Microsoft Entra ID - Microsoft Entra ID | Microsoft Learn
 
-Account recovery is a Microsoft Entra ID feature that helps users regain access to their accounts when they lose all their authentication methods — such as when they lose a phone, hardware token, or their passkeys. The feature uses third-party identity verification providers to verify a user's identity through government-issued identification, allowing them to recover their account and re-enroll authentication methods.
+Account recovery settings control whether users can recover their accounts and how they register replacement authentication methods after identity verification. Use this article to enable the tenant's Account recovery policy, choose Temporary Access Pass (TAP) issuance and stale-credential cleanup settings, and test the recovery experience.
 
-This article walks through the complete process of enabling and configuring account recovery, from initial setup through creating identity verification profiles and deploying to production.
+ID verification profiles are created and managed in Microsoft Entra Verified ID, separately from Account recovery settings.
+
+Before you begin, prepare a recovery profile and confirm licensing, Face Check setup, and administrative permissions. See Prerequisites.
 
 ## Prerequisites
 
-- A Microsoft Entra ID P1 license
-- [Verified ID](../../verified-id/verifiable-credentials-configure-tenant-quick) enabled and [Face Check](../../verified-id/using-facecheck) configured in your tenant
-- The [Authentication Administrator](/en-us/entra/identity/role-based-access-control/permissions-reference#authentication-administrator) role in the Microsoft Entra tenant
-- The Contributor or Billing Administrator role for your Azure subscription (required for identity verification provider subscription)
+Before configuring recovery settings, prepare:
 
-## Open Account Recovery
+- A Microsoft Entra ID P1 license and the applicable [identity verification licenses](../../fundamentals/licensing#identity-verification).
+- [Verified ID](../../verified-id/verifiable-credentials-configure-tenant-quick) enabled and [Face Check](../../verified-id/using-facecheck) configured in your tenant.
+- The [Authentication Policy Administrator](../role-based-access-control/permissions-reference#authentication-policy-administrator) role to manage Account recovery settings.
+- An ID verification profile for recovery, configured in Microsoft Entra Verified ID, and a dedicated test group.
+- Microsoft Authenticator version 6.2610.7075 or later for Android, or version 6.8.58 or later for iOS, installed on users' devices.
+- Supported replacement authentication methods enabled for the users in scope. For the TAP-based path, confirm that users are enabled for the Temporary Access Pass method.
 
-1. Sign in to the [Microsoft Entra admin center](https://entra.microsoft.com) as at least an [Authentication Administrator](/en-us/entra/identity/role-based-access-control/permissions-reference#authentication-administrator).
+## Open Account recovery settings
+
+To open the settings blade:
+
+1. Sign in to the [Microsoft Entra admin center](https://entra.microsoft.com) with permission to manage recovery settings.
 2. Go to **Entra ID** &gt; **Account recovery**.
-3. If this is your first time opening Account Recovery, you see the **Getting started** page with a setup checklist.
-4. After setup is complete, the **Account Recovery** overview page shows the status of each setup task and provides information about the feature.
+3. Open **Settings (preview)**.
 
-    [![Screenshot that shows the Account Recovery overview page with the getting started checklist and feature information.](media/how-to-account-recovery-enable/account-recovery-overview.png)](media/how-to-account-recovery-enable/account-recovery-overview.png#lightbox)
+## Configure an ID verification profile
 
-The overview page guides you through the required setup tasks:
+Create and manage profiles in **Verified ID** &gt; **ID verification profiles** &gt; **Profiles**. For provider selection, user groups, profile mode, and account-validation steps, follow [Create an ID verification profile](../../verified-id/how-to-create-id-verification-profile). Select **Recovery** as the profile purpose.
 
-- **Set up Verified ID** — Configure Verified ID in a few clicks to support secure, compliant account recovery.
-- **Set up Face Check with Verified ID** — Use Face Check to verify identity so the right users regain access.
-- **Set up passkeys after recovery** — Ask users to add a passkey after they recover access. This helps bring accounts back to a strong state. If passkeys aren't enabled in your Authentication Method Policy, enable passkeys so users can recover.
-- **Select and subscribe to your first identity verification provider** — Choose an identity verification provider from the Microsoft Security Store for account recovery.
-- **Create your first identity verification profile** — Complete the configuration wizard to connect your provider and turn on account recovery.
+Profile configuration isn't part of the Account recovery settings blade. Creating a profile doesn't enable the tenant's Account recovery policy or choose actions after recovery.
 
-Tip
+## Enable the Account recovery policy
 
-Select **Estimate savings** on the overview page to open the cost savings estimator. This tool helps you project potential savings by comparing the cost of traditional help desk recovery against self-service account recovery.
+In the new Account recovery policy experience, the policy is disabled by default for both new and existing tenants. Enable the policy before users can use account recovery.
 
-[![Screenshot that shows the cost savings estimator panel with fields for users, recovery rates, and projected savings.](media/how-to-account-recovery-enable/cost-savings-estimator.png)](media/how-to-account-recovery-enable/cost-savings-estimator.png#lightbox)
+If your tenant already uses account recovery from an earlier preview, you also need to enable the new policy to continue using the feature. Existing identity verification profiles alone don't enable the new policy.
 
-## Subscribe to an identity verification provider
+To prepare tenant-level recovery:
 
-Before you create an identity verification profile, subscribe to at least one identity verification provider through the Microsoft Security Store.
+1. In Account recovery settings, enable the tenant's Account recovery policy.
+2. Confirm that the policy is enabled before testing recovery with users in scope.
 
-1. On the Account Recovery overview page, select **Select and subscribe to your first identity verification provider**, or select the **Profiles** tab and then select **Add**.
-2. In the **Identity verification providers** panel, browse the available providers. You can filter by compliance standard.
+Enabling the policy is separate from configuring actions after recovery, such as issuing a TAP or removing stale credentials. The default TAP issuance setting doesn't enable account recovery for your tenant.
 
-    [![Screenshot that shows the identity verification providers panel with available providers, pricing, compliance badges, and subscription options.](media/how-to-account-recovery-enable/select-idv-provider.png)](media/how-to-account-recovery-enable/select-idv-provider.png#lightbox)
-3. For a provider you haven't subscribed to, select **Get Solution** to open the provider's listing in the Microsoft Security Store.
-4. In the Microsoft Security Store:
+## Configure recovery settings
 
-    1. Under **Account details**, select a **Billing subscription** and **Resource group**, and provide a **Resource name**.
-    2. Under **Solution details**, select **Choose plan** and select a pricing plan.
-    3. Select **Next**, confirm your order details, and select **Place order**.
-5. When your SaaS subscription is ready, select **Configure account now**. You're redirected to the SaaS provider's admin portal to complete activation.
-6. On the provider's **General** page, provide the required details (contact name, email, phone number) and select **Activate**.
-7. After you see a success confirmation, return to the Account Recovery page in the Microsoft Entra admin center.
+Use **Actions after recovery** in Account recovery settings to choose how users register replacement methods. These settings are separate from tenant-level enablement and ID verification profile management.
 
-For providers you've already subscribed to, select **Select** to use them in a profile.
+First, enable the Account recovery policy. Confirm that the preview controls are available in your tenant before changing them.
 
-## Create an identity verification profile
+| Setting | Behavior |
+| --- | --- |
+| **Issue Temporary Access Pass** on | Default for new and existing tenants. Successful account validation issues a TAP for the established registration flow. Stale-credential cleanup isn't available. |
+| **Issue Temporary Access Pass** off | Explicit preview opt-in. Successful account validation grants access to registration in the same recovery session without a TAP on supported devices. When passkey attestation is required, this path is supported only on Android; iOS continues to receive a TAP. Stale-credential cleanup becomes available. |
+| **Stale credential cleanup** | Off by default; explicitly opt in during preview with TAP issuance off. After successful recovery and replacement-passkey registration, deletes all previously registered authentication methods while preserving the new passkey. If deletion fails, recovery remains successful. Turning TAP issuance on turns cleanup off before saving. |
 
-Identity verification profiles define how account recovery works for a specific group of users — which provider performs verification, what recovery mode to use, and how account validation is handled. You can create multiple profiles to support different user populations with different configurations.
+To choose the actions after recovery:
 
-1. In the Microsoft Entra admin center, go to **Entra ID** &gt; **Account recovery** and select the **Profiles** tab.
-2. Select **Add** to start the profile creation wizard.
+1. Review whether users should receive a TAP or continue to registration without a TAP on supported devices.
+2. Choose the TAP issuance setting for the intended registration path.
+3. If TAP issuance is off, review the scope and timing of stale-credential cleanup before explicitly enabling it.
+4. If you turn TAP issuance back on, confirm that cleanup is off before saving the settings.
+5. Apply your settings and test recovery through registration of a replacement method, not just successful identity verification.
 
-### Add profile details
+Note
 
-1. On the **Profile details** step, enter a **Name** for the profile and an optional **Description** to help you identify it later.
+When passkey attestation is required, turning off TAP issuance is supported only on Android. iOS continues to receive a TAP, even when TAP issuance is turned off, because the TAP-free registration path doesn't support attestation on iOS.
 
-    [![Screenshot that shows the profile details step of the wizard with fields for profile name and description.](media/how-to-account-recovery-enable/profile-setup-name.png)](media/how-to-account-recovery-enable/profile-setup-name.png#lightbox)
-2. Select **Next**.
+## Test recovery settings
 
-### Choose a recovery mode
+Use a small test group to validate the selected registration path:
 
-1. On the **Recovery mode** step, select one of these modes:
-
-    - **Evaluation** — Users can test the identity verification process without actually recovering their accounts. Use this mode to validate the flow before production deployment.
-    - **Production** — Users who complete identity verification can fully recover their accounts and re-enroll authentication methods.
-
-    [![Screenshot that shows the recovery mode step with Evaluation and Production options and their descriptions.](media/how-to-account-recovery-enable/profile-recovery-mode.png)](media/how-to-account-recovery-enable/profile-recovery-mode.png#lightbox)
-
-    Note
-
-    Start with **Evaluation** mode to test the identity verification flow with a small group before enabling full recovery. In Evaluation mode, accounts are **not** recovered — users can only verify the process works.
-2. Select **Next**.
-
-### Select user groups
-
-1. On the **User group selection** step, choose which users can use this recovery profile:
-
-    - Select the **Include** tab to target specific groups. Choose **All users** or **Select targets** and then **Select groups** to pick specific groups.
-    - Select the **Exclude** tab to exclude specific groups from the profile. Exclusions are feature-wide.
-
-    [![Screenshot that shows the user group selection step with Include and Exclude tabs and group selection options.](media/how-to-account-recovery-enable/profile-group-selection.png)](media/how-to-account-recovery-enable/profile-group-selection.png#lightbox)
-2. Select **Next**.
-
-### Select an identity verification provider
-
-1. On the **Identity verification providers** step, select a provider to use for this profile. The list shows providers you've already subscribed to and providers available for new subscriptions.
-
-    [![Screenshot that shows the identity verification providers step with available providers and their compliance badges.](media/how-to-account-recovery-enable/profile-idv-partner.png)](media/how-to-account-recovery-enable/profile-idv-partner.png#lightbox)
-
-    - For subscribed providers, select **Select**.
-    - For new providers, select **Get Solution** to subscribe through the Microsoft Security Store first.
-2. Select **Next**.
-
-### Configure account validation
-
-1. On the **Account validation** step, configure how identity claims from the verification provider are matched against user properties in Microsoft Entra ID.
-
-    [![Screenshot that shows the account validation step with ID claim matching, match confidence, and custom authentication extension options.](media/how-to-account-recovery-enable/profile-account-validation.png)](media/how-to-account-recovery-enable/profile-account-validation.png#lightbox)
-
-    **ID Claim matching** shows the default claim mapping between the provider's claims and Microsoft Entra attributes:
-
-    | Provider claim (Target) | Entra claim (Source) |
-    | --- | --- |
-    | First name | firstName |
-    | Last name | surName |
-2. Under **Match confidence**, select the matching behavior:
-
-    - **Exact** — Claims must match exactly.
-    - **Relaxed** — Uses cross-field word matching to accommodate variations in how names appear on government-issued documents versus Microsoft Entra ID user profiles. For details on how relaxed matching works, see [How is the Verified ID matched against Microsoft Entra ID account details?](self-service-account-recovery#how-is-the-verified-id-matched-against-microsoft-entra-id-account-details-)
-3. (Recommended) Under **Additional claim validations**, enable a custom authentication extension to add organization-specific account matching logic during recovery. For an example of a custom authentication extension that validates Verified ID claims during Microsoft Entra account recovery, see [Create a custom authentication extension for account recovery claim validation](/en-us/entra/identity-platform/tutorial-custom-authentication-extension-account-recovery).
-
-    This step requires a pre-configured Azure Function, Logic App, or REST endpoint that connects to your organization's data — such as an HRIS system, employee directory, or other authoritative source. During recovery, verified claims from the identity verification provider are passed to your endpoint, which validates them against your organizational data and returns a match decision.
-
-    Important
-
-    All data processed by the custom authentication extension stays within your organization's trust boundary. No organizational data is shared with Microsoft — only the match result is returned to the account recovery flow.
-
-    To configure additional claim validation:
-
-    1. Set the **Enable** toggle to on.
-    2. Select an existing custom authentication extension, or select **Create new extension** to register a new Azure Function, Logic App, or REST API endpoint.
-
-    [![Screenshot that shows the custom authentication extension configuration with enable toggle and extension selection.](media/how-to-account-recovery-enable/profile-account-validation-scrolled.png)](media/how-to-account-recovery-enable/profile-account-validation-scrolled.png#lightbox)
-4. Select **Next**.
-
-### Review and finalize
-
-1. On the **Review and finalize** step, review all your configuration choices:
-
-    - **Recovery mode** — Evaluation or Production
-    - **User group** — Included and excluded groups
-    - **Identity verification providers** — The selected provider
-    - **Account validation** — Claim mappings, match confidence, and custom authentication extension settings
-
-    [![Screenshot that shows the review and finalize step with a summary of all profile configuration settings.](media/how-to-account-recovery-enable/profile-review-create.png)](media/how-to-account-recovery-enable/profile-review-create.png#lightbox)
-
-    Select **edit** next to any section to go back and change settings.
-2. Select **Complete** to create the profile.
-
-## Manage identity verification profiles
-
-After you create one or more profiles, the **Profiles** tab shows all your identity verification profiles in a table view.
-
-[![Screenshot that shows the Profiles tab with a table listing profile name, provider, state, mode, priority, and actions.](media/how-to-account-recovery-enable/profiles-list.png)](media/how-to-account-recovery-enable/profiles-list.png#lightbox)
-
-From this page, you can:
-
-- **Add** — Create another identity verification profile.
-- **Refresh** — Update the profiles list.
-- **View audit logs** — Review audit log entries for account recovery changes.
-- **Set priority** — Change the order in which profiles are evaluated when a user has access to multiple profiles.
-- **Edit columns** — Customize which columns appear in the table.
-- **Edit** a profile — Select the edit icon to modify an existing profile's configuration.
-- **Copy** a profile — Duplicate an existing profile as a starting point for a new one.
-- **Delete** a profile — Remove a profile that is no longer needed.
-
-## Verify user profiles are ready for account recovery
-
-For account recovery to work correctly, user properties must match the claims returned by the identity verification provider.
-
-1. Sign in to the [Microsoft Entra admin center](https://entra.microsoft.com) as at least a [User Administrator](/en-us/entra/identity/role-based-access-control/permissions-reference#user-administrator).
-2. Go to **Entra ID** &gt; **Users** &gt; **All Users** and select the user you want to verify.
-3. Select **Edit properties**.
-4. Confirm that the **First Name** and **Last Name** properties are filled in and match the user's government-issued ID. The display name isn't used in the account recovery matching process — only the **First name** and **Last name** properties are used.
-
-Important
-
-If the First Name or Last Name properties are blank, account recovery can't match the claims from the identity verification provider. The real name on a user's government ID may not match what's listed in their Microsoft Entra ID account — verify and correct these properties before enabling recovery for those users.
-
-## Move a profile from evaluation to production
-
-After you test account recovery in evaluation mode and confirm that identity verification works as expected, update the profile to enable full recovery.
-
-1. In the Microsoft Entra admin center, go to **Entra ID** &gt; **Account recovery** and select the **Profiles** tab.
-2. Select the edit icon next to the profile you want to update.
-3. On the **Recovery mode** step, select **Production** to enable full account recovery.
-4. Review and confirm any other settings, then select **Complete** to apply the changes.
-
-Once a profile is set to Production mode, users in the scoped groups can use account recovery to fully regain access to their accounts. They complete identity verification through the configured provider and receive a Temporary Access Pass to re-enroll their authentication methods.
+1. Confirm the recovery profile's mode and user scope in Microsoft Entra Verified ID. **Evaluation** tests verification without recovering the account; use **Production** only for a deliberate end-to-end recovery test.
+2. Confirm that the tenant's Account recovery policy is enabled.
+3. Complete identity verification and account validation with a test user.
+4. With TAP issuance on, confirm that the user receives a TAP and can register a replacement authentication method.
+5. With TAP issuance off, validate the required device and registration-method combination. If passkey attestation is required, use Android for the TAP-free path; iOS continues to receive a TAP.
+6. Confirm that replacement-method registration completes. Successful identity verification alone doesn't establish that recovery is complete.
 
 Caution
 
-Review which users are in scope for account recovery before switching to Production mode. Confirm that only appropriate user populations have access to this capability based on your organization's security requirements.
+Review which users are in scope before using a recovery profile in Production mode. Confirm that only the intended test users can participate before expanding the deployment.
+
+For the user journey, see [Perform account recovery](how-to-account-recovery-for-users).
+
+## Review policy and extension integration
+
+Use Conditional Access to protect the **Account onboarding and recovery** user action. Review targeting and exclusions with your policy owner so that unrelated access requirements don't block the recovery journey. See [Protect onboarding and recovery with Conditional Access](../conditional-access/policy-require-identity-verification#configure-an-onboarding-and-recovery-policy) for configuration guidance.
+
+Review the [global onboarding and recovery exclusion](../conditional-access/policy-require-identity-verification#enable-the-global-onboarding-and-recovery-exclusion-preview) with your Conditional Access policy owner. This tenant-wide setting excludes the combined onboarding and recovery user action from **All resources** policies. Policies targeting the user action still apply, and ordinary application access remains subject to resource-access policies. Configure and test the intended user-action policy rather than using the exclusion as a replacement for protecting recovery.
+
+Conditional Access policies can block account recovery if they require controls that aren't supported for the onboarding and recovery user action.
+
+Note
+
+**Terms of use**, **Require authentication strength**, and most other Microsoft Entra-specific controls aren't supported for the onboarding and recovery user action. Unsupported recovery policy requirements can block recovery or leave intended requirements unenforced. Review the [control limitations](../conditional-access/policy-require-identity-verification#review-control-limitations) and test policy enforcement before rollout.
+
+Before enabling account recovery, review your Conditional Access policies and test the recovery experience with a small group of users. Successful identity verification alone doesn't confirm that recovery can complete.
+
+If recovery is blocked, review the Conditional Access results in the sign-in logs to identify the blocking policy.
+
+If you can't save the Conditional Access policy, review [Policy configuration errors](../conditional-access/policy-require-identity-verification#troubleshoot-onboarding-and-recovery-policy-configuration-errors) for client-app and named-location validation guidance. Policy-save errors are separate from a saved policy blocking recovery.
+
+Configure custom claim validation in the [ID verification profile](../../verified-id/how-to-create-id-verification-profile#configure-an-optional-custom-extension), not in recovery settings.
+
+Recovery currently supports one custom authentication extension. You can link the same extension to multiple identity verification profiles.

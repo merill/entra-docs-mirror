@@ -12,7 +12,8 @@ ms.service: entra-id
 ms.subservice: agent-id
 manager: pmwongera
 description: Learn about the Microsoft Agent Identity Platform, a comprehensive identity, and authorization framework designed specifically for AI agents. Key concepts include agent registry, authentication protocols, tokens, claims, and agent discovery capabilities.
-ms.date: 2025-10-24T00:00:00.0000000Z
+ms.date: 2026-11-05T00:00:00.0000000Z
+ai-usage: ai-assisted
 ms.topic: concept-article
 ms.reviewer: dastrock
 locale: en-us
@@ -57,13 +58,15 @@ Microsoft Entra Agent ID is a product within Microsoft Entra that provides the p
 
 Extending Microsoft Entra security features to agents requires Microsoft Agent 365. Agent 365 is included with Microsoft 365 E7 and is available as an add-on to Microsoft E5/A5/Business Premium (or Microsoft Defender Suite + Microsoft Purview Suite). See our latest [Agent 365 product terms for more details](https://www.microsoft.com/licensing/terms/productoffering/Agent365/EAEAS#clause-2755-h3-1).
 
+To build or connect an agent, [choose an integration path](choose-agent-integration-path) based on its platform and hosting environment. To administer existing identities, start with [Manage agent identities](manage-agent-identities-admin).
+
 ## Platform architecture overview
 
 The Microsoft agent identity platform is built on several foundational technical components that work together to provide a complete identity and authorization solution for AI agents:
 
 - **Authentication service**: An OAuth 2.0 and OpenID Connect (OIDC) standard-compliant authentication service that enables secure, standards-based authentication for agents. This service issues tokens that agents use to authenticate to resources and APIs, supporting both application-only and delegated access scenarios. There are three objects that form the core identity constructs in the platform: agent identity blueprint, agent identity, and agent's user account.
 - **SDKs**: Software development kits that enable developers to integrate with the Microsoft agent identity platform. SDKs abstract the complexity of token acquisition and protocol handling, making it straightforward for platforms that build agents to incorporate identity management into their applications. Microsoft agent identity platform includes two SDKs: Microsoft Identity Web (.NET) and the Microsoft Entra ID Auth SDK (sidecar).
-- **Agent management**: A comprehensive agent metadata store and administrative interface within the Microsoft Entra admin center that enables administrators to discover, view, configure, and manage agents. The platform provides the agent registry that is a centralized repository for registering and managing agents across an organization.
+- **Agent management**: The Microsoft Entra admin center provides identity-management views for agent identities and blueprints. Microsoft Agent 365 provides the broader organizational agent registry. For which experience to use, see [Agent registry convergence](agent-registry-convergence).
 
 These technical components work together with the identity constructs described in the following section to provide complete platform functionality.
 
@@ -86,4 +89,4 @@ The Microsoft agent identity platform is designed to work seamlessly across the 
 - **Platforms and services that create agents**: Platforms that create and manage agents can integrate with the Microsoft agent identity platform to secure agents. This includes Microsoft-owned platforms like Copilot Studio and non-Microsoft platforms such as Amazon Web Services (AWS) Bedrock, n8n, and other agent frameworks that support OAuth 2.0 and OpenID Connect. Organizations can onboard agents from these platforms by using the [Microsoft Entra ID Auth SDK (sidecar)](authentication-with-auth-sdk-sidecar) or [workload identity federation](/en-us/entra/workload-id/workload-identity-federation), with no platform-specific credential management required.
 - **Extended Microsoft identity and security products**: Integration with Conditional Access, identity protection, identity governance, Global Secure Access, and other security services enable comprehensive agent security.
 
-This interoperability ensures that organizations can build, deploy, and manage agent identities consistently regardless of where agents are created or deployed. For step-by-step guidance on integrating non-Microsoft agents, see [Integrate third-party agents with Microsoft Entra Agent ID](configure-third-party-agents).
+This interoperability ensures that organizations can build, deploy, and manage agent identities consistently regardless of where agents are created or deployed. For step-by-step guidance on integrating non-Microsoft agents, see [Choose an integration path for an agent](choose-agent-integration-path).

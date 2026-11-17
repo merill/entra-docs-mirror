@@ -33,11 +33,11 @@ source_path: docs/identity-platform/v2-overview.md
 cmProducts:
 - https://authoring-docs-microsoft.poolparty.biz/devrel/5f286262-a4cb-47f4-92d3-dc24f172492b
 - https://authoring-docs-microsoft.poolparty.biz/devrel/1e31b9be-b6e9-4221-a20b-d1460dbd5dfa
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
+- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
 spProducts:
 - https://authoring-docs-microsoft.poolparty.biz/devrel/90571f66-8410-4272-8117-79ce87fc2dcc
 - https://authoring-docs-microsoft.poolparty.biz/devrel/8d63a4c4-4889-43b4-a98e-8e50dbfdb083
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
 platformId: 18588237-f64f-4136-7687-47b8fafba655
 ---
 
@@ -78,7 +78,7 @@ Workforce and external tenants have different capabilities and limitations. Choo
 
 ## Getting started
 
-Choose your preferred [application scenario](authentication-flows-app-scenarios). Each of these scenario paths has an overview and links to a quickstart to help you get started:
+Choose your preferred [application scenario](authentication-flows-app-scenarios). Use the following guides to get started:
 
 Browser based authentication (Workforce and External tenants):
 
@@ -91,10 +91,9 @@ Browser based authentication (Workforce and External tenants):
 
 Native authentication (External tenants only):
 
-- [React Single-page app (SPA)](quickstart-native-authentication-single-page-app-react-sign-in)
-- [Android app](quickstart-native-authentication-android-sign-in)
-- [iOS app](quickstart-native-authentication-ios-sign-in)
-- [macOS app](quickstart-native-authentication-macos-sign-in)
+- [React Next.js single-page app (SPA)](quickstart-native-authentication).
+- [Android SDK and sample guidance](how-to-migrate-native-authentication-v1-v2#android-migration).
+- [iOS and macOS SDK guidance](how-to-migrate-native-authentication-v1-v2#ios-migration).
 
 For a more in-depth look at building applications using the Microsoft identity platform, see our multipart tutorial series for the following applications:
 
@@ -103,12 +102,6 @@ Browser based authentication (Workforce and External tenants):
 - [React Single-page app (SPA)](tutorial-single-page-app-react-prepare-app)
 - [ASP.NET Core Web app](tutorial-web-app-dotnet-prepare-app)
 - [ASP.NET Core API](tutorial-web-api-dotnet-register-app)
-
-Native authentication (External tenants only):
-
-- [React Single-page app (SPA)](tutorial-native-authentication-single-page-app-react-sign-up)
-- [Android Kotlin app](tutorial-native-authentication-prepare-android-app)
-- [iOS/macOS Switch app](tutorial-native-authentication-prepare-ios-macos-app)
 
 As you work with the Microsoft identity platform to integrate authentication and authorization in your apps, you can refer to this image that outlines the most common app scenarios and their identity components. Select the image to view it full-size.
 

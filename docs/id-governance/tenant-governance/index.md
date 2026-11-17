@@ -12,7 +12,7 @@ ms.author: owinfrey
 ms.service: entra-id-governance
 manager: dougeby
 description: Learn how to discover and govern Microsoft Entra tenants, monitor configuration, and evaluate resource changes with policies.
-ms.date: 2026-10-12T00:00:00.0000000Z
+ms.date: 2026-11-11T00:00:00.0000000Z
 ms.topic: landing-page
 ai-usage: ai-assisted
 locale: en-us
@@ -69,9 +69,17 @@ Microsoft Entra tenant governance helps organizations discover and govern tenant
 
 - [Enable tenant discovery](how-to-enable-tenant-discovery)
 - [Set up a governance relationship](how-to-set-up-governance-relationship)
+- [Manage expiration and renewal (Preview)](how-to-manage-relationship-expiration)
+- [Set up multi-tier relationships (Preview)](how-to-set-up-multi-tier-governance)
+- [Switch between governed tenants (Preview)](how-to-switch-governed-tenants)
 - [Use delegated administration and monitor activity](how-to-delegated-administration)
 - [Configuration management](configuration-management)
 - [Create a tenant](how-to-create-tenant)
+
+## Resource policy guides (preview)
+
+### How-To Guide
+
 - [Safely deploy resource policy assignments](resource-policy-safe-deployment)
 - [Manage resource policies in the Microsoft Entra admin center](resource-policy-manage-portal)
 - [Analyze resource policy evaluation audit logs](resource-policy-logs)

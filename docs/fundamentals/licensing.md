@@ -6,14 +6,16 @@ uhfHeaderId: MSDocsHeader-Entra
 breadcrumb_path: /entra/breadcrumb/toc.json
 feedback_system: Standard
 feedback_product_url: https://feedback.azure.com/d365community/forum/79b1327d-d925-ec11-b6e6-000d3a4f06a4
-author: kenwith
-ms.author: kenwith
+author: tilarso
+ms.author: tilarso
 ms.service: entra
 ms.subservice: fundamentals
 manager: dougeby
 description: This article documents licensing requirements for Microsoft Entra features.
 ms.topic: concept-article
-ms.date: 2026-06-18T00:00:00.0000000Z
+ms.date: 2026-10-07T00:00:00.0000000Z
+ms.custom: msecd-doc-authoring-108
+ai-usage: ai-assisted
 locale: en-us
 document_id: 4adc9210-6b5b-0bc6-858f-ac8890d95baa
 document_version_independent_id: 6f7a6b66-304b-7196-89e1-875b86c4a264
@@ -120,6 +122,36 @@ Microsoft 365 E7 includes the Microsoft Entra Suite, which provides all Microsof
 | Risk-based Conditional Access |  |  |  |  | ✅ |
 | Self-service password reset (SSPR) | ✅ | ✅ | ✅ | ✅ | ✅ |
 | SSPR with writeback |  |  |  | ✅ | ✅ |
+
+## Identity verification
+
+Review the licensing requirements for each capability in your identity verification journey:
+
+- [Authentication](licensing#authentication) for authentication methods and account recovery.
+- [Conditional Access](licensing#microsoft-entra-conditional-access) for policies that require identity verification.
+- [Microsoft Entra ID Protection](licensing#microsoft-entra-id-protection) for risk-based policies and remediation.
+- [Microsoft Entra ID Governance](licensing#microsoft-entra-id-governance) for Lifecycle Workflows and entitlement management.
+- [Microsoft Entra Verified ID](licensing#microsoft-entra-verified-id) for credential issuance, verification, and Face Check.
+
+### Features by license
+
+The following table shows identity verification features by license. A check mark indicates that the feature is included, and **Add-on** indicates a separate purchase. Blank cells indicate that the feature isn't included.
+
+| Feature | Free | Microsoft Entra ID P1 | Microsoft Entra ID P2 | Microsoft Entra ID Governance | Microsoft Entra Suite | Microsoft 365 E7 |
+| --- | --- | --- | --- | --- | --- | --- |
+| Core Verified ID credential issuance and verification | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Face Check | Add-on | Add-on | Add-on | Add-on | ✅ | ✅ |
+| Account recovery |  | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Identity verification profiles |  | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Integrated onboarding with Lifecycle Workflows |  |  |  | ✅ | ✅ | ✅ |
+| Identity verification for resource access through Conditional Access |  | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Risk-based identity verification and remediation |  |  | ✅ | ✅ | ✅ | ✅ |
+| Identity verification status, history, and credential provenance reporting |  |  | ✅ |  | ✅ | ✅ |
+| Overwrite identity verification events |  |  |  |  | ✅ | ✅ |
+| Credential provenance overwrite |  |  |  |  | ✅ | ✅ |
+| Self-service Verified ID issuance in My Account | ✅ \* | ✅ | ✅ | ✅ | ✅ | ✅ |
+
+\* Free includes self-service issuance of Employee ID only.
 
 ## Managed identities
 

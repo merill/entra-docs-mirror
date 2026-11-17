@@ -13,8 +13,9 @@ ms.subservice: conditional-access
 manager: dougeby
 description: Learn how session controls in Microsoft Entra Conditional Access policies enable secure, limited experiences for cloud apps based on device compliance.
 ms.topic: concept-article
-ms.date: 2026-03-24T00:00:00.0000000Z
+ms.date: 2026-11-04T00:00:00.0000000Z
 ms.reviewer: joflore
+ai-usage: ai-assisted
 locale: en-us
 document_id: 609a0eda-f113-8b77-67ee-c5e8bd94cbac
 document_version_independent_id: 7468d74e-9a7e-2a11-ba35-da46103a1b80
@@ -31,13 +32,9 @@ monikers: []
 item_type: Content
 source_path: docs/identity/conditional-access/concept-conditional-access-session.md
 cmProducts:
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
-- https://authoring-docs-microsoft.poolparty.biz/devrel/1e69816a-aaaa-474e-a36f-3ec7790fadc3
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
+- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
 spProducts:
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
-- https://authoring-docs-microsoft.poolparty.biz/devrel/ae012320-d2b3-47d8-abdc-898a64d069a9
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
 2PlusCloud:
 - Azure
 - M365
@@ -57,6 +54,8 @@ In a Microsoft Entra External ID [external tenant](/en-us/entra/external-id/cust
 
 - Sign-in frequency
 - Persistent browser session
+
+Sign-in frequency applies to both Microsoft-hosted and native authentication. For native authentication, the policy prevents token issuance during refresh token grants when reauthentication is required. Your app must handle the failed token refresh and prompt the user to sign in again. Persistent browser session controls apply to browser-based sessions. For more information, see [Conditional Access and sign-in frequency](../../identity-platform/concept-native-authentication#conditional-access-and-sign-in-frequency).
 
 ## Application enforced restrictions
 

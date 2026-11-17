@@ -31,12 +31,12 @@ item_type: Content
 source_path: docs/id-governance/agent-sponsor-tasks.md
 cmProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ac4b7417-d4c2-43d4-94bf-f22fa1416b34
+- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/302444b9-4a43-4841-8014-3d9e4251ff15
 spProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/68876bab-7da4-4e70-b295-395b3a255a1f
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/bebd8809-dac1-4c22-83e2-66d98af8a94d
 platformId: 4f858779-caee-4eeb-5557-11aba541a9dd
 ---
 
@@ -61,7 +61,7 @@ Using [Microsoft Entra ID Governance](licensing-fundamentals) for agent identiti
 - **Microsoft 365 E7**, which includes Agent 365 and Microsoft Entra Suite, to provide governance of user and agent identities.
 - **Microsoft Agent 365** license paired with at least Microsoft Entra P1 or Microsoft 365 E3.
 
-For more information, see [Microsoft Agent 365 plans and pricing](https://www.microsoft.com/microsoft-agent-365#plans-and-pricing). For the full list of agent-specific capabilities, refer to the **Microsoft Agent 365** column in the [Microsoft Entra ID Governance licensing table](licensing-fundamentals).
+For more information, see [Microsoft Agent 365 and Microsoft 365 E7 plans and pricing](https://www.microsoft.com/microsoft-agent-365#plans-and-pricing). For a list of generally available agent-specific identity governance capabilities, refer to the [Microsoft Entra ID Governance licensing table](licensing-fundamentals).
 
 ## Create a sponsor workflow using the Microsoft Entra Admin Center
 

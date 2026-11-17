@@ -29,13 +29,13 @@ monikers: []
 item_type: Content
 source_path: docs/identity-platform/quickstart-mobile-app-call-api.md
 cmProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d452572f-6212-498f-9050-ca4a9e50a425
 - https://authoring-docs-microsoft.poolparty.biz/devrel/7ebba99b-05c3-4387-8883-f7bbf6632cb8
 - https://authoring-docs-microsoft.poolparty.biz/devrel/1ae5c491-970a-4062-8301-6336e69f9026
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
 spProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/a12e40b7-59a2-4437-96e2-166ce622b864
 - https://authoring-docs-microsoft.poolparty.biz/devrel/006ab567-b18c-4cf1-9a25-c24daa46ede1
 - https://authoring-docs-microsoft.poolparty.biz/devrel/f2c3e52e-3667-4e8a-bf11-20b9eaccdc8c
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
 platformId: c16911e9-0d7c-2543-8809-f1ea9153438d
 ---
 
@@ -75,7 +75,7 @@ In this article, you do the following tasks:
 
     - Application (client) ID
     - Directory (tenant) ID
-- A web API registration that exposes at least one scope (delegated permissions) and one app role (application permission) such as *ToDoList.Read*. If you haven't already, follow the instructions for [call an API in a sample Android mobile app](../external-id/customers/sample-native-authentication-android-sample-app-call-web-api) to have a functional protected ASP.NET Core web API. Make sure you complete the following steps:
+- A web API registration that exposes at least one scope (delegated permissions) and one app role (application permission) such as *ToDoList.Read*. If you haven't already, follow the [ASP.NET Core web API quickstart](quickstart-web-api-dotnet-protect-app?tabs=aspnet-core) to have a functional protected ASP.NET Core web API. Make sure you complete the following steps:
 
     - Configure API scopes
     - Configure app roles
@@ -90,7 +90,7 @@ In this article, you do the following tasks:
 
     - Application (client) ID
     - Directory (tenant) ID\*
-- An API registration that exposes at least one scope (delegated permissions) and one app role (application permission) such as *ToDoList.Read*. If you haven't already, follow the instructions for [call an API in a sample iOS mobile app](../external-id/customers/sample-native-authentication-ios-sample-app-call-web-api) to have a functional protected ASP.NET Core web API. Make sure you complete the following steps:
+- An API registration that exposes at least one scope (delegated permissions) and one app role (application permission) such as *ToDoList.Read*. If you haven't already, follow the [ASP.NET Core web API quickstart](quickstart-web-api-dotnet-protect-app?tabs=aspnet-core) to have a functional protected ASP.NET Core web API. Make sure you complete the following steps:
 
     - Configure API scopes.
     - Configure app roles.

@@ -13,7 +13,8 @@ ms.subservice: agent-id
 manager: pmwongera
 description: Learn about agent identities, specialized identity constructs that enable secure authentication and authorization for AI agents in enterprise environments.
 ms.topic: concept-article
-ms.date: 2025-11-06T00:00:00.0000000Z
+ms.date: 2026-11-05T00:00:00.0000000Z
+ai-usage: ai-assisted
 ms.reviewer: dastrock
 locale: en-us
 document_id: 7ebfb7b1-8e68-c7ae-fb71-03c3743c18a8
@@ -31,13 +32,13 @@ monikers: []
 item_type: Content
 source_path: docs/agent-id/what-are-agent-identities.md
 cmProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/c6f99e62-1cf6-4b71-af9b-649b05f80cce
 spProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/3f56b378-07a9-4fa1-afe8-9889fdc77628
 platformId: 19168ee1-87e8-6ae7-1ca3-19b1f3695875
 ---
 
@@ -94,7 +95,7 @@ Agent identities provide the foundation for secure, scalable AI agent deployment
 
 Several Microsoft products already use agent identities for authenticating AI agents. Two examples include:
 
-- [**Entra conditional access optimization agent**](../identity/conditional-access/agent-optimization): When this agent is enabled in your tenant, it's given an agent identity. The Microsoft Entra conditional access optimization agent then uses its agent identity to query Microsoft Entra systems and inspect the tenant's configuration. All queries made by the agent are recorded as having been performed by an AI agent. The agent's activity is subject to any security policies enforced for agent identities. You can view the agent's identity in the Microsoft Entra admin center in the **Agent identities** tab.
+- [**Microsoft Entra Conditional Access Optimization Agent**](../security-copilot/conditional-access-agent-optimization): When this agent is enabled in your tenant, it's given an agent identity. The Microsoft Entra conditional access optimization agent then uses its agent identity to query Microsoft Entra systems and inspect the tenant's configuration. All queries made by the agent are recorded as having been performed by an AI agent. The agent's activity is subject to any security policies enforced for agent identities. You can view the agent's identity in the Microsoft Entra admin center in the **Agent identities** tab.
 - [**Agents built in Copilot Studio**](/en-us/copilot/security/agents-overview): In organizations that use Copilot Studio, users can quickly create AI agents using Copilot Studio's low-code tools. Each time an AI agent is created, the agent gets an agent identity in the Microsoft Entra tenant. The user who created the agent is recorded as its sponsor. The agent can then use its agent identity to send/receive chat messages to users, and connect to various systems like SharePoint or Dataverse. Any authentication performed by these agents is logged in Microsoft Entra ID as AI agents and viewable through the Microsoft Entra admin center.
 
 ## How to get started
@@ -104,3 +105,5 @@ Microsoft Entra Agent ID is a product within Microsoft Entra that provides the p
 [Microsoft Agent 365](/en-us/microsoft-agent-365/overview) enables agents to operate across Microsoft 365 services and enterprise workflows, which requires a **Microsoft Agent 365** license for each user. For pricing details, see [Microsoft Agent 365 plans and pricing](https://www.microsoft.com/microsoft-agent-365#plans-and-pricing).
 
 Extending Microsoft Entra security features to agents requires Microsoft Agent 365. Agent 365 is included with Microsoft 365 E7 and is available as an add-on to Microsoft E5/A5/Business Premium (or Microsoft Defender Suite + Microsoft Purview Suite). See our latest [Agent 365 product terms for more details](https://www.microsoft.com/licensing/terms/productoffering/Agent365/EAEAS#clause-2755-h3-1).
+
+To add authentication to an agent, [choose an integration path](choose-agent-integration-path) for your platform and hosting environment. To manage identities that already exist in your tenant, see [Manage agent identities](manage-agent-identities-admin).

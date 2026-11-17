@@ -12,7 +12,8 @@ ms.service: entra-id-governance
 manager: dougeby
 description: Learn how to set up a governance relationship between a governing and governed tenant using the handshake process in Microsoft Entra
 ms.topic: how-to
-ms.date: 2026-03-10T00:00:00.0000000Z
+ms.date: 2026-11-11T00:00:00.0000000Z
+ai-usage: ai-assisted
 locale: en-us
 document_id: b59095ee-d313-1bf7-9d2d-321dfefd8cd2
 document_version_independent_id: b59095ee-d313-1bf7-9d2d-321dfefd8cd2
@@ -31,9 +32,11 @@ source_path: docs/id-governance/tenant-governance/how-to-set-up-governance-relat
 cmProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/68e4b2d8-b70c-4019-b49a-d1f8881e2aea
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ac4b7417-d4c2-43d4-94bf-f22fa1416b34
 spProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/67b2ba1a-6f74-4044-a48a-f0f8ad076b8f
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/68876bab-7da4-4e70-b295-395b3a255a1f
 platformId: 46cdb254-8ff1-24dc-4677-8fef3422b593
 ---
 
@@ -60,6 +63,7 @@ Before you can set up a governance relationship, you must create a governance po
 
     - **Delegated administration**: Select one or more Microsoft Entra built-in roles and assign them to a role assignable security group in the governing tenant. Members of this group can use their governing tenant credentials to sign in to the governed tenant without needing an account in the governed tenant. Each group can have multiple role assignments, and each policy template can have multiple groups defined.
     - **Multitenant application management**: Select a custom, multitenant application. The governed tenant creates a service principal with the same permissions when you establish the relationship.
+    - **Relationship lifetime (Preview)**: Optionally set a whole number from 1 to 730 days. The governed tenant reviews and approves the lifetime with the request. Leaving it unset creates a non-expiring relationship. For details, see [Manage relationship expiration and renewal](how-to-manage-relationship-expiration).
 
 ## Set up a governance relationship using a three-step handshake
 

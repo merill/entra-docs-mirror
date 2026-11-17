@@ -13,7 +13,8 @@ manager: dougeby
 description: Describes overview of identity lifecycle management and what is meant by governing the employee lifecycle.
 ms.subservice: entitlement-management
 ms.topic: overview
-ms.date: 2025-04-09T00:00:00.0000000Z
+ms.date: 2026-11-03T00:00:00.0000000Z
+ms.custom: msecd-doc-authoring-1026
 locale: en-us
 document_id: 00d9b2c3-356d-0d2d-fa18-fbee2c309b87
 document_version_independent_id: 00d9b2c3-356d-0d2d-fa18-fbee2c309b87
@@ -30,8 +31,12 @@ monikers: []
 item_type: Content
 source_path: docs/id-governance/scenarios/govern-the-employee-lifecycle.md
 cmProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
+- https://authoring-docs-microsoft.poolparty.biz/devrel/b1cfdec6-b0c3-4209-818c-736879856e0e
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
 spProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
+- https://authoring-docs-microsoft.poolparty.biz/devrel/2d0723c1-cf38-4c30-ab3d-5df787b33270
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
 platformId: 593722e0-bb39-bd6e-f86e-336051ece1d5
 ---
@@ -71,6 +76,8 @@ When planning identity lifecycle management for employees, or other individuals 
 - Leave - when an individual leaves the scope of needing access, access may need to be removed, and subsequently the identity may no longer be required by applications other than for audit or forensics purposes
 
 So for example, if a new employee joins your organization and that employee has never been affiliated with your organization before, that employee requires a new digital identity, represented as a user account in Microsoft Entra ID. The creation of this account would fall into a "Joiner" process, which could be automated if there was a system of record such as Workday that could indicate when the new employee starts work. Later, if your organization has an employee move from say, Sales to Marketing, they would fall into a "Mover" process. This move would require removing the access rights they had in the Sales organization, which they no longer require, and granting them rights in the Marketing organization that they new require.
+
+Account provisioning is separate from identity verification and credential registration. For employee onboarding, the Lifecycle Workflows identity-verification templates (preview) support pre-hire verification and new-hire credential registration. See [Onboard users with identity verification (Preview)](../how-to-onboard-users-with-identity-verification) for configuration and registration constraints. Review guest eligibility separately before applying this employee journey to a guest account.
 
 ## Identity lifecycle management for guests
 

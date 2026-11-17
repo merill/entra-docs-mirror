@@ -1,6 +1,6 @@
 ---
 layout: Conceptual
-title: 'Custom claims provider: Configure a token issuance event - Microsoft identity platform | Microsoft Learn'
+title: Configure a custom claims provider for the OnTokenIssuanceStart event - Microsoft identity platform | Microsoft Learn
 canonicalUrl: https://learn.microsoft.com/en-us/entra/identity-platform/custom-extension-tokenissuancestart-configuration
 uhfHeaderId: MSDocsHeader-Entra
 breadcrumb_path: /entra/breadcrumb/toc.json
@@ -33,15 +33,13 @@ source_path: docs/identity-platform/custom-extension-tokenissuancestart-configur
 cmProducts:
 - https://authoring-docs-microsoft.poolparty.biz/devrel/540ac133-a371-4dbb-8f94-28d6cc77a70b
 - https://authoring-docs-microsoft.poolparty.biz/devrel/1ae5c491-970a-4062-8301-6336e69f9026
-- https://authoring-docs-microsoft.poolparty.biz/devrel/68ec7f3a-2bc6-459f-b959-19beb729907d
 spProducts:
 - https://authoring-docs-microsoft.poolparty.biz/devrel/60bfc045-f127-4841-9d00-ea35495a5800
 - https://authoring-docs-microsoft.poolparty.biz/devrel/f2c3e52e-3667-4e8a-bf11-20b9eaccdc8c
-- https://authoring-docs-microsoft.poolparty.biz/devrel/90370425-aca4-4a39-9533-d52e5e002a5d
 platformId: afe732aa-3950-68b8-e2f2-c12243c312e0
 ---
 
-# Custom claims provider: Configure a token issuance event - Microsoft identity platform | Microsoft Learn
+# Configure a custom claims provider for the OnTokenIssuanceStart event - Microsoft identity platform | Microsoft Learn
 
 This article describes how to configure a custom claims provider for a [token issuance start event](custom-claims-provider-overview#token-issuance-start-event-listener). Using an existing Azure Functions REST API, you'll register a custom authentication extension and add attributes that you expect it to parse from your REST API. To test the custom authentication extension, you'll register a sample OpenID Connect application to get a token and view the claims.
 

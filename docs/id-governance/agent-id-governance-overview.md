@@ -1,6 +1,6 @@
 ---
 layout: Conceptual
-title: Governing Agent Identities - Microsoft Entra ID Governance | Microsoft Learn
+title: Governing Agent identities and access - Microsoft Entra ID Governance | Microsoft Learn
 canonicalUrl: https://learn.microsoft.com/en-us/entra/id-governance/agent-id-governance-overview
 uhfHeaderId: MSDocsHeader-Entra
 breadcrumb_path: /entra/breadcrumb/toc.json
@@ -12,7 +12,7 @@ ms.service: entra-id-governance
 manager: dougeby
 description: This article describes governing agent identities.
 ms.topic: concept-article
-ms.date: 2026-06-05T00:00:00.0000000Z
+ms.date: 2026-11-16T00:00:00.0000000Z
 ai-usage: ai-assisted
 locale: en-us
 document_id: ed193cb7-7f23-723e-a597-712ddd774728
@@ -38,11 +38,13 @@ spProducts:
 platformId: 164bf6d7-81ac-6dea-8405-e32ca38f6971
 ---
 
-# Governing Agent Identities - Microsoft Entra ID Governance | Microsoft Learn
+# Governing Agent identities and access - Microsoft Entra ID Governance | Microsoft Learn
 
-Microsoft Entra allows you to ensure that the right people have the right access to the right apps and services at the right time. With the addition of the Microsoft agent identity platform, managing the access rights of agents in the same way is just as important in the governance lifecycle of your organization's identities. The Microsoft agent identity platform introduces the concept of Agent Identities (IDs). Agent identities are accounts within Microsoft Entra ID that provide unique identification, authentication and authorization capabilities for AI agents.
+Microsoft Entra allows you to ensure that the right people have the right access to the right apps and services at the right time. Microsoft Entra ID Governance features enable governing the identity and access lifecycle for employees and business guests. With the addition of the Microsoft agent identity platform, managing the access rights of agents in the same way is just as important in the governance lifecycle of your organization's identities. The Microsoft agent identity platform introduces the concept of Agent Identities (IDs). Agent identities are accounts within Microsoft Entra ID that provide unique identification, authentication and authorization capabilities for AI agents.
 
-This allows agent identities to be governed with Microsoft Entra features in the same style as you would govern human identities. With Agent identities, you can govern and manage the identity and access lifecycle of agents, ensuring the agents have a responsible person providing oversight throughout the agent lifecycle and agent's access does not persist longer than it is needed. This article provides an overview of how Microsoft Entra can be utilized to govern agent identities and access.
+This allows agent identities to be governed with Microsoft Entra features in the same style as you would govern human identities. With Agent identities, you can govern and manage the identity and access lifecycle of agents, ensuring the agents have a responsible person providing oversight throughout the agent lifecycle, and agent's access does not persist longer than it is needed. This article provides an overview of how Microsoft Entra can be utilized to govern agent identities and access.
+
+In addition to agents that are using the Microsoft Entra agent ID platform, Microsoft Entra can also discover the agent non-human identities in an application that have excessive privileges. For more information, see [Detection and remediation of overprivileged agent identities (Preview)](dynamic-permissions-overview).
 
 ## License requirements
 
@@ -51,19 +53,23 @@ Using [Microsoft Entra ID Governance](licensing-fundamentals) for agent identiti
 - **Microsoft 365 E7**, which includes Agent 365 and Microsoft Entra Suite, to provide governance of user and agent identities.
 - **Microsoft Agent 365** license paired with at least Microsoft Entra P1 or Microsoft 365 E3.
 
-For more information, see [Microsoft Agent 365 plans and pricing](https://www.microsoft.com/microsoft-agent-365#plans-and-pricing). For the full list of agent-specific capabilities, refer to the **Microsoft Agent 365** column in the [Microsoft Entra ID Governance licensing table](licensing-fundamentals).
+For more information, see [Microsoft Agent 365 and Microsoft 365 E7 plans and pricing](https://www.microsoft.com/microsoft-agent-365#plans-and-pricing). For a list of generally available agent-specific identity governance capabilities, refer to the [Microsoft Entra ID Governance licensing table](licensing-fundamentals).
 
 ## Agent identities basics
 
-Historically, AI agents would rely upon tools to interact with various applications and systems, and each of those tools would have their own identities in those applications and systems. Some of those tools would use service principals to authenticate to Microsoft services via Microsoft Graph or Microsoft Azure APIs. [Microsoft Entra Agent ID](../agent-id/what-are-agent-identities) introduces support for identities for the agents themselves, with four new types of object: agent identity blueprint, agent identity blueprint principal, agent identity, and agent user. Through the [agent identity blueprint](../agent-id/agent-blueprint), the agent can create one or more agent identities, and optionally an agent user for each agent identity, which it can use for authentication to Microsoft, third party and line of business applications. Each agent identity and agent user can have distinct access rights.
+Historically, AI agents rely upon tools to interact with various applications and other resources. For an assistive agent, the tools might leverage the authenticated identity of the human user they were assisting. Alternatively, tools might each have their own identities in those applications and resources. For example, a tool might have historically used a service principal to authenticate the agent to Microsoft services via Microsoft Graph or Microsoft Azure APIs.
+
+![Diagram of agent access to a target resource, agent platform registration with Agent 365, and connections to Microsoft Entra.](media/agent-id-governance-overview/agent-and-target.png)
+
+[Microsoft Entra Agent ID](../agent-id/what-are-agent-identities) introduces support for identities for the agents themselves in Microsoft Entra and connected applications, with four new types of object: agent identity blueprint, agent identity blueprint principal, agent identity, and agent user. Through the [agent identity blueprint](../agent-id/agent-blueprint), the agent can create one or more agent identities, and optionally an agent user for each agent identity, which it can use for authentication to Microsoft, third party and line of business applications. Each agent identity and agent user can have distinct access rights. The following diagram illustrates the relationship between the new objects in a Microsoft Entra tenant.
 
 ![Diagram of the relationship of Microsoft Entra Agent ID objects in a single tenant.](media/agent-id-governance-overview/agent-identity-objects-single-tenant.png)
 
-For a multitenant-capable agent, an agent identity blueprint principal can be brought into the tenant with resources so it can create agent identities in that tenant, similar to how a multitenant application can have a service principal in each tenant.
+For a multitenant-capable agent, an agent identity blueprint principal created in one tenant can be brought into another tenant, the tenant with resources the agent needs to access, so the agent can create agent identities in that resource tenant, similar to how a multitenant application can have a service principal in each tenant. The following diagram illustrates the relationship of the Microsoft Entra ID objects when the agent blueprint is in a separate tenant than the resource.
 
 ![Diagram of the relationship of Microsoft Entra Agent ID objects in multiple tenants.](media/agent-id-governance-overview/agent-identity-objects-multiple-tenant.png)
 
-The agent identity and the agent user allow AI agents to take on digital identities within Microsoft Entra. Once agent identities are created, these agent identities are able to be governed using lifecycle and access features. Sponsors can be assigned to agent identities after creation. Sponsors of agent identities are human users accountable for making decisions about its lifecycle and access. For more information about the role of a sponsor of agent identities, see: [Administrative relationships for agent IDs](../agent-id/agent-owners-sponsors-managers).
+The agent identity and the agent user allow AI agents to take on digital identities within Microsoft Entra. Once agent identities are created, these agent identities are able to be governed using lifecycle and access features. Sponsors can be assigned to agent identities after creation. Sponsors of agent identities are human users accountable for making decisions about its lifecycle and access. For more information about the role of a sponsor of agent identities, see: [Administrative relationships for agent IDs](../agent-id/agent-owners-sponsors-managers). Agent users can also be provisioned to applications.
 
 ### Agent identities in other Microsoft products and portals
 
@@ -120,3 +126,7 @@ One of the most important parts of governing agent identities is making sure tha
 ## Agent identity lifecycle automation
 
 To ensure the security and manageability of agent identities for Microsoft customers, Microsoft Entra Agent ID provides a default inactivity policy to all tenants. This policy identifies inactive agent identities, notifies relevant users, and then proceeds to disable the identity if no new activity is detected. For more information, see [Microsoft Entra Agent ID default inactivity policy](agent-default-inactivity-policy) and [Entra Agent ID lifecycle policies](agent-lifecycle-policies).
+
+## Dynamic permissions (preview)
+
+In addition to agents that are using the Microsoft Entra agent ID platform, Microsoft Entra can also discover the agent non-human identities in an application that have excessive privileges. For more information, see [Detection and remediation of overprivileged agent identities (Preview)](dynamic-permissions-overview).

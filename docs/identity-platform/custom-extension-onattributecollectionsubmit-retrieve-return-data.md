@@ -1,6 +1,6 @@
 ---
 layout: Conceptual
-title: Retrieve and return data from an OnAttributeCollectionSubmit event - Microsoft identity platform | Microsoft Learn
+title: OnAttributeCollectionSubmit event reference - Microsoft identity platform | Microsoft Learn
 canonicalUrl: https://learn.microsoft.com/en-us/entra/identity-platform/custom-extension-onattributecollectionsubmit-retrieve-return-data
 uhfHeaderId: MSDocsHeader-Entra
 breadcrumb_path: /entra/breadcrumb/toc.json
@@ -39,7 +39,7 @@ spProducts:
 platformId: 3d2e2c94-66e6-b50d-5efd-a9fed28e4f34
 ---
 
-# Retrieve and return data from an OnAttributeCollectionSubmit event - Microsoft identity platform | Microsoft Learn
+# OnAttributeCollectionSubmit event reference - Microsoft identity platform | Microsoft Learn
 
 **Applies to**: ![Green circle with a white check mark symbol that indicates the following content applies to external tenants.](../external-id/media/common/applies-to-yes.png) External tenants ([learn more](/en-us/entra/external-id/tenant-configurations))
 

@@ -12,7 +12,7 @@ ms.service: entra-id-governance
 manager: dougeby
 description: Learn how to use cross-tenant delegated administration to sign in to and manage governed tenants using your governing tenant credentials
 ms.topic: how-to
-ms.date: 2026-07-27T00:00:00.0000000Z
+ms.date: 2026-11-11T00:00:00.0000000Z
 ai-usage: ai-assisted
 locale: en-us
 document_id: 7ecd9d99-a99e-bd98-c84c-ba68a8584f51
@@ -31,12 +31,12 @@ item_type: Content
 source_path: docs/id-governance/tenant-governance/how-to-delegated-administration.md
 cmProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/68e4b2d8-b70c-4019-b49a-d1f8881e2aea
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ac4b7417-d4c2-43d4-94bf-f22fa1416b34
+- https://authoring-docs-microsoft.poolparty.biz/devrel/b1cfdec6-b0c3-4209-818c-736879856e0e
 spProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/67b2ba1a-6f74-4044-a48a-f0f8ad076b8f
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/68876bab-7da4-4e70-b295-395b3a255a1f
+- https://authoring-docs-microsoft.poolparty.biz/devrel/2d0723c1-cf38-4c30-ab3d-5df787b33270
 platformId: 6bfd6be3-24c1-00cb-98a1-3dd185a63ef4
 ---
 
@@ -55,8 +55,9 @@ Cross-tenant delegated administration enables administrators in a governing tena
 
 After the governance relationship is active and GDAP role assignments are in place, members of the configured security group can sign in to the governed tenant. Confirm that your account is a member of a security group in the governing tenant that's assigned roles in the governance policy template.
 
-You can sign in to a governed tenant in two ways:
+You can sign in to a governed tenant in the following ways:
 
+- From the **Governed tenants** view under **Entra ID** &gt; **Overview** &gt; **Manage tenants** (Preview). This view discovers tenants based on active relationships and active delegated-role group membership. See [Switch between governed tenants](how-to-switch-governed-tenants).
 - From the **Governed tenants** page in the Microsoft Entra admin center.
 - By opening a supported admin portal URL directly.
 

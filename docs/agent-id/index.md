@@ -118,8 +118,8 @@ Use an AI coding agent to automate the full Agent ID onboarding workflow.
 [OAuth protocols for agents](agent-oauth-protocols)
 Understand how agents authenticate using OAuth 2.0 flows optimized for AI workloads.
 
-[Configure third-party agents](configure-third-party-agents)
-Integrate agents from platforms like AWS Bedrock and n8n with Agent ID.
+[Choose an integration path](choose-agent-integration-path)
+Choose how to integrate an agent with Agent ID based on its platform and hosting model.
 
 [Call Microsoft Graph API](call-api-microsoft-graph)
 Access Microsoft 365 data and services from your agents.

@@ -13,7 +13,7 @@ ms.subservice: external
 manager: dougeby
 description: Learn how to enable passkeys (FIDO2) for phishing-resistant, passwordless sign-in in your consumer and business customer apps using Microsoft Entra External ID.
 ms.topic: how-to
-ms.date: 2026-10-24T00:00:00.0000000Z
+ms.date: 2026-11-11T00:00:00.0000000Z
 ai-usage: ai-assisted
 ms.custom: it-pro, msecd-doc-authoring-1030
 locale: en-us
@@ -44,11 +44,11 @@ platformId: a2081e83-a62a-63d4-4777-7ed0d01082c9
 
 # Sign in with passkeys in Microsoft Entra External ID - Microsoft Entra External ID | Microsoft Learn
 
-**Applies to**: ![Green circle with a white check mark symbol that indicates the following content applies to external tenants.](../media/common/applies-to-yes.png) External tenants ([learn more](/en-us/entra/external-id/tenant-configurations))
-
 Passkeys give customers a phishing-resistant way to sign in to consumer applications built on Microsoft Entra External ID. Customers can use face, fingerprint, PIN, or a security key instead of remembering passwords or entering one-time codes.
 
-In an external tenant, you can use passkeys in two ways:
+**Applies to external tenants:** Feature support varies by authentication approach and API or SDK version. Compare Microsoft-hosted authentication, Embedded native authentication, and Bring Your Own UX (BYO UX) in the [authentication approach overview](concept-choose-authentication-approach). Check feature availability in the [authentication support matrix](concept-supported-features-customers#authentication-approach-supportability).
+
+For Microsoft-hosted authentication in an external tenant, you can use passkeys in two ways:
 
 - **Passwordless sign-in.** The user enters their email or username. If a passkey is available, they're prompted to sign in with face, fingerprint, PIN, or a security key. The passkey completes first-factor authentication and also satisfies multifactor authentication (MFA) requirements.
 - **Passkey for MFA.** The user signs in with their email or username and password. If a passkey is registered, they complete MFA with the passkey — a phishing-resistant alternative to traditional verification methods. For more about MFA options, see [MFA in external tenants](concept-multifactor-authentication-customers).

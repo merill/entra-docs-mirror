@@ -1,6 +1,6 @@
 ---
 layout: Conceptual
-title: Agent's user account impersonation protocol - Microsoft Entra Agent ID | Microsoft Learn
+title: Use an agent's user account with Microsoft 365 - Microsoft Entra Agent ID | Microsoft Learn
 canonicalUrl: https://learn.microsoft.com/en-us/entra/agent-id/agent-user-oauth-flow
 uhfHeaderId: MSDocsHeader-Entra
 breadcrumb_path: /entra/breadcrumb/toc.json
@@ -11,9 +11,10 @@ ms.author: dmwendia
 ms.service: entra-id
 ms.subservice: agent-id
 manager: pmwongera
-description: Learn how agent identities operate with user context through an agent's user account using the agent's user account impersonation protocol with OAuth 2.0 token exchange.
-ms.topic: concept-article
-ms.date: 2025-10-30T00:00:00.0000000Z
+description: Learn when an autonomous agent needs an agent's user account for Teams, Exchange, SharePoint, and user-based Microsoft 365 services.
+ms.topic: how-to
+ms.date: 2026-11-05T00:00:00.0000000Z
+ai-usage: ai-assisted
 ms.reviewer: jmprieur
 locale: en-us
 document_id: 15a5b681-46b6-1ebe-bd8b-d955f24df821
@@ -31,88 +32,98 @@ monikers: []
 item_type: Content
 source_path: docs/agent-id/agent-user-oauth-flow.md
 cmProducts:
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
-- https://authoring-docs-microsoft.poolparty.biz/devrel/1ae5c491-970a-4062-8301-6336e69f9026
+- https://authoring-docs-microsoft.poolparty.biz/devrel/63959238-cb90-4871-a33d-4a5519097e47
+- https://authoring-docs-microsoft.poolparty.biz/devrel/1dd701e0-441f-4b0a-9806-aa47decc4e35
+- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
 spProducts:
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
-- https://authoring-docs-microsoft.poolparty.biz/devrel/f2c3e52e-3667-4e8a-bf11-20b9eaccdc8c
+- https://authoring-docs-microsoft.poolparty.biz/devrel/78d87f42-5582-4a6b-90be-7db2f12b34e6
+- https://authoring-docs-microsoft.poolparty.biz/devrel/0a2fc935-5977-4aa6-9f55-0be03bd2acb8
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
 platformId: 8f4e6e50-bee6-5481-fe5f-25f6ff598753
 ---
 
-# Agent's user account impersonation protocol - Microsoft Entra Agent ID | Microsoft Learn
+# Use an agent's user account with Microsoft 365 - Microsoft Entra Agent ID | Microsoft Learn
 
-Agent's user account impersonation enables agent identities to operate with user context through an agent's user account, combining user permissions with autonomous operation. In this scenario, an agent identity blueprint (actor 1) impersonates an agent identity (actor 2) that impersonates an agent's user account (subject) using FIC. Access is scoped to delegations assigned to the agent identity. The agent's user account can be impersonated only by a single agent identity.
+Most autonomous agents should call APIs with their agent identity and application permissions. Create an [agent's user account](agent-users) only when a Microsoft 365 workload requires a user object.
 
-Warning
+An agent's user account is a dedicated user identity for the agent. It isn't the signed-in user of an interactive agent. Each account has a one-to-one relationship with an agent identity.
 
-Microsoft recommends using the approved SDKs like Microsoft.Identity.Web and Microsoft Entra ID Auth SDK (sidecar) libraries to implement these protocols. Manual implementation of these protocols is complex and error-prone, and using the SDKs helps ensure security and compliance with best practices.
+## Determine whether the agent needs a user object
 
-## Managed identities integration
+| Scenario | Is an agent's user account required? | Guidance |
+| --- | --- | --- |
+| Call an API that supports application permissions | No | Use the agent identity and app-only access. |
+| Add the agent as a member of a Microsoft Teams team | Yes | Team membership is assigned to directory users. See [add members to a team](/en-us/graph/api/team-post-members). |
+| Give the agent its own Exchange Online mailbox | Yes | A mailbox is provisioned for a user object. See [create user mailboxes in Exchange Online](/en-us/exchange/recipients-in-exchange-online/create-user-mailboxes). |
+| Share a SharePoint or OneDrive item directly with the agent as a person | Yes | Use the agent's user account as the sharing recipient. See [sharing files and folders](/en-us/sharepoint/modern-experience-sharing-permissions). |
+| Use a Microsoft 365 service that is licensed per user | Yes | Assign only the licenses required by the service. See [assign licenses to users](/en-us/microsoft-365/admin/manage/assign-licenses-to-users). |
 
-Managed identities are the preferred credential type. In this configuration, the managed identity token serves as the credential for the parent agent identity blueprint, while standard MSI protocols apply for credential acquisition. This integration allows the agent ID to receive the full benefits of MSI security and management, including automatic credential rotation and secure storage.
+Don't create an agent's user account only because the agent runs without a person present. If the target service supports application permissions or workload-specific application access controls, use the agent identity instead.
 
-## Protocol steps
+## Provision access
 
-Then following are the protocol steps.
+1. [Create an agent's user account](create-delete-agent-user-account) and associate it with the agent identity.
+2. Assign the account only the Microsoft 365 licenses it needs.
+3. Add the account to the required team, provision its mailbox, or share the required SharePoint resources by following the service documentation in the preceding table.
+4. [Grant the agent identity delegated permissions](grant-agent-access-microsoft-365) for the Microsoft 365 scopes the workload requires, such as `Mail.ReadWrite` or `Files.ReadWrite`. The agent identity uses these delegated permissions when it authenticates as the agent's user account.
 
-![Diagram showing the illustration of agent's user account token acquisition flow for agents.](media/agent-user-oauth-flow/agent-user-flow.png)
+Creating the user object doesn't grant access to a team, mailbox, site, file, or API. Complete the workload-specific assignment separately.
 
-1. The agent identity blueprint requests an exchange token (T1) that it uses for agent identity impersonation. The agent identity blueprint presents client credentials that could be a secret, a certificate, or a managed identity token used as an FIC.
+## Authenticate as the agent's user account
 
-    Warning
+The agent's user account flow doesn't involve a signed-in user. Use `WithAgentUserIdentity` to identify the dedicated user account. *Microsoft.Identity.Web.AgentIdentities* performs the Agent ID token exchange.
 
-    Client secrets shouldn't be used as client credentials in production environments for agent identity blueprints due to security risks. Instead, use more secure authentication methods such as [federated identity credentials (FIC) with managed identities](/en-us/entra/workload-id/workload-identity-federation-config-app-trust-managed-identity) or client certificates. These methods provide enhanced security by eliminating the need to store sensitive secrets directly within your application configuration.
+This example uses blueprint-to-child token exchange. Reuse the [package installation and runtime configuration](aspnet-core-fleet-call-apis-as-agent#install-the-packages), including `Microsoft.Identity.Web.AgentIdentities`, `AddAgentIdentities()`, token acquisition, an HTTP client, and a token cache. Configure the blueprint's client ID and credential in the runtime; pass the child agent identity's client ID and its associated user account to `WithAgentUserIdentity`. Don't substitute the single-instance app-only setup, which omits this Agent ID exchange registration.
 
-    ```
-    POST /oauth2/v2.0/token
-    Content-Type: application/x-www-form-urlencoded
-    
-    client_id=AgentBlueprint
-    &scope=api://AzureADTokenExchange/.default
-    &fmi_path=AgentIdentity
-    &client_assertion_type=urn:ietf:params:oauth:client-assertion-type:jwt-bearer
-    &client_assertion=TUAMI
-    &grant_type=client_credentials
-    ```
+The following code is an endpoint fragment, not a complete host. Merge its `using` directives at the top of `Program.cs` and place its mapping before `app.Run()`. Configure the [inbound `AgentUser` authorization policy](control-user-access-agents#enforce-app-roles-in-the-agent-api) before exposing the mailbox endpoint. Resolve the agent and account from trusted application configuration, not caller-supplied values.
 
-    Where TUAMI is the MSI token for user assigned managed identity (UAMI). This returns token T1.
-2. The agent identity requests a token (T2) that it uses for agent's user account impersonation. The agent identity presents T1 as its client assertion. Microsoft Entra ID returns T2 to the agent identity after validating that T1 (aud) == Agent identity parent app == Agent identity blueprint.​
+Identify the agent's user account by UPN:
 
-    ```
-    POST /oauth2/v2.0/token
-    Content-Type: application/x-www-form-urlencoded
-    
-    client_id=AgentIdentity
-    &scope=api://AzureADTokenExchange/.default
-    &client_assertion_type=urn:ietf:params:oauth:client-assertion-type:jwt-bearer
-    &client_assertion={T1}
-    &grant_type=client_credentials
-    ```
+```csharp
+using System.Net.Http.Headers;
+using System.Security.Claims;
+using Microsoft.Identity.Abstractions;
+using Microsoft.Identity.Web;
 
-    This returns token T2.
-3. The agent identity then sends an OBO token exchange request to Microsoft Entra ID, including both T1 and T2. Microsoft Entra ID validates that T2 (aud) == agent identity.
+app.MapGet("/mailbox", async (
+    IAuthorizationHeaderProvider authorizationHeaderProvider,
+    IHttpClientFactory httpClientFactory) =>
+{
+    var options = new AuthorizationHeaderProviderOptions()
+        .WithAgentUserIdentity("<agent-identity-client-id>", "<agent-user-upn>");
 
-    ```
-    POST /oauth2/v2.0/token
-    Content-Type: application/x-www-form-urlencoded
-    
-    client_id=AgentIdentity
-    &scope=https://resource.example.com/scope1
-    &client_assertion_type=urn:ietf:params:oauth:client-assertion-type:jwt-bearer
-    &client_assertion={T1}
-    &user_federated_identity_credential={T2}
-    &username=agentuser@contoso.com
-    &grant_type=user_fic
-    &requested_token_use=on_behalf_of
-    ```
-4. Microsoft Entra ID then issues the resource token.
+    string authorizationHeader = await authorizationHeaderProvider
+        .CreateAuthorizationHeaderForUserAsync(
+            ["https://graph.microsoft.com/.default"],
+            options,
+            new ClaimsPrincipal());
 
-### Sequence diagram
+    HttpClient client = httpClientFactory.CreateClient();
+    client.DefaultRequestHeaders.Authorization =
+        AuthenticationHeaderValue.Parse(authorizationHeader);
 
-The following sequence diagram shows the agent's user account impersonation flow
+    using HttpResponseMessage response =
+        await client.GetAsync("https://graph.microsoft.com/v1.0/me/messages");
+    response.EnsureSuccessStatusCode();
 
-![Diagram showing the token sequence of agent's user account token acquisition flow for agents.](media/agent-user-oauth-flow/agent-user-flow-token-sequence.png)
+    return Results.Content(
+        await response.Content.ReadAsStringAsync(),
+        "application/json");
+})
+.RequireAuthorization("AgentUser");
+```
 
-Agent's user account impersonation requires credential chaining that follows the pattern agent identity blueprint → Agent identity → Agent's user account. Each step in this chain uses the token from the previous step as a credential, creating a secure delegation pathway. The same client ID must be used for both phases to prevent privilege escalation attacks.
+Or identify the account by object ID:
+
+```csharp
+var options = new AuthorizationHeaderProviderOptions()
+    .WithAgentUserIdentity("<agent-identity-client-id>", Guid.Parse("<agent-user-object-id>"));
+```
+
+Pass `new ClaimsPrincipal()` because no user is signed in. The user identity comes from `WithAgentUserIdentity`, not from the request context. Grant the agent's user account only the delegated permissions the workload requires. Don't implement the token exchange directly.
+
+For the protocol model and security constraints, see [OAuth protocols in Microsoft Entra Agent ID](agent-oauth-protocols#autonomous-agent-that-acts-as-a-dedicated-user). For the full API reference, see [Microsoft.Identity.Web on GitHub](https://github.com/AzureAD/microsoft-identity-web).
+
+For an authorized inbound caller, a successful `/mailbox` call returns the configured **agent user's** messages, not the caller's mailbox. An empty message collection can be valid. If the call fails, check the identity-to-account association, delegated grant, and Exchange mailbox provisioning separately. The sample throws on a downstream non-success status rather than forwarding that status to the inbound caller.
+
+For test-only resources, follow [Delete an agent's user account](create-delete-agent-user-account) after removing any workload-specific access you created. Don't delete a shared mailbox or account.

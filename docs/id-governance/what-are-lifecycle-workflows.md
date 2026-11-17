@@ -13,7 +13,9 @@ manager: dougeby
 description: Get an overview of the lifecycle workflow feature of Microsoft Entra ID.
 ms.subservice: lifecycle-workflows
 ms.topic: overview
-ms.date: 2026-03-12T00:00:00.0000000Z
+ms.date: 2026-11-03T00:00:00.0000000Z
+ms.custom: msecd-doc-authoring-1026
+ai-usage: ai-assisted
 locale: en-us
 document_id: c76a7cb7-547a-f77c-e410-e20290b26cf4
 document_version_independent_id: d7d4818d-734d-d585-62a6-d8f3a042d2f0
@@ -30,13 +32,13 @@ monikers: []
 item_type: Content
 source_path: docs/id-governance/what-are-lifecycle-workflows.md
 cmProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
 - https://authoring-docs-microsoft.poolparty.biz/devrel/e60d1924-c4ad-4104-bd1b-973758bbac7a
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ac4b7417-d4c2-43d4-94bf-f22fa1416b34
 spProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
 - https://authoring-docs-microsoft.poolparty.biz/devrel/91d5f984-ee3d-43c4-9daf-bb09a6bc4e1a
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/68876bab-7da4-4e70-b295-395b3a255a1f
 platformId: 31da10c2-c257-72c4-dc0a-b5904b3d3691
 ---
 
@@ -88,6 +90,7 @@ Those capabilities can help ensure a holistic experience by allowing you to remo
 You can use lifecycle workflows to address any of the following conditions:
 
 - **Automating and extending user orientation and HR provisioning**: Use lifecycle workflows when you want to extend your HR provisioning scenarios by automating tasks such as generating temporary passwords and emailing managers. If you currently have a manual process for orientation, use lifecycle workflows as part of an automated process.
+- **Identity verification during onboarding (preview)**: Use the identity-verification templates and tasks to initiate pre-hire verification and configure new-hire credential registration with Verified ID and FaceCheck. For registration paths, device constraints, and account eligibility considerations, see [Onboard users with identity verification (Preview)](how-to-onboard-users-with-identity-verification).
 - **Automating dynamic group memberships**: When groups in your organization are well defined, you can automate user membership in those groups. Benefits and differences from dynamic group memberships include:
     - Lifecycle workflows manage static groups, where you don't need a dynamic group rule.
     - There's no need to have one rule per group. Lifecycle workflow rules determine the scope of users to execute workflows against, not which group.

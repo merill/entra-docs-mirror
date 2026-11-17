@@ -6,8 +6,8 @@ uhfHeaderId: MSDocsHeader-Entra
 breadcrumb_path: /entra/breadcrumb/toc.json
 feedback_system: Standard
 feedback_product_url: https://feedback.azure.com/d365community/forum/22920db1-ad25-ec11-b6e6-000d3a4f0789
-author: Justinha
-ms.author: justinha
+author: tilarso
+ms.author: tilarso
 ms.service: entra-id
 ms.subservice: authentication
 manager: dougeby
@@ -15,7 +15,8 @@ description: Authentication is the process of verifying identity before granting
 ms.reviewer: tilarso
 ms.topic: concept-article
 ms.custom: msecd-doc-authoring-108
-ms.date: 2026-04-30T00:00:00.0000000Z
+ms.date: 2026-10-08T00:00:00.0000000Z
+ai-usage: ai-assisted
 locale: en-us
 document_id: 31d311ce-04db-267c-2519-b770e546eac0
 document_version_independent_id: c9b9b2c0-32f4-7838-be72-0c26ce483d1c
@@ -32,13 +33,13 @@ monikers: []
 item_type: Content
 source_path: docs/identity/authentication/overview-authentication.md
 cmProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/b1cfdec6-b0c3-4209-818c-736879856e0e
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
 - https://authoring-docs-microsoft.poolparty.biz/devrel/5686b492-7c45-4088-8291-ecc0458747d3
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
 spProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/2d0723c1-cf38-4c30-ab3d-5df787b33270
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
 - https://authoring-docs-microsoft.poolparty.biz/devrel/838f4f15-80c1-4d49-b873-501fe4ed2d28
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
 platformId: ce2f12f8-506e-b3f5-a708-974ae573b8d2
 ---
 
@@ -97,9 +98,9 @@ The following phishing-resistant authentication methods are available in Microso
 
 Verified ID is an identity verification capability in Microsoft Entra ID — not a traditional authentication method. It can't be used to satisfy authentication requirements like sign-in, MFA, or SSPR. Instead, Verified ID provides cryptographic proof of a user's verified identity for scenarios where trust must be re-established, such as account recovery when all authentication methods are lost.
 
-Identity verification profiles control which users can participate in Verified ID flows, which provider performs verification, and how identity claims are validated. Admins configure profiles through the Account Recovery setup wizard in the Microsoft Entra admin center, and the Verified ID policy page provides visibility into profile assignments and global exclusions.
+Identity verification profiles control which users can participate in Verified ID flows, which provider performs verification, and how identity claims are validated. Profiles support recovery, onboarding, and verification for access. Manage shared profiles under **Verified ID** &gt; **ID verification profiles** in the Microsoft Entra admin center. The Account Recovery setup wizard remains the entry point for recovery-specific configuration, and the Verified ID policy page provides visibility into profile assignments and global exclusions.
 
-For more information, see [Verified ID identity verification overview](concept-authentication-verified-id).
+For profile setup and credential support, see [Verified ID identity verification overview](concept-authentication-verified-id). For user-level records, see [Manage user authentication methods](concept-authentication-methods-manage) and [Passkeys (FIDO2)](concept-authentication-passkeys-fido2).
 
 ## High-assurance account recovery
 

@@ -1,6 +1,6 @@
 ---
 layout: Conceptual
-title: Choose an authentication approach - Microsoft Entra External ID | Microsoft Learn
+title: Choose an Authentication Approach - Microsoft Entra External ID | Microsoft Learn
 canonicalUrl: https://learn.microsoft.com/en-us/entra/external-id/customers/concept-choose-authentication-approach
 uhfHeaderId: MSDocsHeader-Entra
 breadcrumb_path: /entra/breadcrumb/toc.json
@@ -11,10 +11,11 @@ ms.author: cmulligan
 ms.service: entra-external-id
 ms.subservice: external
 manager: dougeby
-description: Compare browser-delegated and native authentication in Microsoft Entra External ID and choose the right approach for your customer-facing app.
+description: Compare Microsoft Entra External ID authentication approaches to choose Microsoft-hosted pages, Embedded native authentication, or Bring Your Own UX.
 ai-usage: ai-assisted
 ms.topic: concept-article
-ms.date: 2026-04-16T00:00:00.0000000Z
+ms.custom: msecd-doc-authoring-1030
+ms.date: 2026-11-12T00:00:00.0000000Z
 locale: en-us
 document_id: 5f5d53c5-c4f6-c3ae-683c-1ff67284213e
 document_version_independent_id: 5f5d53c5-c4f6-c3ae-683c-1ff67284213e
@@ -32,77 +33,91 @@ item_type: Content
 source_path: docs/external-id/customers/concept-choose-authentication-approach.md
 cmProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/c77bc83e-f0b0-4b63-836e-6630e606bf7c
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
 - https://authoring-docs-microsoft.poolparty.biz/devrel/63959238-cb90-4871-a33d-4a5519097e47
 spProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/b98eda1f-6af8-444f-bbfb-7f2366948cbc
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
 - https://authoring-docs-microsoft.poolparty.biz/devrel/78d87f42-5582-4a6b-90be-7db2f12b34e6
 platformId: a3290c41-db73-af3a-cbf2-a07b17177110
 ---
 
-# Choose an authentication approach - Microsoft Entra External ID | Microsoft Learn
+# Choose an Authentication Approach - Microsoft Entra External ID | Microsoft Learn
+
+Choose how your customer-facing application presents Microsoft Entra External ID authentication. Compare where the interface runs, what your team maintains, and which capabilities you need. Different applications can use different approaches.
 
 **Applies to**: ![Green circle with a white check mark symbol that indicates the following content applies to external tenants.](../media/common/applies-to-yes.png) External tenants ([learn more](/en-us/entra/external-id/tenant-configurations))
 
-Browser-delegated authentication and native authentication are two sign-in approaches in Microsoft Entra External ID that define how your customer-facing app handles the authentication experience. Both approaches are fully supported, but they differ in user experience, development effort, and security model. Understanding these differences helps you choose the approach that best fits your app.
+## Authentication approach options
 
-With **browser-delegated authentication**, your app redirects users to a Microsoft-hosted sign-in page in a system browser or embedded web view. Microsoft Entra handles the entire authentication flow, and your app receives tokens after sign-in completes. This approach requires minimal code and offers built-in branding customization.
+| Approach | How required authentication steps are presented | What your team controls |
+| --- | --- | --- |
+| **Microsoft-hosted authentication** | On Microsoft-hosted pages reached through a browser redirect. | **Company branding:** Tenant-wide logos, text, and styling. **Branding themes:** Customization for selected applications. |
+| **Embedded native authentication** | In authentication screens your app implements. | Screens and their integration with your app. |
+| **Bring Your Own UX (BYO UX)** | On a separate authentication website your team hosts. | The website, its presentation, and its integration. |
 
-With **native authentication**, you build the sign-in UI experience directly into your app by using the Microsoft Authentication Library (MSAL) SDK or the native authentication API. Users never leave your app. You control every aspect of the UI, but your team is responsible for building and maintaining the authentication experience.
+### Common policy foundation
 
-## When to use browser-delegated authentication
+All approaches use user flows and authentication policies configured in Microsoft Entra External ID. External ID provides the authentication service; the approaches differ in how the interface is hosted and integrated.
 
-Browser-delegated authentication is the better fit when:
+For each application, consider your sign-up, sign-in, account recovery, identity provider, and policy requirements. Confirm that your chosen integration supports those journeys by using the [methods and journeys comparison](concept-supported-features-customers#methods-and-journeys-by-approach). Feature availability can differ by approach and API or SDK version.
 
-- Your app can accommodate a browser redirect during sign-in without disrupting the user experience.
-- You prefer lower implementation and maintenance effort. Microsoft manages security updates and new features automatically.
-- You want to support the broadest range of platforms and languages with less code.
+## Application and audience requirements
 
-For specific feature availability, see the feature comparison.
+Match each requirement to a candidate, then verify its journeys and integration requirements.
 
-## When to use native authentication
+| Requirement | Approach to evaluate | Verification or next step |
+| --- | --- | --- |
+| **Microsoft-managed authentication pages** | Microsoft-hosted authentication. | Review [company branding](concept-branding-customers), application-specific themes, and [sign-up and sign-in availability](concept-supported-features-customers#methods-and-journeys-by-approach). Plan the app integration and presentation settings. |
+| **Authentication screens integrated into your app** | Embedded native authentication. | Review [platform support](../../identity-platform/concept-native-authentication#how-to-use-native-authentication) and [method availability](concept-supported-features-customers#methods-and-journeys-by-approach). Plan the app screens and authentication-state handling. |
+| **An authentication website with its own UI and release cycle** | Bring Your Own UX. | Review the website and domain requirements for one or more applications. Plan the website's API and browser integration. |
+| **Different interaction requirements across applications** | Combine approaches. | Evaluate each application's interface, integration, session, and journey requirements. |
 
-Native authentication is the better fit when:
+Important
 
-- You need full control over the sign-in UI so it blends seamlessly into your app.
-- A browser redirect would disrupt the user experience for your target platform.
-- Your organization operates both the app and the authorization server, and your users perceive them as a single entity.
-- Your development team can take on the additional implementation effort and ongoing maintenance.
+The Native Authentication API V2 and Bring Your Own UX (BYO UX) are in preview. The Native Authentication API V1 remains generally available. See the [Supplemental Terms of Use for Microsoft Azure Previews](https://azure.microsoft.com/support/legal/preview-supplemental-terms/) for legal terms that apply to preview features.
 
-For specific feature availability, see the feature comparison.
+Plan how your team updates the authentication interface:
+
+- Configure company branding and themes for Microsoft-hosted pages.
+- Release Embedded native authentication screens with your application.
+- Deploy a BYO UX website on its own release schedule.
+
+## Microsoft-hosted authentication
+
+Evaluate Microsoft-hosted authentication when you want authentication pages hosted and managed by Microsoft. Configure [company branding](concept-branding-customers) across the tenant, or use [branding themes](../../fundamentals/how-to-customize-branding-themes-apps) for selected applications. Your team integrates the app and configures policy.
+
+## Embedded native authentication
+
+Evaluate Embedded native authentication when you want authentication interactions integrated into your application's interface. Your team builds the screens and handles credentials, state, and integration. Confirm platform and SDK support in the [native authentication overview](../../identity-platform/concept-native-authentication). For method and journey support, use the [methods and journeys comparison](concept-supported-features-customers#methods-and-journeys-by-approach) and [browser fallback requirements](../../identity-platform/concept-native-authentication-web-fallback).
+
+The current Native Authentication API requires a [tenant-verified custom domain](concept-custom-url-domain) for all service API calls. For a browser-based single-page application (SPA), also plan a cross-origin resource sharing (CORS) proxy or edge policy. Android and iOS apps using native HTTP transports don't need CORS or a CORS proxy. Enable the required methods in your tenant and test the journeys your app needs.
+
+## Bring Your Own UX
+
+Evaluate BYO UX when you want a separate authentication website with its own design and release cycle, whether for one application or several. Your team hosts and manages the page while Microsoft Entra External ID verifies credentials and applies policy. The site uses HTTPS on a tenant-verified domain; all service API calls also use a tenant-verified custom domain.
+
+Applications that use BYO UX start sign-in with Microsoft Entra External ID through standard [browser-based integration patterns](samples-ciam-all). BYO UX guidance focuses on implementing the authentication website, including its API calls and CORS proxy. An existing browser session can satisfy authentication without presenting the website.
+
+For architecture, requirements, and implementation guidance, see the [Bring Your Own UX overview](concept-bring-your-own-ux).
+
+## Ownership and security responsibilities
+
+For every approach, your team configures authentication policies, integrates the application, and protects application sessions and tokens. Plan accessibility, testing, monitoring, security updates, incident response, and release coordination for the components your team operates.
+
+Microsoft maintains Microsoft-hosted sign-in pages. With Embedded native authentication, your team maintains app screens and state handling. With BYO UX, your team hosts and manages the website, proxy, and browser integration.
+
+Protect any credentials, continuation state, and tokens your integration handles. Avoid exposing them in URLs or logs. Test what happens when policy requires another verification step and when a session expires. Identify the team responsible for deploying fixes to the components your organization operates.
 
 ## Feature comparison
 
-The following table shows which features are available in each approach.
+Use the [authentication approach support matrix](concept-supported-features-customers#authentication-approach-supportability) to compare methods, policies, and journeys.
 
-| Feature | Browser-delegated authentication | Native authentication |
-| --- | --- | --- |
-| Sign up and sign in with email one-time passcode (OTP) | ✔️ | ✔️ |
-| Sign up and sign in with email and password | ✔️ | ✔️ |
-| Sign in with email and password can use username (alias) and password | ✔️ | ✔️ |
-| Self-service password reset (SSPR) | ✔️ | ✔️ |
-| Custom claims provider | ✔️ | ✔️ |
-| Multifactor authentication with email one-time passcode (OTP) | ✔️ | ✔️ |
-| Multifactor authentication with SMS one-time passcode (OTP) | ✔️ | ✔️ |
-| Social identity provider sign-in (Apple, Facebook, and Google)^1^ | ✔️ | ✔️ |
-| Single sign-on (SSO)^2^ | ✔️ | ✔️ |
-
-^1^ Even with native authentication, social sign-in still uses a browser window for the identity provider step.
-
-^2^ Native authentication supports SSO for embedded web views only. Cross-app SSO through system browsers isn't available with native authentication.
-
-## Supported languages and frameworks
-
-The following languages and frameworks are supported for each approach.
-
-| Approach | Supported languages and frameworks |
+| Requirement | Coverage to review |
 | --- | --- |
-| Browser-delegated authentication | - ASP.NET Core<br>- Android (Kotlin, Java)<br>- iOS/macOS (Swift, Objective-C)<br>- JavaScript<br>- React<br>- Angular<br>- Node.js<br>- Python<br>- Java |
-| Native authentication | - Android (Kotlin, Java)<br>- iOS/macOS (Swift, Objective-C)<br>- Web (JavaScript, React, Angular)<br><br> For other languages and platforms, you can use the [native authentication API](/en-us/entra/identity-platform/reference-native-authentication-api). |
+| **Sign-up, sign-in, and password reset** | Confirm [method and journey availability](concept-supported-features-customers#methods-and-journeys-by-approach) for your approach. For tenant configuration, see [identity providers and authentication methods](concept-authentication-methods-customers). |
+| **Additional verification** | Confirm method availability and factor registration requirements in the [multifactor authentication (MFA) guidance](concept-multifactor-authentication-customers). |
+| **Session behavior** | Review [Conditional Access](concept-supported-features-customers#conditional-access), [sign-in frequency](../../identity/conditional-access/concept-session-lifetime#user-sign-in-frequency), and [single sign-on](concept-supported-features-customers#single-sign-on). Plan sign-out for each app's session. |
+| **Custom business logic** | Confirm which [custom authentication extension events](concept-custom-extensions) your integration supports. |
 
-## Security considerations
+### Supported languages and frameworks
 
-Browser-delegated authentication is the more secure option. Microsoft manages the sign-in surface, which reduces your app's exposure to phishing and credential-harvesting attacks.
-
-With native authentication, your development team shares security responsibility with Microsoft Entra. Your team must follow security best practices for handling user credentials. Before you choose native authentication, discuss the security implications with your app's business owner and development team.
+For Microsoft-hosted integration, see [Samples by app type and language](samples-ciam-all) and [Register an app](../../identity-platform/quickstart-register-app). For Embedded native authentication, confirm platform and SDK requirements in the [native authentication overview](../../identity-platform/concept-native-authentication). For BYO UX, plan a self-hosted browser authorization flow with a web-type redirect URI.

@@ -12,7 +12,8 @@ ms.service: entra-verified-id
 manager: dougeby
 description: Explore recent Microsoft Entra Verified ID features, improvements, and service changes so you can plan updates and use new capabilities.
 ms.topic: whats-new
-ms.date: 2026-10-08T00:00:00.0000000Z
+ms.date: 2026-11-07T00:00:00.0000000Z
+ai-usage: ai-assisted
 ms.custom: references_regions, msecd-doc-authoring-1026
 locale: en-us
 document_id: 1311adbe-3bf0-c64a-1610-3fe2efb68a2c
@@ -31,10 +32,8 @@ item_type: Content
 source_path: docs/verified-id/whats-new.md
 cmProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/19011fa1-e010-495a-a1ea-74b88af5b9b1
-- https://authoring-docs-microsoft.poolparty.biz/devrel/2624a017-7337-44fa-9494-a407bb0e59fa
 spProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/3dc5b4eb-8015-403d-9d1b-ae51b20067fe
-- https://authoring-docs-microsoft.poolparty.biz/devrel/a438284e-c3c3-4c36-ab0b-aa7c244b912c
 platformId: 6559ce41-bc1e-b645-e8ce-2572b2f4fcad
 ---
 
@@ -43,6 +42,13 @@ platformId: 6559ce41-bc1e-b645-e8ce-2572b2f4fcad
 ## Overview
 
 This article summarizes the latest features, improvements, and service changes for Microsoft Entra Verified ID. Use it to understand new capabilities and plan updates to issuer or verifier implementations.
+
+## November 2026
+
+- **ID verification profiles**: Learn how to [create and manage ID verification profiles](how-to-create-id-verification-profile) for account recovery, onboarding, and verification at sign-in.
+- **My Account Verified ID issuance**: Learn how to [get your Microsoft Entra Verified ID from My Account](how-to-get-verified-id-my-account), including profile-based self-service issuance.
+- **Identity verification (IDV) partner gallery: two new Security Store integrations**: Added [Entrust](https://securitystore.microsoft.com/solutions/entrustdatacard.entrust_identity_verification_prod) and [Persona](https://securitystore.microsoft.com/solutions/persona-identities.persona_idv) as [Security Store integration partners](idv-partners#security-store-integration-partners).
+- **High assurance overview (preview)**: Read the [Microsoft Entra high assurance overview](high-assurance) for guidance on identity-verified onboarding, resource access, risk remediation, and account recovery.
 
 ## October 2026
 

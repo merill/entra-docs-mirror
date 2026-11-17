@@ -13,7 +13,8 @@ manager: dougeby
 description: Describes overview of identity lifecycle management for Microsoft Entra ID Governance.
 ms.workload: identity
 ms.topic: overview
-ms.date: 2025-04-09T00:00:00.0000000Z
+ms.date: 2026-11-03T00:00:00.0000000Z
+ms.custom: msecd-doc-authoring-1026
 locale: en-us
 document_id: edd8cf7f-f71f-8615-0966-ede39ea11dc9
 document_version_independent_id: edd8cf7f-f71f-8615-0966-ede39ea11dc9
@@ -30,13 +31,13 @@ monikers: []
 item_type: Content
 source_path: docs/id-governance/scenarios/automate-identity-lifecycle.md
 cmProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/b1cfdec6-b0c3-4209-818c-736879856e0e
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/37da4cc9-0cfc-42a9-ba5e-805706b01ef8
-- https://authoring-docs-microsoft.poolparty.biz/devrel/b1cfdec6-b0c3-4209-818c-736879856e0e
 spProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/2d0723c1-cf38-4c30-ab3d-5df787b33270
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/3661fb96-d414-4a4e-b7ad-9370637790dd
-- https://authoring-docs-microsoft.poolparty.biz/devrel/2d0723c1-cf38-4c30-ab3d-5df787b33270
 platformId: d13a4fd6-ec1e-3ce5-ec15-20f9e5a6e35e
 ---
 
@@ -74,6 +75,8 @@ For more information see [What is HR driven provisioning?](../../identity/app-pr
 ## Automatic workflow tasks with Lifecycle Workflows
 
 - [Lifecycle workflows](../what-are-lifecycle-workflows) automate workflow tasks that run at certain key events, such before a new employee is scheduled to start work at the organization, as they change status during their time in the organization, and as they leave the organization. For example, a workflow can be configured to send an email with a temporary access pass to a new user's manager, or a welcome email to the user, on their first day.
+
+The identity-verification onboarding templates (preview) support pre-hire verification and new-hire credential registration. See [Onboard users with identity verification (Preview)](../how-to-onboard-users-with-identity-verification) for workflow configuration, inline passkey registration, and the Temporary Access Pass (TAP) alternative with Conditional Access-protected registration.
 
 ## Automatic assignment policies in entitlement management
 

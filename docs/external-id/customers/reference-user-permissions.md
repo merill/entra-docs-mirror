@@ -13,8 +13,9 @@ ms.subservice: external
 manager: dougeby
 description: Learn about the default permissions for users in an external tenant.
 ms.topic: reference
-ms.date: 2025-03-10T00:00:00.0000000Z
-ms.custom: it-pro
+ms.date: 2026-11-12T00:00:00.0000000Z
+ms.custom: it-pro, msecd-doc-authoring-1030
+ai-usage: ai-assisted
 locale: en-us
 document_id: 164ff780-a29f-41d6-4a1e-80c6d999e338
 document_version_independent_id: 6bcae341-5d96-a9bd-e823-e9a7c507640c
@@ -31,12 +32,12 @@ monikers: []
 item_type: Content
 source_path: docs/external-id/customers/reference-user-permissions.md
 cmProducts:
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/c77bc83e-f0b0-4b63-836e-6630e606bf7c
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
 - https://authoring-docs-microsoft.poolparty.biz/devrel/5fc61396-d075-4560-aece-fdbda73d243f
 spProducts:
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/b98eda1f-6af8-444f-bbfb-7f2366948cbc
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
 - https://authoring-docs-microsoft.poolparty.biz/devrel/ad9437c1-8cda-4537-ad69-b4b263652e13
 platformId: df236c59-6a36-1157-9bc3-980b28f21438
 ---
@@ -67,6 +68,8 @@ The following table describes the default permissions assigned to a user in an e
 | --- | --- |
 | Users and contacts | - Read and update their own profile through the app profile management experience<br>- Change their own password<br>- Sign in with a local or social account |
 | Applications | - Access applications<br>- Revoke consent to applications |
+
+App ownership is supported, but default permissions differ from workforce tenants. Owners, including invited users, should be assigned the Application Developer role to manage credentials and other properties of owned app registrations. The Application Administrator and Cloud Application Administrator roles provide broader application-management permissions, regardless of ownership. For users who need to manage only app registrations they own, Application Developer is the least-privileged built-in role.
 
 ## Microsoft Graph APIs and permissions
 

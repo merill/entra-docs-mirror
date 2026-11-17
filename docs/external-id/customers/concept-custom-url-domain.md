@@ -1,6 +1,6 @@
 ---
 layout: Conceptual
-title: Overview of custom URL domains for External ID - Microsoft Entra External ID | Microsoft Learn
+title: Custom URL Domains - Microsoft Entra External ID | Microsoft Learn
 canonicalUrl: https://learn.microsoft.com/en-us/entra/external-id/customers/concept-custom-url-domain
 uhfHeaderId: MSDocsHeader-Entra
 breadcrumb_path: /entra/breadcrumb/toc.json
@@ -11,10 +11,11 @@ ms.author: cmulligan
 ms.service: entra-external-id
 ms.subservice: external
 manager: dougeby
-description: Learn about setting up custom URL domains to personalize the authentication sign-in endpoints for the external customers and consumers of your app.
+description: Learn when a custom URL domain is required and how it routes authentication requests for your Microsoft Entra External ID applications.
 ms.topic: concept-article
-ms.date: 2025-09-16T00:00:00.0000000Z
-ms.custom: it-pro, sfi-image-nochange
+ms.date: 2026-11-11T00:00:00.0000000Z
+ms.custom: it-pro, sfi-image-nochange, msecd-doc-authoring-1030
+ai-usage: ai-assisted
 locale: en-us
 document_id: 921b028e-1c03-2051-0847-ffff04ceaba6
 document_version_independent_id: 921b028e-1c03-2051-0847-ffff04ceaba6
@@ -31,21 +32,21 @@ monikers: []
 item_type: Content
 source_path: docs/external-id/customers/concept-custom-url-domain.md
 cmProducts:
-- https://authoring-docs-microsoft.poolparty.biz/devrel/b5e53e15-0a76-4936-b270-8b2badca62ac
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/c77bc83e-f0b0-4b63-836e-6630e606bf7c
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
+- https://authoring-docs-microsoft.poolparty.biz/devrel/b5e53e15-0a76-4936-b270-8b2badca62ac
 spProducts:
-- https://authoring-docs-microsoft.poolparty.biz/devrel/6908a4c7-0b59-4f8b-a00e-59c83ae0a04a
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/b98eda1f-6af8-444f-bbfb-7f2366948cbc
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
+- https://authoring-docs-microsoft.poolparty.biz/devrel/6908a4c7-0b59-4f8b-a00e-59c83ae0a04a
 platformId: cf65403e-942e-010c-bc63-617448950715
 ---
 
-# Overview of custom URL domains for External ID - Microsoft Entra External ID | Microsoft Learn
+# Custom URL Domains - Microsoft Entra External ID | Microsoft Learn
 
-**Applies to**: ![Green circle with a white check mark symbol that indicates the following content applies to external tenants.](../media/common/applies-to-yes.png) External tenants ([learn more](/en-us/entra/external-id/tenant-configurations))
+A custom URL domain lets you use your own authentication endpoint names in Microsoft Entra External ID.
 
-A custom URL domain allows you to brand your application’s sign-in endpoints with your own custom URL domain instead of Microsoft’s default domain name.
+**Applies to external tenants:** Feature support varies by authentication approach and API or SDK version. Compare Microsoft-hosted authentication, Embedded native authentication, and Bring Your Own UX (BYO UX) in the [authentication approach overview](concept-choose-authentication-approach). Check feature availability in the [authentication support matrix](concept-supported-features-customers#authentication-approach-supportability).
+
+The current Native Authentication API and Bring Your Own UX (BYO UX) require a tenant-verified custom domain for all service API call URLs. Verify and configure that domain before integrating either approach. Microsoft-hosted authentication can also use a custom URL domain for a consistent sign-in address.
 
 [![Screenshot demonstrates an External ID custom URL domain user experience.](media/concept-custom-url-domain/custom-domain-user-experience-small.png)](media/concept-custom-url-domain/custom-domain-user-experience.png#lightbox)
 

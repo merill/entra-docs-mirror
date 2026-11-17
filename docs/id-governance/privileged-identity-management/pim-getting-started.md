@@ -13,9 +13,10 @@ ms.subservice: privileged-identity-management
 manager: dougeby
 description: Learn how to enable and get started using Privileged Identity Management (PIM) in the Microsoft Entra admin center.
 ms.topic: how-to
-ms.date: 2026-04-23T00:00:00.0000000Z
+ms.date: 2026-10-26T00:00:00.0000000Z
 ms.reviewer: shaunliu
-ms.custom: pim, sfi-ga-nochange
+ms.custom: pim, sfi-ga-nochange, msecd-doc-authoring-1031
+ai-usage: ai-assisted
 locale: en-us
 document_id: f720f767-871a-b92b-0efa-e0e35d3ccca8
 document_version_independent_id: ee84f58e-7791-40cf-9b38-1d5b416303af
@@ -52,6 +53,14 @@ This article describes how to enable Privileged Identity Management (PIM) and ge
 
 To use Privileged Identity Management, you must have a Microsoft Entra ID P2 or Microsoft Entra ID Governance license. For more information on licensing, see [Microsoft Entra ID Governance licensing fundamentals](../licensing-fundamentals).
 
+PIM for app roles (preview) requires Microsoft Entra ID Governance licenses.
+
+License coverage is required for users with eligible or time-bound app role assignments and for request approvers.
+
+At preview launch, licensed tenants receive access to PIM for app roles automatically. No tenant enrollment or enablement step is required.
+
+PIM for app roles (preview) is available in all clouds. There are no additional tenant prerequisites or exclusions beyond the licensing requirement.
+
 ## Activation of role assignments
 
 When a Microsoft Entra tenant has a Microsoft Entra ID P2 or Microsoft Entra ID Governance license, users with active role assignments can do the following:
@@ -85,6 +94,20 @@ Here are the recommended tasks to prepare Privileged Identity Management to mana
 3. [Give eligible assignments](pim-resource-roles-assign-roles)
 4. [Allow eligible users to activate their Azure roles just-in-time](pim-resource-roles-activate-your-roles)
 
+## Prepare PIM for app roles (preview)
+
+Use PIM for app roles to give users eligible assignments to roles defined by an application. Users activate those assignments when they need access and deactivate them when they finish. For background, see [PIM for app roles (preview)](concept-pim-for-app-roles).
+
+Applications with existing app roles can be managed directly in PIM. No application onboarding or bring-under-management step is required.
+
+Here are the recommended tasks to prepare Privileged Identity Management to manage app roles:
+
+1. [Configure app role settings](app-roles-settings).
+2. [Give eligible app role assignments](app-roles-assign).
+3. [Allow eligible users to activate their app roles just-in-time](app-roles-activate).
+
+To open the app role experience, sign in to the [Microsoft Entra admin center](https://entra.microsoft.com) and browse to **ID Governance** &gt; **Privileged Identity Management** &gt; **App Roles (Preview)**.
+
 ## Navigate to your tasks
 
 Once Privileged Identity Management is set up, you can learn your way around.
@@ -100,6 +123,7 @@ Once Privileged Identity Management is set up, you can learn your way around.
 | **Microsoft Entra roles** | Displays a dashboard and settings for Privileged Role Administrators to manage Microsoft Entra role assignments. This dashboard is disabled for anyone who isn't a Privileged Role Administrator. These users have access to a special dashboard titled **My view**. The **My view** dashboard only displays information about the user accessing the dashboard, not the entire organization. |
 | **Groups** | Manage just-in-time membership in the group or just-in-time ownership of the group. Groups can be used to provide access to Microsoft Entra roles, Azure roles, and various other scenarios. To manage a Microsoft Entra group in PIM, you must bring it under management in PIM. |
 | **Azure resources** | Displays a dashboard and settings for Privileged Role Administrators to manage Azure resource role assignments. This dashboard is disabled for anyone who isn't a Privileged Role Administrator. These users have access to a special dashboard titled **My view**. The **My view** dashboard only displays information about the user accessing the dashboard, not the entire organization. |
+| **App Roles (Preview)** | Displays a list of applications. Select an application to work with its app roles. Available management and self-service tasks depend on your permissions and assignments. |
 | **My audit history** | View your PIM audit history, including all role activations and assignments. |
 | **Troubleshoot** | Get help diagnosing and resolving common PIM issues. |
 | **New support request** | Create a support request for PIM-related issues. |

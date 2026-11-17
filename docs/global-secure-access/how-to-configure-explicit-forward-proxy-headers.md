@@ -12,7 +12,9 @@ ms.service: global-secure-access
 manager: dougeby
 description: Learn how to configure HTTP header session management for Explicit Forward Proxy.
 ms.topic: concept-article
-ms.date: 2026-04-06T00:00:00.0000000Z
+ms.date: 2026-11-13T00:00:00.0000000Z
+ms.custom: msecd-doc-authoring-1026
+ai-usage: ai-assisted
 locale: en-us
 document_id: b0fa0a08-f02a-3003-c641-4818f09ea9a0
 document_version_independent_id: b0fa0a08-f02a-3003-c641-4818f09ea9a0

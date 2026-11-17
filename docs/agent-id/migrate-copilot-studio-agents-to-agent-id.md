@@ -11,9 +11,9 @@ ms.author: dmwendia
 ms.service: entra-id
 ms.subservice: agent-id
 manager: pmwongera
-description: Learn how to recreate Microsoft Copilot Studio agents with Microsoft Entra Agent ID for enhanced governance and security. No in-place migration path exists today.
+description: Plan a manual recreation of Microsoft Copilot Studio agents with Microsoft Entra Agent ID, validate the replacements, and safely retire legacy identities.
 ms.topic: how-to
-ms.date: 2026-06-15T00:00:00.0000000Z
+ms.date: 2026-11-05T00:00:00.0000000Z
 ms.custom: msecd-doc-authoring-1013
 ai-usage: ai-assisted
 locale: en-us
@@ -32,34 +32,34 @@ monikers: []
 item_type: Content
 source_path: docs/agent-id/migrate-copilot-studio-agents-to-agent-id.md
 cmProducts:
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/46e3c7c4-fe77-4a6e-b40a-44c569819fa5
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/c389ea6b-b6a0-46df-93a1-1e21f25e19e7
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
 spProducts:
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/d0c6fab8-2d7d-4bb0-bf40-589e08d7c132
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/19ada1b6-705b-4ed7-aad0-bffd1bd03dfa
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
 platformId: c026398e-cbef-32ce-cf71-ccbad2341b2c
 ---
 
 # Recreate Copilot Studio agents with Microsoft Entra Agent ID - Microsoft Entra Agent ID | Microsoft Learn
 
-Some agents created in Microsoft Copilot Studio authenticate by using platform-managed service principals. These agents could have been created before Copilot Studio began automatically creating agent identities for all new agents, which happened on March 18, 2026. These agents could have also been created before your organization opted in to the [Microsoft Entra Agent ID integration with Copilot Studio](/en-us/microsoft-copilot-studio/admin-use-entra-agent-identities) or if your organization opted out of creating agent identities.
+Some older agents created in Microsoft Copilot Studio authenticate by using platform-managed service principals rather than agent identities. New agents receive an Agent ID automatically. For current lifecycle behavior, see [Manage Microsoft Entra Agent IDs in Copilot Studio](/en-us/microsoft-copilot-studio/admin-use-entra-agent-identities).
 
 These service principals let agents communicate with Azure Bot Service, Microsoft Teams, and Bot Framework skills, but Microsoft Entra treats these service principals as standard applications, not as AI agents. Adopting Microsoft Entra Agent ID gives you agent-specific governance, including Conditional Access policies, centralized audit logging, and lifecycle management.
 
 This article describes the manual process of recreating Copilot Studio agents with Microsoft Entra Agent ID and decommissioning the legacy service principals. Because Copilot Studio manages the agent code, credentials, and deployment lifecycle, this process differs from custom-built agents. For agents where you own the code and identity configuration, see [Migrate custom app registrations to Agent ID](migrate-custom-app-registrations-to-agent-id).
 
+## Prerequisites
+
 Important
 
-At this time, there is no automated or in-place migration path to convert an existing Copilot Studio agent's service principal to an agent identity. To use Microsoft Entra Agent ID with Copilot Studio, you must **create a new agent** with the Agent ID integration enabled, manually reconfigure the agent, and then decommission the legacy agent. This article describes that recreate-and-deprecate process.
-
-## Prerequisites
+Before choosing manual recreation, review the current [Copilot Studio migration options](/en-us/microsoft-copilot-studio/govern-migrate-api-entra-agent-identity). This article covers a separate recreate-and-deprecate process, not the platform's self-service migration procedure. Manual recreation creates a new agent with new identity and channel references; keep the legacy agent available until you validate its replacement.
 
 Before you begin, make sure you meet the following requirements:
 
-- One or more Copilot Studio agents that use legacy service principals, created before March 18, 2026 or before your tenant opted in to Microsoft Entra Agent ID.
+- One or more Copilot Studio agents that use legacy service principals and that you've selected for manual recreation after reviewing the platform migration options.
 - Access to the **Copilot Studio admin center** and the **Microsoft Entra admin center**.
 - **Agent ID Developer** or **Agent ID Administrator** role in Microsoft Entra to manage agent identities.
-- Microsoft Entra Agent ID integration enabled for your tenant in Copilot Studio.
+- Permission to create and configure replacement agents in the relevant Copilot Studio environment.
 - Familiarity with [Microsoft Entra Agent ID key concepts](key-concepts).
 
 ### Licensing requirements
@@ -106,7 +106,7 @@ Copilot Studio agents require a different approach than custom agents:
 | **Microsoft Entra Agent ID action** | Create blueprint + agent identity through Graph API, update your code | Create a new agent with Microsoft Entra Agent ID integration enabled, then manually reconfigure |
 | **Rollback strategy** | Revert code to use old app registration | Keep the legacy agent active until the new agent is fully validated |
 
-Because Copilot Studio manages the identity lifecycle, you can't create a blueprint and agent identity directly as you would for a custom agent. There's no in-place conversion that transforms an existing service principal into an agent identity, and republishing an existing agent doesn't create an agent identity. Instead, you must create a new agent in Copilot Studio with Microsoft Entra Agent ID integration enabled, manually reconfigure all channels and connections, and then decommission the legacy agent.
+Because Copilot Studio manages the identity lifecycle, don't create a blueprint and agent identity directly as you would for a custom agent. For the manual recreation path described here, create a new agent in Copilot Studio, reconfigure its channels and connections, and then decommission the legacy agent. Use the platform documentation for supported migration of an existing agent.
 
 ## Review the process phases
 
@@ -149,13 +149,13 @@ Classify each Copilot Studio agent by its usage level to determine the migration
 | --- | --- | --- |
 | **Low** | No sign-in activity in 30+ days, no active conversations, agent in draft or unpublished state. | Candidate for cleanup. Decommission the agent and its service principal directly; no migration needed. |
 | **Medium** | Some recent conversation activity, noncritical business function, identifiable owner. | Candidate for recreation with Microsoft Entra Agent ID. Proceed through Phase 3 with standard validation. |
-| **High** | Active daily conversations, production business workflows dependent on the agent, integrated with Teams or customer-facing channels. | **Don't recreate at this time.** See Production-critical agents. |
+| **High** | Active daily conversations, production business workflows dependent on the agent, integrated with Teams or customer-facing channels. | Review supported platform migration options and the safeguards for production-critical agents before choosing manual recreation. |
 
 The 30-day sign-in threshold is based on Microsoft Entra's default retention period. If your organization has extended audit log retention (through Microsoft Sentinel or another SIEM), adjust thresholds accordingly.
 
 ### Production-critical agents
 
-For Copilot Studio agents with high usage, **don't recreate them until Microsoft provides an official automated migration path**. There's no automated migration path, and the manual recreation process carries significant risk for production agents. Maintain these service principals as-is until an official automated migration path is available.
+For Copilot Studio agents with high usage, check the current platform migration options before considering manual recreation. Manual recreation carries significant risk for production agents. Keep the existing agent active until you have an approved cutover and rollback plan and have validated the replacement.
 
 The risks specific to high-usage Copilot Studio agents include:
 
@@ -168,7 +168,7 @@ The risks specific to high-usage Copilot Studio agents include:
 
 Warning
 
-In-place migration of an existing Copilot Studio service principal to a Microsoft Entra Agent ID-native agent identity isn't supported. You must create a new agent in Copilot Studio with Microsoft Entra Agent ID integration enabled. Configuration, channels, and internal IDs don't carry over automatically.
+This manual recreation procedure creates a new agent; it doesn't convert the existing agent in place. Configuration, channels, and internal IDs don't carry over automatically.
 
 For **medium-usage** Copilot Studio agents, complete the following seven-step recreation procedure:
 
@@ -188,13 +188,13 @@ Before making any changes, document:
 
 Use this documentation as your checklist to re-establish every item on the new agent.
 
-### Step 3: Enable Microsoft Entra Agent ID integration
+### Step 3: Confirm the recreation decision
 
-Ensure your tenant opts in to Microsoft Entra Agent ID integration for Copilot Studio. Verify this setting in the **Copilot Studio admin center** or through your tenant's feature settings.
+Confirm with the agent owner that manual recreation, rather than a supported platform migration, is appropriate. Agree on test channels and a rollback path before configuring the replacement. New Copilot Studio agents receive an Agent ID automatically; don't look for an opt-in setting or create a separate blueprint.
 
 ### Step 4: Create a new agent with Microsoft Entra Agent ID
 
-In Copilot Studio, create a new agent with the Microsoft Entra Agent ID integration enabled. This new agent receives a native agent identity during provisioning. Recreate the agent's topics, knowledge sources, and configuration to match the legacy agent.
+In Copilot Studio, create a new agent. This new agent receives a native agent identity during provisioning. Recreate the agent's topics, knowledge sources, and configuration to match the legacy agent.
 
 Note
 
@@ -275,7 +275,7 @@ To decommission the legacy service principal, follow these steps:
 
 1. **Unpublish or delete the agent in Copilot Studio.** This step ensures the platform stops authenticating on behalf of the agent.
 2. Remove API permissions from the old app registration.
-3. Delete or rotate client secrets and certificates on the old app registration.
+3. Follow the [Copilot Studio identity lifecycle guidance](/en-us/microsoft-copilot-studio/admin-use-entra-agent-identities) for platform-managed credentials. Don't change those credentials independently of the platform lifecycle.
 4. Delete the app registration (enters 30-day soft-delete).
 5. After 30 days, confirm permanent deletion or hard-delete if needed.
 
@@ -285,7 +285,7 @@ The following table lists common issues you might encounter during the recreate-
 
 | Symptom | Likely cause | Resolution |
 | --- | --- | --- |
-| New Agent ID doesn't appear in **Microsoft Entra admin center** after creating the agent | Agent ID integration might not be enabled for your tenant. | Verify tenant opt-in for Agent ID integration. Try creating the agent again. If the issue persists, contact Copilot Studio support. |
+| New Agent ID doesn't appear in **Microsoft Entra admin center** after creating the agent | The identity hasn't been located or provisioning needs investigation. | Check **Settings** &gt; **Advanced** &gt; **Metadata** &gt; **Entra Agent ID** in Copilot Studio and use that ID to locate the identity. If the ID is missing, contact Copilot Studio support before creating another replacement. |
 | Agent stops responding after switchover | Channel configurations still reference the old SP's application ID. | Update channel configurations to reference the new agent's identity. Check Teams app manifest and web chat embed codes. |
 | Connection reference errors | Connectors were authorized against the old SP and need reauthorization with the new identity. | Reauthorize each connection reference in Copilot Studio using the new agent's identity. |
 | Power Automate flows fail | Flows reference the old SP's application ID or service principal. | Update flow connections and triggers to use the new agent's identity. |

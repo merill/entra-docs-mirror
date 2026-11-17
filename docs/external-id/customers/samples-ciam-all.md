@@ -13,7 +13,7 @@ ms.subservice: external
 manager: dougeby
 description: Learn how to build and integrate apps with Microsoft Entra External ID for scenarios such as sign-up, sign-in, and getting an access token to call an API.
 ms.topic: sample
-ms.date: 2026-11-09T00:00:00.0000000Z
+ms.date: 2026-11-13T00:00:00.0000000Z
 ms.custom: it-pro, seo-july-2024, msecd-doc-authoring-1030
 ai-usage: ai-assisted
 locale: en-us
@@ -42,15 +42,33 @@ platformId: a527b1ed-bab1-01b4-5143-24b5ca7408aa
 
 # Microsoft Entra External ID app samples and guides - Microsoft Entra External ID | Microsoft Learn
 
-Microsoft maintains code samples that demonstrate how to integrate various application types with Microsoft Entra External ID. We provide instructions for downloading and using samples or building your own app based on common authentication and authorization scenarios, development languages, and platforms. Included are instructions for building the project (if applicable) and running the sample application. Within the sample code, comments help you understand how these libraries are used in the application to perform authentication and authorization in an external tenant.
+Use these samples and guides to integrate authentication and authorization with Microsoft Entra External ID. Choose by app type, language, or platform. Each guide explains how to build and run a sample or develop your own app, with code comments that explain the integration.
 
-Tip
+**Applies to external tenants:** Feature support varies by authentication approach and API or SDK version. Compare Microsoft-hosted authentication, Embedded native authentication, and Bring Your Own UX (BYO UX) in the [authentication approach overview](concept-choose-authentication-approach). Check feature availability in the [authentication support matrix](concept-supported-features-customers#authentication-approach-supportability).
 
-Microsoft Entra External ID supports two authentication approaches: **browser-delegated authentication**, which redirects users to a Microsoft-hosted sign-in page, and **native authentication**, which lets you build the sign-in UI directly in your app. The samples in this article include both. If you're not sure which approach to use, see [Choose an authentication approach](concept-choose-authentication-approach).
+**Sample inventory:** This index lists Microsoft-hosted and Embedded native authentication examples. No Bring Your Own UX (BYO UX) sample is listed here.
+
+For Embedded native authentication, start with the [quickstart](../../identity-platform/quickstart-native-authentication) and [application configuration guide](../../identity-platform/how-to-native-authentication-configure-app). For an existing integration, review [SDK compatibility and migration requirements](../../identity-platform/how-to-migrate-native-authentication-v1-v2#sdk-compatibility).
+
+## Embedded native authentication
+
+Use the following onboarding guidance for the Microsoft Authentication Library (MSAL) interfaces. Check the [SDK compatibility table](../../identity-platform/how-to-migrate-native-authentication-v1-v2#sdk-compatibility) for the documented package versions and supported continuation interfaces. For direct HTTP integration, use the [Native Authentication API reference](../../identity-platform/reference-native-authentication).
+
+| Platform | SDK | Guidance |
+| --- | --- | --- |
+| **JavaScript and TypeScript** | `@azure/msal-browser`. | [React Next.js quickstart](../../identity-platform/quickstart-native-authentication) and [browser CORS requirements](../../identity-platform/concept-native-authentication-cors#proxy-contract). |
+| **Android** | `com.microsoft.identity.client:msal`. | [Android sample](https://github.com/Azure-Samples/ms-identity-ciam-native-auth-android-sample/tree/adacfe21414333128300c722c9031d4663938d7c) and [Android SDK compatibility and migration](../../identity-platform/how-to-migrate-native-authentication-v1-v2#android-migration). |
+| **Apple** | MSAL for iOS and macOS. | [iOS sample](https://github.com/Azure-Samples/ms-identity-ciam-native-auth-ios-sample/tree/85ef82afd59572ade876011bad516fd631761dd4) and [Apple SDK compatibility and migration](../../identity-platform/how-to-migrate-native-authentication-v1-v2#ios-migration). |
+
+Existing V1 integrations can use the [V1 API reference and SDK library links](../../identity-platform/reference-native-authentication-api-v1). The passkey samples are separate credential-management integrations, not passkey sign-in through the Native Authentication API.
+
+CORS and proxy guidance applies to cross-origin browser API calls from SPAs with Embedded native authentication and BYO UX websites. Android and iOS apps using native HTTP transports don't need a CORS proxy.
 
 ## Samples and guides
 
 Use the tabs to sort samples either by app type or your preferred language or platform.
+
+These tables list examples, not overall feature support. A missing sample doesn't mean a feature is unsupported. Check the [authentication support matrix](concept-supported-features-customers#authentication-approach-supportability) for availability.
 
 # [By app type](#tab/apptype)
 ### Single-page application (SPA)
@@ -92,7 +110,7 @@ These samples and how-to guides demonstrate how to write a desktop application t
 | ASP.NET (MAUI) | • [Sign in users](/en-us/entra/identity-platform/quickstart-desktop-app-sign-in?toc=/entra/external-id/toc.json&amp;bc=/entra/external-id/breadcrumb/toc.json&amp;pivots=external&amp;tabs=wpfdotnet-maui-external) | • [Sign in users](/en-us/entra/identity-platform/tutorial-desktop-app-maui-sign-in-prepare-app?toc=/entra/external-id/toc.json&amp;bc=/entra/external-id/breadcrumb/toc.json) |
 | .NET (MAUI) WPF | • [Sign in users](/en-us/entra/identity-platform/quickstart-desktop-app-sign-in?toc=/entra/external-id/toc.json&amp;bc=/entra/external-id/breadcrumb/toc.json&amp;pivots=external&amp;tabs=wpfdotnet-wpf-external) | --- |
 
-### Mobile: Browser delegated authentication
+### Mobile: Microsoft-hosted authentication
 
 These samples and how-to guides show you how to write a public client mobile application with browser-delegated authentication that integrates with Microsoft Entra External ID.
 
@@ -102,22 +120,18 @@ These samples and how-to guides show you how to write a public client mobile app
 | Android (Kotlin) | • [Sign in users](/en-us/entra/identity-platform/quickstart-mobile-app-sign-in?toc=/entra/external-id/toc.json&amp;bc=/entra/external-id/breadcrumb/toc.json&amp;pivots=external&amp;tabs=android-external) • [Sign in users and call an API](/en-us/entra/identity-platform/quickstart-mobile-app-call-api?toc=/entra/external-id/toc.json&amp;bc=/entra/external-id/breadcrumb/toc.json&amp;pivots=external&amp;tabs=android-external) | • [Sign in users, call an API](tutorial-mobile-app-android-kotlin-prepare-tenant) |
 | iOS (Swift) | • [Sign in users](/en-us/entra/identity-platform/quickstart-mobile-app-sign-in?toc=/entra/external-id/toc.json&amp;bc=/entra/external-id/breadcrumb/toc.json&amp;pivots=external&amp;tabs=ios-macos-external) • [Sign in users and call an API](sample-mobile-app-ios-swift-sign-in-call-api) | • [Sign in users, call an API](/en-us/entra/identity-platform/tutorial-mobile-app-ios-swift-prepare-tenant?toc=/entra/external-id/toc.json&amp;bc=/entra/external-id/breadcrumb/toc.json&amp;pivots=external) |
 
-### Desktop: Native authentication
+### Desktop: Embedded native authentication
 
-These samples and how-to guides demonstrate how to write a desktop application that integrates with Microsoft Entra External ID.
+For macOS, use the [MSAL iOS/macOS SDK reference](https://azuread.github.io/microsoft-authentication-library-for-objc/) and [Apple SDK compatibility and migration guidance](../../identity-platform/how-to-migrate-native-authentication-v1-v2#ios-migration).
 
-| Language/Platform | Code sample guide | Build and integrate guide |
-| --- | --- | --- |
-| macOS (Swift) | • [Sign in users](/en-us/entra/identity-platform/quickstart-native-authentication-macos-sign-in?toc=/entra/external-id/toc.json&amp;bc=/entra/external-id/breadcrumb/toc.json) | • [Sign in users](/en-us/entra/identity-platform/tutorial-native-authentication-prepare-ios-macos-app?toc=/entra/external-id/toc.json&amp;bc=/entra/external-id/breadcrumb/toc.json) |
+### Mobile: Embedded native authentication
 
-### Mobile: Native authentication
-
-These samples and how-to guides demonstrate how to write a public client mobile application with native authentication that integrates with Microsoft Entra External ID.
+Use these samples with the onboarding guidance for the response-driven integration.
 
 | Language/Platform | Code sample guide | Build and integrate guide |
 | --- | --- | --- |
-| Android (Kotlin) | • [Sign in users](/en-us/entra/identity-platform/quickstart-native-authentication-android-sign-in?toc=/entra/external-id/toc.json&amp;bc=/entra/external-id/breadcrumb/toc.json) • [Sign in users and call an API](/en-us/entra/identity-platform/quickstart-native-authentication-android-call-api?toc=/entra/external-id/toc.json&amp;bc=/entra/external-id/breadcrumb/toc.json) | • [Sign in users](/en-us/entra/identity-platform/tutorial-native-authentication-prepare-android-app?toc=/entra/external-id/toc.json&amp;bc=/entra/external-id/breadcrumb/toc.json) |
-| iOS (Swift) | • [Sign in users](/en-us/entra/identity-platform/quickstart-native-authentication-ios-sign-in?toc=/entra/external-id/toc.json&amp;bc=/entra/external-id/breadcrumb/toc.json) • [Sign in users and call an API](/en-us/entra/identity-platform/quickstart-native-authentication-ios-call-api?toc=/entra/external-id/toc.json&amp;bc=/entra/external-id/breadcrumb/toc.json) | • [Sign in users](/en-us/entra/identity-platform/tutorial-native-authentication-prepare-ios-macos-app?toc=/entra/external-id/toc.json&amp;bc=/entra/external-id/breadcrumb/toc.json) |
+| Android (Kotlin) | • [Android sample](https://github.com/Azure-Samples/ms-identity-ciam-native-auth-android-sample/tree/adacfe21414333128300c722c9031d4663938d7c) | • [SDK compatibility and migration](../../identity-platform/how-to-migrate-native-authentication-v1-v2#android-migration) |
+| iOS (Swift) | • [iOS sample](https://github.com/Azure-Samples/ms-identity-ciam-native-auth-ios-sample/tree/85ef82afd59572ade876011bad516fd631761dd4) | • [SDK compatibility and migration](../../identity-platform/how-to-migrate-native-authentication-v1-v2#ios-migration) |
 
 ### Daemon
 
@@ -139,8 +153,8 @@ These samples and how-to guides demonstrate how to write a daemon application th
 
 | App type | Code sample guide | Build and integrate guide |
 | --- | --- | --- |
-| Mobile: Browser delegated authentication | • [Sign in users](sample-mobile-app-android-kotlin-sign-in) • [Sign in users and call an API](sample-mobile-app-android-kotlin-sign-in-call-api) | • [Sign in users, call an API](tutorial-mobile-app-android-kotlin-prepare-tenant) |
-| Mobile: Native authentication | • [Sign in users](/en-us/entra/identity-platform/quickstart-native-authentication-android-sign-in?toc=/entra/external-id/toc.json&amp;bc=/entra/external-id/breadcrumb/toc.json) • [Sign in users and call an API](/en-us/entra/identity-platform/quickstart-native-authentication-android-call-api?toc=/entra/external-id/toc.json&amp;bc=/entra/external-id/breadcrumb/toc.json) | • [Sign in users](/en-us/entra/identity-platform/tutorial-native-authentication-prepare-android-app?toc=/entra/external-id/toc.json&amp;bc=/entra/external-id/breadcrumb/toc.json) |
+| Mobile: Microsoft-hosted authentication | • [Sign in users](sample-mobile-app-android-kotlin-sign-in) • [Sign in users and call an API](sample-mobile-app-android-kotlin-sign-in-call-api) | • [Sign in users, call an API](tutorial-mobile-app-android-kotlin-prepare-tenant) |
+| Mobile: Embedded native authentication | • [Android sample](https://github.com/Azure-Samples/ms-identity-ciam-native-auth-android-sample/tree/adacfe21414333128300c722c9031d4663938d7c) | • [SDK compatibility and migration](../../identity-platform/how-to-migrate-native-authentication-v1-v2#android-migration) |
 
 ### ASP.NET Core
 
@@ -154,7 +168,7 @@ These samples and how-to guides demonstrate how to write a daemon application th
 | App type | Code sample guide | Build and integrate guide |
 | --- | --- | --- |
 | Desktop | • [Sign in users](/en-us/entra/identity-platform/quickstart-desktop-app-sign-in?toc=/entra/external-id/toc.json&amp;bc=/entra/external-id/breadcrumb/toc.json&amp;pivots=external&amp;tabs=wpfdotnet-maui-external) | • [Sign in users](/en-us/entra/identity-platform/tutorial-desktop-app-maui-sign-in-prepare-app?toc=/entra/external-id/toc.json&amp;bc=/entra/external-id/breadcrumb/toc.json) |
-| Mobile: Browser delegated authentication | • [Sign in users](/en-us/entra/identity-platform/quickstart-mobile-app-sign-in?toc=/entra/external-id/toc.json&amp;bc=/entra/external-id/breadcrumb/toc.json&amp;pivots=external&amp;tabs=android-netmaui-external) | • [Sign in users](tutorial-mobile-app-maui-sign-in-prepare-tenant) |
+| Mobile: Microsoft-hosted authentication | • [Sign in users](/en-us/entra/identity-platform/quickstart-mobile-app-sign-in?toc=/entra/external-id/toc.json&amp;bc=/entra/external-id/breadcrumb/toc.json&amp;pivots=external&amp;tabs=android-netmaui-external) | • [Sign in users](tutorial-mobile-app-maui-sign-in-prepare-tenant) |
 
 ### Python, Django
 
@@ -172,9 +186,9 @@ These samples and how-to guides demonstrate how to write a daemon application th
 
 | App type | Code sample guide | Build and integrate guide |
 | --- | --- | --- |
-| Mobile: Browser delegated authentication | • [Sign in users](/en-us/entra/identity-platform/quickstart-mobile-app-sign-in?toc=/entra/external-id/toc.json&amp;bc=/entra/external-id/breadcrumb/toc.json&amp;pivots=external&amp;tabs=ios-macos-external) • [Sign in users and call an API](sample-mobile-app-ios-swift-sign-in-call-api) | • [Sign in users, call an API](/en-us/entra/identity-platform/tutorial-mobile-app-ios-swift-prepare-tenant?toc=/entra/external-id/toc.json&amp;bc=/entra/external-id/breadcrumb/toc.json&amp;pivots=external) |
-| Mobile: Native authentication | • iOS (Swift) [Sign in users](/en-us/entra/identity-platform/quickstart-native-authentication-ios-sign-in?toc=/entra/external-id/toc.json&amp;bc=/entra/external-id/breadcrumb/toc.json) • [Sign in users and call an API](/en-us/entra/identity-platform/quickstart-native-authentication-ios-call-api?toc=/entra/external-id/toc.json&amp;bc=/entra/external-id/breadcrumb/toc.json) | • [Sign in users](/en-us/entra/identity-platform/tutorial-native-authentication-prepare-ios-macos-app?toc=/entra/external-id/toc.json&amp;bc=/entra/external-id/breadcrumb/toc.json) |
-| Desktop: Native authentication | • macOS (Swift) [Sign in users](/en-us/entra/identity-platform/quickstart-native-authentication-macos-sign-in?toc=/entra/external-id/toc.json&amp;bc=/entra/external-id/breadcrumb/toc.json) | • [Sign in users](/en-us/entra/identity-platform/tutorial-native-authentication-prepare-ios-macos-app?toc=/entra/external-id/toc.json&amp;bc=/entra/external-id/breadcrumb/toc.json) |
+| Mobile: Microsoft-hosted authentication | • [Sign in users](/en-us/entra/identity-platform/quickstart-mobile-app-sign-in?toc=/entra/external-id/toc.json&amp;bc=/entra/external-id/breadcrumb/toc.json&amp;pivots=external&amp;tabs=ios-macos-external) • [Sign in users and call an API](sample-mobile-app-ios-swift-sign-in-call-api) | • [Sign in users, call an API](/en-us/entra/identity-platform/tutorial-mobile-app-ios-swift-prepare-tenant?toc=/entra/external-id/toc.json&amp;bc=/entra/external-id/breadcrumb/toc.json&amp;pivots=external) |
+| Mobile: Embedded native authentication | • [iOS sample](https://github.com/Azure-Samples/ms-identity-ciam-native-auth-ios-sample/tree/85ef82afd59572ade876011bad516fd631761dd4) | • [SDK compatibility and migration](../../identity-platform/how-to-migrate-native-authentication-v1-v2#ios-migration) |
+| Desktop: Embedded native authentication | --- | • [MSAL iOS/macOS SDK reference](https://azuread.github.io/microsoft-authentication-library-for-objc/) • [SDK compatibility and migration](../../identity-platform/how-to-migrate-native-authentication-v1-v2#ios-migration) |
 
 ### JavaScript
 

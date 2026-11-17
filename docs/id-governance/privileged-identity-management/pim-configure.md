@@ -13,9 +13,10 @@ ms.subservice: privileged-identity-management
 manager: dougeby
 description: Provides an overview of Microsoft Entra Privileged Identity Management (PIM).
 ms.topic: overview
-ms.date: 2026-04-23T00:00:00.0000000Z
+ms.date: 2026-10-26T00:00:00.0000000Z
 ms.reviewer: ilyal
-ms.custom: pim, azuread-video-2020, content-engagement, sfi-ga-nochange, sfi-image-nochange
+ms.custom: pim, azuread-video-2020, content-engagement, sfi-ga-nochange, sfi-image-nochange, msecd-doc-authoring-1031
+ai-usage: ai-assisted
 locale: en-us
 document_id: d7338196-8434-f76e-ec0d-15bc85d51434
 document_version_independent_id: c7003b7a-91f8-3727-0f3e-93f52f5809fa
@@ -33,8 +34,10 @@ item_type: Content
 source_path: docs/id-governance/privileged-identity-management/pim-configure.md
 cmProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
+- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
 spProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
 platformId: 7df81cdf-9920-f097-f254-8ad149a1df54
 ---
 
@@ -43,6 +46,8 @@ platformId: 7df81cdf-9920-f097-f254-8ad149a1df54
 ## Overview
 
 Privileged Identity Management (PIM) is a service in Microsoft Entra ID that enables you to manage, control, and monitor access to important resources in your organization. These resources include resources in Microsoft Entra ID, Azure, and other Microsoft Online Services such as Microsoft 365 or Microsoft Intune. The following video explains important PIM concepts and features. 
+
+PIM also supports eligible and active assignments for application-defined roles through [PIM for app roles (preview)](concept-pim-for-app-roles). Users can activate eligible app roles when they need them and deactivate them when they finish.
 
 ## Reasons to use
 
@@ -56,6 +61,10 @@ However, users still need to carry out privileged operations in Microsoft Entra 
 ## License requirements
 
 Using Privileged Identity Management requires licenses. For more information on licensing, see [Microsoft Entra ID Governance licensing fundamentals](../licensing-fundamentals) .
+
+PIM for app roles (preview) requires Microsoft Entra ID Governance licenses. Microsoft Entra ID P2 alone isn't sufficient.
+
+License coverage is required for users with eligible or time-bound app role assignments and for request approvers.
 
 ## What does it do?
 
@@ -71,9 +80,13 @@ Privileged Identity Management provides time-based and approval-based role activ
 - Download **audit history** for internal or external audit
 - Prevent removal of the **last active Global Administrator** and **Privileged Role Administrator** role assignments
 
+The available capabilities depend on the PIM provider. For the app roles preview's workflows, see [PIM for app roles (preview)](concept-pim-for-app-roles).
+
 ## What can I do with it?
 
 Once you set up Privileged Identity Management, you'll see **Tasks**, **Manage**, and **Activity** options in the left navigation menu. As an administrator, you can choose between options such as managing **Microsoft Entra roles**, managing **Azure resource** roles, or PIM for Groups. When you choose what you want to manage, you see the appropriate set of options for that option.
+
+For app role assignments, select **App Roles (Preview)**, and then select an application. From the application, you can manage assignments and role settings, activate your eligible roles, and review requests.
 
 ![Screenshot of Privileged Identity Management in the Azure portal.](media/pim-configure/pim-quickstart.png)
 
@@ -82,6 +95,8 @@ Once you set up Privileged Identity Management, you'll see **Tasks**, **Manage**
 For Microsoft Entra roles in Privileged Identity Management, only a user who is in the Privileged Role Administrator or Global Administrator role can manage assignments for other administrators. Global Administrators, Security Administrators, Global Readers, and Security Readers can also view assignments to Microsoft Entra roles in Privileged Identity Management.
 
 For Azure resource roles in Privileged Identity Management, only a subscription administrator, a resource Owner, or a resource User Access Administrator can manage assignments for other administrators. Users who are Privileged Role Administrators, Security Administrators, or Security Readers don't by default have access to view assignments to Azure resource roles in Privileged Identity Management.
+
+For app role assignments, owners of the target service principal and users with a supported administrative role can create, update, and remove assignments. For the supported roles, see [Permissions for app role assignments (preview)](app-roles-assign#permissions).
 
 ## Terminology
 
@@ -113,7 +128,7 @@ The following screenshot shows an email message sent by PIM. The email informs P
 
 ### Assign
 
-The assignment process starts by assigning roles to members. To grant access to a resource, the administrator assigns roles to users, groups, service principals, or managed identities. The assignment includes the following data:
+The assignment process starts by assigning roles to members. To grant access to a resource, the administrator assigns roles to users, groups, service principals, or managed identities. The supported assignment subjects depend on the PIM provider. The assignment includes the following data:
 
 - The members or owners to assign the role.
 - The scope of the assignment. The scope limits the assigned role to a particular set of resources.
@@ -126,7 +141,7 @@ The following screenshot shows how administrator assigns a role to members.
 
 ![Screenshot of Privileged Identity Management role assignment.](media/pim-configure/role-assignment.png)
 
-For more information, check out the following articles: [Assign Microsoft Entra roles](pim-how-to-add-role-to-user), [Assign Azure resource roles](pim-resource-roles-assign-roles), and [Assign eligibility for a PIM for Groups](groups-assign-member-owner).
+For more information, check out the following articles: [Assign Microsoft Entra roles](pim-how-to-add-role-to-user), [Assign Azure resource roles](pim-resource-roles-assign-roles), [Assign eligibility for a PIM for Groups](groups-assign-member-owner), and [Assign app roles (preview)](app-roles-assign).
 
 ### Activate
 
@@ -138,13 +153,17 @@ The following screenshot shows how members activate their role to a limited time
 
 If the role requires [approval](pim-resource-roles-approval-workflow) to activate, a notification appears in the upper right corner of the user's browser informing them the request is pending approval. If an approval isn't required, the member can start using the role.
 
-For more information, check out the following articles: [Activate Microsoft Entra roles](pim-how-to-activate-role), [Activate my Azure resource roles](pim-resource-roles-activate-your-roles), and [Activate my PIM for Groups roles](groups-activate-roles)
+For app roles (preview), don't assume that completing PIM activation immediately changes application access. See the [app role activation considerations](app-roles-activate#overview).
+
+For more information, check out the following articles: [Activate Microsoft Entra roles](pim-how-to-activate-role), [Activate my Azure resource roles](pim-resource-roles-activate-your-roles), [Activate my PIM for Groups roles](groups-activate-roles), and [Activate app roles (preview)](app-roles-activate).
 
 ### Approve or deny
 
 Delegated approvers receive email notifications when a role request is pending their approval. Approvers can view, approve, or deny these pending requests in PIM. After the request is approved, the member can start using the role. For example, if a user or a group was assigned with Contribution role to a resource group, they can manage that particular resource group.
 
-For more information, check out the following articles: [Approve or deny requests for Microsoft Entra roles](pim-approval-workflow), [Approve or deny requests for Azure resource roles](pim-resource-roles-approval-workflow), and [Approve activation requests for PIM for Groups](groups-approval-workflow)
+For app roles (preview), approval alone doesn't confirm that the application has started granting access. See the [app role activation considerations](app-roles-activate#overview).
+
+For more information, check out the following articles: [Approve or deny requests for Microsoft Entra roles](pim-approval-workflow), [Approve or deny requests for Azure resource roles](pim-resource-roles-approval-workflow), [Approve activation requests for PIM for Groups](groups-approval-workflow), and [Approve or deny app role requests (preview)](app-roles-approval-workflow).
 
 ### Extend and renew assignments
 
@@ -153,9 +172,9 @@ After administrators set up time-bound owner or member assignments, the first qu
 - **Extend** – When a role assignment nears expiration, the user can use Privileged Identity Management to request an extension for the role assignment
 - **Renew** – When a role assignment expires, the user can use Privileged Identity Management to request a renewal for the role assignment
 
-Both user-initiated actions require an approval from a Global Administrator or Privileged Role Administrator. Admins don't need to be in the business of managing assignment expirations. You can just wait for the extension or renewal requests to arrive for simple approval or denial.
+For Microsoft Entra role assignments, both user-initiated actions require an approval from a Global Administrator or Privileged Role Administrator. Admins don't need to be in the business of managing assignment expirations. You can just wait for the extension or renewal requests to arrive for simple approval or denial.
 
-For more information, check out the following articles: [Extend or renew Microsoft Entra role assignments](pim-how-to-renew-extend), [Extend or renew Azure resource role assignments](pim-resource-roles-renew-extend), and [Extend or renew PIM for Groups assignments](groups-renew-extend)
+For more information, check out the following articles: [Extend or renew Microsoft Entra role assignments](pim-how-to-renew-extend), [Extend or renew Azure resource role assignments](pim-resource-roles-renew-extend), [Extend or renew PIM for Groups assignments](groups-renew-extend), and [Extend or renew app role assignments (preview)](app-roles-renew-extend).
 
 ## Scenarios
 

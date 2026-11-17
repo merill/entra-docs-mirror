@@ -1,6 +1,6 @@
 ---
 layout: Conceptual
-title: Plan a CIAM Deployment - Microsoft Entra External ID | Microsoft Learn
+title: Plan a Deployment - Microsoft Entra External ID | Microsoft Learn
 canonicalUrl: https://learn.microsoft.com/en-us/entra/external-id/customers/concept-planning-your-solution
 uhfHeaderId: MSDocsHeader-Entra
 breadcrumb_path: /entra/breadcrumb/toc.json
@@ -11,11 +11,11 @@ ms.author: cmulligan
 ms.service: entra-external-id
 ms.subservice: external
 manager: dougeby
-description: Discover the steps for setting up a customer identity and access management (CIAM) solution in an external tenant, including creating a tenant, registering apps, and setting up user flows for sign-in.
+description: Plan a Microsoft Entra External ID deployment, from creating an external tenant and choosing an authentication approach to integrating and securing sign-in.
 ai-usage: ai-assisted
 ms.topic: concept-article
-ms.date: 2026-05-21T00:00:00.0000000Z
-ms.custom: it-pro, seo-july-2024
+ms.date: 2026-11-12T00:00:00.0000000Z
+ms.custom: it-pro, seo-july-2024, msecd-doc-authoring-1030
 locale: en-us
 document_id: 4cd23bdf-a161-ab3b-4940-f42726aaefe7
 document_version_independent_id: e68e8f00-c2ec-7885-4139-cf6c9455c159
@@ -34,23 +34,23 @@ source_path: docs/external-id/customers/concept-planning-your-solution.md
 cmProducts:
 - https://authoring-docs-microsoft.poolparty.biz/devrel/1ae5c491-970a-4062-8301-6336e69f9026
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/c77bc83e-f0b0-4b63-836e-6630e606bf7c
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
+- https://authoring-docs-microsoft.poolparty.biz/devrel/a3955c7b-f5ee-420d-aff5-d7119738f38b
 spProducts:
 - https://authoring-docs-microsoft.poolparty.biz/devrel/f2c3e52e-3667-4e8a-bf11-20b9eaccdc8c
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/b98eda1f-6af8-444f-bbfb-7f2366948cbc
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
+- https://authoring-docs-microsoft.poolparty.biz/devrel/b31948f4-2f38-404b-ac93-c3c8c5b3ae33
 platformId: 27db9af4-115d-f993-c845-abc6ebf82201
 ---
 
-# Plan a CIAM Deployment - Microsoft Entra External ID | Microsoft Learn
-
-**Applies to**: ![Green circle with a white check mark symbol that indicates the following content applies to external tenants.](../media/common/applies-to-yes.png) External tenants ([learn more](/en-us/entra/external-id/tenant-configurations))
+# Plan a Deployment - Microsoft Entra External ID | Microsoft Learn
 
 Microsoft Entra External ID adds customer identity and access management (CIAM) to your app on the Microsoft Entra platform, so you get consistent app integration, tenant management, and operations across workforce and customer scenarios.
 
-This article is a decision-making guide for the six planning steps. Each section summarizes the key choices and links to the canonical how-tos and reference docs.
+**Applies to external tenants:** Feature support varies by authentication approach and API or SDK version. Compare Microsoft-hosted authentication, Embedded native authentication, and Bring Your Own UX (BYO UX) in the [authentication approach overview](concept-choose-authentication-approach). Check feature availability in the [authentication support matrix](concept-supported-features-customers#authentication-approach-supportability).
 
-![Diagram showing the six setup steps as a horizontal flow: create an external tenant, choose an authentication approach, register your application, integrate a sign-in flow, secure your sign-in, and customize your sign-in.](media/concept-planning-your-solution/planning-flow-horizontal.png)
+Use this guide to plan your deployment in six steps. Each section summarizes the key choices and links to setup instructions and reference documentation.
+
+![Diagram of six setup steps: create a tenant, choose authentication, register an app, integrate a user flow, secure sign-in, and customize sign-in.](media/concept-planning-your-solution/planning-flow-horizontal.png)
 
 Jump to a step for details, or go straight to the **How-to guides**.
 
@@ -60,18 +60,14 @@ Jump to a step for details, or go straight to the **How-to guides**.
 | **Step 2: Choose an authentication approach** | • [Choose an authentication approach](concept-choose-authentication-approach) |
 | **Step 3: Register your application** | • [Register your application](/en-us/entra/identity-platform/quickstart-register-app) |
 | **Step 4: Integrate a sign-in flow with your app** | • [Create a user flow](how-to-user-flow-sign-up-sign-in-customers)• [Add your app to the user flow](how-to-user-flow-add-application) |
-| **Step 5: Secure your sign-in** | • [Add multifactor authentication (MFA)](concept-multifactor-authentication-customers)• [Review security and governance](concept-security-customers)• [Integrate third-party bot protection](tutorial-third-party-bot-protection-native-api-sign-up)*(native authentication)*• [Integrate third-party ATO protection](tutorial-third-party-account-take-over-protection-native-api)*(native authentication)* |
-| **Step 6: Customize your sign-in** | • [Customize branding](concept-branding-customers)*(browser-delegated)*• [Use a custom URL domain](concept-custom-url-domain)• [Add custom authentication extensions](concept-custom-extensions) |
+| **Step 5: Secure your sign-in** | • [Add multifactor authentication (MFA)](concept-multifactor-authentication-customers)• [Review security and governance](concept-security-customers) |
+| **Step 6: Customize your sign-in** | • [Customize branding](concept-branding-customers)*(Microsoft-hosted pages)*• [Use a custom URL domain](concept-custom-url-domain)• [Add custom authentication extensions](concept-custom-extensions) |
 
 ## Step 1: Create an external tenant
 
 ![Diagram showing the setup flow with step 1, create an external tenant, highlighted.](media/concept-planning-your-solution/planning-flow-horizontal-step-1.png)
 
-Your external tenant is the resource where you register apps and manage customer identities, separate from your workforce tenant. When you create it, you choose its geographic location and domain name. If you currently use Azure AD B2C, your existing B2C tenants aren't affected; see [Plan your migration from Azure AD B2C to External ID](plan-your-migration-from-b2c-to-external-id).
-
-Important
-
-Effective May 1, 2025, Azure Active Directory B2C (Azure AD B2C) is no longer available for new customers to purchase. To learn more, see [Is Azure AD B2C still available to purchase?](/en-us/azure/active-directory-b2c/faq?tabs=app-reg-ga#azure-ad-b2c-end-of-sale) in our FAQ.
+Your external tenant is the resource where you register apps and manage customer identities, separate from your workforce tenant. When you create it, you choose its geographic location and domain name. If you're migrating from Azure AD B2C, review the [Azure AD B2C migration planning guidance](plan-your-migration-from-b2c-to-external-id). For other identity deployments, review [user migration guidance](how-to-migrate-users).
 
 The directory contains both [admin accounts](how-to-manage-admin-accounts) and customer accounts. Customers usually self-register; you can also [create local accounts](how-to-manage-customer-accounts). Customer accounts have a restricted [default permission set](reference-user-permissions) and can't see other users, groups, or devices.
 
@@ -79,7 +75,7 @@ The directory contains both [admin accounts](how-to-manage-admin-accounts) and c
 
 - [Create an external tenant](how-to-create-external-tenant-portal) in the Microsoft Entra admin center.
 - Don't have a tenant yet? [Start a free trial](https://aka.ms/ciam-free-trial?wt.mc_id=ciamcustomertenantfreetrial_linkclick_content_cnl).
-- Using VS Code? Use the [Microsoft Entra External ID extension](https://aka.ms/ciamvscode/quickstarts/marketplace) ([learn more](https://aka.ms/ciamvscode/quickstartguide)).
+- Using Visual Studio Code? Use the [Microsoft Entra External ID extension](https://aka.ms/ciamvscode/quickstarts/marketplace) and its [quickstart guide](https://aka.ms/ciamvscode/quickstartguide).
 
 ## Step 2: Choose an authentication approach
 
@@ -87,47 +83,43 @@ The directory contains both [admin accounts](how-to-manage-admin-accounts) and c
 
 Decide how to build the sign-in experience before you register your app. This choice drives the rest of your integration.
 
-- **Browser-delegated authentication** — Microsoft hosts the sign-in page; your app redirects users to it. Broad platform support, system-browser SSO, lower maintenance.
-- **Native authentication** — your app hosts the sign-in UI and calls MSAL or the native authentication API directly. Full UI control, more development and security responsibility.
+- **Microsoft-hosted authentication** — Microsoft hosts the sign-in page, and your app redirects users to it. You can apply company branding or application-specific branding themes.
+- **Embedded native authentication** — Your app presents the sign-in interface and calls an SDK or the Native Authentication API. Your team manages the interface and integration.
+- **Bring Your Own UX (BYO UX)** — Your team hosts a separate authentication website within a browser-based authorization flow. Microsoft Entra External ID applies authentication policies and verifies credentials.
 
 ### How to choose an authentication approach
 
 - [Choose an authentication approach](concept-choose-authentication-approach) — feature comparison and trade-offs.
-- [Native authentication overview](/en-us/entra/identity-platform/concept-native-authentication) — detail if you're considering native.
+- [Embedded native authentication overview](../../identity-platform/concept-native-authentication) — integration guidance for an interface in your app.
 
 ## Step 3: Register your application
 
 ![Diagram showing the setup flow with step 3, register your application, highlighted.](media/concept-planning-your-solution/planning-flow-horizontal-step-3.png)
 
-Register your app in your external tenant to establish a trust relationship with Microsoft Entra ID. The settings you configure depend on the authentication approach you chose in Step 2:
+Register your app in your external tenant to establish its application identity. Follow the registration guide for your platform and authentication approach.
 
-| Setting | Browser-delegated | Native authentication |
-| --- | --- | --- |
-| Redirect URI | Required (matches your app's sign-in callback) | Required only as a [web fallback](/en-us/entra/identity-platform/concept-native-authentication-web-fallback) |
-| Public client flows | Not required | Enabled |
-| Native authentication | Not required | Enabled |
+| Setting | Microsoft-hosted | Embedded native authentication | BYO UX |
+| --- | --- | --- | --- |
+| Redirect URI | Register a callback URI for your app. | Configure the redirect required by your platform or browser integration, separately from direct native code redemption. | Register a web-type redirect URI, including for public clients. |
+| Client type | Choose the registration for your app's platform. | Public client; enable public client flows. | Public or confidential client. |
+| Service API authority | Default tenant domain or a custom URL domain. | Tenant-verified custom domain for the current API. | Tenant-verified custom domain for API calls. |
+| Integration setup | Configure hosted sign-in. | Enable native authentication for the app. | Use Microsoft Graph beta to configure your self-hosted authentication page. |
 
-After you register the app, update your code with the application (client) ID, tenant subdomain, and (if applicable) client secret.
+After registration, configure your application and tenant identifiers. Keep confidential-client credentials on the server; don't place client secrets in mobile apps or browser code.
 
 ### How to register your application
 
 - Find platform-specific guidance on the [Samples by app type and language page](samples-ciam-all).
-- If your platform isn't listed, follow the general [register an application](/en-us/entra/identity-platform/quickstart-register-app) quickstart.
-- For native authentication app settings, see [How to enable native authentication](/en-us/entra/identity-platform/concept-native-authentication#how-to-enable-native-authentication).
+- If your platform isn't listed, follow the general [register an application](../../identity-platform/quickstart-register-app) quickstart.
+- For Embedded native authentication app settings, see [Configure an app for Embedded native authentication](../../identity-platform/how-to-native-authentication-configure-app).
 
 ## Step 4: Integrate a sign-in flow with your app
 
 ![Diagram showing the setup flow with step 4, integrate a sign-in flow with your app, highlighted.](media/concept-planning-your-solution/planning-flow-horizontal-step-4.png)
 
-Create a sign-up and sign-in user flow that defines the sign-in methods, attributes to collect, and identity providers for your app. You create the user flow the same way for both authentication approaches; the difference is how your app drives it at runtime:
+Create a sign-up and sign-in user flow that defines the sign-in methods, attributes to collect, and identity providers for your app. Use the [authentication support matrix](concept-supported-features-customers#authentication-approach-supportability) to check which configured features are available through your integration.
 
-| - | Browser-delegated | Native authentication |
-| --- | --- | --- |
-| Runtime behavior | App redirects to the Microsoft-hosted sign-in page | App calls MSAL native authentication APIs from your own UI |
-| Supported app types | Web, SPA, mobile, daemon | Mobile, SPA |
-| Federated identity providers (social, external IdPs) | Supported | Not supported — use browser-delegated if needed |
-| Company branding | Applies to Microsoft-hosted pages | Managed in your app's UI/localization |
-| Attribute collection | Configured in the user flow | Configured in the user flow; submitted via the MSAL [user attribute builder](/en-us/entra/identity-platform/concept-native-authentication-user-attribute-builder) |
+For the Native Authentication API integrations, follow the [attribute collection contract](../../identity-platform/concept-native-authentication-user-attributes).
 
 ### Plan your user flow
 
@@ -135,34 +127,33 @@ Create a sign-up and sign-in user flow that defines the sign-in methods, attribu
 - **Attributes to collect.** Decide which built-in attributes you need and whether you need [custom attributes](how-to-define-custom-attributes).
 - **Terms and conditions consent.** Use custom attributes to capture consent with links to your terms and privacy policies.
 - **Token claims.**[Add required attributes to the token](how-to-add-attributes-to-token) if your app depends on them.
-- **Sign-in methods.** Local accounts (email OTP, email + password) work with both approaches. Federated providers ([Google](how-to-google-federation-customers), [Facebook](how-to-facebook-federation-customers), [Apple](how-to-apple-federation-customers), [another Microsoft Entra tenant](how-to-entra-id-federation-customers), [custom OIDC](how-to-custom-oidc-federation-customers)) require browser-delegated authentication.
+- **Sign-in methods.** Configure local account methods and identity providers for each user flow. With Microsoft-hosted authentication, configured federated providers can include [Google](how-to-google-federation-customers), [Facebook](how-to-facebook-federation-customers), [Apple](how-to-apple-federation-customers), [another Microsoft Entra tenant](how-to-entra-id-federation-customers), or [custom OpenID Connect (OIDC)](how-to-custom-oidc-federation-customers). Federation isn't supported through the Native Authentication API. Confirm method and journey availability in the [methods and journeys comparison](concept-supported-features-customers#methods-and-journeys-by-approach).
 
 ### How to integrate a user flow with your app
 
 - [Define custom attributes](how-to-define-custom-attributes) (if needed).
 - [Create the sign-up and sign-in user flow](how-to-user-flow-sign-up-sign-in-customers).
 - [Add your application to the user flow](how-to-user-flow-add-application).
-- Wire up your app code:
-    - **Browser-delegated:** follow a [sample or quickstart](samples-ciam-all) for your app type.
-    - **Native authentication:** follow the [native authentication overview and tutorials](/en-us/entra/identity-platform/concept-native-authentication).
+- Integrate your app code:
+    - **Microsoft-hosted:** Follow a [sample or quickstart](samples-ciam-all) for your app type.
+    - **Embedded native authentication:** Start with the [application configuration guide](../../identity-platform/how-to-native-authentication-configure-app), [SDK quickstart](../../identity-platform/quickstart-native-authentication), or [Native Authentication API reference](../../identity-platform/reference-native-authentication). Confirm platform and SDK coverage in the [native authentication overview](../../identity-platform/concept-native-authentication#how-to-use-native-authentication). For an existing V1 integration, use the [V1 API reference](../../identity-platform/reference-native-authentication-api-v1) and [migration guide](../../identity-platform/how-to-migrate-native-authentication-v1-v2).
+    - **Bring Your Own UX:** Review the [Bring Your Own UX overview](concept-bring-your-own-ux) for architecture, requirements, and implementation guidance.
 
 ## Step 5: Secure your sign-in
 
 ![Diagram showing the setup flow with step 5, secure your sign-in, highlighted.](media/concept-planning-your-solution/planning-flow-horizontal-step-5.png)
 
-Every customer-facing app needs MFA and a baseline security review. Native authentication apps have extra work: because your app is the exposed sign-in surface, you front it with a web application firewall (WAF). Browser-delegated apps inherit Microsoft's platform-level protections on the hosted sign-in pages.
+Plan MFA and review security for your customer-facing apps. Configure tenant policies and protect application sessions, tokens, and any credentials or state your integration handles. Assign ownership for the interface, integration, and hosting components your team operates. For responsibility boundaries, see [authentication integration responsibilities](concept-choose-authentication-approach#security-considerations).
 
-- **Enable MFA.**[Available MFA methods](concept-multifactor-authentication-customers).
-- **Review security and governance.** Conditional Access, risk-based policies, auditing. See [Security and governance](concept-security-customers).
-- **Add bot protection***(native authentication only)*. Requires a [custom URL domain](concept-custom-url-domain). See [Integrate third-party bot protection](tutorial-third-party-bot-protection-native-api-sign-up).
-- **Add account takeover (ATO) protection***(native authentication only)*. Requires a [custom URL domain](concept-custom-url-domain). See [Integrate third-party ATO protection](tutorial-third-party-account-take-over-protection-native-api).
+- **Enable MFA.** Review [available MFA methods](concept-multifactor-authentication-customers).
+- **Review security and governance.** Plan for Conditional Access, risk-based policies, and auditing. See [Security and governance](concept-security-customers).
 
 ## Step 6: Customize your sign-in
 
 ![Diagram showing the setup flow with step 6, customize your sign-in, highlighted.](media/concept-planning-your-solution/planning-flow-horizontal-step-6.png)
 
-Customize the sign-in look and feel and extend it with your own business logic. With native authentication, your app owns the UI, so the Microsoft Entra company-branding feature doesn't apply — manage visuals and localization in your app code.
+Customize the sign-in look and feel and extend it with your own business logic. You can configure Microsoft-hosted pages, manage the interface in your app with Embedded native authentication, or host your own page with BYO UX.
 
-- **Customize branding***(browser-delegated only)*. Apply your logo, colors, and language strings to the Microsoft-hosted sign-in pages. See [Customize the sign-in look and feel](concept-branding-customers).
-- **Use a custom URL domain.** Replace the default `ciamlogin.com` host with your own domain. Also a prerequisite for native authentication bot/ATO protection in Step 5. See [Custom URL domain](concept-custom-url-domain).
-- **Add custom authentication extensions.** Extend the flow with server-side logic. Token-issuance extensions work with both approaches; attribute-collection extensions are browser-delegated only. See [Custom authentication extensions](concept-custom-extensions).
+- **Customize branding***(Microsoft-hosted pages)*. Apply your logo, colors, and language strings to the sign-in pages. See [Customize the sign-in look and feel](concept-branding-customers).
+- **Use a custom URL domain.** All service API calls for the current Native Authentication API and BYO UX use a tenant-verified custom domain. See [Custom URL domain](concept-custom-url-domain).
+- **Add custom authentication extensions.** Extend the flow with server-side logic. Event availability can differ by approach and API or SDK version. See [Custom authentication extensions](concept-custom-extensions).

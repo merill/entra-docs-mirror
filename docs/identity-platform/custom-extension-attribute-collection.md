@@ -1,6 +1,6 @@
 ---
 layout: Conceptual
-title: Create a custom authentication extension for attribute collection start and submit events (preview) - Microsoft identity platform | Microsoft Learn
+title: Create a custom authentication extension for OnAttributeCollectionStart and OnAttributeCollectionSubmit events (preview) - Microsoft identity platform | Microsoft Learn
 canonicalUrl: https://learn.microsoft.com/en-us/entra/identity-platform/custom-extension-attribute-collection
 uhfHeaderId: MSDocsHeader-Entra
 breadcrumb_path: /entra/breadcrumb/toc.json
@@ -38,7 +38,7 @@ spProducts:
 platformId: 9a1484b9-6689-8bee-ba2c-89876346badb
 ---
 
-# Create a custom authentication extension for attribute collection start and submit events (preview) - Microsoft identity platform | Microsoft Learn
+# Create a custom authentication extension for OnAttributeCollectionStart and OnAttributeCollectionSubmit events (preview) - Microsoft identity platform | Microsoft Learn
 
 **Applies to**: ![Green circle with a white check mark symbol that indicates the following content applies to external tenants.](../external-id/media/common/applies-to-yes.png) External tenants ([learn more](/en-us/entra/external-id/tenant-configurations))
 

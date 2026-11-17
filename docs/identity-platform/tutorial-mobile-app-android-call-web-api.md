@@ -31,12 +31,12 @@ item_type: Content
 source_path: docs/identity-platform/tutorial-mobile-app-android-call-web-api.md
 cmProducts:
 - https://authoring-docs-microsoft.poolparty.biz/devrel/a3955c7b-f5ee-420d-aff5-d7119738f38b
-- https://authoring-docs-microsoft.poolparty.biz/devrel/7ebba99b-05c3-4387-8883-f7bbf6632cb8
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
+- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d452572f-6212-498f-9050-ca4a9e50a425
 spProducts:
 - https://authoring-docs-microsoft.poolparty.biz/devrel/b31948f4-2f38-404b-ac93-c3c8c5b3ae33
-- https://authoring-docs-microsoft.poolparty.biz/devrel/006ab567-b18c-4cf1-9a25-c24daa46ede1
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
+- https://authoring-docs-microsoft.poolparty.biz/devrel/a12e40b7-59a2-4437-96e2-166ce622b864
 platformId: 32fae5e6-b240-ae2d-2c4a-c530b0d4a86d
 ---
 
@@ -57,7 +57,7 @@ In this tutorial, you:
 
 # [External tenant configuration](#tab/android-external)
 - [Tutorial: Add add sign-in to an Android app by using Microsoft identity platform](tutorial-mobile-app-android-sign-in-sign-out)
-- An API registration that exposes at least one scope (delegated permissions) and one app role (application permission) such as *ToDoList.Read*. If you haven't already, follow the instructions for [call an API in a sample Android mobile app](quickstart-native-authentication-android-call-api) to have a functional protected ASP.NET Core web API. Make sure you complete the following steps:
+- An API registration that exposes at least one scope (delegated permissions) and one app role (application permission) such as *ToDoList.Read*. If you haven't already, follow the [ASP.NET Core web API quickstart](quickstart-web-api-dotnet-protect-app?tabs=aspnet-core) to have a functional protected ASP.NET Core web API. Make sure you complete the following steps:
 
     - Register a web API application
     - Configure API scopes

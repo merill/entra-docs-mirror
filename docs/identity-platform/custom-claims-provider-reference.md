@@ -1,6 +1,6 @@
 ---
 layout: Conceptual
-title: Custom claims provider reference - Microsoft identity platform | Microsoft Learn
+title: OnTokenIssuanceStart event reference - Microsoft identity platform | Microsoft Learn
 canonicalUrl: https://learn.microsoft.com/en-us/entra/identity-platform/custom-claims-provider-reference
 uhfHeaderId: MSDocsHeader-Entra
 breadcrumb_path: /entra/breadcrumb/toc.json
@@ -9,7 +9,7 @@ feedback_product_url: /entra/identity-platform/developer-support-help-options
 author: cilwerner
 ms.author: cwerner
 ms.service: identity-platform
-description: Reference documentation for custom claims providers
+description: REST API schema and claims mapping policy reference for the OnTokenIssuanceStart event.
 manager: pmwongera
 ms.custom: 
 ms.date: 2025-05-25T00:00:00.0000000Z
@@ -32,16 +32,16 @@ item_type: Content
 source_path: docs/identity-platform/custom-claims-provider-reference.md
 cmProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
+- https://authoring-docs-microsoft.poolparty.biz/devrel/b1cfdec6-b0c3-4209-818c-736879856e0e
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
-- https://authoring-docs-microsoft.poolparty.biz/devrel/540ac133-a371-4dbb-8f94-28d6cc77a70b
 spProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
+- https://authoring-docs-microsoft.poolparty.biz/devrel/2d0723c1-cf38-4c30-ab3d-5df787b33270
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
-- https://authoring-docs-microsoft.poolparty.biz/devrel/60bfc045-f127-4841-9d00-ea35495a5800
 platformId: 05cb7535-66ed-9559-9b7c-b9d3639f4e31
 ---
 
-# Custom claims provider reference - Microsoft identity platform | Microsoft Learn
+# OnTokenIssuanceStart event reference - Microsoft identity platform | Microsoft Learn
 
 In this how-to guide, you can learn about the REST API schema and claims mapping policy structure for custom claim provider events.
 

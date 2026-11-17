@@ -12,7 +12,8 @@ ms.service: entra-external-id
 manager: martinco
 description: Learn about edge protection, domains, subscriptions, consumer app security, and fraud tactics in security operations for Microsoft Entra External ID.
 ms.topic: concept-article
-ms.date: 2026-06-27T00:00:00.0000000Z
+ms.date: 2026-11-13T00:00:00.0000000Z
+ms.custom: msecd-doc-authoring-1030
 ms.reviewer: gasinh
 locale: en-us
 document_id: 60eb80df-ebf7-e4a2-806e-7a94c23300f9
@@ -32,11 +33,11 @@ source_path: docs/architecture/deployment-external-operations.md
 cmProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/c77bc83e-f0b0-4b63-836e-6630e606bf7c
 - https://authoring-docs-microsoft.poolparty.biz/devrel/e8fdebed-2921-4997-a75a-fa863723a535
-- https://authoring-docs-microsoft.poolparty.biz/devrel/07bb3e10-d135-43ff-bc8b-360497cb39fa
+- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
 spProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/b98eda1f-6af8-444f-bbfb-7f2366948cbc
 - https://authoring-docs-microsoft.poolparty.biz/devrel/cf1e63a8-325f-42be-b60c-d84a95a42b1f
-- https://authoring-docs-microsoft.poolparty.biz/devrel/12e559b9-eaf6-4aee-9af7-62334e15f863
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
 platformId: 1f1a33cd-b8f9-c8de-924e-1dfb8c6f79fd
 ---
 
@@ -102,7 +103,7 @@ CIAM applications authenticate with Microsoft Entra External ID using protocols 
 | Security considerations | Details |
 | --- | --- |
 | Prefer certificates over secrets | When possible, use X.509 certificate credentials instead of password secrets. While secrets are easier to set up, certificates offer stronger security and can be the default method to acquire tokens. Currently, managed identities and workload identities aren't available in Microsoft Entra External ID. |
-| Enforce credential usage policies | Configure application authentication method policies to restrict or block the use of secrets. If you use secrets, set expirations to minimize exposure. |
+| Manage credential lifetimes | Application management policies aren't available in external tenants. If you use client secrets, set expirations to minimize exposure. |
 | Avoid credentials on public client apps | For applications that are public client apps, ensure no credentials are configured on the app registration. An example is apps with user sign-in via public endpoints. These apps shouldn't require client secrets or certificates. |
 | Audit credentials regularly | To ensure credentials are used, and haven't expired, periodically review credentials assigned to applications. Remove stale or unused credentials, avoid credential sharing between applications, and limit credentials per app. |
 | Scan application code for sensitive data | To detect application credentials, use static analysis tools like a credential scanner. Use the tool for other sensitive information in source code. Build artifacts before they're committed or deployed. |
@@ -135,11 +136,9 @@ In this section, learn how to protect users from sign-up fraud. The user flow de
 | Reputation email filtering | To mitigate the risk of fraudulent email accounts, implement domain validation. Restrict sign-up from email addresses with poor reputations, or known associations with malicious activity. Microsoft Entra External ID supports custom extensions during sign-up. To evaluate the reputation of the email domain, invoke a REST API during the sign-up flow. Based on the reputation score, the system allows or blocks the sign-up request. |
 | IP email filtering | To reduce the risk of fraudulent account creation, we advise you to restrict sign-ups from anonymous proxies or IP addresses tied to Autonomous System Numbers (ASNs) outside your organization's business regions. This strategy helps reduce exposure to high-risk or untrusted traffic sources. Microsoft Entra External ID supports custom authentication extensions to invoke during the sign-up process. Use these extensions to call a REST API to assess the reputation or geolocation of the IP address initiating the sign-up request. Use this process during email one-time password (OTP) verification. |
 | Excessive OTPs from one IP address or ASN | Implement monitoring and alerting when a high volume of email OTP requests originates from the same IP address, ASN, or location. For example, trigger an alert if email OTPs come from a single IP or similar geo-coordinates in a short time. |
-| Sign-up protection (Security Store) | Use Microsoft-built native integrations with [Arkose Labs](../external-id/customers/how-to-integrate-fraud-protection?pivots=arkose) and [HUMAN Security](../external-id/customers/how-to-integrate-fraud-protection?pivots=human) to detect and block bot-driven sign-ups and fake account creation. Configured through the Microsoft Security Store in the Microsoft Entra admin center. |
+| Sign-up protection (Security Store) | Use Microsoft-built integrations with [Arkose Labs](../external-id/customers/how-to-integrate-fraud-protection?pivots=arkose) and [HUMAN Security](../external-id/customers/how-to-integrate-fraud-protection?pivots=human) to detect and block bot-driven sign-ups and fake account creation in Microsoft-hosted sign-up flows. Configured through the Microsoft Security Store in the Microsoft Entra admin center. |
 
-To strengthen defenses, Microsoft Entra External ID integrates with industry-leading non-Microsoft fraud protection providers through the [Microsoft Security Store](https://securitystore.microsoft.com). Native, Microsoft-built integrations are available for **Arkose Labs** and **HUMAN Security**, which deliver comprehensive bot detection and fake-account-prevention capabilities during the sign-up flow. For configuration steps, see [Integrate Microsoft Entra External ID with Arkose Labs and HUMAN Security for fraud protection](../external-id/customers/how-to-integrate-fraud-protection).
-
-For native authentication API flows, see [Tutorial: Integrate third-party bot protection with Native API sign-up flows](../external-id/customers/tutorial-third-party-bot-protection-native-api-sign-up).
+For Microsoft-hosted sign-up flows, Microsoft Entra External ID integrates with non-Microsoft fraud protection providers through the [Microsoft Security Store](https://securitystore.microsoft.com). Microsoft-built integrations are available for **Arkose Labs** and **HUMAN Security** to detect bots and prevent fake-account creation. For configuration steps, see [Integrate Microsoft Entra External ID with Arkose Labs and HUMAN Security for fraud protection](../external-id/customers/how-to-integrate-fraud-protection).
 
 ### International Revenue Share Fraud
 
@@ -219,13 +218,13 @@ In large systems, some transactions fail. Incomplete identity experiences, somet
 
 ### Continuous system validation
 
-Changes in environments are inevitable. An automated continuous validation environment helps catch issues caused by changes. You can use the same syntactic monitoring infrastructure to set up this validation automation.
+Changes in environments are inevitable. An automated continuous validation environment helps catch issues caused by changes. You can use the same synthetic monitoring infrastructure to set up this validation automation.
 
 Synthetic transactions can reference applications and APIs used for token acquisition, validation, and integration components such as API managers and service buses. We recommend you maintain versions of supported services, operating systems, and runtime environments. Each component continuously reports test success or failure. This action ensures identity services availability and early detection of potential failures.
 
 ### Dashboards: Operational telemetry and security insights
 
-Microsoft Entra External ID has built-in dashboards with useful telemetry from key areas such as authentication trends, MFA usage, and protections related to SMS verification. Use insights to maintain visibility into your identity system health and threat posture. For your deployment and operational strategy, we recommended you incorporate regular metrics monitoring. Detect anomalies, assess risk exposure, and ensure the effectiveness of security controls. Use the following table to see metrics and details. For more information, see [Gain insights into your app users' activity](../external-id/customers/how-to-user-insights).
+Microsoft Entra External ID has built-in dashboards with useful telemetry from key areas such as authentication trends, MFA usage, and protections related to SMS verification. Use insights to maintain visibility into your identity system health and threat posture. For your deployment and operational strategy, we recommend you incorporate regular metrics monitoring. Detect anomalies, assess risk exposure, and ensure the effectiveness of security controls. Use the following table to see metrics and details. For more information, see [Gain insights into your app users' activity](../external-id/customers/how-to-user-insights).
 
 | Metric | Details |
 | --- | --- |
@@ -243,10 +242,10 @@ See more information on the [pricing structure and billing model for Microsoft E
 
 View incurred costs on the cost analysis area of the subscription/resource group linked to the Microsoft Entra External ID tenant. If the MAU count is below the free tier, the bill is $0. Usage data, below the free tier, appears in the cost analysis.
 
-In the [Microsoft Entra admin center](https://entra.microsoft.com), for the Microsoft External ID tenant, use the usage and insight dashboard to view utilization details, even when usage is below the free tier.
+In the [Microsoft Entra admin center](https://entra.microsoft.com), for the Microsoft Entra External ID tenant, use the usage and insight dashboard to view utilization details, even when usage is below the free tier.
 
 - Learn how to [list monthly activeUsers in Microsoft Graph](/en-us/graph/api/monthlyuserinsightmetricsroot-list-activeusers?view=graph-rest-beta&amp;tabs=http&amp;preserve-view=true).
-- See the graph resource types in [dailyUserInsigntMetricsRoot resource type](/en-us/graph/api/resources/dailyuserinsightmetricsroot?view=graph-rest-beta&amp;preserve-view=true).
+- See the graph resource types in [dailyUserInsightMetricsRoot resource type](/en-us/graph/api/resources/dailyuserinsightmetricsroot?view=graph-rest-beta&amp;preserve-view=true).
 
     Note
 

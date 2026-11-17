@@ -13,7 +13,7 @@ ms.subservice: agent-id
 manager: pmwongera
 description: Learn how to disable agent identities in your Microsoft Entra ID tenant using Conditional Access policies and creation restrictions.
 ms.topic: how-to
-ms.date: 2026-04-29T00:00:00.0000000Z
+ms.date: 2026-11-05T00:00:00.0000000Z
 ms.reviewer: dastrock
 ai-usage: ai-assisted
 locale: en-us
@@ -140,7 +140,7 @@ The following steps help create a Conditional Access policy to block issuance of
     1. Select **Block**.
     2. Select **Select**.
 8. Confirm your settings and set **Enable policy** to **Report-only**.
-9. Select **Create** to create to enable your policy.
+9. Select **Create** to create the policy.
 
 # [Microsoft Graph API](#tab/microsoft-graph-api)
 Example JSON for creating the **Block agent identity authentication** policy with the Microsoft Graph APIs:
@@ -194,7 +194,7 @@ The following steps help create a Conditional Access policy to block issuance of
     1. Select **Block access**.
     2. Select **Select**.
 8. Confirm your settings and set **Enable policy** to **Report-only**.
-9. Select **Create** to create to enable your policy.
+9. Select **Create** to create the policy.
 
 # [Microsoft Graph API](#tab/microsoft-graph-api)
 Example JSON for creating the **Block agent's user account authentication** policy with the Microsoft Graph APIs:
@@ -247,7 +247,7 @@ The following steps help create a Conditional Access policy to block issuance of
     1. Select **Block**.
     2. Select **Select**.
 8. Confirm your settings and set **Enable policy** to **Report-only**.
-9. Select **Create** to create to enable your policy.
+9. Select **Create** to create the policy.
 
 # [Microsoft Graph API](#tab/microsoft-graph-api)
 Example JSON for creating the **Block users signing into agents** policy with the Microsoft Graph APIs:

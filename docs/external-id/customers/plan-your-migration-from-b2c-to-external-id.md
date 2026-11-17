@@ -13,8 +13,9 @@ ms.subservice: external
 manager: dougeby
 description: Choose between the standard migration approach and High Scale Compatibility (HSC) mode when moving from Azure AD B2C to Microsoft Entra External ID.
 ms.topic: concept-article
-ms.date: 2026-03-13T00:00:00.0000000Z
+ms.date: 2026-11-11T00:00:00.0000000Z
 ai-usage: ai-assisted
+ms.custom: msecd-doc-authoring-1030
 locale: en-us
 document_id: d203e358-690c-2ba8-ffec-ca1ed0e1499e
 document_version_independent_id: d203e358-690c-2ba8-ffec-ca1ed0e1499e
@@ -214,7 +215,7 @@ Review these limitations carefully before enabling HSC mode. They apply in addit
 
 **Security and fraud prevention**
 
-- Third-party fraud protection integration for web-hosted (browser-based) sign-in and sign-up flows isn't supported in HSC mode. Native authentication API flows can integrate with third-party fraud protection by using a web application firewall (WAF) in front of the native authentication endpoints. For implementation guidance, see [Integrate third-party bot protection with native authentication](tutorial-third-party-bot-protection-native-api-sign-up) and [Integrate third-party account takeover protection with native authentication](tutorial-third-party-account-take-over-protection-native-api).
+- Third-party fraud protection integration for web-hosted (browser-based) sign-in and sign-up flows isn't supported in HSC mode.
 
 **User experience and compliance**
 

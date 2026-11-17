@@ -7,15 +7,17 @@ breadcrumb_path: /entra/breadcrumb/toc.json
 feedback_system: Standard
 feedback_product_url: https://feedback.azure.com/d365community/forum/79b1327d-d925-ec11-b6e6-000d3a4f06a4
 author: kenwith
-ms.author: kenwith
+ms.author: tamimsangrar
 ms.service: entra-id-governance
 ms.subservice: privileged-identity-management
 manager: dougeby
-description: Learn how to activate your group membership or ownership in Privileged Identity Management (PIM).
+description: Learn how to activate eligible group membership or ownership with Microsoft Entra Privileged Identity Management (PIM).
 ms.topic: how-to
-ms.date: 2026-04-23T00:00:00.0000000Z
+ms.date: 2026-11-17T00:00:00.0000000Z
 ms.reviewer: ilyal
-ms.custom: pim
+ms.custom: pim, msecd-doc-authoring-1032
+ai-usage: ai-assisted
+zone_pivot_groups: pim-activation-portals
 locale: en-us
 document_id: 5b5337a5-a4ab-2c6b-8d86-00c907e5f951
 document_version_independent_id: 574a92d9-5f94-fc74-2ae0-cb5237db34d4
@@ -33,18 +35,22 @@ item_type: Content
 source_path: docs/id-governance/privileged-identity-management/groups-activate-roles.md
 cmProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
+- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
 spProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
 platformId: dfc6f511-e448-447a-3144-779b9cfd2695
 ---
 
 # Activate your group membership or ownership in Privileged Identity Management - Microsoft Entra ID Governance | Microsoft Learn
 
-## Overview
-
 You can use Privileged Identity Management (PIM) in Microsoft Entra ID to have just-in-time membership in the group or just-in-time ownership of the group.
 
 This article is for eligible members or owners who want to activate their group membership or ownership in PIM.
+
+Choose the portal you use to activate your group membership or ownership.
+
+## Understand activation and deactivation
 
 Important
 
@@ -57,6 +63,36 @@ An application might provide access to users based on their group membership. In
 Microsoft Entra ID doesn't allow you to remove the last (active) owner of a group. For example, consider a group that has active owner A and eligible owner B. If user B activates their ownership with PIM and then later user A is removed from the group or from the tenant, deactivation of user B's ownership won't succeed.
 
 PIM will try to deactivate user B's ownership for up to 30 days. If another active owner C is added to the group, the deactivation will succeed. If deactivation is unsuccessful after 30 days, PIM will stop trying to deactivate user B's ownership and user B will continue to be an active owner.
+
+::: zone pivot="my-access"
+
+## Activate group membership or ownership in My Access portal
+
+Use [**Roles**](https://aka.ms/pim/roles) under **My Access** in the [My Access portal](../my-access-portal-overview) to activate your eligible group membership or ownership.
+
+Group membership and ownership activation through the My Access portal is in preview. You activate an existing eligible assignment to obtain temporary membership or ownership for your signed-in identity.
+
+1. Sign in to the [My Access portal](https://myaccess.microsoft.com) in the tenant where you have an eligible group assignment.
+2. Under **My Access**, select [**Roles**](https://aka.ms/pim/roles), and then select **Groups**.
+3. Find the group and select the eligible membership or ownership assignment you need for your task.
+
+    [![Screenshot of My Access Groups showing an eligible group membership assignment and its Activate action.](media/groups-activate-roles/my-access-groups.png)](media/groups-activate-roles/my-access-groups.png#lightbox)
+4. Review the activation details and complete the activation requirements shown for your membership or ownership assignment.
+5. Select **Activate** to submit your activation request. If approval is required, wait for approval before using the group access.
+
+The ownership deactivation restriction also applies when you activate ownership through the [My Access portal](../my-access-portal-overview).
+
+## View and cancel a pending request in My Access
+
+If you no longer need a pending membership or ownership activation, cancel the request in the My Access portal.
+
+1. Under **My Access**, select [**Roles**](https://aka.ms/pim/roles), and then select **Groups**.
+2. In the **Assignment status** dropdown, select **Pending**.
+3. Find the membership or ownership request you no longer need, and select **Cancel**.
+
+::: zone-end
+
+::: zone pivot="entra-admin-center"
 
 ## Activate a role
 
@@ -79,7 +115,7 @@ When you need to take on a group membership or ownership, you can request activa
     [![Screenshot of where to provide a justification in the Reason box.](media/pim-for-groups/pim-group-7.png)](media/pim-for-groups/pim-group-7.png#lightbox)
 8. Select **Activate**.
 
-If the [role requires approval](pim-resource-roles-approval-workflow) to activate, an Azure notification appears in the upper right corner of your browser informing you the request is pending approval.
+If the [role requires approval](groups-approval-workflow) to activate, an Azure notification appears in the upper right corner of your browser informing you the request is pending approval.
 
 ## View the status of your requests
 
@@ -100,3 +136,5 @@ You can view the status of your pending requests to activate. It's important whe
 3. For the request that you want to cancel, select **Cancel**.
 
 When you select **Cancel**, the request is canceled. To activate the role again, you have to submit a new request for activation.
+
+::: zone-end

@@ -13,8 +13,9 @@ ms.subservice: agent-id
 manager: pmwongera
 description: Learn how audit and sign-in activities associated with agent identities are logged in Microsoft Entra ID.
 ms.topic: concept-article
-ms.date: 2026-04-28T00:00:00.0000000Z
+ms.date: 2026-11-06T00:00:00.0000000Z
 ms.reviewer: egreenberg14
+ai-usage: ai-assisted
 locale: en-us
 document_id: 4341dc75-ef36-5ba3-0387-11511d9dfd54
 document_version_independent_id: 4341dc75-ef36-5ba3-0387-11511d9dfd54
@@ -31,13 +32,13 @@ monikers: []
 item_type: Content
 source_path: docs/agent-id/sign-in-audit-logs-agents.md
 cmProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/b1cfdec6-b0c3-4209-818c-736879856e0e
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
-- https://authoring-docs-microsoft.poolparty.biz/devrel/5fc61396-d075-4560-aece-fdbda73d243f
 spProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/2d0723c1-cf38-4c30-ab3d-5df787b33270
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
-- https://authoring-docs-microsoft.poolparty.biz/devrel/ad9437c1-8cda-4537-ad69-b4b263652e13
 platformId: 61d3c02b-765a-14a2-f668-bbfbaa958c59
 ---
 
@@ -127,7 +128,7 @@ The `agentSignIn` sign-in event type is available in the Microsoft Entra admin c
 # [Microsoft Graph](#tab/microsoft-graph)
 Microsoft Entra Agent ID logs can be viewed and managed using Microsoft Graph on the `/beta` endpoint.
 
-To get started, follow these instructions to work with recommendations using Microsoft Graph in Graph Explorer.
+To get started, use Graph Explorer to query sign-in logs.
 
 1. Sign in to [Graph Explorer](https://developer.microsoft.com/graph/graph-explorer).
 2. Select **GET** as the HTTP method from the dropdown.
@@ -135,7 +136,7 @@ To get started, follow these instructions to work with recommendations using Mic
 
 ### Retrieve agent identity sign-in events
 
-To retrieve only sign-in events where Microsoft Entra Agent ID was involved, you need to find events initiated by a service principal where the agent type is `AgentIdentity`. Use the following Microsoft Graph request:
+This request is limited to service principal sign-in events where the agent type is `AgentIdentity`. It doesn't retrieve all agent-related sign-in types. The Microsoft Graph API documents separate event-type filters for sign-in categories, so use the filter that matches the sign-in flow you need to investigate. For example, use the following request for the service-principal category:
 
 ```http
 GET https://graph.microsoft.com/beta/auditLogs/signIns?$filter=signInEventTypes/any(t: t eq 'servicePrincipal') and agent/agentType eq 'AgentIdentity'

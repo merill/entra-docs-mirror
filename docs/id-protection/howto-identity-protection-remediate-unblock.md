@@ -6,13 +6,15 @@ uhfHeaderId: MSDocsHeader-Entra
 breadcrumb_path: /entra/breadcrumb/toc.json
 feedback_system: Standard
 feedback_product_url: https://feedback.azure.com/d365community/forum/79b1327d-d925-ec11-b6e6-000d3a4f06a4
-author: shlipsey3
-ms.author: sarahlipsey
+author: tilarso
+ms.author: tilarso
 ms.service: entra-id-protection
 manager: dougeby
 description: Learn how to configure user self-remediation and manually remediate risky users in Microsoft Entra ID Protection.
 ms.topic: how-to
-ms.date: 2026-05-15T00:00:00.0000000Z
+ms.date: 2026-10-08T00:00:00.0000000Z
+ai-usage: ai-assisted
+ms.custom: msecd-doc-authoring-108
 ms.reviewer: ebasseri
 locale: en-us
 document_id: bff3e81f-1107-2b97-8ae1-c85cf2314c95
@@ -30,13 +32,13 @@ monikers: []
 item_type: Content
 source_path: docs/id-protection/howto-identity-protection-remediate-unblock.md
 cmProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/079cf7bf-da09-4bd3-ab74-bd5a5da031d1
 - https://authoring-docs-microsoft.poolparty.biz/devrel/1ae5c491-970a-4062-8301-6336e69f9026
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
 spProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/b606cead-f1a2-4925-9a71-5fbd7a0d9b81
 - https://authoring-docs-microsoft.poolparty.biz/devrel/f2c3e52e-3667-4e8a-bf11-20b9eaccdc8c
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
 platformId: 13b33749-3a11-db48-597a-a491cbc5f073
 ---
 
@@ -78,6 +80,21 @@ When risk-based Conditional Access policies are configured, remediating user ris
 - [Self-remediation experience with Microsoft Entra ID Protection and Conditional Access](concept-identity-protection-user-experience)
 - [Require multifactor authentication for all users](../identity/conditional-access/policy-all-users-mfa-strength)
 - [Implement password hash sync](../identity/hybrid/connect/how-to-connect-password-hash-synchronization)
+
+For identity verification-based remediation, [create an eligible identity verification profile](../identity/authentication/concept-authentication-verified-id#create-and-manage-identity-verification-profiles) that supports your risk scenario before [configuring the risk policy](howto-identity-protection-configure-risk-policies#configure-identity-verification-for-risk). Use **Require Identity Verification (preview)** with either user risk or sign-in risk. This control is independent of **Require risk remediation**; the adaptive control doesn't automatically require identity verification.
+
+### Validate identity verification remediation
+
+Successful identity verification remediates user risk or sign-in risk, depending on the risk condition in the triggering policy. Failed verification doesn't remediate risk. Finish your test by checking remediation evidence rather than treating credential issuance or access as proof that risk was cleared.
+
+1. Review the applicable policy and sign-in result for the tested access attempt. Confirm the expected policy applied and presented the intended verification challenge.
+2. Confirm the user completed the [credential presentation and verification journey](concept-identity-protection-user-experience#identity-verification-for-risk). Keep issuance, verification, and credential registration outcomes separate.
+3. Review the available [verification evidence during investigation](howto-identity-protection-investigate-risk#investigate-identity-verification-outcomes) and the resulting access decision independently.
+4. Check the relevant user-risk or sign-in-risk record for the expected remediation outcome. Don't assume verification automatically clears every risk.
+5. If verification succeeds but risk remains, preserve that distinction in the test result and continue investigating. Don't dismiss risk merely to make the test pass.
+6. For failed verification, missing credentials, or unsupported remediation cases, use the existing investigation and administrator-assisted remediation process in this article.
+
+Record whether policy targeting, verification, access, and risk remediation each met their success criteria. Before expanding the policy, confirm credential eligibility, permissions, licensing, and the supported remediation outcome. Don't assume this control uses the session revocation or reauthentication behavior of the adaptive **Require risk remediation** control.
 
 ### Self-remediation of sign-in risk
 

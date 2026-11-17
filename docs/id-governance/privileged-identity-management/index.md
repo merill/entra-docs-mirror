@@ -32,8 +32,10 @@ item_type: Content
 source_path: docs/id-governance/privileged-identity-management/index.yml
 cmProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
+- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
 spProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
 platformId: 60e12861-717b-cae4-dc61-87b9c7d41476
 ---
 
@@ -68,6 +70,8 @@ Privileged Identity Management (PIM) in Microsoft Entra ID enables you to limit 
 
 - [Activate my Microsoft Entra roles](pim-how-to-activate-role)
 - [Activate my Azure resource roles](pim-resource-roles-activate-your-roles)
+- [Connect to an Azure Virtual Machine from the My Access portal](pim-connect-virtual-machine-my-access)
+- [My Access portal (preview)](../my-access-portal-overview#activate-eligible-role-assignments)
 
 ## Assign roles
 
@@ -75,6 +79,8 @@ Privileged Identity Management (PIM) in Microsoft Entra ID enables you to limit 
 
 - [Assign Microsoft Entra roles](pim-how-to-add-role-to-user)
 - [Assign Azure resource roles](pim-resource-roles-assign-roles)
+- [Assign eligibility for groups](groups-assign-member-owner)
+- [Assign app roles (preview)](app-roles-assign)
 
 ## Approve requests
 
@@ -89,3 +95,4 @@ Privileged Identity Management (PIM) in Microsoft Entra ID enables you to limit 
 
 - [Configure Microsoft Entra role settings](pim-how-to-change-default-settings)
 - [Configure Azure resource role settings](pim-resource-roles-configure-role-settings)
+- [Configure PIM for Groups settings](groups-role-settings)

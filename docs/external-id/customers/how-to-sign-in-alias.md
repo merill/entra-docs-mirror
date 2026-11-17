@@ -13,8 +13,8 @@ ms.subservice: external
 manager: dougeby
 description: Learn how to sign in and sign up with alias/username with External ID for customer identity and access management (CIAM). Get detailed steps to enable username as a sign-in identifier and create users with both email address and username.
 ms.topic: how-to
-ms.date: 2026-01-13T00:00:00.0000000Z
-ms.custom: it-pro
+ms.date: 2026-11-11T00:00:00.0000000Z
+ms.custom: it-pro, msecd-doc-authoring-1030
 locale: en-us
 document_id: 69cb866e-f3e6-12af-2ba2-32685f93ebdf
 document_version_independent_id: 69cb866e-f3e6-12af-2ba2-32685f93ebdf
@@ -31,21 +31,21 @@ monikers: []
 item_type: Content
 source_path: docs/external-id/customers/how-to-sign-in-alias.md
 cmProducts:
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/68e4b2d8-b70c-4019-b49a-d1f8881e2aea
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/c77bc83e-f0b0-4b63-836e-6630e606bf7c
 spProducts:
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/67b2ba1a-6f74-4044-a48a-f0f8ad076b8f
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/b98eda1f-6af8-444f-bbfb-7f2366948cbc
 platformId: cb5e6b30-23da-cbf2-901c-11e8958133d5
 ---
 
 # Sign in with alias - Microsoft Entra External ID | Microsoft Learn
 
-**Applies to**: ![Green circle with a white check mark symbol that indicates the following content applies to external tenants.](../media/common/applies-to-yes.png) External tenants ([learn more](/en-us/entra/external-id/tenant-configurations))
-
 You can allow users who sign in with an email address and password also sign up or sign in with a username and password. A username, also called an alternate sign-in identifier, can be a customer ID, account number, or another identifier that you choose.
+
+**Applies to external tenants:** Feature support varies by authentication approach and API or SDK version. Compare Microsoft-hosted authentication, Embedded native authentication, and Bring Your Own UX (BYO UX) in the [authentication approach overview](concept-choose-authentication-approach). Check feature availability in the [authentication support matrix](concept-supported-features-customers#authentication-approach-supportability).
 
 ![Screenshot of the username sign-in option.](media/how-to-sign-in-alias/username-login-option.png)
 

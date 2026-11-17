@@ -6,16 +6,17 @@ uhfHeaderId: MSDocsHeader-Entra
 breadcrumb_path: /entra/breadcrumb/toc.json
 feedback_system: Standard
 feedback_product_url: https://feedback.azure.com/d365community/forum/22920db1-ad25-ec11-b6e6-000d3a4f0789
-author: Justinha
-ms.author: justinha
+author: tilarso
+ms.author: tilarso
 ms.service: entra-id
 ms.subservice: authentication
 manager: dougeby
 description: Overview of the authentication methods that users register to sign in and reset passwords.
 ms.topic: how-to
-ms.date: 2025-10-22T00:00:00.0000000Z
+ms.date: 2026-11-09T00:00:00.0000000Z
 ms.reviewer: dawoo
-ms.custom: sfi-ga-nochange, sfi-image-nochange
+ms.custom: sfi-ga-nochange, sfi-image-nochange, msecd-doc-authoring-108
+ai-usage: ai-assisted
 locale: en-us
 document_id: cf2e7f7f-792d-3063-b672-f54f1e769cf3
 document_version_independent_id: fca17480-6c8d-d067-1469-2771953de47e
@@ -32,13 +33,13 @@ monikers: []
 item_type: Content
 source_path: docs/identity/authentication/howto-authentication-methods-activity.md
 cmProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/b1cfdec6-b0c3-4209-818c-736879856e0e
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
-- https://authoring-docs-microsoft.poolparty.biz/devrel/68ec7f3a-2bc6-459f-b959-19beb729907d
+- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
 spProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/2d0723c1-cf38-4c30-ab3d-5df787b33270
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
-- https://authoring-docs-microsoft.poolparty.biz/devrel/90370425-aca4-4a39-9533-d52e5e002a5d
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
 platformId: 5759ca74-10d1-3ddb-002a-2312ebe25f12
 ---
 
@@ -165,6 +166,20 @@ The registration details report shows the following information for each user:
 - Reason for failure (explanation)
 
     ![Screenshot of registration and reset events](media/how-to-authentication-methods-usage-insights/registration-and-reset-logs.png)
+
+## Identity verification reporting
+
+To view a user's identity verification status and history, use at least the [Security Reader](../role-based-access-control/permissions-reference#security-reader) role.
+
+Identity verification reporting provides account-level status and history and passkey-level provenance. These records answer different questions from the registration and usage totals in this dashboard.
+
+- Review [identity verification status and history](concept-authentication-methods-manage#identity-verification-status-and-history) on the user's separate **Identity verification** page for account-level context.
+- Review **Credential assurance** and [passkey credential provenance](concept-authentication-passkeys-fido2#credential-provenance) by selecting a passkey on the user's **Authentication methods** page and opening its details. See [Credential assurance classification](concept-authentication-passkeys-fido2#credential-assurance-classification-preview) for **Low**, **Medium**, and **High**. During preview, classification and provenance are available only for passkeys.
+- Use [audit logs](../monitoring-health/concept-audit-logs) to investigate changes to verification or provenance. Use sign-in records to review the policy evaluation and result of an access attempt separately.
+
+Enable tenant-wide collection before viewing status and history. See [Identity verification collection prerequisites](concept-authentication-verified-id#prerequisites). For the reporting entitlement, see [Identity verification licensing](../../fundamentals/licensing#identity-verification); the dashboard licensing above doesn't establish eligibility for identity verification reporting.
+
+For possible events and scenario markers, see [Verified ID audit activities](../monitoring-health/reference-audit-activities#verified-id). Identity verification audit events are separate from the dashboard's registration and usage totals. Don't apply the dashboard's reporting latency to audit logs.
 
 ## Limitations
 

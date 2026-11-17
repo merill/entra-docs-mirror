@@ -16,6 +16,7 @@ ms.topic: how-to
 ms.date: 2026-04-23T00:00:00.0000000Z
 ms.reviewer: shaunliu
 ms.custom: pim
+zone_pivot_groups: pim-role-approval-methods
 locale: en-us
 document_id: 2db25c00-21a0-2be5-7d78-8b66ec675847
 document_version_independent_id: aa152389-c2ac-867b-e53d-5af5a92a0572
@@ -34,9 +35,11 @@ source_path: docs/id-governance/privileged-identity-management/pim-resource-role
 cmProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
 - https://authoring-docs-microsoft.poolparty.biz/devrel/68ec7f3a-2bc6-459f-b959-19beb729907d
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ac4b7417-d4c2-43d4-94bf-f22fa1416b34
 spProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
 - https://authoring-docs-microsoft.poolparty.biz/devrel/90370425-aca4-4a39-9533-d52e5e002a5d
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/68876bab-7da4-4e70-b295-395b3a255a1f
 platformId: 97379049-938d-fa8c-3671-3198ebf9c3aa
 ---
 
@@ -52,6 +55,8 @@ Follow the steps in this article to approve or deny requests for Azure resource 
 
 As a delegated approver, you receive an email notification when an Azure resource role request is pending your approval. You can view these pending requests in Privileged Identity Management.
 
+::: zone pivot="portal"
+
 1. Sign in to the [Microsoft Entra admin center](https://entra.microsoft.com) as at least a [Privileged Role Administrator](../../identity/role-based-access-control/permissions-reference#privileged-role-administrator).
 2. Browse to **ID Governance** &gt; **Privileged Identity Management** &gt; **Approve requests**.
 
@@ -62,6 +67,10 @@ As a delegated approver, you receive an email notification when an Azure resourc
 1. Find and select the request that you want to approve. An approve or deny page appears.
 2. In the **Justification** box, enter the business justification.
 3. Select **Approve**. You receive an Azure notification of your approval.
+
+::: zone-end
+
+::: zone pivot="api"
 
 ## Approve pending requests with the Microsoft Azure Resource Manager API
 
@@ -99,11 +108,17 @@ Successful PATCH calls generate an empty response.
 
 For more information, see [Use Role Assignment Approvals to approve PIM role activation requests with REST API](/en-us/rest/api/authorization/privileged-approval-sample).
 
+::: zone-end
+
+::: zone pivot="portal"
+
 ## Deny requests
 
 1. Find and select the request that you want to deny. An approve or deny page appears.
 2. In the **Justification** box, enter the business justification.
 3. Select **Deny**. A notification appears with your denial.
+
+::: zone-end
 
 ## Workflow notifications
 

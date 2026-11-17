@@ -1,6 +1,6 @@
 ---
 layout: Conceptual
-title: Create a User Flow - Microsoft Entra External ID | Microsoft Learn
+title: Create a Sign-up and Sign-in User Flow - Microsoft Entra External ID | Microsoft Learn
 canonicalUrl: https://learn.microsoft.com/en-us/entra/external-id/customers/how-to-user-flow-sign-up-sign-in-customers
 uhfHeaderId: MSDocsHeader-Entra
 breadcrumb_path: /entra/breadcrumb/toc.json
@@ -11,11 +11,12 @@ ms.author: cmulligan
 ms.service: entra-external-id
 ms.subservice: external
 manager: dougeby
-description: Add sign-up and sign-in user flows for your consumer and business customers. Create a branded, customized user experience for apps in your external tenant.
+description: Create a Microsoft Entra External ID user flow to configure sign-up and sign-in methods and collect customer attributes for apps in your external tenant.
 ms.topic: how-to
-ms.date: 2025-09-16T00:00:00.0000000Z
+ms.date: 2026-11-11T00:00:00.0000000Z
 ms.reviewer: kengaderdus
-ms.custom: it-pro, seo-july-2024, sfi-image-nochange
+ms.custom: it-pro, seo-july-2024, sfi-image-nochange, msecd-doc-authoring-1030
+ai-usage: ai-assisted
 locale: en-us
 document_id: 1a5b75b2-1997-a166-40b6-243d0b1d8e66
 document_version_independent_id: 53180cc2-558c-8861-6967-66de977ff8c4
@@ -33,24 +34,24 @@ item_type: Content
 source_path: docs/external-id/customers/how-to-user-flow-sign-up-sign-in-customers.md
 cmProducts:
 - https://authoring-docs-microsoft.poolparty.biz/devrel/1ae5c491-970a-4062-8301-6336e69f9026
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/c77bc83e-f0b0-4b63-836e-6630e606bf7c
 spProducts:
 - https://authoring-docs-microsoft.poolparty.biz/devrel/f2c3e52e-3667-4e8a-bf11-20b9eaccdc8c
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/b98eda1f-6af8-444f-bbfb-7f2366948cbc
 platformId: 28a36c1a-9663-b792-83ad-fd1d151af74a
 ---
 
-# Create a User Flow - Microsoft Entra External ID | Microsoft Learn
+# Create a Sign-up and Sign-in User Flow - Microsoft Entra External ID | Microsoft Learn
 
-**Applies to**: ![Green circle with a white check mark symbol that indicates the following content applies to external tenants.](../media/common/applies-to-yes.png) External tenants ([learn more](/en-us/entra/external-id/tenant-configurations))
+A user flow defines how customers sign up and sign in to your application and which attributes you collect.
 
-Tip
+**Applies to external tenants:** Feature support varies by authentication approach and API or SDK version. Compare Microsoft-hosted authentication, Embedded native authentication, and Bring Your Own UX (BYO UX) in the [authentication approach overview](concept-choose-authentication-approach). Check feature availability in the [authentication support matrix](concept-supported-features-customers#authentication-approach-supportability).
 
-User flows are created in the Microsoft Entra admin center the same way for both authentication approaches. The instructions in this article apply whether your app uses **browser-delegated authentication** (Microsoft-hosted sign-in pages) or **native authentication** (sign-in UI built into your app). How your app integrates with the user flow at runtime differs by approach. To learn more, see [Choose an authentication approach](concept-choose-authentication-approach).
+Configure methods such as email and password, one-time passcodes, social accounts from [Google](how-to-google-federation-customers), [Facebook](how-to-facebook-federation-customers), or [Apple](how-to-apple-federation-customers), or custom [OpenID Connect (OIDC) federation](how-to-custom-oidc-federation-customers). Confirm availability for your integration in the [methods and journeys comparison](concept-supported-features-customers#methods-and-journeys-by-approach).
 
-You can create a simple sign-up and sign-in experience for your customers by adding a user flow to your application. The user flow defines the series of sign-up steps customers follow and the sign-in methods they can use (such as email and password, one-time passcodes, or social accounts from [Google](how-to-google-federation-customers), [Facebook](how-to-facebook-federation-customers), [Apple](how-to-apple-federation-customers)) or a custom [OIDC federation](how-to-custom-oidc-federation-customers). You can also collect information from customers during sign-up by selecting from a series of built-in user attributes or adding your own custom attributes.
+Page layout settings and the **Stay signed in?** prompt guidance in this article apply to Microsoft-hosted pages.
 
-This article describes how to create a sign-in and sign-up user flow. After you create the user flow, the next step is to [add your application to the user flow](how-to-user-flow-add-application). You can create multiple user flows if you have multiple applications that you want to offer to customers. Or, you can use the same user flow for many applications. However, an application can have only one user flow.
+Before you begin, review the Prerequisites for your external tenant and optional sign-in methods. After you create the user flow, [add your application to the user flow](how-to-user-flow-add-application). Multiple applications can share a user flow, but each application can have only one user flow.
 
 ## Prerequisites
 
@@ -65,6 +66,8 @@ Follow these steps to create a user flow a customer can use to sign in or sign u
 
 ### To add a new user flow
 
+Create the user flow in your external tenant:
+
 1. Sign in to the [Microsoft Entra admin center](https://entra.microsoft.com).
 2. If you have access to multiple tenants, use the **Settings** icon ![](media/common/admin-center-settings-icon.png) in the top menu to switch to your external tenant from the **Directories + subscriptions** menu.
 3. Browse to **Entra ID** &gt; **External Identities** &gt; **User flows**.
@@ -74,7 +77,7 @@ Follow these steps to create a user flow a customer can use to sign in or sign u
 5. On the **Create** page, enter a **Name** for the user flow (for example, "SignUpSignIn").
 6. Under **Identity providers**, select the **Email Accounts** check box, and then select one of these options:
 
-    - **Email with password**: Allows new users to sign up and sign in using an email address as the sign-in name and a password as their first-factor authentication method. You can also configure options for showing, hiding, or customizing the self-service password reset link on the sign-in page ([learn more](how-to-customize-branding-customers#to-customize-self-service-password-reset)). If you plan to require multifactor authentication, this option lets you choose from email one-time passcodes, SMS text codes, or both as second-factor methods.
+    - **Email with password**: Allows new users to sign up and sign in using an email address as the sign-in name and a password as their first-factor authentication method. On Microsoft-hosted pages, you can also [customize the self-service password reset link](how-to-customize-branding-customers#to-customize-self-service-password-reset). If you plan to require multifactor authentication, this option lets you choose from email one-time passcodes, SMS text codes, or both as second-factor methods.
     - **Email one-time passcode**: Allows new users to sign up and sign in using an email address as the sign-in name and email one-time passcode as their first-factor authentication method. If you plan to require multifactor authentication, you can enable SMS text codes as a second-factor method.
 
     Note
@@ -87,7 +90,7 @@ Follow these steps to create a user flow a customer can use to sign in or sign u
     [![Screenshot of the user attribute options on the Create a user flow page.](media/how-to-user-flow-sign-up-sign-in-customers/user-attributes.png)](media/how-to-user-flow-sign-up-sign-in-customers/user-attributes.png#lightbox)
 8. Select **Show more** to choose from the full list of attributes, including **Job Title**, **Display Name**, and **Postal Code**.
 
-    This list also includes any [custom attributes you defined](how-to-define-custom-attributes). Select the checkbox next to each attribute you want to collect from the user during sign-up
+    This list also includes any [custom attributes you defined](how-to-define-custom-attributes). Select the checkbox next to each attribute you want to collect from the user during sign-up.
 
     [![Screenshot of the user attribute pane after selecting Show more.](media/how-to-user-flow-sign-up-sign-in-customers/user-attributes-show-more.png)](media/how-to-user-flow-sign-up-sign-in-customers/user-attributes-show-more.png#lightbox)
 9. Select **OK**.
@@ -95,9 +98,9 @@ Follow these steps to create a user flow a customer can use to sign in or sign u
 
 ## Control the 'Stay signed in?' prompt
 
-By default, after a customer signs in to an app that uses your user flow, they see a **Stay signed in?** prompt asking whether to stay signed in across browser sessions. If the user selects **Yes**, a persistent authentication cookie is issued and they remain signed in across browser sessions. If they select **No**, a non-persistent cookie is issued.
+For Microsoft-hosted authentication, after a customer signs in to an app that uses your user flow, they see a **Stay signed in?** prompt by default. The prompt asks whether to stay signed in across browser sessions. If the user selects **Yes**, a persistent authentication cookie is issued and they remain signed in across browser sessions. If they select **No**, a non-persistent cookie is issued.
 
-This prompt is the default behavior for every user flow. Applying custom branding to the user flow or requiring multifactor authentication doesn't change whether the prompt appears. It's shown in all cases unless you override it with a Conditional Access policy.
+For Microsoft-hosted pages, applying custom branding or requiring multifactor authentication doesn't change whether the prompt appears. To override the default prompt behavior, use a Conditional Access policy.
 
 The prompt isn't a user flow setting. To change or suppress it, configure the **Persistent browser session** session control in a Conditional Access policy that targets your customers and apps:
 

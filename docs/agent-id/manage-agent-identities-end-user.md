@@ -14,7 +14,8 @@ manager: pmwongera
 description: Learn how to manage agent identities in the end user experience within Microsoft Entra. View, control, and take action on agents you own or sponsor with ease.
 ms.custom: entra-id-governance
 ms.topic: how-to
-ms.date: 2026-05-01T00:00:00.0000000Z
+ms.date: 2026-11-06T00:00:00.0000000Z
+ai-usage: ai-assisted
 locale: en-us
 document_id: 48e61b50-8716-cccf-588a-ac81773b7417
 document_version_independent_id: 48e61b50-8716-cccf-588a-ac81773b7417
@@ -31,8 +32,10 @@ monikers: []
 item_type: Content
 source_path: docs/agent-id/manage-agent-identities-end-user.md
 cmProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
 spProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
 platformId: 57d2229a-eb98-d1c5-408a-187a78710133
 ---
@@ -64,7 +67,11 @@ This article is for agent identity owners and sponsors. The **Manage agents** me
 ## Enable or disable an agent
 
 1. To disable an agent, select it from the list and choose **Disable agent**. This blocks users from being able to access it and prevents it from being issued tokens. This has the same effect as disabling the agent from the admin center.
-2. To re-enable, select the agent that is disabled and choose **Enable agent**. This allows users to access it, and allows it to be issued tokens. Note that sponsors can't re-enable agents. They will need an owner or admin's help if one of their agents needs to be re-enabled.
+
+    Note
+
+    Sponsors can't re-enable agents. Ask an owner or administrator to re-enable an agent that a sponsor disabled.
+2. To re-enable an agent, an owner or administrator selects the disabled agent and chooses **Enable agent**. This allows users to access the agent and allows it to be issued tokens.
 
 ## Request an access package on behalf of an agent identity
 

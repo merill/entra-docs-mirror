@@ -7,15 +7,15 @@ breadcrumb_path: /entra/breadcrumb/toc.json
 feedback_system: Standard
 feedback_product_url: https://feedback.azure.com/d365community/forum/79b1327d-d925-ec11-b6e6-000d3a4f06a4
 author: kenwith
-ms.author: kenwith
+ms.author: tamimsangrar
 ms.service: entra-id-governance
 ms.subservice: privileged-identity-management
 manager: dougeby
-description: Learn how to configure Azure resource role settings in Privileged Identity Management (PIM).
+description: Learn how to configure Azure resource role settings in Microsoft Entra Privileged Identity Management (PIM) to manage activation and role assignment requirements.
 ms.topic: how-to
-ms.date: 2026-04-23T00:00:00.0000000Z
+ms.date: 2026-11-17T00:00:00.0000000Z
 ms.reviewer: tamimsangrar
-ms.custom: sfi-ga-nochange, sfi-image-nochange
+ms.custom: sfi-ga-nochange, sfi-image-nochange, msecd-doc-authoring-1032
 ai-usage: ai-assisted
 locale: en-us
 document_id: caec76df-16e4-f418-14c3-6c83528134c7
@@ -34,9 +34,11 @@ item_type: Content
 source_path: docs/id-governance/privileged-identity-management/pim-resource-roles-configure-role-settings.md
 cmProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
+- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
 spProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
 platformId: 9fb71c81-0404-727b-07a3-5b6ead6c3fcb
 ---
@@ -74,6 +76,22 @@ This section discusses options for role settings.
 ### Activation maximum duration
 
 Use the **Activation maximum duration** slider to set the maximum time, in hours, that an activation request for a role assignment remains active before it expires. This value can be from 1 to 24 hours.
+
+### Allow least-privilege role activation (Preview)
+
+**Allow least-privilege role activation** lets an eligible user choose an available lower-privileged Azure resource role. The lower-privileged role's permissions must be a subset of the permissions of the role the user is eligible for. Configure this setting on the policy for the role the user is eligible for.
+
+The eligible role's policy governs approval, authentication, justification, and activation maximum duration, even when the user selects a lower-privileged role. The selected role's policy doesn't replace these controls for this activation.
+
+For example, a user eligible for **Contributor** on a resource group can select **Reader** at that scope. If the Contributor policy requires approval, authentication, and justification and limits activation to two hours, those controls still apply to the Reader activation.
+
+1. Open role settings for the Azure resource role that users are eligible for and select **Edit**.
+2. On the **Activation** tab, select **Allow least-privilege role activation**.
+3. Review the remaining activation controls, and select **Update** to save the policy.
+
+[![Screenshot of the Activation tab for an Azure resource role with Allow least-privilege role activation enabled.](media/pim-resource-roles-configure-role-settings/allow-least-privilege-role-activation.png)](media/pim-resource-roles-configure-role-settings/allow-least-privilege-role-activation.png#lightbox)
+
+In the [My Access portal](../my-access-portal-overview), users can then [select a lower-privileged role](pim-resource-roles-activate-your-roles?pivots=my-access#activate-an-azure-resource-role-in-my-access). Manual selection doesn't require Microsoft Security Copilot. If Security Copilot is available to the user, they can optionally request a role recommendation before submitting the activation request.
 
 ### On activation, require multifactor authentication
 

@@ -15,7 +15,7 @@ description: Learn how to configure and enable users to register passwordless au
 ms.topic: how-to
 ms.date: 2026-03-04T00:00:00.0000000Z
 ms.reviewer: tilarso
-ms.custom: sfi-ga-nochange, sfi-image-nochange
+ms.custom: sfi-ga-nochange, sfi-image-nochange, msecd-doc-authoring-108
 locale: en-us
 document_id: 5eeab12d-7578-3f86-4461-10603274408b
 document_version_independent_id: f4911928-14be-ecf6-0b02-cc80871ae365
@@ -32,24 +32,28 @@ monikers: []
 item_type: Content
 source_path: docs/identity/authentication/howto-authentication-temporary-access-pass.md
 cmProducts:
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
+- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/798bd9d1-9cc5-4fc7-b0e5-8699d1f6ce2a
+- https://authoring-docs-microsoft.poolparty.biz/devrel/b1cfdec6-b0c3-4209-818c-736879856e0e
 spProducts:
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/b5dc5f65-34a8-4bfc-9917-97d1e20c88b2
+- https://authoring-docs-microsoft.poolparty.biz/devrel/2d0723c1-cf38-4c30-ab3d-5df787b33270
 platformId: bbf3394b-aaf1-4f66-3c72-76ffeb547e0e
 ---
 
 # Configure a Temporary Access Pass in Microsoft Entra ID to register passwordless authentication methods - Microsoft Entra ID | Microsoft Learn
 
-Passwordless authentication methods like a passkey (FIDO2) let users sign in securely without a password. Users can bootstrap passwordless methods in one of two ways:
+Passwordless authentication methods like a passkey (FIDO2) let users sign in securely without a password. Common ways to bootstrap passwordless methods include:
 
 - Use existing Microsoft Entra multifactor authentication methods
 - Use a Temporary Access Pass
 
 A Temporary Access Pass (TAP) is a time-limited passcode that can be configured for single use or multiple sign-ins. Users can sign in with a TAP to onboard other passwordless authentication methods. A TAP also makes recovery easier when a user loses or forgets a strong authentication method.
+
+Note
+
+For identity-verified onboarding (preview), use Microsoft Entra Lifecycle Workflows to orchestrate identity verification before credential bootstrap. See the [high assurance onboarding overview](../../verified-id/high-assurance#supported-journeys) and [Create and manage identity verification profiles](concept-authentication-verified-id#create-and-manage-identity-verification-profiles). This journey requires separate configuration; issuing a TAP alone doesn't enable identity-verified onboarding.
 
 This article shows you how to enable and use a TAP using the [Microsoft Entra admin center](https://entra.microsoft.com). You can also perform these actions using REST APIs.
 

@@ -6,15 +6,16 @@ uhfHeaderId: MSDocsHeader-Entra
 breadcrumb_path: /entra/breadcrumb/toc.json
 feedback_system: Standard
 feedback_product_url: https://feedback.azure.com/d365community/forum/79b1327d-d925-ec11-b6e6-000d3a4f06a4
-author: OWinfreyATL
-ms.author: owinfrey
+author: rogulati
+ms.author: rogulati
 ms.service: entra-id-governance
 manager: dougeby
-description: Conceptual article discussing workflow templates and categories with Lifecycle Workflows.
+description: Explore Lifecycle Workflows templates for joiners, movers, and leavers, including identity-verification onboarding templates, triggers, and default tasks.
 ms.subservice: lifecycle-workflows
 ms.topic: concept-article
-ms.date: 2026-04-25T00:00:00.0000000Z
-ms.custom: template-concept
+ms.date: 2026-11-03T00:00:00.0000000Z
+ms.custom: template-concept, msecd-doc-authoring-1026
+ai-usage: ai-assisted
 locale: en-us
 document_id: 0f027bcf-ac81-8dfe-13b6-d97aa2e8afdc
 document_version_independent_id: e18836de-5235-f9ee-9b10-2398b53f5fdd
@@ -31,13 +32,13 @@ monikers: []
 item_type: Content
 source_path: docs/id-governance/lifecycle-workflow-templates.md
 cmProducts:
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ac4b7417-d4c2-43d4-94bf-f22fa1416b34
 - https://authoring-docs-microsoft.poolparty.biz/devrel/63959238-cb90-4871-a33d-4a5519097e47
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/68e4b2d8-b70c-4019-b49a-d1f8881e2aea
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/19011fa1-e010-495a-a1ea-74b88af5b9b1
 spProducts:
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/68876bab-7da4-4e70-b295-395b3a255a1f
 - https://authoring-docs-microsoft.poolparty.biz/devrel/78d87f42-5582-4a6b-90be-7db2f12b34e6
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/67b2ba1a-6f74-4044-a48a-f0f8ad076b8f
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/3dc5b4eb-8015-403d-9d1b-ae51b20067fe
 platformId: d8f6e1bb-fb27-569a-0c39-5c486e376dea
 ---
 
@@ -47,12 +48,14 @@ Lifecycle Workflows allows you to automate the lifecycle management process for 
 
 ## Lifecycle Workflows built-in templates
 
-Lifecycle Workflows currently have 14 built-in templates you can use or customize:
+Lifecycle Workflows currently have 16 built-in templates you can use or customize:
 
-[![Screenshot of a list of lifecycle workflow templates.](media/lifecycle-workflow-templates/templates-list.png)](media/lifecycle-workflow-templates/templates-list.png#lightbox)
+[![Screenshot of the workflow template gallery showing 16 templates, including the two identity verification templates.](media/lifecycle-workflow-templates/templates-list.png)](media/lifecycle-workflow-templates/templates-list.png#lightbox)
 
 The list of templates is as follows:
 
+- [Pre-hire identity verification initiation (Preview)](lifecycle-workflow-templates#pre-hire-identity-verification-initiation-preview)
+- [New Hire employee onboarding with identity verification (Preview)](lifecycle-workflow-templates#new-hire-employee-onboarding-with-identity-verification-preview)
 - [Onboard pre-hire employee](lifecycle-workflow-templates#onboard-pre-hire-employee)
 - [Onboard new hire employee](lifecycle-workflow-templates#onboard-new-hire-employee)
 - [Post-Onboarding of an employee](lifecycle-workflow-templates#post-onboarding-of-an-employee)
@@ -73,6 +76,50 @@ For a complete guide on creating a new workflow from a template, see: [Tutorial:
 Note
 
 Lifecycle workflows enhances Microsoft Entra ID Governance's [HR-driven provisioning](../identity/app-provisioning/what-is-hr-driven-provisioning) by automating routine processes. While HR provisioning manages the creation and attribute updates of user accounts, lifecycle workflows provide additional automation of tasks.
+
+### Pre-hire identity verification initiation (Preview)
+
+The **Pre-hire identity verification initiation (Preview)** template completes initial identity verification activities for new employees before their first day of work. This pre-hire phase is Day 0.
+
+[![Screenshot of the pre-hire identity verification template summary, with a trigger seven days before employeeHireDate and two enabled tasks.](media/lifecycle-workflow-templates/employee-identity-verification-template.png)](media/lifecycle-workflow-templates/employee-identity-verification-template.png#lightbox)
+
+The default parameters and tasks for the **Pre-hire identity verification initiation (Preview)** template are as follows:
+
+| Parameter | Description | Customizable |
+| --- | --- | --- |
+| **Category** | Joiner | ❌ |
+| **Trigger type** | Time based attribute | ✔️ |
+| **Trigger details** | Days from event, Event timing, Event user attribute | ✔️ |
+| **Days from event** | 7 | ✔️ |
+| **Event timing** | Before | ❌ |
+| **Event user attribute** | `employeeHireDate` | ❌ |
+| **Scope** | Rule based. The Marketing department rule in the screenshot is an example. | ✔️ |
+| **ID verification profile** | A profile with purpose set to `all` or `onboarding`. | ✔️ |
+| **Tasks** | **Select verification profile for identity verification (Preview)** **Send manager verification status email (Preview)** | ✔️ |
+
+You select the profile in the **Verified ID Profile** dropdown on the **Select identity verification profile** page. For profile configuration, see [Create an ID verification profile](../verified-id/how-to-create-id-verification-profile).
+
+### New Hire employee onboarding with identity verification (Preview)
+
+The **New Hire employee onboarding with identity verification (Preview)** template enables new employees to onboard on their first day of work using identity verification. This new-hire phase is Day 1.
+
+[![Screenshot of the new-hire identity verification template summary, with a trigger on employeeHireDate and three enabled tasks.](media/lifecycle-workflow-templates/new-hire-identity-verification-template.png)](media/lifecycle-workflow-templates/new-hire-identity-verification-template.png#lightbox)
+
+The default parameters and tasks for the **New Hire employee onboarding with identity verification (Preview)** template are as follows:
+
+| Parameter | Description | Customizable |
+| --- | --- | --- |
+| **Category** | Joiner | ❌ |
+| **Trigger type** | Time based attribute | ✔️ |
+| **Trigger details** | Days from event, Event timing, Event user attribute | ✔️ |
+| **Days from event** | 0 | ❌ |
+| **Event timing** | On | ❌ |
+| **Event user attribute** | `employeeHireDate` | ✔️ |
+| **Scope** | Rule based. The Marketing department rule in the screenshot is an example. | ✔️ |
+| **ID verification profile** | A profile with purpose set to `all` or `onboarding`. | ✔️ |
+| **Tasks** | **Enable User Account** **Select verification for Verified ID presentation (Preview)** **Send manager verification status email (Preview)** | ✔️ |
+
+You select the profile in the **Verified ID Profile** dropdown on the **Select identity verification profile** page. For profile configuration, see [Create an ID verification profile](../verified-id/how-to-create-id-verification-profile).
 
 ### Onboard pre-hire employee
 

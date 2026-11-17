@@ -12,7 +12,8 @@ ms.service: entra-id-governance
 manager: dougeby
 description: Learn about governance relationships and how they enable centralized management of tenants in Microsoft Entra Tenant Governance
 ms.topic: concept-article
-ms.date: 2026-03-10T00:00:00.0000000Z
+ms.date: 2026-11-11T00:00:00.0000000Z
+ai-usage: ai-assisted
 locale: en-us
 document_id: 7ad715f8-8020-72ca-d4df-89b1b14f5987
 document_version_independent_id: 7ad715f8-8020-72ca-d4df-89b1b14f5987
@@ -30,12 +31,12 @@ item_type: Content
 source_path: docs/id-governance/tenant-governance/governance-relationships.md
 cmProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
+- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ac4b7417-d4c2-43d4-94bf-f22fa1416b34
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
 spProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/68876bab-7da4-4e70-b295-395b3a255a1f
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
 platformId: 3d7062b4-5324-6e59-10eb-b1089da3b27d
 ---
 
@@ -87,7 +88,17 @@ Governance relationships progress through these states:
 | --- | --- |
 | Active | The relationship is established and operational. |
 | Termination requested | The governing tenant has requested to terminate the relationship. |
-| Terminated | Both tenants terminated the relationship, and Tenant Governance deleted all related resources. |
+| Terminated | The relationship ended through termination or expiration. Tenant Governance removes access granted only through that relationship and preserves resources required by surviving relationships or unrelated grants. |
+
+### Expiration and renewal (Preview)
+
+You can optionally configure a relationship lifetime from 1 to 730 days in a governance policy template. The governed tenant reviews and approves that lifetime when accepting the governance request. Without a configured lifetime, the relationship doesn't expire automatically.
+
+The governing tenant can request renewal before expiration, and the governed tenant must approve it. Renewal preserves the relationship ID, permissions, and existing policy snapshot. The new expiration is the renewal acceptance time plus the lifetime stored in the active relationship.
+
+A pending renewal doesn't pause expiration. If renewal isn't approved before the deadline, Tenant Governance terminates the relationship and removes its exclusive access. An expiration warning isn't a separate relationship status.
+
+For setup, notifications, cleanup behavior, and the add-on tenant exception, see [Manage relationship expiration and renewal](how-to-manage-relationship-expiration).
 
 ## Governance models
 
@@ -97,4 +108,14 @@ When you set up governance relationships between a pair of tenants, note these s
 | --- | --- | --- |
 | ✅ | One to many | A tenant can govern multiple tenants. |
 | ✅ | Many to one | Multiple tenants can govern a tenant. |
-| ❌ | Multi-tier | A tenant can't be both a governing and governed tenant. For example, if Contoso governs Fabrikam, Fabrikam can't request to govern another tenant. |
+| ✅ (Preview) | Multi-tier | A tenant can be governed by another tenant while governing downstream tenants. Each direct relationship requires independent approval and defines its own permissions. Access isn't inherited down the chain. |
+
+For example, if A governs B and B governs C, A doesn't automatically gain access to C. To administer C, A needs its own direct relationship with C, approved by C. Each relationship has an independent policy snapshot and lifecycle.
+
+For a walkthrough, see [Set up multi-tier governance relationships](how-to-set-up-multi-tier-governance).
+
+## Switch between governed tenants (Preview)
+
+The **Governed tenants** view under **Entra ID** &gt; **Overview** &gt; **Manage tenants** helps users find and switch to tenants available through active relationships and qualifying delegated-role group membership. Switching uses existing access; it doesn't grant new permissions or create B2B guest accounts.
+
+For prerequisites and instructions, see [Switch between governed tenants](how-to-switch-governed-tenants).

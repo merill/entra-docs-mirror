@@ -7,15 +7,17 @@ breadcrumb_path: /entra/breadcrumb/toc.json
 feedback_system: Standard
 feedback_product_url: https://feedback.azure.com/d365community/forum/79b1327d-d925-ec11-b6e6-000d3a4f06a4
 author: kenwith
-ms.author: kenwith
+ms.author: tamimsangrar
 ms.service: entra-id-governance
 ms.subservice: privileged-identity-management
 manager: dougeby
 description: Learn how to assign Microsoft Entra roles in Privileged Identity Management (PIM).
 ms.topic: how-to
-ms.date: 2026-04-23T00:00:00.0000000Z
-ms.reviewer: shaunliu
-ms.custom: subject-rbac-steps, sfi-ga-nochange, sfi-image-nochange
+ms.date: 2026-11-17T00:00:00.0000000Z
+ms.reviewer: ilyal
+ms.custom: subject-rbac-steps, sfi-ga-nochange, sfi-image-nochange, msecd-doc-authoring-1032
+ai-usage: ai-assisted
+zone_pivot_groups: pim-role-assignment-methods
 locale: en-us
 document_id: 5251782e-04ce-449d-8756-50baf40a17b5
 document_version_independent_id: e7453008-05a8-4ff9-0406-b0ee278866ba
@@ -44,7 +46,7 @@ platformId: 9e400368-9d7a-caaf-75d2-7b4b51f0f727
 
 ## Overview
 
-With Microsoft Entra ID, a Global Administrator can make **permanent** Microsoft Entra admin role assignments. These role assignments can be created using the [Microsoft Entra admin center](../../identity/role-based-access-control/permissions-reference) or using [PowerShell commands](/en-us/powershell/module/azuread/#directory_roles).
+With Microsoft Entra ID, a Global Administrator can make **permanent** Microsoft Entra admin role assignments. These role assignments can be created using the [Microsoft Entra admin center](https://entra.microsoft.com) or using [PowerShell commands](/en-us/powershell/module/azuread/#directory_roles).
 
 The Microsoft Entra Privileged Identity Management (PIM) service also allows Privileged Role Administrators to make permanent admin role assignments. Additionally, Privileged Role Administrators can make users **eligible** for Microsoft Entra admin roles. An eligible administrator can activate the role when they need it, and then their permissions expire once they're done.
 
@@ -56,6 +58,8 @@ When a role is assigned, the assignment:
 
 - Can't be assigned for a duration of less than five minutes
 - Can't be removed within five minutes of it being assigned
+
+::: zone pivot="portal"
 
 ## Assign a role
 
@@ -95,9 +99,30 @@ Follow these steps to make a user eligible for a Microsoft Entra admin role.
 
     ![Screenshot showing a new assignment notification.](media/pim-how-to-add-role-to-user/assignment-notification.png)
 
+## Convert active role assignments to eligible role assignments (preview)
+
+Use the enhanced **Assignments** experience to change selected active Microsoft Entra role assignments to eligible role assignments. This experience is in preview and is rolling out.
+
+Existing PIM licensing requirements apply. For more information, see [License requirements to use Privileged Identity Management](../licensing-fundamentals#privileged-identity-management).
+
+Before converting Global Administrator assignments, review the Global Administrator safeguards and [emergency access account guidance](../../identity/role-based-access-control/security-emergency-access).
+
+1. Sign in to the [Microsoft Entra admin center](https://entra.microsoft.com) as at least a [Privileged Role Administrator](../../identity/role-based-access-control/permissions-reference#privileged-role-administrator).
+2. Browse to **ID Governance** &gt; **Privileged Identity Management** &gt; **Microsoft Entra roles**.
+3. Open **Assignments**, and then select **Active assignments**.
+4. Select the role assignments you want to convert, and then select **Manage Assignments**.
+5. Change the assignment type to **Eligible**, and save your changes.
+6. Review **Eligible assignments** to confirm that the selected assignments are eligible.
+
+Users must [activate their eligible Microsoft Entra role assignments](pim-how-to-activate-role) when they need to use the roles.
+
+::: zone-end
+
 ## Assign a role with restricted scope
 
 For certain roles, the scope of the granted permissions can be restricted to a single admin unit, service principal, or application. This procedure is an example of assigning a role that has the scope of an administrative unit. For a list of roles that support scope via administrative unit, see [Assign roles with administrative unit scope](../../identity/role-based-access-control/manage-roles-portal). This feature is currently being rolled out to Microsoft Entra organizations.
+
+::: zone pivot="portal"
 
 1. Sign in to the [Microsoft Entra admin center](https://entra.microsoft.com) as at least a [Privileged Role Administrator](../../identity/role-based-access-control/permissions-reference#privileged-role-administrator).
 2. Browse to **Entra ID** &gt; **Roles & admins**.
@@ -114,6 +139,10 @@ For certain roles, the scope of the granted permissions can be restricted to a s
     - Select an administrative unit for the scope.
 
 If you try to assign a custom role that is compatible with administrative units, you aren't able to assign the role with administrative unit scope by starting from the **Roles & admins** page. To assign the custom role with administrative unit scope, you must first open the administrative unit and then assign the role. For more information, see [Assign roles with administrative unit scope](../../identity/role-based-access-control/manage-roles-portal). For information about creating administrative units, see [Create or delete administrative units](../../identity/role-based-access-control/admin-units-manage).
+
+::: zone-end
+
+::: zone pivot="api"
 
 ## Assign a role using Microsoft Graph API
 
@@ -264,9 +293,19 @@ This example shows the response. The response object shown here might be shorten
 }
 ```
 
+::: zone-end
+
 ## Update or remove an existing role assignment
 
-Follow these steps to update or remove an existing role assignment. You can't remove the last active role assignment for Global Administrators. Consider having an emergency access account with active permanent role assignment for Global Administrator role. For more information, see [emergency access accounts](../../identity/role-based-access-control/security-emergency-access). You can't remove the eligible role assignment for Global Administrators if there would be no assigned role assignments for the Global Administrator role left. This is done to minimize risks of administrators locking themselves out of the tenant inadvertently.
+::: zone pivot="portal"
+
+Follow these steps to update or remove an existing role assignment.
+
+::: zone-end
+
+You can't remove the last active role assignment for Global Administrators. Consider having an emergency access account with active permanent role assignment for Global Administrator role. For more information, see [emergency access accounts](../../identity/role-based-access-control/security-emergency-access). You can't remove the eligible role assignment for Global Administrators if there would be no assigned role assignments for the Global Administrator role left. This is done to minimize risks of administrators locking themselves out of the tenant inadvertently.
+
+::: zone pivot="portal"
 
 1. Sign in to the [Microsoft Entra admin center](https://entra.microsoft.com) as at least a [Privileged Role Administrator](../../identity/role-based-access-control/permissions-reference#privileged-role-administrator).
 2. Browse to **ID Governance** &gt; **Privileged Identity Management** &gt; **Microsoft Entra roles**.
@@ -276,6 +315,10 @@ Follow these steps to update or remove an existing role assignment. You can't re
 
     ![Screenshot showing how to update or remove role assignment.](media/pim-how-to-add-role-to-user/remove-update-assignments.png)
 6. Select **Update** or **Remove** to update or remove the role assignment.
+
+::: zone-end
+
+::: zone pivot="api"
 
 ## Remove eligible assignment via Microsoft Graph API
 
@@ -329,3 +372,5 @@ POST https://graph.microsoft.com/v1.0/roleManagement/directory/roleEligibilitySc
     } 
 } 
 ```
+
+::: zone-end

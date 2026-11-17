@@ -14,7 +14,8 @@ ms.subservice: authentication
 manager: dougeby
 description: Learn how to manage and deploy Microsoft Entra self-service password reset, multifactor authentication, custom banned password list, and smart lockout.
 ms.topic: landing-page
-ms.date: 2025-11-05T00:00:00.0000000Z
+ms.date: 2026-11-03T00:00:00.0000000Z
+ms.custom: msecd-doc-authoring-108
 locale: en-us
 document_id: 6f3ac9db-196f-7e5b-2c48-279414ded84f
 document_version_independent_id: 102739f6-732c-e0a8-0cc8-fdd010815c1b
@@ -41,13 +42,6 @@ platformId: d97679db-b011-434d-9cf6-592f7ee8be50
 
 Learn how to manage and deploy Microsoft Entra self-service password reset, multifactor authentication, custom banned password list, and smart lockout.
 
-## About authentication
-
-### Overview
-
-- [What is authentication?](overview-authentication)
-- [Authentication methods in Microsoft Entra ID](overview-authentication)
-
 ## Deploy phishing-resistant authentication
 
 ### Concept
@@ -67,17 +61,33 @@ Learn how to manage and deploy Microsoft Entra self-service password reset, mult
 - [Enable passkeys (FIDO2) for your organization](how-to-authentication-passkeys-fido2)
 - [Enable certificate-based authentication](how-to-certificate-based-authentication)
 
-## Microsoft Entra account recovery
+## About authentication
+
+### Overview
+
+- [What is authentication?](overview-authentication)
+- [Authentication methods in Microsoft Entra ID](overview-authentication)
+
+## High assurance (preview)
+
+### Overview
+
+- [Microsoft Entra High Assurance overview](../../verified-id/high-assurance)
 
 ### Concept
 
 - [What is Microsoft Entra account recovery?](concept-account-recovery-overview)
 - [FAQs about Microsoft Entra account recovery](self-service-account-recovery)
+- [Passkeys (FIDO2)](concept-authentication-passkeys-fido2)
 
 ### How-To Guide
 
 - [Configure Microsoft Entra account recovery](how-to-account-recovery-enable)
 - [How users can recover their accounts](how-to-account-recovery-for-users)
+- [Configure identity verification profiles](concept-authentication-verified-id#create-and-manage-identity-verification-profiles)
+- [Plan identity-verified onboarding](../../verified-id/high-assurance#deployment-sequence)
+- [Require identity verification with Conditional Access](../conditional-access/policy-require-identity-verification)
+- [Configure risk policies](../../id-protection/howto-identity-protection-configure-risk-policies)
 
 ## Enable Microsoft Entra multifactor authentication
 
