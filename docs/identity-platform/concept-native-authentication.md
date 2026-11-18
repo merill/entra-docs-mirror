@@ -13,7 +13,7 @@ description: Understand how Embedded native authentication gives your applicatio
 manager: dougeby
 ms.subservice: external
 ms.topic: overview
-ms.date: 2026-11-13T00:00:00.0000000Z
+ms.date: 2026-11-17T00:00:00.0000000Z
 ms.custom: msecd-doc-authoring-1030
 ai-usage: ai-assisted
 locale: en-us
@@ -101,7 +101,7 @@ Use the configuration guide and API references for a direct integration, or use 
 
 SPAs with Embedded native authentication and BYO UX websites need a proxy or edge cross-origin resource sharing (CORS) policy for cross-origin browser API calls. Android and iOS apps using native HTTP transports don't need CORS or a CORS proxy. See [Native authentication CORS concepts](concept-native-authentication-cors).
 
-All service API calls in the current native authentication integration use a tenant-verified custom domain and the tenant GUID. Configure that authority before starting a journey; see [Configure the API authority](how-to-native-authentication-configure-app#configure-the-api-authority).
+The Native Authentication API V2 requires a tenant-verified custom domain for browser-based apps, such as SPAs, to help protect against cross-site request forgery (CSRF). Non-browser clients, such as Android and iOS apps using native HTTP transports, don't require a custom domain. An embedded browser or webview isn't a native HTTP transport. BYO UX websites still require a tenant-verified custom domain. Configure the service authority before starting a journey; see [Configure the API authority](how-to-native-authentication-configure-app#configure-the-api-authority).
 
 ## Security boundaries
 

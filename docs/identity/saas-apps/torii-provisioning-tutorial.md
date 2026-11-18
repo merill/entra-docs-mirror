@@ -14,7 +14,9 @@ ms.subservice: saas-apps
 manager: pmwongera
 description: Learn how to automatically provision and de-provision user accounts from Microsoft Entra ID to Torii.
 ms.topic: how-to
-ms.date: 2026-04-09T00:00:00.0000000Z
+ms.date: 2026-11-18T00:00:00.0000000Z
+ai-usage: ai-assisted
+ms.custom: msecd-doc-authoring-1032
 locale: en-us
 document_id: 5835fddc-8d6d-e53c-35cc-02da62caebf0
 document_version_independent_id: 82dc1a7f-4f42-3375-18ae-55cd6b221456
@@ -32,9 +34,11 @@ item_type: Content
 source_path: docs/identity/saas-apps/torii-provisioning-tutorial.md
 cmProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
+- https://authoring-docs-microsoft.poolparty.biz/devrel/b1cfdec6-b0c3-4209-818c-736879856e0e
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
 spProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
+- https://authoring-docs-microsoft.poolparty.biz/devrel/2d0723c1-cf38-4c30-ab3d-5df787b33270
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
 platformId: f7e495b5-1095-904c-c7af-aeaceca736f2
 ---
@@ -83,7 +87,10 @@ The scenario outlined in this article assumes that you already have the followin
     ![Screenshot of Create API Key.](media/torii-provisioning-tutorial/create-key.png)
 
     ![Screenshot of Copy API Key.](media/torii-provisioning-tutorial/copy-key.png)
-10. **Torii Tenant Url:**`https://api.toriihq.com/v1.0/scim/v2` is entered in the **Tenant URL** field in the Provisioning tab of your Torii application.
+10. In the **Tenant URL** field in the Provisioning tab of your Torii application, enter the URL for your Torii region:
+
+    - US: `https://api.toriihq.com/v1.0/scim/v2`.
+    - EU: `https://api.euc.toriihq.com/v1.0/scim/v2`.
 
 ## Step 3: Add Torii from the Microsoft Entra application gallery
 

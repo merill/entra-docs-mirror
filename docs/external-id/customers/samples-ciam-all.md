@@ -13,7 +13,7 @@ ms.subservice: external
 manager: dougeby
 description: Learn how to build and integrate apps with Microsoft Entra External ID for scenarios such as sign-up, sign-in, and getting an access token to call an API.
 ms.topic: sample
-ms.date: 2026-11-13T00:00:00.0000000Z
+ms.date: 2026-11-17T00:00:00.0000000Z
 ms.custom: it-pro, seo-july-2024, msecd-doc-authoring-1030
 ai-usage: ai-assisted
 locale: en-us
@@ -56,9 +56,9 @@ Use the following onboarding guidance for the Microsoft Authentication Library (
 
 | Platform | SDK | Guidance |
 | --- | --- | --- |
-| **JavaScript and TypeScript** | `@azure/msal-browser`. | [React Next.js quickstart](../../identity-platform/quickstart-native-authentication) and [browser CORS requirements](../../identity-platform/concept-native-authentication-cors#proxy-contract). |
-| **Android** | `com.microsoft.identity.client:msal`. | [Android sample](https://github.com/Azure-Samples/ms-identity-ciam-native-auth-android-sample/tree/adacfe21414333128300c722c9031d4663938d7c) and [Android SDK compatibility and migration](../../identity-platform/how-to-migrate-native-authentication-v1-v2#android-migration). |
-| **Apple** | MSAL for iOS and macOS. | [iOS sample](https://github.com/Azure-Samples/ms-identity-ciam-native-auth-ios-sample/tree/85ef82afd59572ade876011bad516fd631761dd4) and [Apple SDK compatibility and migration](../../identity-platform/how-to-migrate-native-authentication-v1-v2#ios-migration). |
+| **JavaScript and TypeScript** | [MSAL for JavaScript releases](https://github.com/AzureAD/microsoft-authentication-library-for-js/releases), `@azure/msal-browser` 5.29.1 or later. | [JavaScript samples](https://github.com/Azure-Samples/ms-identity-ciam-native-javascript-samples), [React Next.js quickstart](../../identity-platform/quickstart-native-authentication), and [browser CORS requirements](../../identity-platform/concept-native-authentication-cors#proxy-contract). |
+| **Android** | [MSAL for Android](https://github.com/AzureAD/microsoft-authentication-library-for-android/), `com.microsoft.identity.client:msal` 8.7.0 or later. | [Android sample](https://github.com/Azure-Samples/ms-identity-ciam-native-auth-android-sample) and [Android SDK compatibility and migration](../../identity-platform/how-to-migrate-native-authentication-v1-v2#android-migration). |
+| **Apple** | [MSAL for iOS and macOS releases](https://github.com/AzureAD/microsoft-authentication-library-for-objc/releases), 2.18.1 or later. | [iOS sample](https://github.com/Azure-Samples/ms-identity-ciam-native-auth-ios-sample) and [Apple SDK compatibility and migration](../../identity-platform/how-to-migrate-native-authentication-v1-v2#ios-migration). |
 
 Existing V1 integrations can use the [V1 API reference and SDK library links](../../identity-platform/reference-native-authentication-api-v1). The passkey samples are separate credential-management integrations, not passkey sign-in through the Native Authentication API.
 
@@ -130,8 +130,8 @@ Use these samples with the onboarding guidance for the response-driven integrati
 
 | Language/Platform | Code sample guide | Build and integrate guide |
 | --- | --- | --- |
-| Android (Kotlin) | • [Android sample](https://github.com/Azure-Samples/ms-identity-ciam-native-auth-android-sample/tree/adacfe21414333128300c722c9031d4663938d7c) | • [SDK compatibility and migration](../../identity-platform/how-to-migrate-native-authentication-v1-v2#android-migration) |
-| iOS (Swift) | • [iOS sample](https://github.com/Azure-Samples/ms-identity-ciam-native-auth-ios-sample/tree/85ef82afd59572ade876011bad516fd631761dd4) | • [SDK compatibility and migration](../../identity-platform/how-to-migrate-native-authentication-v1-v2#ios-migration) |
+| Android (Kotlin) | • [Android sample](https://github.com/Azure-Samples/ms-identity-ciam-native-auth-android-sample) | • [SDK compatibility and migration](../../identity-platform/how-to-migrate-native-authentication-v1-v2#android-migration) |
+| iOS (Swift) | • [iOS sample](https://github.com/Azure-Samples/ms-identity-ciam-native-auth-ios-sample) | • [SDK compatibility and migration](../../identity-platform/how-to-migrate-native-authentication-v1-v2#ios-migration) |
 
 ### Daemon
 
@@ -154,7 +154,7 @@ These samples and how-to guides demonstrate how to write a daemon application th
 | App type | Code sample guide | Build and integrate guide |
 | --- | --- | --- |
 | Mobile: Microsoft-hosted authentication | • [Sign in users](sample-mobile-app-android-kotlin-sign-in) • [Sign in users and call an API](sample-mobile-app-android-kotlin-sign-in-call-api) | • [Sign in users, call an API](tutorial-mobile-app-android-kotlin-prepare-tenant) |
-| Mobile: Embedded native authentication | • [Android sample](https://github.com/Azure-Samples/ms-identity-ciam-native-auth-android-sample/tree/adacfe21414333128300c722c9031d4663938d7c) | • [SDK compatibility and migration](../../identity-platform/how-to-migrate-native-authentication-v1-v2#android-migration) |
+| Mobile: Embedded native authentication | • [Android sample](https://github.com/Azure-Samples/ms-identity-ciam-native-auth-android-sample) | • [SDK compatibility and migration](../../identity-platform/how-to-migrate-native-authentication-v1-v2#android-migration) |
 
 ### ASP.NET Core
 
@@ -187,7 +187,7 @@ These samples and how-to guides demonstrate how to write a daemon application th
 | App type | Code sample guide | Build and integrate guide |
 | --- | --- | --- |
 | Mobile: Microsoft-hosted authentication | • [Sign in users](/en-us/entra/identity-platform/quickstart-mobile-app-sign-in?toc=/entra/external-id/toc.json&amp;bc=/entra/external-id/breadcrumb/toc.json&amp;pivots=external&amp;tabs=ios-macos-external) • [Sign in users and call an API](sample-mobile-app-ios-swift-sign-in-call-api) | • [Sign in users, call an API](/en-us/entra/identity-platform/tutorial-mobile-app-ios-swift-prepare-tenant?toc=/entra/external-id/toc.json&amp;bc=/entra/external-id/breadcrumb/toc.json&amp;pivots=external) |
-| Mobile: Embedded native authentication | • [iOS sample](https://github.com/Azure-Samples/ms-identity-ciam-native-auth-ios-sample/tree/85ef82afd59572ade876011bad516fd631761dd4) | • [SDK compatibility and migration](../../identity-platform/how-to-migrate-native-authentication-v1-v2#ios-migration) |
+| Mobile: Embedded native authentication | • [iOS sample](https://github.com/Azure-Samples/ms-identity-ciam-native-auth-ios-sample) | • [SDK compatibility and migration](../../identity-platform/how-to-migrate-native-authentication-v1-v2#ios-migration) |
 | Desktop: Embedded native authentication | --- | • [MSAL iOS/macOS SDK reference](https://azuread.github.io/microsoft-authentication-library-for-objc/) • [SDK compatibility and migration](../../identity-platform/how-to-migrate-native-authentication-v1-v2#ios-migration) |
 
 ### JavaScript

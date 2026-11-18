@@ -13,7 +13,7 @@ ms.subservice: external
 manager: dougeby
 description: Compare Microsoft Entra External ID features in workforce and external tenants, and confirm authentication approach support to plan your customer apps.
 ms.topic: concept-article
-ms.date: 2026-11-12T00:00:00.0000000Z
+ms.date: 2026-11-17T00:00:00.0000000Z
 ms.custom: it-pro, seo-july-2024, sfi-ropc-nochange, msecd-doc-authoring-1030
 ai-usage: ai-assisted
 locale: en-us
@@ -98,7 +98,7 @@ Password recovery support doesn't imply support for Microsoft-hosted reset-page 
 | --- | --- | --- | --- |
 | **Recovery: email one-time passcode** | Supported. | Supported. | Supported. |
 | **Recovery: SMS** | Supported. | Supported. | Supported. |
-| **Recovery during sign-in** | Available through configured sign-in pages. | The API can offer recovery through the current password method. | Can follow recovery offered by the current transaction. |
+| **Recovery during sign-in** | Supported through configured sign-in pages. | Supported when offered through the current password method. | Supported when offered by the current transaction. |
 
 ### Multifactor authentication behavior
 
@@ -110,7 +110,7 @@ For [tenant MFA configuration](concept-multifactor-authentication-customers) and
 | **Method registration during sign-in** | Supported. | Supported for offered email and SMS methods. | Supported for offered email and SMS methods. |
 | **Time-based one-time password (TOTP)** | Supported. | Not supported. | Not supported. |
 | **Passkey sign-in or MFA** | Supported, subject to [passkey restrictions](concept-multifactor-authentication-customers#enabling-mfa-methods). | Not supported. | Not supported. |
-| **Additional verification for sensitive actions after sign-in** | Available through configured authentication context. | Not supported. | Available through configured authentication context. |
+| **Additional verification for sensitive actions after sign-in** | Supported through configured authentication context. | Not supported. | Supported through configured authentication context. |
 
 ### Branding and language scope
 
@@ -121,18 +121,23 @@ These rows describe Microsoft-hosted customization settings, not whether an appl
 | **Tenant-wide company branding** | Supported. See [Branding](concept-branding-customers). | Hosted branding settings don't apply to native screens. | Hosted branding settings don't apply to the self-hosted page. |
 | **Application-specific branding themes** | Supported. See [Branding themes](../../fundamentals/how-to-customize-branding-themes-apps). | Hosted themes don't apply to native screens. | Hosted themes don't apply to the self-hosted page. |
 | **Hosted language customization** | Supported for Microsoft-hosted pages. | Hosted language settings don't configure native interface text. | Hosted language settings don't configure the self-hosted page's text. |
-| **Service custom URL domain** | Optional for Microsoft-hosted authentication. | Required for Native Authentication API calls. | Required for Native Authentication API calls, the custom authentication page, and the Entra authentication endpoints. |
+| **Service custom URL domain** | Optional for Microsoft-hosted authentication. | Required for browser-based apps using the Native Authentication API V2, such as SPAs; not required for non-browser clients using native HTTP transports. | Required for calls to the Native Authentication API, the custom authentication page, and the Microsoft Entra authentication endpoints. |
 
 ### Custom authentication extension applicability
 
 The following comparison describes event availability, not interchangeable request or response payloads. Use the event's documented contract and the current operation's returned data.
 
+**Legend:**![Supported](../media/common/applies-to-yes.png) Supported; ![Not supported](../media/common/applies-to-no.png) Not supported.
+
 | Event | Microsoft-hosted authentication | Embedded native authentication | Bring Your Own UX |
 | --- | --- | --- | --- |
-| **`OnAttributeCollectionStart`** | Supported. | Not supported. | Not supported. |
-| **`OnAttributeCollectionSubmit`** | Supported. | Not supported. | Not supported. |
-| **`OnOtpSend` (email)** | Supported. | Supported. | Supported. |
-| **`OnTokenIssuanceStart`** | Supported. | Supported. | Supported. |
+| **`OnAttributeCollectionStart`** | ![Supported](../media/common/applies-to-yes.png) | ![Not supported](../media/common/applies-to-no.png) | ![Not supported](../media/common/applies-to-no.png) |
+| **`OnAttributeCollectionSubmit`** | ![Supported](../media/common/applies-to-yes.png) | ![Not supported](../media/common/applies-to-no.png) | ![Not supported](../media/common/applies-to-no.png) |
+| **`OnOtpSend` (email)** | ![Supported](../media/common/applies-to-yes.png) | ![Supported](../media/common/applies-to-yes.png) | ![Supported](../media/common/applies-to-yes.png) |
+| **`OnPasswordSubmit`** | ![Supported](../media/common/applies-to-yes.png) | ![Supported](../media/common/applies-to-yes.png) | ![Supported](../media/common/applies-to-yes.png) |
+| **`OnTokenIssuanceStart`** | ![Supported](../media/common/applies-to-yes.png) | ![Supported](../media/common/applies-to-yes.png) | ![Supported](../media/common/applies-to-yes.png) |
+
+`OnPasswordSubmit` supports [just-in-time password migration](how-to-migrate-passwords-just-in-time) from a legacy identity provider during sign-in. It isn't a general-purpose password-validation event.
 
 ### Integration, policy, and sessions by approach
 
@@ -145,7 +150,7 @@ Session reuse, persistent sessions, and coordinated sign-out are different capab
 | **Existing browser session reuse** | Supported when the session satisfies the request. | Native authentication does not establish an Entra session. | A session that satisfies the authorization request skips the self-hosted page. |
 | **Persistent browser session** | Controlled through [Conditional Access](../../identity/conditional-access/concept-conditional-access-session#persistent-browser-session) and/or the [**Stay signed in?**](how-to-user-flow-sign-up-sign-in-customers#control-the-stay-signed-in-prompt) user prompt. | Native authentication does not establish an Entra session. | Use the [**Persistent browser session**](../../identity/conditional-access/concept-session-lifetime#persistence-of-browsing-sessions) Conditional Access control. |
 | **Browser fallback and transaction resume** | Uses Microsoft-hosted pages. | A separately configured browser sign-in starts a new attempt; it doesn't resume native progress. | Inline escape to Microsoft-hosted pages and resumption of the same transaction isn't supported. |
-| **Account selection on the authentication page** | Microsoft-hosted account selection appears during OAuth processing. | Not used by current Native Authentication API integrations. | An account picker on the self-hosted authentication page isn't currently supported. |
+| **Account selection on the authentication page** | Microsoft-hosted account selection appears during OAuth processing. | Not used by the current Native Authentication API integrations. | An account picker on the self-hosted authentication page isn't currently supported. |
 | **Sign-out across applications** | Supported for configured browser applications as described in Single sign-on. | Sign-out is application-specific. | Manage relying-application and browser sessions separately; the self-hosted authentication page doesn't currently offer a logout hook. |
 | **Authentication diagnostics** | Use sign-in logs. | Record HTTP status codes, request IDs, correlation IDs, and timestamps without exposing sensitive data. See [API diagnostics](../../identity-platform/reference-native-authentication#security-and-diagnostics). | Use the Native Authentication API request diagnostics and relying-application authorization diagnostics. |
 
@@ -165,8 +170,8 @@ The following table compares the general features and capabilities in workforce 
 | Local accounts | Local accounts are supported for *internal* members of your organization only. | Local accounts are supported for:<br>- Consumers and business customers who use self-service sign-up.<br>- Admin-created internal accounts (with or without an admin role).<br><br> All users in an external tenant have [default permissions](reference-user-permissions) unless they're [assigned an admin role](how-to-manage-admin-accounts). |
 | Groups | Use [groups](/en-us/entra/fundamentals/how-to-manage-groups) to manage administrative and user accounts. | Use groups to manage administrative accounts. Support for Microsoft Entra groups and [application roles](how-to-use-app-roles-customers) is being phased into customer tenants. For the latest updates, see [Groups and application roles support](reference-group-app-roles-support). |
 | Roles and administrators | [Roles and administrators](../../fundamentals/how-subscriptions-associated-directory) are fully supported for administrative and user accounts. | Roles are supported for all users. All users in an external tenant have [default permissions](reference-user-permissions) unless they're assigned an [admin role](how-to-manage-admin-accounts). |
-| Microsoft Entra ID Protection | This product provides ongoing risk detection for your Microsoft Entra tenant. It allows organizations to discover, investigate, and remediate identity-based risks. | Not available. |
-| Microsoft Entra ID Governance | This product enables organizations to govern identity and access lifecycles, along with secure privileged access. [Learn more](../../id-governance/identity-governance-overview). | Not available. |
+| Microsoft Entra ID Protection | This product provides ongoing risk detection for your Microsoft Entra tenant. It allows organizations to discover, investigate, and remediate identity-based risks. | Not supported. |
+| Microsoft Entra ID Governance | This product enables organizations to govern identity and access lifecycles, along with secure privileged access. [Learn more](../../id-governance/identity-governance-overview). | Not supported. |
 | Self-service password reset | Allow users to reset their password by using up to two authentication methods. | Allow users to reset their password by using email with a one-time passcode or SMS. [Learn more](how-to-enable-password-reset-customers). |
 | Language customization | Customize the sign-in experience based on browser language when users authenticate into your corporate intranet or web-based applications. | Use languages to modify the strings displayed to your customers as part of the sign-in and sign-up process. [Learn more](concept-branding-customers). |
 | Custom attributes | Use directory extension attributes to store more data in the Microsoft Entra directory for user objects, groups, tenant details, and service principals. | Use directory extension attributes to store more data in the customer directory for user objects. Create custom user attributes and add them to your sign-up user flow. [Learn more](how-to-define-custom-attributes). |
@@ -180,8 +185,8 @@ The following table compares the features for interface customization in workfor
 | --- | --- | --- |
 | Company branding | You can add [company branding](../../fundamentals/how-to-customize-branding) that applies to all these experiences to create a consistent sign-in experience for your users. | Supported. [Customize branding](how-to-customize-branding-customers). |
 | Language customization | [Customize the sign-in experience by browser language](../../fundamentals/how-to-customize-branding). | Supported. [Customize languages](how-to-customize-languages-customers). |
-| Custom domain names | You can use [custom domains](../../fundamentals/add-custom-domain) for administrative accounts only. | A [tenant-verified custom URL domain](concept-custom-url-domain) is required for all current Native Authentication API and BYO UX service API calls. It's optional for Microsoft-hosted authentication. |
-| Embedded native authentication for mobile apps | Not available. | [Embedded native authentication](../../identity-platform/concept-native-authentication) gives you control over the design of your mobile application's sign-in experiences. Confirm support for your API or SDK version in the [Native Authentication API reference](../../identity-platform/reference-native-authentication) or [SDK integration guidance](../../identity-platform/concept-native-authentication#how-to-use-native-authentication). |
+| Custom domain names | You can use [custom domains](../../fundamentals/add-custom-domain) for administrative accounts only. | A [tenant-verified custom URL domain](concept-custom-url-domain) is required for browser-based apps using the Native Authentication API V2 and for BYO UX. It isn't required for non-browser native HTTP clients and is optional for Microsoft-hosted authentication. |
+| Embedded native authentication for mobile apps | Not supported. | [Embedded native authentication](../../identity-platform/concept-native-authentication) gives you control over the design of your mobile application's sign-in experiences. Confirm support for your API or SDK version in the [Native Authentication API reference](../../identity-platform/reference-native-authentication) or [SDK integration guidance](../../identity-platform/concept-native-authentication#how-to-use-native-authentication). |
 
 ## Add your own business logic
 
@@ -191,9 +196,10 @@ The following table compares the events for custom authentication extensions in 
 
 | Event | Workforce tenant | External tenant |
 | --- | --- | --- |
-| **`OnAttributeCollectionStart`** | Not available. | This event occurs at the beginning of the sign-up's attribute collection step, before the attribute collection page renders. You can add actions such as prefilling values and displaying a blocking error. [Learn more](../../identity-platform/custom-extension-attribute-collection?toc=/entra/external-id/toc.json&amp;bc=/entra/external-id/breadcrumb/toc.json&amp;tabs=start-continue,submit-continue). |
-| **`OnAttributeCollectionSubmit`** | Not available. | This event occurs during the sign-up flow, after the user enters and submits attributes. You can add actions such as validating or modifying the user's entries. [Learn more](../../identity-platform/custom-extension-attribute-collection?toc=/entra/external-id/toc.json&amp;bc=/entra/external-id/breadcrumb/toc.json&amp;tabs=start-continue,submit-continue). |
-| **`OnOtpSend` (email)** | Not available. | Configure a custom email provider for one-time passcode send events. [Learn more](../../identity-platform/custom-extension-email-otp-get-started?toc=/entra/external-id/toc.json&amp;bc=/entra/external-id/breadcrumb/toc.json&amp;tabs=azure-communication-services,azure-portal). |
+| **`OnAttributeCollectionStart`** | Not supported. | This event occurs at the beginning of the sign-up's attribute collection step, before the attribute collection page renders. You can add actions such as prefilling values and displaying a blocking error. [Learn more](../../identity-platform/custom-extension-attribute-collection?toc=/entra/external-id/toc.json&amp;bc=/entra/external-id/breadcrumb/toc.json&amp;tabs=start-continue,submit-continue). |
+| **`OnAttributeCollectionSubmit`** | Not supported. | This event occurs during the sign-up flow, after the user enters and submits attributes. You can add actions such as validating or modifying the user's entries. [Learn more](../../identity-platform/custom-extension-attribute-collection?toc=/entra/external-id/toc.json&amp;bc=/entra/external-id/breadcrumb/toc.json&amp;tabs=start-continue,submit-continue). |
+| **`OnOtpSend` (email)** | Not supported. | Configure a custom email provider for one-time passcode send events. [Learn more](../../identity-platform/custom-extension-email-otp-get-started?toc=/entra/external-id/toc.json&amp;bc=/entra/external-id/breadcrumb/toc.json&amp;tabs=azure-communication-services,azure-portal). |
+| **`OnPasswordSubmit`** | Not supported. | Migrate a customer's password from a legacy identity provider during sign-in. See [Just-in-time password migration](how-to-migrate-passwords-just-in-time). |
 | **`OnTokenIssuanceStart`** | [Add claims from external systems](../../identity-platform/custom-extension-overview). | [Add claims from external systems](concept-custom-extensions). |
 
 ## Identity providers and authentication methods
@@ -215,20 +221,22 @@ You can use some authentication methods as the primary factor when users sign in
 
 This table lists tenant-level method availability. Confirm method and journey availability for your approach in the approach-specific guidance.
 
+**Legend:**![Supported](../media/common/applies-to-yes.png) Supported. Not applicable means the method isn't used for that operation.
+
 | Method | Sign-in | Sign-up | Password reset | MFA |
 | --- | --- | --- | --- | --- |
-| [Email with password](concept-authentication-methods-customers#email-and-password-sign-in) | Yes ![](../media/common/applies-to-yes.png) | Yes ![](../media/common/applies-to-yes.png) |  |  |
-| [Email one-time passcode](concept-authentication-methods-customers#email-with-one-time-passcode-sign-in) | Yes ![](../media/common/applies-to-yes.png) | Yes ![](../media/common/applies-to-yes.png) | Yes ![](../media/common/applies-to-yes.png) | Yes ![](../media/common/applies-to-yes.png) |
-| [SMS-based authentication](concept-multifactor-authentication-customers#sms-based-authentication) |  |  | Yes ![](../media/common/applies-to-yes.png) | Yes ![](../media/common/applies-to-yes.png) |
-| [Time-based one-time password (TOTP)](concept-multifactor-authentication-customers#time-based-one-time-password-totp) |  |  |  | Yes ![](../media/common/applies-to-yes.png) |
-| [Passkey (FIDO2)](how-to-sign-in-with-passkey) | Yes ![](../media/common/applies-to-yes.png) |  |  | Yes ![](../media/common/applies-to-yes.png) |
-| [Apple federation](how-to-apple-federation-customers) | Yes ![](../media/common/applies-to-yes.png) | Yes ![](../media/common/applies-to-yes.png) |  |  |
-| [Facebook federation](how-to-facebook-federation-customers) | Yes ![](../media/common/applies-to-yes.png) | Yes ![](../media/common/applies-to-yes.png) |  |  |
-| [Google federation](how-to-google-federation-customers) | Yes ![](../media/common/applies-to-yes.png) | Yes ![](../media/common/applies-to-yes.png) |  |  |
-| Microsoft personal account ([OpenID Connect](how-to-custom-oidc-federation-customers)) | Yes ![](../media/common/applies-to-yes.png) | Yes ![](../media/common/applies-to-yes.png) |  |  |
-| [Microsoft Entra ID federation](how-to-entra-id-federation-customers) | Yes ![](../media/common/applies-to-yes.png) | Yes ![](../media/common/applies-to-yes.png) |  |  |
-| [OpenID Connect federation](how-to-custom-oidc-federation-customers) | Yes ![](../media/common/applies-to-yes.png) | Yes ![](../media/common/applies-to-yes.png) |  |  |
-| [SAML/WS-Fed federation](../direct-federation) | Yes ![](../media/common/applies-to-yes.png) | Yes ![](../media/common/applies-to-yes.png) |  |  |
+| [Email with password](concept-authentication-methods-customers#email-and-password-sign-in) | ![Supported](../media/common/applies-to-yes.png) | ![Supported](../media/common/applies-to-yes.png) | Not applicable | Not applicable |
+| [Email one-time passcode](concept-authentication-methods-customers#email-with-one-time-passcode-sign-in) | ![Supported](../media/common/applies-to-yes.png) | ![Supported](../media/common/applies-to-yes.png) | ![Supported](../media/common/applies-to-yes.png) | ![Supported](../media/common/applies-to-yes.png) |
+| [SMS-based authentication](concept-multifactor-authentication-customers#sms-based-authentication) | Not applicable | Not applicable | ![Supported](../media/common/applies-to-yes.png) | ![Supported](../media/common/applies-to-yes.png) |
+| [Time-based one-time password (TOTP)](concept-multifactor-authentication-customers#time-based-one-time-password-totp) | Not applicable | Not applicable | Not applicable | ![Supported](../media/common/applies-to-yes.png) |
+| [Passkey (FIDO2)](how-to-sign-in-with-passkey) | ![Supported](../media/common/applies-to-yes.png) | Not applicable | Not applicable | ![Supported](../media/common/applies-to-yes.png) |
+| [Apple federation](how-to-apple-federation-customers) | ![Supported](../media/common/applies-to-yes.png) | ![Supported](../media/common/applies-to-yes.png) | Not applicable | Not applicable |
+| [Facebook federation](how-to-facebook-federation-customers) | ![Supported](../media/common/applies-to-yes.png) | ![Supported](../media/common/applies-to-yes.png) | Not applicable | Not applicable |
+| [Google federation](how-to-google-federation-customers) | ![Supported](../media/common/applies-to-yes.png) | ![Supported](../media/common/applies-to-yes.png) | Not applicable | Not applicable |
+| Microsoft personal account ([OpenID Connect](how-to-custom-oidc-federation-customers)) | ![Supported](../media/common/applies-to-yes.png) | ![Supported](../media/common/applies-to-yes.png) | Not applicable | Not applicable |
+| [Microsoft Entra ID federation](how-to-entra-id-federation-customers) | ![Supported](../media/common/applies-to-yes.png) | ![Supported](../media/common/applies-to-yes.png) | Not applicable | Not applicable |
+| [OpenID Connect federation](how-to-custom-oidc-federation-customers) | ![Supported](../media/common/applies-to-yes.png) | ![Supported](../media/common/applies-to-yes.png) | Not applicable | Not applicable |
+| [SAML/WS-Fed federation](../direct-federation) | ![Supported](../media/common/applies-to-yes.png) | ![Supported](../media/common/applies-to-yes.png) | Not applicable | Not applicable |
 
 ## Application registration
 
@@ -244,7 +252,7 @@ The following table compares the features for [application registration](../../i
 | Implicit grant and hybrid flows for authentication | Request a token directly from the authorization endpoint. | Supported. |
 | Certificates and secrets | Multiple credentials are available: <br>- [Certificates](../../identity-platform/how-to-add-credentials?tabs=certificate)<br>- [Client secrets](../../identity-platform/how-to-add-credentials?tabs=client-secret)<br>- [Federated credentials](../../identity-platform/how-to-add-credentials?tabs=federated-credential) | Certificates, client secrets, and federated credentials. |
 | Rotation for certificates and secrets | Update client credentials to help ensure that they remain valid and secure, while users can continue to sign-in. You can rotate [certificates](../../identity-platform/how-to-add-credentials?tabs=certificate), [secrets](../../identity-platform/how-to-add-credentials?tabs=client-secret), and [federated credentials](../../identity-platform/how-to-add-credentials?tabs=federated-credential) by adding a new one and then removing the old one. | Supported for certificates, client secrets, and federated credentials. |
-| Policy for certificates and secrets | Configure the [application management policies](../../identity/enterprise-apps/tutorial-enforce-secret-standards) to enforce secret and certificate restrictions. | Not available. |
+| Policy for certificates and secrets | Configure the [application management policies](../../identity/enterprise-apps/tutorial-enforce-secret-standards) to enforce secret and certificate restrictions. | Not supported. |
 | API permissions | Add, remove, and replace permissions to an application. After permissions are added to your application, users or admins need to grant consent to the new permissions. [Learn more about updating an app's requested permissions in Microsoft Entra ID](../../identity-platform/howto-update-permissions). | The following permissions are allowed: Microsoft Graph `offline_access`, `openid`, and `User.Read`, along with your **My APIs** delegated permissions. Only an admin can consent on behalf of the organization. |
 | Expose an API | [Define custom scopes](../../identity-platform/quickstart-configure-app-expose-web-apis) to restrict access to data and functionality that the API helps protect. An application that requires access to parts of this API can request user or admin consent to one or more of these scopes. | Supported. |
 | Owners | Application owners can view and edit the application registration. Additionally, any user (who might not be listed) with administrative privileges to manage any application (for example, [Cloud Application Administrator](../../identity/role-based-access-control/permissions-reference#cloud-application-administrator)) can view and edit the application registration. | App ownership is supported, but [default permissions](reference-user-permissions#default-permissions) differ from workforce tenants. Owners, including invited users, should be assigned the Application Developer role to manage credentials and other properties of owned app registrations. The Application Administrator and Cloud Application Administrator roles provide broader application-management permissions, regardless of ownership. |
@@ -270,7 +278,7 @@ The following table compares the unique features for [enterprise application](/e
 | Application gallery | The [application gallery](/en-us/entra/identity/enterprise-apps/overview-application-gallery) contains thousands of applications that are integrated into Microsoft Entra ID. | Choose from a range of integrated apps. To find a partner app, use the search bar. The application gallery catalog isn't available. |
 | Register a custom enterprise application | [Add an enterprise application.](/en-us/entra/identity/enterprise-apps/add-application-portal) | [Register a SAML app in your external tenant.](/en-us/entra/external-id/customers/how-to-register-saml-app) |
 | Self-service application assignment | Let users [self-discover apps](/en-us/entra/identity/enterprise-apps/manage-self-service-access). | Self-service application assignment in the [My Apps portal](/en-us/entra/identity/enterprise-apps/myapps-overview) isn't available. |
-| Application proxy | [Microsoft Entra application proxy](/en-us/entra/identity/app-proxy/overview-what-is-app-proxy) provides secure remote access to on-premises web applications. | Not available. |
+| Application proxy | [Microsoft Entra application proxy](/en-us/entra/identity/app-proxy/overview-what-is-app-proxy) provides secure remote access to on-premises web applications. | Not supported. |
 | Deactivate app registration | [Deactivate an app registration](/en-us/entra/identity/enterprise-apps/deactivate-app-registration) to prevent token issuance while preserving configuration. | Supported. |
 
 ### Consent and permission features for enterprise applications
@@ -292,20 +300,20 @@ The following table compares tenant-level OAuth 2.0 and OpenID Connect capabilit
 
 | Feature | Workforce tenant | External tenant |
 | --- | --- | --- |
-| [OpenID Connect](../../identity-platform/v2-protocols-oidc) | Yes | Yes |
-| [Authorization code](../../identity-platform/v2-oauth2-auth-code-flow) | Yes | Yes |
-| [Authorization code with Proof Key for Code Exchange (PKCE)](../../identity-platform/v2-oauth2-auth-code-flow) | Yes | Yes |
-| [Client credentials](../../identity-platform/v2-oauth2-client-creds-grant-flow) | Yes | [v2.0 applications](../../identity-platform/reference-app-manifest) |
-| [Device authorization](../../identity-platform/v2-oauth2-device-code) | Yes | Yes |
-| [On-behalf-of flow](../../identity-platform/v2-oauth2-on-behalf-of-flow) | Yes | Yes |
-| [Implicit grant](../../identity-platform/v2-oauth2-implicit-grant-flow) | Yes | Yes |
-| [Resource owner password credentials](../../identity-platform/v2-oauth-ropc) | Yes | No; for mobile applications, use [Embedded native authentication](../../identity-platform/concept-native-authentication) |
+| [OpenID Connect](../../identity-platform/v2-protocols-oidc) | Supported. | Supported. |
+| [Authorization code](../../identity-platform/v2-oauth2-auth-code-flow) | Supported. | Supported. |
+| [Authorization code with Proof Key for Code Exchange (PKCE)](../../identity-platform/v2-oauth2-auth-code-flow) | Supported. | Supported. |
+| [Client credentials](../../identity-platform/v2-oauth2-client-creds-grant-flow) | Supported. | Supported for [v2.0 applications](../../identity-platform/reference-app-manifest). |
+| [Device authorization](../../identity-platform/v2-oauth2-device-code) | Supported. | Supported. |
+| [On-behalf-of flow](../../identity-platform/v2-oauth2-on-behalf-of-flow) | Supported. | Supported. |
+| [Implicit grant](../../identity-platform/v2-oauth2-implicit-grant-flow) | Supported. | Supported. |
+| [Resource owner password credentials](../../identity-platform/v2-oauth-ropc) | Supported. | Not supported; for mobile applications, use [Embedded native authentication](../../identity-platform/concept-native-authentication). |
 
 ### Authority URL in OpenID Connect and OAuth2 flows
 
 The authority URL indicates a directory that the Microsoft Authentication Library (MSAL) can request tokens from. For Microsoft-hosted authentication in external tenants, use the default `<tenant-name>.ciamlogin.com` domain or a tenant-verified custom URL domain.
 
-For current Native Authentication API and Bring Your Own UX (BYO UX) service API calls, use a [tenant-verified custom domain](concept-custom-url-domain). Include the tenant GUID in the URL path.
+For browser-based apps using the Native Authentication API V2 and Bring Your Own UX (BYO UX), use a [tenant-verified custom domain](concept-custom-url-domain) and include the tenant GUID in the URL path. This browser requirement helps protect against cross-site request forgery (CSRF). Non-browser clients, such as iOS and Android apps using native HTTP transports, don't require a custom domain. See [Configure the API authority](../../identity-platform/how-to-native-authentication-configure-app#configure-the-api-authority).
 
 The following JSON shows a Microsoft-hosted authentication example in a .NET application's `appsettings.json` file:
 
@@ -336,8 +344,8 @@ The following table compares the features for terms-of-use policies in each type
 
 | Feature | Workforce tenant | External tenant |
 | --- | --- | --- |
-| Conditional Access policies | See the [Microsoft Entra terms of use](../../identity/conditional-access/terms-of-use). | Not available. |
-| Self-service sign-up | Not available. | Add a [required attribute](how-to-define-custom-attributes#configure-a-single-select-checkbox-checkboxsingleselect) linked to your terms-of-use policies on the sign-up page. You can customize the hyperlink to support various languages. |
+| Conditional Access policies | See the [Microsoft Entra terms of use](../../identity/conditional-access/terms-of-use). | Not supported. |
+| Self-service sign-up | Not supported. | Add a [required attribute](how-to-define-custom-attributes#configure-a-single-select-checkbox-checkboxsingleselect) linked to your terms-of-use policies on the sign-up page. You can customize the hyperlink to support various languages. |
 | Sign-in page | You can add links to the lower-right corner for privacy information by using [company branding](../../fundamentals/how-to-customize-branding). | [Add privacy and terms-of-use links](how-to-customize-branding-customers#to-customize-the-logo-privacy-link-and-terms-of-use). |
 
 ## Account management
@@ -424,11 +432,11 @@ Sign-up logs and Azure Monitor for external tenants are in preview. See the [Sup
 | --- | --- | --- |
 | [Audit logs](../../identity/monitoring-health/concept-audit-logs) | These logs provide a detailed report of all events logged in Microsoft Entra ID, including modifications to applications, groups, and users. | Supported. |
 | [Sign-in logs](../../identity/monitoring-health/concept-sign-ins) | The sign-in logs track all sign-in activities within a Microsoft Entra tenant, including access to your applications and resources. | Supported. |
-| [Sign-up logs](../../identity/monitoring-health/concept-sign-ups) | Not available. | Microsoft Entra External ID logs all self-service sign-up events, including both successful sign-ups and failed attempts. |
-| [Provisioning logs](../../identity/monitoring-health/concept-provisioning-logs) | The provisioning logs provide detailed records of provisioning events within a tenant, such as user account creations, updates, and deletions. | Not available. |
+| [Sign-up logs](../../identity/monitoring-health/concept-sign-ups) | Not supported. | Microsoft Entra External ID logs all self-service sign-up events, including both successful sign-ups and failed attempts. |
+| [Provisioning logs](../../identity/monitoring-health/concept-provisioning-logs) | The provisioning logs provide detailed records of provisioning events within a tenant, such as user account creations, updates, and deletions. | Not supported. |
 | [Activity logs for retention policies](../../identity/monitoring-health/concept-provisioning-logs) | Microsoft Entra data retention policies determine how long various types of logs (like audit, sign-in, and provisioning logs) are stored. | Seven days. |
 | [Export activity logs](../../identity/monitoring-health/howto-configure-diagnostic-settings) | By using diagnostic settings in Microsoft Entra ID, you can integrate logs with Azure Monitor, stream logs to an event hub, or integrate with security information and event management (SIEM) tools. | [Azure Monitor for external tenants](how-to-azure-monitor). |
-| [Reports for application user activity](how-to-user-insights) (retiring August 31, 2026; see [migration guidance](how-to-user-insights#migrate-from-user-insights)) | Not available. | Application user activity provides analytics on how users interact with registered applications in your tenant. It tracks metrics like active users, new users, sign-ins, and MFA success rates. |
+| [Reports for application user activity](how-to-user-insights) (retiring August 31, 2026; see [migration guidance](how-to-user-insights#migrate-from-user-insights)) | Not supported. | Application user activity provides analytics on how users interact with registered applications in your tenant. It tracks metrics like active users, new users, sign-ins, and MFA success rates. |
 
 ## Microsoft Graph APIs
 

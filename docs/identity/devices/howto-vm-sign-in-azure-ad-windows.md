@@ -66,6 +66,10 @@ Important
 
 After you enable this capability, your Arc-enabled machine will be Microsoft Entra joined. This scenario is for machines that are planned to not be joined to another domain, like on-premises Active Directory or Microsoft Entra Domain Services. If you need to do so, disconnect the device from Microsoft Entra by uninstalling the extension and instead use the [Entra hybrid join](concept-hybrid-join) solution. If you deploy a supported golden image, you can enable Microsoft Entra ID authentication by installing the extension after the machine is deployed. Device configuration details as part of Conditional Access policy for Entra are not available for Windows Server operating systems.
 
+Important
+
+If your tenant admin has opted in to the [public preview for managing Windows Server using Intune](https://aka.ms/IntuneServerPreview), verify the scope and understand whether qualifying devices might be automatically enrolled when the Entra extension is deployed.
+
 ## Requirements
 
 ### Supported Azure regions and Windows distributions

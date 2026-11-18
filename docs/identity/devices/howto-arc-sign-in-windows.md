@@ -34,11 +34,11 @@ source_path: docs/identity/devices/howto-arc-sign-in-windows.md
 cmProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/fc3f72c2-fb6f-4cea-95ee-b444e52254ee
-- https://authoring-docs-microsoft.poolparty.biz/devrel/b1cfdec6-b0c3-4209-818c-736879856e0e
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
 spProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/f12cf087-582d-48ac-a085-0c19adf1e391
-- https://authoring-docs-microsoft.poolparty.biz/devrel/2d0723c1-cf38-4c30-ab3d-5df787b33270
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
 platformId: 1773b2ec-f7b0-54cb-6559-5140927c5f1c
 ---
 
@@ -62,6 +62,10 @@ There are many security benefits of using Microsoft Entra ID-based authenticatio
 Important
 
 After you enable this capability, your Arc-enabled machine will be Microsoft Entra joined. This scenario is for machines that are planned to not be joined to another domain, like on-premises Active Directory or Microsoft Entra Domain Services. If you need to do so, disconnect the device from Microsoft Entra by uninstalling the extension and instead use the [Entra hybrid join](concept-hybrid-join) solution. If you deploy a supported golden image, you can enable Microsoft Entra ID authentication by installing the extension after the machine is deployed. Device configuration details as part of Conditional Access policy for Entra are not available for Windows Server operating systems.
+
+Important
+
+If your tenant admin has opted in to the [public preview for managing Windows Server using Intune](https://aka.ms/IntuneServerPreview), verify the scope and understand whether qualifying devices might be automatically enrolled when the Entra extension is deployed.
 
 ## Requirements
 

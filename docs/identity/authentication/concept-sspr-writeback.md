@@ -13,7 +13,7 @@ ms.subservice: authentication
 manager: dougeby
 description: Learn how password change or reset events in Microsoft Entra ID can be written back to an on-premises directory environment
 ms.topic: concept-article
-ms.date: 2025-10-25T00:00:00.0000000Z
+ms.date: 2026-11-11T00:00:00.0000000Z
 ms.reviewer: tilarso
 locale: en-us
 document_id: ebc51bb0-dd9d-cb3f-3e3f-b9765b48f21d
@@ -59,7 +59,7 @@ Password writeback is supported in environments that use the following hybrid id
 
 Note
 
-SSPR with writeback to an on-premises domain isn't supported when staged rollout is enabled for a security group. Although it works in some cases, SSPR can't be guaranteed to work consistently when staged rollout is enabled.
+SSPR with password writeback is supported for users in [password hash synchronization (PHS) staged rollout](../hybrid/connect/how-to-connect-staged-rollout#supported-scenarios) when you use [Microsoft Entra Cloud Sync](tutorial-enable-cloud-sync-sspr-writeback). Password writeback through Microsoft Entra Connect Sync isn't supported for users in staged rollout.
 
 Password writeback provides the following features:
 
