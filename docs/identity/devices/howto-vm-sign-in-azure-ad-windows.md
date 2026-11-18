@@ -32,12 +32,12 @@ monikers: []
 item_type: Content
 source_path: docs/identity/devices/howto-vm-sign-in-azure-ad-windows.md
 cmProducts:
-- https://authoring-docs-microsoft.poolparty.biz/devrel/2ed91286-6cf7-4b83-810d-75d0ee3b09dd
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
+- https://authoring-docs-microsoft.poolparty.biz/devrel/2ed91286-6cf7-4b83-810d-75d0ee3b09dd
 - https://authoring-docs-microsoft.poolparty.biz/devrel/68ec7f3a-2bc6-459f-b959-19beb729907d
 spProducts:
-- https://authoring-docs-microsoft.poolparty.biz/devrel/6735bd7e-4f7b-457d-b58c-29e6f0198677
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
+- https://authoring-docs-microsoft.poolparty.biz/devrel/6735bd7e-4f7b-457d-b58c-29e6f0198677
 - https://authoring-docs-microsoft.poolparty.biz/devrel/90370425-aca4-4a39-9533-d52e5e002a5d
 platformId: 3512e42e-8944-5079-2d47-fb14afa85c6b
 ---
@@ -64,7 +64,7 @@ MDM autoenrollment requires Microsoft Entra ID P1 licenses. Windows Server VMs d
 
 Important
 
-After you enable this capability, your Azure virtual machine will be Microsoft Entra joined. You can't join them to another domain, like on-premises Active Directory or Microsoft Entra Domain Services. If you need to do so, disconnect the device from Microsoft Entra by uninstalling the extension. In addition, if you deploy a supported golden image, you can enable Microsoft Entra ID authentication by installing the extension. Conditional Access isn't supported with Windows Server with Microsoft Entra join extension in Azure Windows virtual machines.
+After you enable this capability, your Arc-enabled machine will be Microsoft Entra joined. This scenario is for machines that are planned to not be joined to another domain, like on-premises Active Directory or Microsoft Entra Domain Services. If you need to do so, disconnect the device from Microsoft Entra by uninstalling the extension and instead use the [Entra hybrid join](concept-hybrid-join) solution. If you deploy a supported golden image, you can enable Microsoft Entra ID authentication by installing the extension after the machine is deployed. Device configuration details as part of Conditional Access policy for Entra are not available for Windows Server operating systems.
 
 ## Requirements
 

@@ -13,9 +13,9 @@ ms.subservice: privileged-identity-management
 manager: dougeby
 description: Provides an overview of Microsoft Entra Privileged Identity Management (PIM).
 ms.topic: overview
-ms.date: 2026-10-26T00:00:00.0000000Z
+ms.date: 2026-11-17T00:00:00.0000000Z
 ms.reviewer: ilyal
-ms.custom: pim, azuread-video-2020, content-engagement, sfi-ga-nochange, sfi-image-nochange, msecd-doc-authoring-1031
+ms.custom: pim, azuread-video-2020, content-engagement, sfi-ga-nochange, sfi-image-nochange, msecd-doc-authoring-1032
 ai-usage: ai-assisted
 locale: en-us
 document_id: d7338196-8434-f76e-ec0d-15bc85d51434
@@ -35,9 +35,11 @@ source_path: docs/id-governance/privileged-identity-management/pim-configure.md
 cmProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
 - https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
+- https://authoring-docs-microsoft.poolparty.biz/devrel/68ec7f3a-2bc6-459f-b959-19beb729907d
 spProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
 - https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
+- https://authoring-docs-microsoft.poolparty.biz/devrel/90370425-aca4-4a39-9533-d52e5e002a5d
 platformId: 7df81cdf-9920-f097-f254-8ad149a1df54
 ---
 
@@ -81,6 +83,18 @@ Privileged Identity Management provides time-based and approval-based role activ
 - Prevent removal of the **last active Global Administrator** and **Privileged Role Administrator** role assignments
 
 The available capabilities depend on the PIM provider. For the app roles preview's workflows, see [PIM for app roles (preview)](concept-pim-for-app-roles).
+
+## Privileged access capabilities in preview
+
+PIM also includes preview capabilities for role activation, agent access, and privileged sessions. Licensing and setup requirements vary by feature; see the linked guides for prerequisites.
+
+- **Activate roles in My Access.** Activate eligible Microsoft Entra roles, Azure resource roles, and group membership or ownership from one portal. See [Role activation in My Access (preview)](../my-access-portal-overview#activate-eligible-role-assignments).
+- **Govern Azure resource access for agents.** Assign eligible Azure resource roles to agents and agent identities so they can activate access when needed. See [Eligible assignments for agents (preview)](pim-resource-roles-assign-roles#eligible-assignments-for-agents-preview) and [Agent identity activation (preview)](pim-resource-roles-activate-your-roles?pivots=api#activate-an-agent-identity-with-azure-resource-manager-api-preview).
+- **Connect to virtual machines.** Use My Access to activate existing eligible access for Azure virtual machines or supported Azure Arc-enabled Linux servers. Then connect through an available path, including Azure Bastion. See [Virtual machine connections in My Access (preview)](pim-connect-virtual-machine-my-access).
+- **Review session activity and recordings.** Session analytics show PIM role lifecycle and Azure Bastion connection activity, not commands run inside a virtual machine. With Azure Bastion Premium and recording configured, you can review recordings of supported connections. See [Session analytics (preview)](azure-pim-resource-rbac#review-session-activity-preview) and [Azure Bastion session recordings (preview)](azure-pim-resource-rbac#review-azure-bastion-session-recordings).
+- **Manage active sessions.** Find and disconnect selected active Azure Bastion sessions without deactivating the user's role assignments. See [Session management in PIM (preview)](pim-manage-bastion-sessions).
+- **Activate a lower-privileged role.** When the eligible role's policy allows it, select an available lower-privileged Azure resource role. You can optionally request a Microsoft Security Copilot recommendation based on your justification when the Copilot prerequisites are met. See [Least-privilege role activation (preview)](pim-resource-roles-configure-role-settings#allow-least-privilege-role-activation) and [Role recommendations with Microsoft Security Copilot](pim-resource-roles-activate-your-roles?pivots=my-access#get-a-role-recommendation-with-microsoft-security-copilot).
+- **Reduce standing access.** Convert selected active Azure resource role assignments to eligible assignments that require activation before use. See [Active-to-eligible assignment conversion (preview)](pim-resource-roles-assign-roles?pivots=portal#convert-active-role-assignments-to-eligible-role-assignments).
 
 ## What can I do with it?
 

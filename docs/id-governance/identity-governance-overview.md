@@ -13,8 +13,8 @@ manager: dougeby
 description: Microsoft Entra ID Governance enables you to balance your organization's need for security and end user productivity with the right processes and visibility.
 editor: markwahl-msft
 ms.topic: overview
-ms.date: 2026-11-03T00:00:00.0000000Z
-ms.custom: msecd-doc-authoring-1026
+ms.date: 2026-11-17T00:00:00.0000000Z
+ms.custom: msecd-doc-authoring-1032
 ms.reviewer: markwahl-msft
 locale: en-us
 document_id: a68d2671-8e5e-63b2-b5d2-5f58c5b9aa2f
@@ -106,6 +106,10 @@ Governing privileged access is a key part of modern Identity Governance especial
 ![Privileged access lifecycle](media/identity-governance-overview/privileged-access-lifecycle.png)
 
 [Microsoft Entra Privileged Identity Management (PIM)](privileged-identity-management/pim-configure) provides additional controls tailored to securing access rights for resources, across Microsoft Entra, Azure, other Microsoft Online Services and other applications. The just-in-time access, and role change alerting capabilities provided by Microsoft Entra PIM, in addition to multifactor authentication and Conditional Access, provide a comprehensive set of governance controls to help secure your organization's resources (directory roles, Microsoft 365 roles, Azure resource roles and group memberships). As with other forms of access, organizations can use access reviews to configure recurring access re-certification for all identities in privileged administrator roles.
+
+PIM capabilities also extend just-in-time Azure resource access to [agents and agent identities (preview)](privileged-identity-management/pim-resource-roles-assign-roles#eligible-assignments-for-agents-preview). Users can activate eligible roles and connect to Azure virtual machines or supported Azure Arc-enabled Linux servers through the My Access portal. For more information, see [Virtual machine connections in My Access (preview)](privileged-identity-management/pim-connect-virtual-machine-my-access).
+
+For administrators, session analytics show role lifecycle and Azure Bastion connection activity. Session recordings let you review supported recorded connections when Azure Bastion recording is configured. Session management lets you disconnect selected active Bastion sessions. For more information, see [Privileged access capabilities in preview](privileged-identity-management/pim-configure#privileged-access-capabilities-in-preview).
 
 ## License requirements
 
