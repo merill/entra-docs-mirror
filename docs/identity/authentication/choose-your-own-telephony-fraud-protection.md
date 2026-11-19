@@ -1,7 +1,7 @@
 ---
 layout: Conceptual
 title: Protect against telephony fraud with your own telephony provider - Microsoft Entra ID | Microsoft Learn
-canonicalUrl: https://learn.microsoft.com/en-us/entra/identity/authentication/choose-your-own-telephony-fraud-costs
+canonicalUrl: https://learn.microsoft.com/en-us/entra/identity/authentication/choose-your-own-telephony-fraud-protection
 uhfHeaderId: MSDocsHeader-Entra
 breadcrumb_path: /entra/breadcrumb/toc.json
 feedback_system: Standard
@@ -18,18 +18,18 @@ ai-usage: ai-assisted
 locale: en-us
 document_id: 72350b1a-8c4d-15d7-1e2b-943f50732ebf
 document_version_independent_id: 72350b1a-8c4d-15d7-1e2b-943f50732ebf
-original_content_git_url: https://github.com/MicrosoftDocs/entra-docs-pr/blob/live/docs/identity/authentication/choose-your-own-telephony-fraud-costs.md
+original_content_git_url: https://github.com/MicrosoftDocs/entra-docs-pr/blob/live/docs/identity/authentication/choose-your-own-telephony-fraud-protection.md
 site_name: Docs
 depot_name: MSDN.entra-docs
 page_type: conceptual
 toc_rel: toc.json
 feedback_help_link_type: ''
 feedback_help_link_url: ''
-asset_id: identity/authentication/choose-your-own-telephony-fraud-costs
+asset_id: identity/authentication/choose-your-own-telephony-fraud-protection
 moniker_range_name: 
 monikers: []
 item_type: Content
-source_path: docs/identity/authentication/choose-your-own-telephony-fraud-costs.md
+source_path: docs/identity/authentication/choose-your-own-telephony-fraud-protection.md
 cmProducts:
 - https://authoring-docs-microsoft.poolparty.biz/devrel/b1cfdec6-b0c3-4209-818c-736879856e0e
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
@@ -38,7 +38,7 @@ spProducts:
 - https://authoring-docs-microsoft.poolparty.biz/devrel/2d0723c1-cf38-4c30-ab3d-5df787b33270
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
-platformId: 0e0e312f-34ec-5ec6-8352-086bba9d4cd9
+platformId: f41d740d-d859-235a-10aa-c91ff5de2b3b
 ---
 
 # Protect against telephony fraud with your own telephony provider - Microsoft Entra ID | Microsoft Learn

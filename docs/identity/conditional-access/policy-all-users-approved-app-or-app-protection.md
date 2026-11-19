@@ -13,7 +13,7 @@ ms.subservice: conditional-access
 manager: dougeby
 description: Create a custom Conditional Access policy require approved app or app protection policy
 ms.reviewer: lhuangnorth
-ms.date: 2026-03-24T00:00:00.0000000Z
+ms.date: 2026-11-16T00:00:00.0000000Z
 ms.topic: how-to
 locale: en-us
 document_id: 14348ba7-48f0-1862-ebec-0fc3640e587d
@@ -31,13 +31,9 @@ monikers: []
 item_type: Content
 source_path: docs/identity/conditional-access/policy-all-users-approved-app-or-app-protection.md
 cmProducts:
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
-- https://authoring-docs-microsoft.poolparty.biz/devrel/5287f575-02f0-405f-92b7-800456526b0c
+- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
 spProducts:
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
-- https://authoring-docs-microsoft.poolparty.biz/devrel/06e86142-34c2-4b94-ab9c-9477c21f7152
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
 platformId: f4fca17e-01ba-443d-281b-98fee471ab7d
 ---
 
@@ -51,7 +47,7 @@ With Conditional Access, organizations can restrict access to [approved (modern 
 
 Warning
 
-App protection policies are supported on iOS and Android where applications meet specific requirements. **App protection policies are supported on Windows in preview for the Microsoft Edge browser only.** Not all applications that are supported as approved applications or support application protection policies. For a list of some common client apps, see [App protection policy requirement](concept-conditional-access-grant#require-app-protection-policy). If your application is not listed there, contact the application developer. To require approved client apps or to enforce app protection policies for iOS and Android devices, these devices must first register in Microsoft Entra ID.
+App protection policies are supported on iOS and Android where applications meet specific requirements. **App protection policies are supported on Windows in preview for the Microsoft Edge browser and Windows App desktop client only.** Not all applications that are supported as approved applications or support application protection policies. For a list of some common client apps, see [App protection policy requirement](concept-conditional-access-grant#require-app-protection-policy). If your application is not listed there, contact the application developer. To require approved client apps or to enforce app protection policies for iOS and Android devices, these devices must first register in Microsoft Entra ID.
 
 Note
 

@@ -13,7 +13,7 @@ ms.subservice: conditional-access
 manager: dougeby
 description: Create a Conditional Access policy to require app protection policy for Windows.
 ms.topic: how-to
-ms.date: 2026-03-24T00:00:00.0000000Z
+ms.date: 2026-11-16T00:00:00.0000000Z
 ms.reviewer: lhuangnorth, jogro
 ms.custom: sfi-image-nochange
 locale: en-us
@@ -32,13 +32,13 @@ monikers: []
 item_type: Content
 source_path: docs/identity/conditional-access/policy-all-users-windows-app-protection.md
 cmProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
 - https://authoring-docs-microsoft.poolparty.biz/devrel/bcbcbad5-4208-4783-8035-8481272c98b8
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/cd440f3c-1b78-40a7-97ba-aa00a1d79df7
 spProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
 - https://authoring-docs-microsoft.poolparty.biz/devrel/43b2e5aa-8a6d-4de2-a252-692232e5edc8
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/c828f7e0-89b4-459c-9bae-d7ab1c4bd9ad
 platformId: d66c7634-a785-9f8a-56ed-0988f7cb1ac8
 ---
 
@@ -50,9 +50,11 @@ App protection policies apply [mobile application management (MAM)](/en-us/mem/i
 
 ::![Screenshot of a browser requiring the user to sign in to their Microsoft Edge profile to access an application.](media/policy-all-users-windows-app-protection/browser-sign-in-with-edge-profile.png)
 
+[!IMPORTANT] Windows App support for Windows MAM and app protection policies is in preview. Availability and supported environments can differ from generally available scenarios. For more information about the Windows App on Windows public preview, including configuration requirements and supported scenarios, see [Require local client device security compliance](/en-us/windows-app/require-device-security-compliance-intune.md).
+
 ## Prerequisites
 
-- Policy can be applied to the Microsoft Edge browser on devices running Windows 11 and Windows 10 version 20H2 and higher with KB5031445.
+- Policy can be applied to the Microsoft Edge browser on devices running Windows 11 and Windows 10 version 20H2 and higher with KB5031445 and the Windows App desktop client in preview.
 - Set up an app protection policy targeting Windows devices. For details, see [Configured app protection policy targeting Windows devices](/en-us/mem/intune/apps/app-protection-policy-settings-windows).
 - Sovereign clouds aren't supported.
 
@@ -95,6 +97,7 @@ App protection policies (MAM) support unmanaged devices:
         3. Select **Done**.
     2. **Client apps** set **Configure** to **Yes**.
         1. Select **Browser** only.
+        2. For Windows App preview, select **Mobile apps and desktop clients**. For more information about the Windows App and MAM on Windows preview, including configuration requirements and supported scenarios, see [Require local client device security compliance](/en-us/windows-app/require-device-security-compliance-intune.md).
 8. Under **Access controls** &gt; **Grant**, select **Grant access**.
     1. Select **Require app protection policy** and **Require device to be marked as compliant**.
     2. **For multiple controls**, select **Require one of the selected controls**

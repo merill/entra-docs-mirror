@@ -82,6 +82,10 @@ This FAQ covers:
 
 CYOT is generally available starting October 30, 2026, for Microsoft Entra ID workforce tenants in global Azure.
 
+### Can I purchase a telephony provider offer in my country or region?
+
+Check [Microsoft Marketplace geographic availability](/en-us/partner-center/marketplace-offers/marketplace-geo-availability-currencies) for purchase availability in your billing country or region. If Marketplace purchasing is unavailable, contact your Microsoft field team to discuss Bring Your Own Telephony (BYOT).
+
 ### Which telephony providers can I use?
 
 You can choose Soprano, Telesign, or Infobip. For coverage, pricing, and terms, see [Available telephony providers](concept-phone-providers#available-telephony-providers) and each provider's [Microsoft Security Store](https://securitystore.microsoft.com/) listing.

@@ -33,11 +33,11 @@ source_path: docs/identity/authentication/choose-your-own-telephony-set-up.md
 cmProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
 - https://authoring-docs-microsoft.poolparty.biz/devrel/68ec7f3a-2bc6-459f-b959-19beb729907d
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/68e4b2d8-b70c-4019-b49a-d1f8881e2aea
+- https://authoring-docs-microsoft.poolparty.biz/devrel/540ac133-a371-4dbb-8f94-28d6cc77a70b
 spProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
 - https://authoring-docs-microsoft.poolparty.biz/devrel/90370425-aca4-4a39-9533-d52e5e002a5d
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/67b2ba1a-6f74-4044-a48a-f0f8ad076b8f
+- https://authoring-docs-microsoft.poolparty.biz/devrel/60bfc045-f127-4841-9d00-ea35495a5800
 platformId: d1478d6e-e3fe-f3ee-72af-76324d2160dd
 ---
 
@@ -78,6 +78,10 @@ Important
 Before you begin, confirm that your Microsoft Entra policies allow the setup script to create the application and credentials it needs. If you use app management policies for credentials, multitenant apps, or custom Application ID URIs, review them with your Microsoft Entra administrator.
 
 ## Step 1: Purchase and activate your telephony provider
+
+Note
+
+Before purchasing a telephony provider offer, check [Microsoft Marketplace geographic availability](/en-us/partner-center/marketplace-offers/marketplace-geo-availability-currencies). If Marketplace purchasing is unavailable in your billing country or region, contact your Microsoft field team to discuss Bring Your Own Telephony (BYOT).
 
 1. Sign in to the [Microsoft Entra admin center](https://entra.microsoft.com) as an Authentication Policy Administrator.
 2. Go to **Entra ID** &gt; **Authentication methods** &gt; **Policies** and select **Add telecom profile**. The **Set up an SMS or voice provider** page guides you through subscription, integration, and profile setup.
@@ -173,7 +177,11 @@ Warning
 1. On **Profile plan**, select **Evaluation**. Review the **Evaluation sampling percentage**, then select **Next**.
 
     [![Redacted screenshot of the Evaluation plan, Microsoft-managed delivery explanation, and evaluation sampling control.](media/choose-your-own-telephony-set-up/evaluation-plan.png)](media/choose-your-own-telephony-set-up/evaluation-plan.png#lightbox)
-2. On **Function App**, select the Function App deployed for the channel's integration. The wizard populates its **Function App URL** and **App ID**, along with subscription and resource details. Compare the endpoint and application client ID with the deployment summary, then select **Next**.
+2. On **Function App**, select the deployed Function App from the **Function App** dropdown. The wizard populates its **Function App URL** and **App ID**, along with subscription and resource details. Compare the function endpoint URL and **App ID** with the deployment summary, then select **Next**.
+
+    Note
+
+    Select **Custom Function App URL** only if you're using a custom-hosted endpoint outside Azure. If you deployed the Function App using the provided PowerShell script, select it from the **Function App** dropdown instead.
 
     [![Redacted screenshot of Function App selection and automatically populated endpoint, application, subscription, and resource details.](media/choose-your-own-telephony-set-up/select-function-app.png)](media/choose-your-own-telephony-set-up/select-function-app.png#lightbox)
 3. On **Review and finalize**, confirm the delivery channel, existing targets, **Evaluation** plan, and selected Function App, then select **Create profile**.
