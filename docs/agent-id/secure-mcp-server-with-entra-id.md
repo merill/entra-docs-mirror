@@ -34,11 +34,11 @@ source_path: docs/agent-id/secure-mcp-server-with-entra-id.md
 cmProducts:
 - https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
+- https://authoring-docs-microsoft.poolparty.biz/devrel/b1cfdec6-b0c3-4209-818c-736879856e0e
 spProducts:
 - https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
-- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
+- https://authoring-docs-microsoft.poolparty.biz/devrel/2d0723c1-cf38-4c30-ab3d-5df787b33270
 platformId: a700c79c-2a4b-e611-3a61-741effb2dc7b
 ---
 
@@ -51,14 +51,14 @@ This guidance supports Microsoft identity platform v2.0 access tokens only.
 ## Prerequisites
 
 - A Microsoft Entra tenant.
-- An HTTPS endpoint for the MCP server.
+- An HTTPS endpoint with a nonempty path and no trailing slash, such as `https://mcp.contoso.com/mcp`.
 - Permission to create an app registration and grant consent.
 - An MCP client that supports OAuth protected-resource metadata.
 
 ## Register the MCP server
 
 1. Register an application for the MCP server.
-2. Set an Application ID URI that uniquely identifies the server.
+2. Set the Application ID URI to the MCP server's canonical endpoint URL, such as `https://mcp.contoso.com/mcp`.
 3. Expose the delegated scopes required by MCP clients.
 4. Define application roles only if the server supports app-only access.
 5. Record the tenant ID, application client ID, and Application ID URI.
@@ -67,18 +67,18 @@ Grant only the permissions required by the tools and resources that the server e
 
 ## Publish protected-resource metadata
 
-Publish a metadata document at `<server-url>/.well-known/oauth-protected-resource`. MCP clients that support OAuth protected-resource discovery fetch this document to find the authorization server and supported scopes before requesting a token.
+Publish a metadata document at `<server-origin>/.well-known/oauth-protected-resource`, such as `https://mcp.contoso.com/.well-known/oauth-protected-resource`, and advertise its URL in the `WWW-Authenticate` header. This metadata URL is separate from the MCP endpoint at `https://mcp.contoso.com/mcp`. MCP clients that support OAuth protected-resource discovery fetch this document to find the authorization server and supported scopes before requesting a token.
 
 The following example shows a minimal document for a Microsoft Entra-backed MCP server:
 
 ```json
 {
-  "resource": "https://mcp.contoso.com",
+  "resource": "https://mcp.contoso.com/mcp",
   "authorization_servers": [
     "https://login.microsoftonline.com/<tenant-id>/oauth21/2026-08"
   ],
   "scopes_supported": [
-    "mcp.access"
+    "https://mcp.contoso.com/mcp/mcp.access"
   ],
   "bearer_methods_supported": [
     "header"
@@ -86,18 +86,31 @@ The following example shows a minimal document for a Microsoft Entra-backed MCP 
 }
 ```
 
-- **`resource`** — The Application ID URI registered for the MCP server. This value must match the `aud` claim the server expects in incoming tokens.
-- **`authorization_servers`** — The Microsoft Entra authorization server URL, `https://login.microsoftonline.com/<tenant>/oauth21/2026-08`. Use your tenant ID for a server that accepts users from a single tenant, or `common` for a server that accepts users from any organization. Clients append `/.well-known/openid-configuration` to this URL to discover the authorization and token endpoints.
-- **`scopes_supported`** — The delegated scopes exposed by the MCP server. List only the scopes clients need to call the server.
+- **`resource`** — The canonical MCP server URL registered as the Application ID URI. This value must match the client's OAuth `resource` parameter. For v2 access tokens, the token's `aud` is the resource application's client-ID GUID, not this URL.
+- **`authorization_servers`** — For CIMD support, advertise the versioned identifier `https://login.microsoftonline.com/<tenant>/oauth21/2026-08`. Use your tenant ID for a server that accepts users from a single tenant, or `organizations` for a server that accepts users from any organization. Clients append `/.well-known/openid-configuration` to this URL to discover the authorization and token endpoints. This field contains an authorization server identifier, not the full discovery-document URL, and must not contain a query string or fragment. The ordinary `/v2.0` discovery identifier is used for conventional integrations, but doesn't select the versioned CIMD endpoints.
+- **`scopes_supported`** — The fully qualified delegated scopes exposed by the MCP server: the registered Application ID URI plus the exact scope name. For example, `https://mcp.contoso.com/mcp` and `mcp.access` produce `https://mcp.contoso.com/mcp/mcp.access`. List only the scopes clients need to call the server.
 - **`bearer_methods_supported`** — Set to `["header"]` to indicate that clients must send the token in the `Authorization` request header.
 
 For the full metadata format and discovery behavior, see the [MCP authorization specification](https://modelcontextprotocol.io/specification/2025-06-18/basic/authorization).
 
+On an unauthenticated request, return a `401` response whose `WWW-Authenticate` header points to the metadata document and lists the required fully qualified scope:
+
+```http
+HTTP/1.1 401 Unauthorized
+WWW-Authenticate: Bearer resource_metadata="https://mcp.contoso.com/.well-known/oauth-protected-resource", scope="https://mcp.contoso.com/mcp/mcp.access"
+```
+
 ## Validate access tokens
 
-Require an access token on protected MCP requests. Validate the token's signature, issuer, audience, lifetime, tenant, client, and permissions.
+Require an access token on protected MCP requests. Validate the token's signature, issuer, audience, lifetime, tenant, client, and permissions. Always use a supported library to validate access tokens.
 
-Use the MCP server's Application ID URI or client ID as the expected audience, according to its registration. Enforce delegated scopes from `scp` and application permissions from `roles`.
+For v2 tokens issued to your MCP server, the following claims are issued:
+
+| Value | Expected value |
+| --- | --- |
+| `iss` | `https://login.microsoftonline.com/<issuing-tenant-id>/v2.0` |
+| `aud` | Your resource application's client-ID GUID |
+| `scp` | The short, case-sensitive scope value, such as `mcp.access` |
 
 For the complete validation checklist, see [Validate Agent ID tokens in a downstream API](how-to-validate-agent-tokens-downstream-api).
 
@@ -171,7 +184,4 @@ The client discovers the protected-resource metadata, signs in or authenticates 
 Use one of these client identity models:
 
 - A registered Agent ID.
-- A local public-client Agent ID using authorization code flow with PKCE.
-- A [Client ID Metadata Document](client-id-metadata-documents) URL when preregistration isn't practical.
-
-The MCP server doesn't need different token-validation logic for CIMD clients. Microsoft Entra ID still issues the access token, and the server validates it against the same issuer and audience policy.
+- A [Client ID Metadata Document](client-id-metadata-documents) URL when pre-registration isn't practical.

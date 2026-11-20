@@ -34,9 +34,11 @@ item_type: Content
 source_path: docs/identity/authentication/concept-certificate-based-authentication-certificateuserids.md
 cmProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
+- https://authoring-docs-microsoft.poolparty.biz/devrel/b1cfdec6-b0c3-4209-818c-736879856e0e
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
 spProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
+- https://authoring-docs-microsoft.poolparty.biz/devrel/2d0723c1-cf38-4c30-ab3d-5df787b33270
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
 platformId: e8abd763-8203-8ba1-ea0a-3f5732cf1dee
 ---
@@ -110,7 +112,7 @@ Get-EntraUserCBAAuthorizationInfo helps retrieve authorization information for a
 **Example 1: Get authorization information for a user by User Principal Name**
 
 ```powershell
-Connect-Entra -Scopes 'User.Read.All' 
+Connect-Entra -Scopes 'User.Read.All'
 Get-EntraUserCBAAuthorizationInfo -UserId ‘user@contoso.com'
 ```
 
@@ -192,7 +194,7 @@ This example shows how to get all possible certificate mappings as an object.
 **Example 2: Retrieve certificate object from a certificate path and certificate mapping**
 
 ```powershell
-Get-EntraUserCertificateUserIdsFromCertificate -Path 'C:\path\to\certificate.cer' -CertificateMapping 'Subject' 
+Get-EntraUserCertificateUserIdsFromCertificate -Path 'C:\path\to\certificate.cer' -CertificateMapping 'Subject'
 ```
 
 **Response:**`X509:<S>DC=com,DC=contoso,OU=UserAccounts,CN=user`
@@ -345,7 +347,7 @@ For this configuration, you can use [Microsoft Graph PowerShell](/en-us/powershe
       $params = @{
             authorizationInfo = @{
                   certificateUserIds = @(
-                  "X509:<SKI>gH4iJ5kL6mN7oP8qR9sT0uV1wX", 
+                  "X509:<SKI>gH4iJ5kL6mN7oP8qR9sT0uV1wX",
                   "X509:<PN>user@contoso.com"
                   )
             }
@@ -368,7 +370,7 @@ For this configuration, you can use [Microsoft Graph PowerShell](/en-us/powershe
 2. Update the certificateUserIds attribute of the user object.
 
     ```powershell
-       $user.AuthorizationInfo.certificateUserIds = @("X509:<SKI>iJ5kL6mN7oP8qR9sT0uV1wX2yZ", "X509:<PN>user1@contoso.com") 
+       $user.AuthorizationInfo.certificateUserIds = @("X509:<SKI>iJ5kL6mN7oP8qR9sT0uV1wX2yZ", "X509:<PN>user1@contoso.com")
        Update-MgUser -UserId $userObjectId -AuthorizationInfo $user.AuthorizationInfo
     ```
 

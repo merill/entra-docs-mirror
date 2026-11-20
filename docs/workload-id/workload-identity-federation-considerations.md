@@ -32,10 +32,12 @@ item_type: Content
 source_path: docs/workload-id/workload-identity-federation-considerations.md
 cmProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
-- https://authoring-docs-microsoft.poolparty.biz/devrel/4e834929-0ce1-4c1d-9c81-fcb14721edfb
+- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/f233afb4-f511-4877-ab18-c53e36c47c54
 spProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
-- https://authoring-docs-microsoft.poolparty.biz/devrel/75670257-a3f0-4627-9981-8046f99219e6
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/aa758f63-7086-440d-afba-dcb5819f0b6f
 platformId: 9c276c74-4974-d843-ee98-de37f08fcd93
 ---
 
@@ -113,72 +115,72 @@ If federated identity credentials are provisioned in a loop, you can [provision 
 You can also provision multiple new federated identity credentials sequentially using the *dependsOn* property. The following Azure Resource Manager template (ARM template) example creates three new federated identity credentials sequentially on a user-assigned managed identity by using the *dependsOn* property:
 
 ```json
-{ 
-    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#", 
-    "contentVersion": "1.0.0.0", 
-    "parameters": { 
-        "userAssignedIdentities_parent_uami_name": { 
-            "defaultValue": "parent_uami", 
-            "type": "String" 
-        } 
-    }, 
-    "variables": {}, 
-    "resources": [ 
-        { 
-            "type": "Microsoft.ManagedIdentity/userAssignedIdentities", 
-            "apiVersion": "2022-01-31-preview", 
-            "name": "[parameters('userAssignedIdentities_parent_uami_name')]", 
-            "location": "eastus" 
-        }, 
-        { 
-            "type": "Microsoft.ManagedIdentity/userAssignedIdentities/federatedIdentityCredentials", 
-            "apiVersion": "2022-01-31-preview", 
-            "name": "[concat(parameters('userAssignedIdentities_parent_uami_name'), '/fic01')]", 
-            "dependsOn": [ 
-                "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', parameters('userAssignedIdentities_parent_uami_name'))]" 
-            ], 
-            "properties": { 
-                "issuer": "https://kubernetes-oauth.azure.com", 
-                "subject": "fic01", 
-                "audiences": [ 
-                    "api://AzureADTokenExchange" 
-                ] 
-            } 
-        }, 
-        { 
-            "type": "Microsoft.ManagedIdentity/userAssignedIdentities/federatedIdentityCredentials", 
-            "apiVersion": "2022-01-31-preview", 
-            "name": "[concat(parameters('userAssignedIdentities_parent_uami_name'), '/fic02')]", 
-            "dependsOn": [ 
-                "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', parameters('userAssignedIdentities_parent_uami_name'))]", 
-                "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities/federatedIdentityCredentials', parameters('userAssignedIdentities_parent_uami_name'), 'fic01')]" 
-            ], 
-            "properties": { 
-                "issuer": "https://kubernetes-oauth.azure.com", 
-                "subject": "fic02", 
-                "audiences": [ 
-                    "api://AzureADTokenExchange" 
-                ] 
-            } 
-        }, 
-        { 
-            "type": "Microsoft.ManagedIdentity/userAssignedIdentities/federatedIdentityCredentials", 
-            "apiVersion": "2022-01-31-preview", 
-            "name": "[concat(parameters('userAssignedIdentities_parent_uami_name'), '/fic03')]", 
-            "dependsOn": [ 
-                "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', parameters('userAssignedIdentities_parent_uami_name'))]", 
-                "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities/federatedIdentityCredentials', parameters('userAssignedIdentities_parent_uami_name'), 'fic02')]" 
-            ], 
-            "properties": { 
-                "issuer": "https://kubernetes-oauth.azure.com", 
-                "subject": "fic03", 
-                "audiences": [ 
-                    "api://AzureADTokenExchange" 
-                ] 
-            } 
-        } 
-    ] 
-} 
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "userAssignedIdentities_parent_uami_name": {
+            "defaultValue": "parent_uami",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.ManagedIdentity/userAssignedIdentities",
+            "apiVersion": "2022-01-31-preview",
+            "name": "[parameters('userAssignedIdentities_parent_uami_name')]",
+            "location": "eastus"
+        },
+        {
+            "type": "Microsoft.ManagedIdentity/userAssignedIdentities/federatedIdentityCredentials",
+            "apiVersion": "2022-01-31-preview",
+            "name": "[concat(parameters('userAssignedIdentities_parent_uami_name'), '/fic01')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', parameters('userAssignedIdentities_parent_uami_name'))]"
+            ],
+            "properties": {
+                "issuer": "https://kubernetes-oauth.azure.com",
+                "subject": "fic01",
+                "audiences": [
+                    "api://AzureADTokenExchange"
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.ManagedIdentity/userAssignedIdentities/federatedIdentityCredentials",
+            "apiVersion": "2022-01-31-preview",
+            "name": "[concat(parameters('userAssignedIdentities_parent_uami_name'), '/fic02')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', parameters('userAssignedIdentities_parent_uami_name'))]",
+                "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities/federatedIdentityCredentials', parameters('userAssignedIdentities_parent_uami_name'), 'fic01')]"
+            ],
+            "properties": {
+                "issuer": "https://kubernetes-oauth.azure.com",
+                "subject": "fic02",
+                "audiences": [
+                    "api://AzureADTokenExchange"
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.ManagedIdentity/userAssignedIdentities/federatedIdentityCredentials",
+            "apiVersion": "2022-01-31-preview",
+            "name": "[concat(parameters('userAssignedIdentities_parent_uami_name'), '/fic03')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', parameters('userAssignedIdentities_parent_uami_name'))]",
+                "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities/federatedIdentityCredentials', parameters('userAssignedIdentities_parent_uami_name'), 'fic02')]"
+            ],
+            "properties": {
+                "issuer": "https://kubernetes-oauth.azure.com",
+                "subject": "fic03",
+                "audiences": [
+                    "api://AzureADTokenExchange"
+                ]
+            }
+        }
+    ]
+}
 ```
 
 ## Azure policy
@@ -188,16 +190,16 @@ You can also provision multiple new federated identity credentials sequentially 
 It's possible to use a deny [Azure Policy](/en-us/azure/governance/policy/overview) as in the following ARM template example:
 
 ```json
-{ 
-"policyRule": { 
-            "if": { 
-                "field": "type", 
-                "equals": "Microsoft.ManagedIdentity/userAssignedIdentities/federatedIdentityCredentials" 
-            }, 
-            "then": { 
-                "effect": "deny" 
-            } 
-        } 
+{
+"policyRule": {
+            "if": {
+                "field": "type",
+                "equals": "Microsoft.ManagedIdentity/userAssignedIdentities/federatedIdentityCredentials"
+            },
+            "then": {
+                "effect": "deny"
+            }
+        }
 }
 ```
 

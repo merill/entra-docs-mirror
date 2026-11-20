@@ -149,7 +149,7 @@ Returns True if both attributes have the same value.
 
 **Description:** The ConvertFromBase64 function converts the specified base64 encoded value to a regular string.
 
-**Syntax:**`str ConvertFromBase64(str source)` - assumes Unicode for encoding`str ConvertFromBase64(str source, enum Encoding)`
+**Syntax:**`str ConvertFromBase64(str source)` - assumes Unicode for encoding `str ConvertFromBase64(str source, enum Encoding)`
 
 - source: Base64 encoded string
 - Encoding: Unicode, ASCII, UTF8
@@ -686,8 +686,8 @@ Based on the user's first name, middle name and last name, you need to generate 
 **Expression:**
 
 ```ad
-    SelectUniqueValue( 
-        Join("@", NormalizeDiacritics(StripSpaces(Join(".",  [PreferredFirstName], [PreferredLastName]))), "contoso.com"), 
+    SelectUniqueValue(
+        Join("@", NormalizeDiacritics(StripSpaces(Join(".",  [PreferredFirstName], [PreferredLastName]))), "contoso.com"),
         Join("@", NormalizeDiacritics(StripSpaces(Join(".",  Mid([PreferredFirstName], 1, 1), [PreferredLastName]))), "contoso.com"),
         Join("@", NormalizeDiacritics(StripSpaces(Join(".",  Mid([PreferredFirstName], 1, 2), [PreferredLastName]))), "contoso.com")
     )

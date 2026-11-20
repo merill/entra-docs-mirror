@@ -104,9 +104,9 @@ It's also possible to get a result that isn't an UpgradeResult, that is, *AADHea
 
 Then, make sure you allow the required URLs in your proxy or firewall. Automatic update is using Microsoft Entra Connect Health as described in the overview. If you use a proxy, make sure Health is configured to use a [proxy server](how-to-connect-health-agent-install#configure-azure-ad-connect-health-agents-to-use-http-proxy). Also test the [Health connectivity](how-to-connect-health-agent-install#test-connectivity-to-azure-ad-connect-health-service) to Microsoft Entra ID.
 
-With the connectivity to Microsoft Entra ID verified, it's time to look into the eventlogs. Start the event viewer and look in the **Application** eventlog. Add an eventlog filter for the source **Microsoft Entra Connect Upgrade** and the event ID range **300-399**.![Screenshot that shows the &quot;Filter Current Log&quot; window with &quot;Event sources&quot; and the &quot;Include/Exclude&quot; Event IDs box highlighted.](media/how-to-connect-install-automatic-upgrade/eventlogfilter.png)
+With the connectivity to Microsoft Entra ID verified, it's time to look into the eventlogs. Start the event viewer and look in the **Application** eventlog. Add an eventlog filter for the source **Microsoft Entra Connect Upgrade** and the event ID range **300-399**. ![Screenshot that shows the &quot;Filter Current Log&quot; window with &quot;Event sources&quot; and the &quot;Include/Exclude&quot; Event IDs box highlighted.](media/how-to-connect-install-automatic-upgrade/eventlogfilter.png)
 
-You can now see the eventlogs associated with the status for automatic upgrade.![Eventlog filter for automatic upgrade](media/how-to-connect-install-automatic-upgrade/eventlogresult.png)
+You can now see the eventlogs associated with the status for automatic upgrade. ![Eventlog filter for automatic upgrade](media/how-to-connect-install-automatic-upgrade/eventlogresult.png)
 
 The result code has a prefix with an overview of the state.
 

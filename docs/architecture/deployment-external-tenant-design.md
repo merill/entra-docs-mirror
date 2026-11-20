@@ -77,19 +77,19 @@ When you define the extension attribute, the name stored in the directory follow
 **GET**: `https://graph.microsoft.com/v1.0/applications/{application-id}/extensionProperties`
 
 ```Kusto
-  "value": [</br> 
+  "value": [</br>
         {</br>
-            "id": "b7271a2b-a03e-48f7-abf0-54d21427987a",</br> 
-            "deletedDateTime": null,</br> 
-            "appDisplayName": "",</br> 
-            "dataType": "String",</br> 
-            "isMultiValued": false,</br> 
-            "isSyncedFromOnPremises": false,</br> 
-            "name": "extension_8beb06b77e314e2393cc5453a6a56756_lastName",</br> 
-            "targetObjects": [</br> 
-                "User"</br> 
+            "id": "b7271a2b-a03e-48f7-abf0-54d21427987a",</br>
+            "deletedDateTime": null,</br>
+            "appDisplayName": "",</br>
+            "dataType": "String",</br>
+            "isMultiValued": false,</br>
+            "isSyncedFromOnPremises": false,</br>
+            "name": "extension_8beb06b77e314e2393cc5453a6a56756_lastName",</br>
+            "targetObjects": [</br>
+                "User"</br>
             ]</br>
-        } 
+        }
 ```
 
 The supported data formats include:

@@ -174,8 +174,8 @@ In this scenario, the agent identity is acting on behalf of a human user. The ac
 
 | Claim Name | Description |
 | --- | --- |
-| `tid ` | Tenant ID of the customer tenant |
-| `idtyp ` | `user` (indicating the subject is a user) |
+| `tid` | Tenant ID of the customer tenant |
+| `idtyp` | `user` (indicating the subject is a user) |
 | `xms_idrel` | `1` (indicating a member user; others possible too) |
 | `azp` / `appid` | Application ID of the agent identity |
 | `scp` | Delegated permissions granted to the agent identity |

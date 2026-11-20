@@ -34,8 +34,12 @@ item_type: Content
 source_path: docs/identity/enterprise-apps/manage-app-consent-policies.md
 cmProducts:
 - https://authoring-docs-microsoft.poolparty.biz/devrel/5fc61396-d075-4560-aece-fdbda73d243f
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d56bfe0c-ecd5-4d90-854f-35482bbb1314
+- https://authoring-docs-microsoft.poolparty.biz/devrel/fcc3cd4a-59ea-47a2-9cc1-784142a5a25d
 spProducts:
 - https://authoring-docs-microsoft.poolparty.biz/devrel/ad9437c1-8cda-4537-ad69-b4b263652e13
+- https://authoring-docs-microsoft.poolparty.biz/devrel/02e99b71-5808-477b-9387-4c6efa24e46b
+- https://authoring-docs-microsoft.poolparty.biz/devrel/d7a55faf-a992-4e27-aa3a-eadc9830e778
 platformId: df7c8b2f-2649-ffee-5fdf-4113a76ca158
 ---
 
@@ -118,7 +122,7 @@ Similarly, a user or service principal can be given the ability to grant consent
     - Privileged Role Administrator directory role
     - A custom directory role with the necessary [permissions to manage app consent policies](../role-based-access-control/custom-consent-permissions#managing-app-consent-policies)
     - The Microsoft Graph app role (application permission) `Policy.ReadWrite.PermissionGrant` when connecting as an app or a service
-- Familiarize yourself with (Permission grant condition sets)[/graph/api/resources/permissiongrantconditionset?view=graph-rest-1.0]
+- Familiarize yourself with [Permission grant condition sets](/en-us/graph/api/resources/permissiongrantconditionset?view=graph-rest-1.0)
 
 ::: zone pivot="ms-powershell"
 

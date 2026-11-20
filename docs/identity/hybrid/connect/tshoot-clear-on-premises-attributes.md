@@ -33,10 +33,12 @@ item_type: Content
 source_path: docs/identity/hybrid/connect/tshoot-clear-on-premises-attributes.md
 cmProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
-- https://authoring-docs-microsoft.poolparty.biz/devrel/5fc61396-d075-4560-aece-fdbda73d243f
+- https://authoring-docs-microsoft.poolparty.biz/devrel/b1cfdec6-b0c3-4209-818c-736879856e0e
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/5cf46315-b33f-4e99-8224-a1592697eff9
 spProducts:
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
-- https://authoring-docs-microsoft.poolparty.biz/devrel/ad9437c1-8cda-4537-ad69-b4b263652e13
+- https://authoring-docs-microsoft.poolparty.biz/devrel/2d0723c1-cf38-4c30-ab3d-5df787b33270
+- https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/715d24c3-3683-4219-82c5-1e3c813fb7fc
 platformId: 97edacc4-2717-bb24-1dfd-af379e57fee7
 ---
 
@@ -83,9 +85,9 @@ You can also view and update these on-premises attributes with the PowerShell sc
 Install the [ADSyncTools](reference-connect-adsynctools) module from PowerShell Gallery:
 
 ```powershell
-[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12 
-Install-Module ADSyncTools # If ADSyncTools isn’t installed, or; 
-Update-Module ADSyncTools # If ADSyncTools is already installed 
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+Install-Module ADSyncTools # If ADSyncTools isn’t installed, or;
+Update-Module ADSyncTools # If ADSyncTools is already installed
 ```
 
 Note
@@ -95,29 +97,29 @@ The minimum required version to manage on-premises attributes in Entra ID is v2.
 Use the following commands to get started with ADSyncTools.
 
 ```powershell
-Import-Module ADSyncTools 
+Import-Module ADSyncTools
 ```
 
 See the cmdlets available for managing on-premises attributes:
 
 ```powershell
-Get-Command *onpremises* -Module ADSyncTools 
+Get-Command *onpremises* -Module ADSyncTools
 ```
 
 Result:
 
 ```
-CommandType   Name                      Version  Source 
------------   ----                      -------  ------ 
-Function    Clear-ADSyncToolsOnPremisesAttribute      2.5.0   ADSyncTools 
-Function    Get-ADSyncToolsOnPremisesAttribute       2.5.0   ADSyncTools 
-Function    Set-ADSyncToolsOnPremisesAttribute       2.5.0   ADSyncTools 
+CommandType   Name                      Version  Source
+-----------   ----                      -------  ------
+Function    Clear-ADSyncToolsOnPremisesAttribute      2.5.0   ADSyncTools
+Function    Get-ADSyncToolsOnPremisesAttribute       2.5.0   ADSyncTools
+Function    Set-ADSyncToolsOnPremisesAttribute       2.5.0   ADSyncTools
 
 ```
 
 Get all the details of a cmdlet (for example, Syntax and Examples) with Get-Help &lt;cmdlet&gt; -Full:
 
-`Get-Help Get-ADSyncToolsOnPremisesAttribute -Full `
+`Get-Help Get-ADSyncToolsOnPremisesAttribute -Full`
 
 ## Get-ADSyncToolsOnPremisesAttribute
 
@@ -132,13 +134,13 @@ This operation requires Microsoft Graph PowerShell SDK, preauthenticated with `C
 #### By Identity
 
 ```powershell
- Get-ADSyncToolsOnPremisesAttribute [-Id] <String> [[-Property] <String[]>] [<CommonParameters>] 
+ Get-ADSyncToolsOnPremisesAttribute [-Id] <String> [[-Property] <String[]>] [<CommonParameters>]
 ```
 
 #### By IncludeSyncedUsers
 
 ```powershell
-Get-ADSyncToolsOnPremisesAttribute [[-IncludeSyncedUsers]] [[-Property] <String[]>] [<CommonParameters>] 
+Get-ADSyncToolsOnPremisesAttribute [[-IncludeSyncedUsers]] [[-Property] <String[]>] [<CommonParameters>]
 ```
 
 ### EXAMPLES
@@ -148,7 +150,7 @@ Get-ADSyncToolsOnPremisesAttribute [[-IncludeSyncedUsers]] [[-Property] <String[
 Get the on-premises attributes of all cloud-users that have on-premises attributes populated.
 
 ```powershell
-Get-ADSyncToolsOnPremisesAttribute 
+Get-ADSyncToolsOnPremisesAttribute
 ```
 
 ### Clearing all on-premises attributes for all users
@@ -164,13 +166,13 @@ Before clearing on‑premises attributes from Entra ID users in production, back
 You can back up all the current values with the following command:
 
 ```powershell
-Get-ADSyncToolsOnPremisesAttribute | Export-Csv backupOnpremisesAttributes.csv -Delimiter ';' 
+Get-ADSyncToolsOnPremisesAttribute | Export-Csv backupOnpremisesAttributes.csv -Delimiter ';'
 ```
 
 To clear all on-premises attributes from all users, run:
 
 ```powershell
-Get-ADSyncToolsOnPremisesAttribute | Select-Object id | Clear-ADSyncToolsOnPremisesAttribute -All -Verbose 
+Get-ADSyncToolsOnPremisesAttribute | Select-Object id | Clear-ADSyncToolsOnPremisesAttribute -All -Verbose
 ```
 
 ### Clearing all on-premises attributes for one user
@@ -180,10 +182,10 @@ To clear all on-premises attributes for one particular user, specify the objectI
 This operation requires Microsoft Graph PowerShell SDK, preauthenticated with `Connect-MgGraph -Scopes "User.ReadWrite.All, User-OnPremisesSyncBehavior.ReadWrite.All"`
 
 ```powershell
-Clear-ADSyncToolsOnPremisesAttribute 'User1@Contoso.com' -All 
+Clear-ADSyncToolsOnPremisesAttribute 'User1@Contoso.com' -All
 ```
 
-You can also use `Clear-ADSyncToolsOnPremisesAttribute ` to clear any of the following on-premises attributes individually:
+You can also use `Clear-ADSyncToolsOnPremisesAttribute` to clear any of the following on-premises attributes individually:
 
 - onPremisesDistinguishedName
 - onPremisesDomainName
@@ -202,20 +204,20 @@ Clears the on-premises properties of a specific Cloud-Only user or all CLoud-Onl
 ### SYNTAX
 
 ```powershell
- Clear-ADSyncToolsOnPremisesAttribute [-Id] <String> [[-onPremisesDistinguishedName]] [[-onPremisesDomainName]] [[-onPremisesImmutableId]] 
-[[-onPremisesObjectIdentifier]] [[-onPremisesSamAccountName]] [[-onPremisesSecurityIdentifier]] [[-onPremisesUserPrincipalName]] [<CommonParameters>] 
+ Clear-ADSyncToolsOnPremisesAttribute [-Id] <String> [[-onPremisesDistinguishedName]] [[-onPremisesDomainName]] [[-onPremisesImmutableId]]
+[[-onPremisesObjectIdentifier]] [[-onPremisesSamAccountName]] [[-onPremisesSecurityIdentifier]] [[-onPremisesUserPrincipalName]] [<CommonParameters>]
 ```
 
 #### By BodyParameter
 
 ```powershell
- Clear-ADSyncToolsOnPremisesAttribute [-Id] <String> [-BodyParameter] <String> [<CommonParameters>] 
+ Clear-ADSyncToolsOnPremisesAttribute [-Id] <String> [-BodyParameter] <String> [<CommonParameters>]
 ```
 
 #### By All
 
 ```powershell
- Clear-ADSyncToolsOnPremisesAttribute [-Id] <String> [-All] [<CommonParameters>] 
+ Clear-ADSyncToolsOnPremisesAttribute [-Id] <String> [-All] [<CommonParameters>]
 ```
 
 #### Example 1
@@ -232,16 +234,16 @@ Clear on-premises attributes based on a json parameter body (-BodyParameter)
 
 ```powershell
 $jsonBody = @'
-{ 
-  "onPremisesDistinguishedName": null, 
-  "onPremisesDomainName": null, 
-  "onPremisesImmutableId": null, 
-  "onPremisesObjectIdentifier": null, 
-  "onPremisesSamAccountName": null, 
-  "onPremisesSecurityIdentifier": null, 
-  "onPremisesUserPrincipalName": null 
-} 
-'@ 
+{
+  "onPremisesDistinguishedName": null,
+  "onPremisesDomainName": null,
+  "onPremisesImmutableId": null,
+  "onPremisesObjectIdentifier": null,
+  "onPremisesSamAccountName": null,
+  "onPremisesSecurityIdentifier": null,
+  "onPremisesUserPrincipalName": null
+}
+'@
 
 Clear-ADSyncToolsOnPremisesAttribute -Id $userId -BodyParameter $jsonBody
 
@@ -260,7 +262,7 @@ Before updating on‑premises attributes for Entra ID users in production, back 
 You can back up all the current values with the following command:
 
 ```powershell
-Get-ADSyncToolsOnPremisesAttribute | Export-Csv backupOnpremisesAttributes.csv -Delimiter ';' 
+Get-ADSyncToolsOnPremisesAttribute | Export-Csv backupOnpremisesAttributes.csv -Delimiter ';'
 ```
 
 This function can be used to set any of the following on-premises attributes:
@@ -280,13 +282,13 @@ This function can be used to set any of the following on-premises attributes:
 ### SYNTAX
 
 ```powershell
-Set-ADSyncToolsOnPremisesAttribute [-Id] <String> [[-onPremisesDistinguishedName] <String>] [[-onPremisesDomainName] <String>] [[-onPremisesImmutableId] <String>] [[-onPremisesSamAccountName] <String>] [[-onPremisesSecurityIdentifier] <String>] [[-onPremisesUserPrincipalName] <String>] [<CommonParameters>] 
+Set-ADSyncToolsOnPremisesAttribute [-Id] <String> [[-onPremisesDistinguishedName] <String>] [[-onPremisesDomainName] <String>] [[-onPremisesImmutableId] <String>] [[-onPremisesSamAccountName] <String>] [[-onPremisesSecurityIdentifier] <String>] [[-onPremisesUserPrincipalName] <String>] [<CommonParameters>]
 ```
 
 #### By BodyParameter
 
 ```powershell
-Set-ADSyncToolsOnPremisesAttribute [-Id] <String> [-BodyParameter] <String> [<CommonParameters>] 
+Set-ADSyncToolsOnPremisesAttribute [-Id] <String> [-BodyParameter] <String> [<CommonParameters>]
 ```
 
 ### EXAMPLES
@@ -296,7 +298,7 @@ Set-ADSyncToolsOnPremisesAttribute [-Id] <String> [-BodyParameter] <String> [<Co
 Set only onPremisesImmutableId (pipelining)
 
 ```powershell
-'User1@Contoso.com' | Set-ADSyncToolsOnPremisesAttribute -onPremisesImmutableId 'nofCJe0gZk6D8J4gRgrt+A==' 
+'User1@Contoso.com' | Set-ADSyncToolsOnPremisesAttribute -onPremisesImmutableId 'nofCJe0gZk6D8J4gRgrt+A=='
 ```
 
 #### Example 2
@@ -304,14 +306,14 @@ Set only onPremisesImmutableId (pipelining)
 Set on-premises attributes based on a json parameter body (-BodyParameter)
 
 ```powershell
-$jsonBody = @' 
-{ 
-  "onPremisesDistinguishedName": "User1@Contoso.com", 
-  "onPremisesDomainName": 'Contoso.com', 
-  "onPremisesImmutableId": 'nofCJe0gZk6D8J4gRgrt+A==', 
-  "onPremisesSamAccountName": 'User1', 
-  "onPremisesSecurityIdentifier": "S-1-5-21-4097605469-3104078553-1111111111-1111", 
-  "onPremisesUserPrincipalName": "User1@Contoso.com" 
+$jsonBody = @'
+{
+  "onPremisesDistinguishedName": "User1@Contoso.com",
+  "onPremisesDomainName": 'Contoso.com',
+  "onPremisesImmutableId": 'nofCJe0gZk6D8J4gRgrt+A==',
+  "onPremisesSamAccountName": 'User1',
+  "onPremisesSecurityIdentifier": "S-1-5-21-4097605469-3104078553-1111111111-1111",
+  "onPremisesUserPrincipalName": "User1@Contoso.com"
 }
 '@
 Set-ADSyncToolsOnPremisesAttribute -Id '11111111-2222-3333-4444-555555555555' -BodyParameter $jsonBody

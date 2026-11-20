@@ -71,7 +71,7 @@ For a full list of roles, see [Least privileged role by task](../identity/role-b
 6. As you continue to provide further clarification or select specific events to troubleshoot, Self-Service Support uses Microsoft public documentation to provide context, explanations, and guidance. Select the appropriate option or enter more natural language prompts to continue.
 7. After your initial question, you can ask follow-up questions to refine the troubleshooting process. On the third response (after two follow-up questions), the option to create a support request appears at the top of the window.
 
-    [![Screenshot of the Microsoft Entra Support Assistant with the create support requestion option highlighted.](media/how-to-entra-support-assistant/support-assistant-support-request.png)](media/how-to-entra-support-assistant/support-assistant-support-request.png#lightbox)
+    [![Screenshot of the Microsoft Entra Support Assistant with the create support request option highlighted.](media/how-to-entra-support-assistant/support-assistant-support-request.png)](media/how-to-entra-support-assistant/support-assistant-support-request.png#lightbox)
 
 ### Special considerations
 

@@ -134,7 +134,7 @@ SELECT * FROM pgaadauth_list_principals(false);
 
 You should see `pg-employees-readers` listed with `r` (SELECT) privileges on the `employees` table.
 
-## Create an access package to assign agent identites to the security group
+## Create an access package to assign agent identities to the security group
 
 Entitlement Management lets you define an *access package* that bundles the security group membership and attach a policy describing how identities, including agent identities, can request access.
 

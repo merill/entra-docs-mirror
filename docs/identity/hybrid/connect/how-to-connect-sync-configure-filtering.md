@@ -33,9 +33,11 @@ monikers: []
 item_type: Content
 source_path: docs/identity/hybrid/connect/how-to-connect-sync-configure-filtering.md
 cmProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/b1cfdec6-b0c3-4209-818c-736879856e0e
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
 spProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/2d0723c1-cf38-4c30-ab3d-5df787b33270
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
 platformId: 26556344-adda-574c-208a-c05a0a65f6b4
@@ -146,7 +148,7 @@ Note that Microsoft Entra Connect is designed to clean up the objects it was res
 
 In inbound filtering, you use the power of **scope** to determine which objects to synchronize or not synchronize. This is where you make adjustments to fit your own organization's requirements. The scope module has a **group** and a **clause** to determine when a sync rule is in scope. A group contains one or many clauses. There is a logical "AND" between multiple clauses, and a logical "OR" between multiple groups.
 
-Let us look at an example:![A screenshot showing an example of adding scoping filters.](media/how-to-connect-sync-configure-filtering/scope.png) This should be read as **(department = IT) OR (department = Sales AND c = US)**.
+Let us look at an example: ![A screenshot showing an example of adding scoping filters.](media/how-to-connect-sync-configure-filtering/scope.png) This should be read as **(department = IT) OR (department = Sales AND c = US)**.
 
 In the following samples and steps, you use the user object as an example, but you can use this for all object types.
 
@@ -159,10 +161,10 @@ In the following example, you filter out (not synchronize) all users where **ext
 1. Sign in to the server that is running Microsoft Entra Connect Sync by using an account that is a member of the **ADSyncAdmins** security group.
 2. Start **Synchronization Rules Editor** from the **Start** menu.
 3. Make sure **Inbound** is selected, and click **Add New Rule**.
-4. Give the rule a descriptive name, such as "*In from AD – User DoNotSyncFilter*". Select the correct forest, select **User** as the **CS object type**, and select **Person** as the **MV object type**. In **Link Type**, select **Join**. In **Precedence**, type a value that isn't currently used by another synchronization rule (for example 50), and then click **Next**.![Inbound 1 description](media/how-to-connect-sync-configure-filtering/inbound1.png)
-5. In **Scoping filter**, click **Add Group**, and click **Add Clause**. In **Attribute**, select **ExtensionAttribute15**. Make sure that **Operator** is set to **EQUAL**, and type the value **NoSync** in the **Value** box. Click **Next**.![Inbound 2 scope](media/how-to-connect-sync-configure-filtering/inbound2.png)
+4. Give the rule a descriptive name, such as "*In from AD – User DoNotSyncFilter*". Select the correct forest, select **User** as the **CS object type**, and select **Person** as the **MV object type**. In **Link Type**, select **Join**. In **Precedence**, type a value that isn't currently used by another synchronization rule (for example 50), and then click **Next**. ![Inbound 1 description](media/how-to-connect-sync-configure-filtering/inbound1.png)
+5. In **Scoping filter**, click **Add Group**, and click **Add Clause**. In **Attribute**, select **ExtensionAttribute15**. Make sure that **Operator** is set to **EQUAL**, and type the value **NoSync** in the **Value** box. Click **Next**. ![Inbound 2 scope](media/how-to-connect-sync-configure-filtering/inbound2.png)
 6. Leave the **Join** rules empty, and then click **Next**.
-7. Click **Add Transformation**, select the **FlowType** as **Constant**, and select **cloudFiltered** as the **Target Attribute**. In the **Source** text box, type **True**. Click **Add** to save the rule.![Inbound 3 transformation](media/how-to-connect-sync-configure-filtering/inbound3.png)
+7. Click **Add Transformation**, select the **FlowType** as **Constant**, and select **cloudFiltered** as the **Target Attribute**. In the **Source** text box, type **True**. Click **Add** to save the rule. ![Inbound 3 transformation](media/how-to-connect-sync-configure-filtering/inbound3.png)
 8. To complete the configuration, you need to run a **Full sync**. Continue reading the section Apply and verify changes.
 
 #### Positive filtering: "only sync these"
@@ -176,14 +178,14 @@ In the following example, you only synchronize user objects where the department
 1. Sign in to the server that is running Microsoft Entra Connect Sync by using an account that is a member of the **ADSyncAdmins** security group.
 2. Start **Synchronization Rules Editor** from the **Start** menu.
 3. Make sure **Inbound** is selected, and click **Add New Rule**.
-4. Give the rule a descriptive name, such as "*In from AD – User Sales sync*". Select the correct forest, select **User** as the **CS object type**, and select **Person** as the **MV object type**. In **Link Type**, select **Join**. In **Precedence**, type a value that isn't currently used by another synchronization rule (for example 51), and then click **Next**.![Inbound 4 description](media/how-to-connect-sync-configure-filtering/inbound4.png)
-5. In **Scoping filter**, click **Add Group**, and click **Add Clause**. In **Attribute**, select **department**. Make sure that Operator is set to **EQUAL**, and type the value **Sales** in the **Value** box. Click **Next**.![Inbound 5 scope](media/how-to-connect-sync-configure-filtering/inbound5.png)
+4. Give the rule a descriptive name, such as "*In from AD – User Sales sync*". Select the correct forest, select **User** as the **CS object type**, and select **Person** as the **MV object type**. In **Link Type**, select **Join**. In **Precedence**, type a value that isn't currently used by another synchronization rule (for example 51), and then click **Next**. ![Inbound 4 description](media/how-to-connect-sync-configure-filtering/inbound4.png)
+5. In **Scoping filter**, click **Add Group**, and click **Add Clause**. In **Attribute**, select **department**. Make sure that Operator is set to **EQUAL**, and type the value **Sales** in the **Value** box. Click **Next**. ![Inbound 5 scope](media/how-to-connect-sync-configure-filtering/inbound5.png)
 6. Leave the **Join** rules empty, and then click **Next**.
-7. Click **Add Transformation**, select **Constant** as the **FlowType**, and select the **cloudFiltered** as the **Target Attribute**. In the **Source** box, type **False**. Click **Add** to save the rule.![Inbound 6 transformation](media/how-to-connect-sync-configure-filtering/inbound6.png) This is a special case where you explicitly set cloudFiltered to **False**.
-8. We now have to create the catch-all sync rule. Give the rule a descriptive name, such as "*In from AD – User Catch-all filter*". Select the correct forest, select **User** as the **CS object type**, and select **Person** as the **MV object type**. In **Link Type**, select **Join**. In **Precedence**, type a value that isn't currently used by another Synchronization Rule (for example 99). You've selected a precedence value that is higher (lower precedence) than the previous sync rule. But you've also left some room so that you can add more filtering sync rules later when you want to start synchronizing additional departments. Click **Next**.![Inbound 7 description](media/how-to-connect-sync-configure-filtering/inbound7.png)
+7. Click **Add Transformation**, select **Constant** as the **FlowType**, and select the **cloudFiltered** as the **Target Attribute**. In the **Source** box, type **False**. Click **Add** to save the rule. ![Inbound 6 transformation](media/how-to-connect-sync-configure-filtering/inbound6.png) This is a special case where you explicitly set cloudFiltered to **False**.
+8. We now have to create the catch-all sync rule. Give the rule a descriptive name, such as "*In from AD – User Catch-all filter*". Select the correct forest, select **User** as the **CS object type**, and select **Person** as the **MV object type**. In **Link Type**, select **Join**. In **Precedence**, type a value that isn't currently used by another Synchronization Rule (for example 99). You've selected a precedence value that is higher (lower precedence) than the previous sync rule. But you've also left some room so that you can add more filtering sync rules later when you want to start synchronizing additional departments. Click **Next**. ![Inbound 7 description](media/how-to-connect-sync-configure-filtering/inbound7.png)
 9. Leave **Scoping filter** empty, and click **Next**. An empty filter indicates that the rule is to be applied to all objects.
 10. Leave the **Join** rules empty, and then click **Next**.
-11. Click **Add Transformation**, select **Constant** as the **FlowType**, and select **cloudFiltered** as the **Target Attribute**. In the **Source** box, type **True**. Click **Add** to save the rule.![Inbound 3 transformation](media/how-to-connect-sync-configure-filtering/inbound3.png)
+11. Click **Add Transformation**, select **Constant** as the **FlowType**, and select **cloudFiltered** as the **Target Attribute**. In the **Source** box, type **True**. Click **Add** to save the rule. ![Inbound 3 transformation](media/how-to-connect-sync-configure-filtering/inbound3.png)
 12. To complete the configuration, you need to run a **Full sync**. Continue reading the section Apply and verify changes.
 
 If you need to, you can create more rules of the first type where you include more objects in the synchronization.
@@ -217,7 +219,7 @@ As a best practice, make sure your server is in [Staging mode](/en-us/entra/iden
 To manually start a run profile, do the following steps:
 
 1. Start **Synchronization Service** from the **Start** menu.
-2. Select **Connectors**. In the **Connectors** list, select the Connector where you made a configuration change earlier. In **Actions**, select **Run**.![Connector run](media/how-to-connect-sync-configure-filtering/connectorrun.png)
+2. Select **Connectors**. In the **Connectors** list, select the Connector where you made a configuration change earlier. In **Actions**, select **Run**. ![Connector run](media/how-to-connect-sync-configure-filtering/connectorrun.png)
 3. In **Run profiles**, select the operation that was mentioned in the previous section. If you need to run two actions, run the second after the first one has finished. (The **State** column is **Idle** for the selected connector.)
 
 After the synchronization, all changes are staged to be exported. Before you actually make the changes in Microsoft Entra ID, you want to verify that all these changes are correct.

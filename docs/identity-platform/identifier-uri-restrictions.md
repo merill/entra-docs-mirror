@@ -125,7 +125,7 @@ When this protection is enabled, new custom identifier URIs can't be added to an
 
 Once this protection is enabled, if anyone in your organization attempts to add a custom identifier URI to a v1 application, they'll receive an error like:
 
-`The newly added URI {uri} must comply with the format 'api://{appId}' or 'api://{tenantId}/{appId}' as per the default app management policy of your organization. If the requestedAccessTokenVersion is set to 2, this restriction may not apply. See https://aka.ms/identifier-uri-addition-error for more information on this error. `
+`The newly added URI {uri} must comply with the format 'api://{appId}' or 'api://{tenantId}/{appId}' as per the default app management policy of your organization. If the requestedAccessTokenVersion is set to 2, this restriction may not apply. See https://aka.ms/identifier-uri-addition-error for more information on this error.`
 
 This more restrictive policy can help protect your organization from common token validation errors in the `audience` claim. We recommend enabling it if possible, but Microsoft won't enable it on your behalf.
 

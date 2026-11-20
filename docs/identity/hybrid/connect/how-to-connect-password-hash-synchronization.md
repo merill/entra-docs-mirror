@@ -32,13 +32,13 @@ monikers: []
 item_type: Content
 source_path: docs/identity/hybrid/connect/how-to-connect-password-hash-synchronization.md
 cmProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/b1cfdec6-b0c3-4209-818c-736879856e0e
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/57eae307-c3a1-4cac-b645-1a899934bac8
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/1433a524-c01f-4b87-beab-670c040dea4f
-- https://authoring-docs-microsoft.poolparty.biz/devrel/b1cfdec6-b0c3-4209-818c-736879856e0e
 spProducts:
+- https://authoring-docs-microsoft.poolparty.biz/devrel/2d0723c1-cf38-4c30-ab3d-5df787b33270
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/ee561821-1ac7-45a8-9409-6ba5eb7a5b97
 - https://microsoft-devrel.poolparty.biz/DevRelOfferingOntology/312f1f05-a431-4193-8a4d-e6245d5966de
-- https://authoring-docs-microsoft.poolparty.biz/devrel/2d0723c1-cf38-4c30-ab3d-5df787b33270
 platformId: 71152f1c-6409-241c-9795-58513cdc511d
 ---
 
@@ -209,7 +209,7 @@ $OnPremSync.Features.UserForcePasswordChangeOnLogonEnabled = $true
 
 Update-MgDirectoryOnPremiseSynchronization `
   -OnPremisesDirectorySynchronizationId $OnPremSync.Id `
-  -Features $OnPremSync.Features 
+  -Features $OnPremSync.Features
 ```
 
 Note
@@ -288,7 +288,7 @@ If your legacy applications don't use NTLM authentication or LDAP simple binds, 
     - Generates a random initialization vector needed for the first round of encryption.
     - Extracts Kerberos password hashes from the *supplementalCredentials* attributes.
     - Checks the Microsoft Entra Domain Services security configuration *SyncNtlmPasswords*setting.
-        - If this setting is disabled, generates a random, high-entropy NTLM hash (different from the user's password). This hash is then combined with the exacted Kerberos password hashes from the *supplementalCrendetials* attribute into one data structure.
+        - If this setting is disabled, generates a random, high-entropy NTLM hash (different from the user's password). This hash is then combined with the exacted Kerberos password hashes from the *supplementalCredentials* attribute into one data structure.
         - If enabled, combines the value of the *unicodePwd* attribute with the extracted Kerberos password hashes from the *supplementalCredentials* attribute into one data structure.
     - Encrypts the single data structure using the AES symmetric key.
     - Encrypts the AES symmetric key using the tenant's Microsoft Entra Domain Services public key.
